@@ -1,0 +1,45 @@
+<div class="conversation-hud-content">
+  <div class="conversation-hud-active-participant">
+    <img id="conversationActiveParticipant" class="active-participant-image" src="" alt="active_participant" />
+    <p id="conversationActiveParticipantName" class="active-participant-name">
+      {{localize 'CHUD.anonymous'}}
+    </p>
+    <p id="conversationNoActiveParticipantMsg" class="no-active-participant-text active">
+      {{localize 'CHUD.noActiveParticipant'}}
+    </p>
+  </div>
+
+  <div id="conversationParticipantList" class="conversation-hud-participant-list">
+    {{#if isGM}}
+      {{#each participants as |participant index|}}
+        <div class="conversation-participant">
+          <div class="conversation-participant-gm-wrapper" onclick="game.ConversationHud.changeActiveParticipant({{index}})">
+            <img src="{{participant.img}}" alt="image" />
+            <p class="participant-name">{{participant.name}}</p>
+          </div>
+
+          <a class="conversation-participant-edit" onclick="game.ConversationHud.updateParticipantFromActiveConversation({{index}})">
+            <i class="fas fa-edit"></i>
+          </a>
+
+          <a class="conversation-participant-remove" onclick="game.ConversationHud.removeParticipantFromActiveConversation({{index}})">
+            <i class="fas fa-trash"></i>
+          </a>
+        </div>
+      {{/each}}
+    {{else}}
+      {{#each participants as |participant index|}}
+        <div class="conversation-participant">
+          <img src="{{participant.img}}" alt="image" />
+          <p class="participant-name">{{participant.name}}</p>
+        </div>
+      {{/each}}
+    {{/if}}
+    
+    {{#if isGM}}
+      <a class="conversation-participant" onclick="game.ConversationHud.addParticipantToActiveConversation()">
+        <i class="fas fa-plus"></i>
+      </a>
+    {{/if}}
+  </div>
+</div>

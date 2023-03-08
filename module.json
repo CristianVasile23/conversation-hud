@@ -1,0 +1,54 @@
+{
+  "id": "conversation-hud",
+  "title": "ConversationHUD",
+  "name": "conversation-hud",
+  "description": "A nice HUD that nicely display the portraits of all the characters present in a conversation.",
+  "version": "#{VERSION}#",
+  "library": "false",
+  "compatibility": {
+    "minimum": 10,
+    "verified": 10,
+    "maximum": 10
+  },
+  "authors": [
+    {
+      "name": "Cristian Vasile",
+      "url": "https://github.com/CristianVasile23"
+    }
+  ],
+  "relationships": {
+    "requires": [
+      {
+        "id": "lib-wrapper",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.12.4.0",
+          "verified": "1.12.10.0"
+        }
+      },
+      {
+        "id": "socketlib",
+        "type": "module",
+        "compatibility": {
+          "minimum": "1.0.10",
+          "verified": "1.0.10"
+        }
+      }
+    ]
+  },
+  "esmodules": ["js/controls.js", "js/conversation.js", "js/entityLinkHandler.js"],
+  "styles": ["css/main.css"],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "socket": true,
+  "url": "#{URL}#",
+  "manifest": "#{MANIFEST}#",
+  "download": "#{DOWNLOAD}#",
+  "license": "LICENSE",
+  "readme": "README.md"
+}

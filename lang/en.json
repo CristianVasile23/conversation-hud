@@ -1,0 +1,50 @@
+{
+  "CHUD.name": "Name",
+  "CHUD.portrait": "Portrait",
+  "CHUD.anonymous": "Anonymous",
+  "CHUD.browseFiles": "Browse Files",
+  "CHUD.filePath": "File Path",
+  "CHUD.save": "Save",
+
+  "CHUD.nameHint": "Name of the conversation participant.",
+  "CHUD.portraitHint": "Portrait of the conversation participant.",
+
+  "CHUD.conversationName": "Conversation Name",
+  "CHUD.conversationParticipants": "Conversation Participants",
+
+  "CHUD.currentParticipants": "Current Participants",
+  "CHUD.noActiveParticipant": "No active participant",
+  "CHUD.noParticipantsInList": "Conversation has no participants. Try adding some.",
+
+  "CHUD.addParticipant": "Add Participant",
+  "CHUD.editParticipant": "Edit Participant",
+  "CHUD.deleteParticipant": "Delete Participant",
+
+  "CHUD.activateHUD": "Activate ConversationHUD",
+  "CHUD.activateConversation": "Activate Conversation",
+  "CHUD.createConversation": "Create Conversation",
+  "CHUD.startConversation": "Start Conversation",
+
+  "CHUD.toggleVisibility": "Toggle Visibility",
+  "CHUD.saveConversation": "Save Conversation",
+  "CHUD.maximizeConversation": "Maximize Conversation",
+  "CHUD.minimizeConversation": "Minimize Conversation",
+
+  "CHUD.participantData": "Conversation Participant Data",
+  "CHUD.conversationEntry": "Conversation Entry",
+
+  "CHUD.unsavedChanges": "Unsaved Changes",
+  "CHUD.unsavedChangesHint": "The conversation contains unsaved changes. Do you wish to save them?",
+  "CHUD.discardChanges": "Discard Changes",
+
+  "CHUD.errors": {
+    "generic": "An unknown error occurred while trying to render the sheet. Are you sure this is a valid conversation sheet?",
+    "failedToParse": "Failed to parse sheet data. Are you sure this is a valid conversation sheet?",
+
+    "activateNoPages": "Tried to activate a conversation with a document containing no pages.",
+    "activateNoInit": "Tried to activate a conversation when the ConversationHUD object was not yet initialized",
+    "activateNoPerms": "You do not have permission to activate this conversation.",
+
+    "noLibWrapper": "ConversationHUD requires the libWrapper module for full functionality. Please install and activate it."
+  }
+}
