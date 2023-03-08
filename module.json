@@ -2,7 +2,7 @@
   "id": "conversation-hud",
   "title": "ConversationHUD",
   "name": "conversation-hud",
-  "description": "A nice HUD that nicely display the portraits of all the characters present in a conversation.",
+  "description": "A simple module that adds a nice HUD that display the portraits of all the characters present in a conversation.",
   "version": "#{VERSION}#",
   "library": "false",
   "compatibility": {
