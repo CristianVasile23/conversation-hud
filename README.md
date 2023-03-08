@@ -18,7 +18,7 @@ https://user-images.githubusercontent.com/51834117/223569960-3a119bb8-1a5f-4ad8-
 
 Initially, this module was made as a very simple module to solve some of the issues I had as a GM during my sessions. As I added more features and polished it, I decided to also release it.
 
-As of this moment, I feel that the module is feature complete and has all the functionality I envisioned for it. I will continue to support the module for future versions of Foundry as well as fix any possible issues that may occur. That said, I don't think I will be adding additional features unless I feel that they would benefit greatly the module.
+As of this moment, I feel that the module is feature complete and has all the functionality I envisioned for it. I will continue to support the module for future versions of Foundry as well as fix any possible issues that may occur. That said, I don't think I will be adding additional features unless I feel that they would greatly benefit the module.
 
 # Known Issues
 
