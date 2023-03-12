@@ -83,13 +83,19 @@
   color: var(--color-text-dark-secondary);
 }
 
-.conversation-sheet-participant .edit {
+.conversation-sheet-participant .participant-controls {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+}
+
+.conversation-sheet-participant .participant-controls .edit {
   display: flex;
   align-items: center;
   margin-right: 10px;
 }
 
-.conversation-sheet-participant .delete {
+.conversation-sheet-participant .participant-controls .delete {
   display: flex;
   align-items: center;
 }

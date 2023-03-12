@@ -163,7 +163,7 @@
 
   box-shadow: 0 0 10px var(--color-shadow-dark);
 }
-.conversation-participant:hover {
+.conversation-participant.has-control:hover {
   border: 1px solid var(--color-border-highlight-alt);
   border-bottom: 1px solid var(--color-border-highlight);
   box-shadow: 0 0 10px var(--color-shadow-highlight);
