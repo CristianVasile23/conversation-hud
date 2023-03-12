@@ -16,6 +16,7 @@
   "CHUD.noActiveParticipant": "No active participant",
   "CHUD.noParticipantsInList": "Conversation has no participants. Try adding some.",
 
+  "CHUD.newParticipant": "New Participant",
   "CHUD.addParticipant": "Add Participant",
   "CHUD.editParticipant": "Edit Participant",
   "CHUD.deleteParticipant": "Delete Participant",

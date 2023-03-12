@@ -54,7 +54,10 @@ export class ConversationEntrySheet extends JournalSheet {
       for (let i = 0; i < participants.length; i++) {
         const controls = participants[i].children[2].children;
         controls[0].onclick = () => {
-          const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i));
+          const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
+            name: this.participants[i].name,
+            img: this.participants[i].img,
+          });
           fileInputForm.render(true);
         };
         controls[1].onclick = () => this.#handleRemoveParticipant(i);
@@ -177,12 +180,11 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   #handleEditParticipant(data, index) {
-    // Check if data is empty and if so keep the old data
     if (data.name === "") {
-      data.name = this.participants[index].name;
+      data.name = game.i18n.localize("CHUD.anonymous");
     }
     if (data.img === "") {
-      data.img = this.participants[index].img;
+      data.img = "modules/conversation-hud/img/silhouette.jpg";
     }
 
     this.participants[index] = data;
