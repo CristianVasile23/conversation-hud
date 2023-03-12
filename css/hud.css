@@ -28,6 +28,9 @@
   justify-content: center;
   align-items: center;
 
+  height: 65vh;
+  max-height: 650px;
+
   pointer-events: all;
 }
 .conversation-hud-wrapper.visible .conversation-hud-content {
@@ -47,8 +50,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  height: 65vh;
-  max-height: 650px;
+  height: 100%;
   width: 30vw;
   max-width: 420px;
 }
@@ -123,25 +125,38 @@
 .conversation-hud-participant-list {
   display: none;
   flex-flow: column;
-  justify-content: center;
   align-items: center;
   margin-left: 50px;
 
-  height: 65vh;
-  max-height: 650px;
+  height: 100%;
   overflow-y: auto;
-  padding: 0px 10px;
+  padding: 10px;
 }
 .conversation-hud-wrapper.visible .conversation-hud-participant-list {
   display: flex;
 }
 .conversation-hud-wrapper.minimized .conversation-hud-participant-list {
   margin-top: 25px;
+  margin-bottom: 25px;
 }
 @media only screen and (max-width: 1150px) {
   .conversation-hud-participant-list {
     margin-left: 20px;
   }
+}
+
+/* CSS to center conversation participants while still respecting overflow */
+.conversation-hud-participant-list .conversation-participant:first-child {
+  margin-top: auto;
+}
+.conversation-hud-participant-list .conversation-participant:last-child {
+  margin-bottom: auto;
+}
+.conversation-hud-wrapper.minimized .conversation-hud-participant-list .conversation-participant:first-child {
+  margin-top: auto;
+}
+.conversation-hud-wrapper.minimized .conversation-hud-participant-list .conversation-participant:last-child {
+  margin-bottom: unset;
 }
 
 .conversation-participant {
@@ -163,7 +178,7 @@
 
   box-shadow: 0 0 10px var(--color-shadow-dark);
 }
-.conversation-participant:hover {
+.conversation-participant.has-control:hover {
   border: 1px solid var(--color-border-highlight-alt);
   border-bottom: 1px solid var(--color-border-highlight);
   box-shadow: 0 0 10px var(--color-shadow-highlight);

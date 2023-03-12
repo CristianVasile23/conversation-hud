@@ -16,6 +16,7 @@
   "CHUD.noActiveParticipant": "No active participant",
   "CHUD.noParticipantsInList": "Conversation has no participants. Try adding some.",
 
+  "CHUD.newParticipant": "New Participant",
   "CHUD.addParticipant": "Add Participant",
   "CHUD.editParticipant": "Edit Participant",
   "CHUD.deleteParticipant": "Delete Participant",
@@ -45,6 +46,13 @@
     "activateNoInit": "Tried to activate a conversation when the ConversationHUD object was not yet initialized",
     "activateNoPerms": "You do not have permission to activate this conversation.",
 
+    "noActiveConversation": "No active conversation found.",
+    "saveUnsuccessful": "Failed to save current conversation.",
+
     "noLibWrapper": "ConversationHUD requires the libWrapper module for full functionality. Please install and activate it."
+  },
+
+  "CHUD.info": {
+    "saveSuccessful": "Current conversation has been saved successfully."
   }
 }

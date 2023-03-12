@@ -3,7 +3,7 @@
     <div class="form-group">
       <label>{{localize 'CHUD.name'}}</label>
       <div class="form-fields">
-        <input class="text" type="text" name="name" />
+        <input class="text" type="text" name="name" placeholder="{{localize 'CHUD.newParticipant'}}" value="{{participantData.name}}" />
       </div>
       <p class="notes">{{localize 'CHUD.nameHint'}}</p>
     </div>
@@ -14,7 +14,7 @@
         <button type="button" class="file-picker" data-type="imagevideo" data-target="img" title="{{localize 'CHUD.browseFiles'}}">
           <i class="fas fa-file-import fa-fw"></i>
         </button>
-        <input class="image" type="text" name="img" placeholder="{{localize 'CHUD.filePath'}}"/>
+        <input class="image" type="text" name="img" placeholder="{{localize 'CHUD.filePath'}}" value="{{participantData.img}}" />
       </div>
       <p class="notes">{{localize 'CHUD.portraitHint'}}</p>
     </div>

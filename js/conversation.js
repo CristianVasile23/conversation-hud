@@ -290,7 +290,10 @@ class ConversationHud {
         return;
       }
 
-      const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index));
+      const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
+        name: this.activeConversation.participants[index].name,
+        img: this.activeConversation.participants[index].img,
+      });
       fileInputForm.render(true);
     }
   }
@@ -313,13 +316,13 @@ class ConversationHud {
           callback: (html) => {
             const formElement = html[0].querySelector("form");
             const formData = new FormDataExtended(formElement);
-            const formDataObject = formData.toObject();
+            const formDataObject = formData.object;
             this.#handleConversationSave(formDataObject);
           },
           rejectClose: false,
         });
       } else {
-        ui.notifications.error("No active conversation found.");
+        ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
       }
     }
   }
@@ -345,9 +348,9 @@ class ConversationHud {
           name: "Conversation Participants",
         },
       ]);
-      ui.notifications.info("Current conversation has been saved successfully.");
+      ui.notifications.info(game.i18n.localize("CHUD.info.saveSuccessful"));
     } else {
-      ui.notifications.error("Failed to save current conversation.");
+      ui.notifications.error(game.i18n.localize("CHUD.errors.saveUnsuccessful"));
     }
   }
 
@@ -439,7 +442,6 @@ class ConversationHud {
 
   // Function that adds a single participant to the active conversation
   #handleAddParticipant(data) {
-    // Check if data is empty and add default values if so
     if (data.name === "") {
       data.name = game.i18n.localize("CHUD.anonymous");
     }
@@ -453,12 +455,11 @@ class ConversationHud {
   }
 
   #handleUpdateParticipant(data, index) {
-    // Check if data is empty and if so keep the old data
     if (data.name === "") {
-      data.name = game.ConversationHud.activeConversation.participants[index].name;
+      data.name = game.i18n.localize("CHUD.anonymous");
     }
     if (data.img === "") {
-      data.img = game.ConversationHud.activeConversation.participants[index].img;
+      data.img = "modules/conversation-hud/img/silhouette.jpg";
     }
 
     // Update participant with the given index

@@ -1,121 +1,130 @@
 .conversation-sheet-header {
-    margin-top: 5px;
-    border-bottom: 1px solid var(--color-underline-header);
-    height: 34px;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  margin-top: 5px;
+  border-bottom: 1px solid var(--color-underline-header);
+  height: 34px;
 }
 
 .conversation-sheet-header > input {
-    background: none !important;
-    border: 1px solid transparent !important;
+  background: none !important;
+  border: 1px solid transparent !important;
 
-    color: var(--color-text-dark-primary) !important;
-    font-size: 1.5em !important;
+  color: var(--color-text-dark-primary) !important;
+  font-size: 1.5em !important;
 }
 .conversation-sheet-header > input:hover,
 .conversation-sheet-header > input:focus {
-    box-shadow: none !important;
+  box-shadow: none !important;
 }
 
 .conversation-sheet-header > p {
-    display: flex;
-    align-items: center;
-    flex: 3;
-    margin: 0;
+  display: flex;
+  align-items: center;
+  flex: 3;
+  margin: 0;
 
-    color: var(--color-text-dark-primary);
-    font-size: 1.5em;
+  color: var(--color-text-dark-primary);
+  font-size: 1.5em;
 }
 
 .conversation-sheet-participants-list {
-    display: flex;
-    flex-flow: column;
+  display: flex;
+  flex-flow: column;
 
-    margin-left: 15px;
-    margin-right: 5px;
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-left: 15px;
+  margin-right: 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 
-    padding-right: 10px;
-    padding-top: 5px;
-    padding-bottom: 5px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 
-    height: 300px;
-    overflow-y: auto;
+  height: 300px;
+  overflow-y: auto;
 }
 
 .conversation-sheet-participant {
-    display: flex;
-    flex-flow: row;
-    border-bottom: 1px solid var(--light-color);
+  display: flex;
+  flex-flow: row;
+  border-bottom: 1px solid var(--light-color);
 
-    padding-top: 5px;
-    padding-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .conversation-sheet-participant:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .conversation-sheet-participant .image {
-    height: 40px;
-    width: 40px;
+  height: 40px;
+  width: 40px;
 }
 
 .conversation-sheet-participant .image img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    object-position: top center;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: top center;
 }
 
 .conversation-sheet-participant .name {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 
-    margin: 0;
-    margin-left: 10px;
-    margin-right: auto;
+  margin: 0;
+  margin-left: 10px;
+  margin-right: auto;
 
-    font-weight: bold;
-    color: var(--color-text-dark-secondary);
+  font-weight: bold;
+  color: var(--color-text-dark-secondary);
 }
 
-.conversation-sheet-participant .edit {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
+.conversation-sheet-participant .participant-controls {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
 }
 
-.conversation-sheet-participant .delete {
-    display: flex;
-    align-items: center;
+.conversation-sheet-participant .participant-controls .edit {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.conversation-sheet-participant .participant-controls .delete {
+  display: flex;
+  align-items: center;
 }
 
 .conversation-sheet-footer {
-    flex: unset;
+  flex: unset;
 }
 
 .conversation-control-button {
-    position: relative;
-    flex: 0;
-    width: 32px;
-    height: 32px;
-    text-align: center;
+  position: relative;
+  flex: 0;
+  width: 32px;
+  height: 32px;
+  text-align: center;
 
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .conversation-control-button .fa-eye {
-    margin: 0;
+  margin: 0;
 }
 
 .conversation-control-button .fa-user-plus {
-    margin: 0;
+  margin: 0;
 }
 
-.no-participants-message {
-    display: flex;
-    margin: auto;
+.conversation-sheet-participants-list > .no-participants-message {
+  display: flex;
+  margin: auto;
 }
