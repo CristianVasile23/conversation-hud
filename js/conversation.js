@@ -316,13 +316,13 @@ class ConversationHud {
           callback: (html) => {
             const formElement = html[0].querySelector("form");
             const formData = new FormDataExtended(formElement);
-            const formDataObject = formData.toObject();
+            const formDataObject = formData.object;
             this.#handleConversationSave(formDataObject);
           },
           rejectClose: false,
         });
       } else {
-        ui.notifications.error("No active conversation found.");
+        ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
       }
     }
   }
@@ -348,9 +348,9 @@ class ConversationHud {
           name: "Conversation Participants",
         },
       ]);
-      ui.notifications.info("Current conversation has been saved successfully.");
+      ui.notifications.info(game.i18n.localize("CHUD.info.saveSuccessful"));
     } else {
-      ui.notifications.error("Failed to save current conversation.");
+      ui.notifications.error(game.i18n.localize("CHUD.errors.saveUnsuccessful"));
     }
   }
 
