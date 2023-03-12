@@ -1,4 +1,4 @@
-![Conversation HUD Logo](/docs/icon.png)
+![Conversation HUD Logo](https://user-images.githubusercontent.com/51834117/224548529-6781a471-fed8-4d36-9119-f0df11b4d839.png)
 
 # About
 
