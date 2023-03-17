@@ -48,6 +48,36 @@ export class ConversationEntrySheet extends JournalSheet {
       return fileInputForm.render(true);
     });
 
+    // Drag and drop functionality
+    const dragDropWrapper = html.find("#conversation-sheet-content-wrapper")[0];
+    const dragDropZone = html.find("#conversation-sheet-dropzone")[0];
+    if (dragDropWrapper && dragDropZone) {
+      dragDropWrapper.ondragenter = () => {
+        dragDropWrapper.classList.add("active-dropzone");
+      };
+
+      dragDropZone.ondragleave = () => {
+        dragDropWrapper.classList.remove("active-dropzone");
+      };
+
+      dragDropWrapper.ondrop = async (event) => {
+        event.preventDefault();
+        const data = TextEditor.getDragEventData(event);
+        if (data.type == "Actor") {
+          const actor = await Actor.implementation.fromDropData(data);
+          if (actor) {
+            const data = {
+              name: actor.name || "",
+              img: actor.img || "",
+            };
+            this.#handleAddParticipant(data);
+          } else {
+            // TODO: Log an error
+          }
+        }
+      };
+    }
+
     const participantsObject = html.find("#conversation-participants-list")[0];
     if (participantsObject) {
       const participants = participantsObject.children;

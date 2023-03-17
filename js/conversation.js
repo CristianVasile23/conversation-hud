@@ -263,6 +263,11 @@ class ConversationHud {
     }
   }
 
+  // Function that handles drag and drop for actors
+  handleActorDrop(event) {
+    console.log(event);
+  }
+
   // Function that removes a participant from the active conversation
   removeParticipantFromActiveConversation(index) {
     if (game.user.isGM) {

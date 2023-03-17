@@ -128,3 +128,45 @@
   display: flex;
   margin: auto;
 }
+
+.conversation-sheet-content-wrapper {
+  position: relative;
+}
+
+.conversation-sheet-content-wrapper .conversation-sheet-dropzone {
+  display: none;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0;
+  right: 0px;
+
+  border: 5px dashed var(--color-border-light-secondary);
+}
+
+.conversation-sheet-content-wrapper .conversation-sheet-dropzone > i {
+  font-size: 60px;
+}
+
+.conversation-sheet-content-wrapper .conversation-sheet-dropzone > p {
+  color: var(--color-text-dark-secondary);
+
+  margin-top: 15px;
+  max-width: 200px;
+  text-align: center;
+}
+
+.conversation-sheet-content-wrapper .conversation-sheet-dropzone * {
+  pointer-events: none;
+}
+
+.conversation-sheet-content-wrapper.active-dropzone .conversation-sheet-dropzone {
+  display: flex;
+}
+.conversation-sheet-content-wrapper.active-dropzone .conversation-sheet-participants-list {
+  visibility: hidden;
+}
