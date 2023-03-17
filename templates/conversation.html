@@ -1,3 +1,4 @@
+<!-- prettier-ignore -->
 <div class="conversation-hud-content">
   <div class="conversation-hud-active-participant">
     <img id="conversationActiveParticipant" class="active-participant-image" src="" alt="active_participant" />
@@ -37,7 +38,12 @@
     {{/if}}
     
     {{#if isGM}}
-      <a class="conversation-participant" onclick="game.ConversationHud.addParticipantToActiveConversation()">
+      <a
+        id="conversation-add-button"
+        class="conversation-participant has-control"
+        onclick="game.ConversationHud.addParticipantToActiveConversation()"
+        ondrop="game.ConversationHud.handleActorDrop(event)"
+      >
         <i class="fas fa-plus"></i>
       </a>
     {{/if}}

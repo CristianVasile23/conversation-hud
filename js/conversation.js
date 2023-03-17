@@ -264,8 +264,23 @@ class ConversationHud {
   }
 
   // Function that handles drag and drop for actors
-  handleActorDrop(event) {
-    console.log(event);
+  async handleActorDrop(event) {
+    if (game.user.isGM) {
+      event.preventDefault();
+      const data = TextEditor.getDragEventData(event);
+      if (data.type == "Actor") {
+        const actor = await Actor.implementation.fromDropData(data);
+        if (actor) {
+          const data = {
+            name: actor.name || "",
+            img: actor.img || "",
+          };
+          this.#handleAddParticipant(data);
+        } else {
+          ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActor"));
+        }
+      }
+    }
   }
 
   // Function that removes a participant from the active conversation

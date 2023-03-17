@@ -72,7 +72,7 @@ export class ConversationEntrySheet extends JournalSheet {
             };
             this.#handleAddParticipant(data);
           } else {
-            // TODO: Log an error
+            ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActor"));
           }
         }
       };

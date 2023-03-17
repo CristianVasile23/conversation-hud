@@ -39,11 +39,11 @@ export class ConversationInputForm extends FormApplication {
     if (dragDropWrapper && dragDropZone) {
       dragDropWrapper.ondragenter = () => {
         dragDropWrapper.classList.add("active-dropzone");
-      }
+      };
 
       dragDropZone.ondragleave = () => {
         dragDropWrapper.classList.remove("active-dropzone");
-      }
+      };
 
       dragDropWrapper.ondrop = async (event) => {
         event.preventDefault();
@@ -53,11 +53,11 @@ export class ConversationInputForm extends FormApplication {
           if (actor) {
             const data = {
               name: actor.name || "",
-              img: actor.img || ""
-            }
+              img: actor.img || "",
+            };
             this.#handleAddParticipant(data);
           } else {
-            // TODO: Log an error
+            ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActor"));
           }
         }
       };
