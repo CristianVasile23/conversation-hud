@@ -21,6 +21,8 @@
   "CHUD.editParticipant": "Edit Participant",
   "CHUD.deleteParticipant": "Delete Participant",
 
+  "CHUD.dropActor": "Drop actor here to add them to the conversation",
+
   "CHUD.activateHUD": "Activate ConversationHUD",
   "CHUD.activateConversation": "Activate Conversation",
   "CHUD.createConversation": "Create Conversation",

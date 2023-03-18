@@ -21,6 +21,8 @@
 }
 
 .conversation-hud-content {
+  position: relative;
+
   margin: auto;
 
   display: flex;
@@ -248,7 +250,7 @@
   font-size: 30px;
 }
 
-.conversation-participant p {
+.conversation-participant .name {
   position: absolute;
 
   bottom: 0;
@@ -323,4 +325,52 @@
   border: 1px solid var(--color-border-highlight-alt);
   border-bottom: 1px solid var(--color-border-highlight);
   box-shadow: 0 0 10px var(--color-shadow-highlight);
+}
+
+.conversation-hud-content .conversation-hud-dropzone {
+  display: none;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0;
+  right: 0px;
+
+  border: 5px dashed var(--color-border-light-secondary);
+
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.conversation-hud-content .conversation-hud-dropzone > i {
+  font-size: 60px;
+
+  color: var(--color-border-light-secondary);
+}
+
+.conversation-hud-content .conversation-hud-dropzone > p {
+  color: var(--color-border-light-secondary);
+
+  margin-top: 15px;
+  max-width: 200px;
+  text-align: center;
+}
+.conversation-hud-wrapper.minimized .conversation-hud-content .conversation-hud-dropzone > p {
+  max-width: 120px;
+}
+
+.conversation-hud-content .conversation-hud-dropzone * {
+  pointer-events: none;
+}
+
+.conversation-hud-content.active-dropzone .conversation-hud-dropzone {
+  display: flex;
+}
+.conversation-hud-content.active-dropzone > .conversation-hud-active-participant,
+.conversation-hud-content.active-dropzone > .conversation-hud-participant-list {
+  pointer-events: none;
 }
