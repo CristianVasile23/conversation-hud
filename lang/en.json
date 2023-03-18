@@ -14,7 +14,7 @@
 
   "CHUD.currentParticipants": "Current Participants",
   "CHUD.noActiveParticipant": "No active participant",
-  "CHUD.noParticipantsInList": "Conversation has no participants. Try adding some.",
+  "CHUD.noParticipantsInList": "Conversation has no participants. Try adding some. (Actor drag and drop is supported)",
 
   "CHUD.newParticipant": "New Participant",
   "CHUD.addParticipant": "Add Participant",

@@ -127,6 +127,8 @@
 .conversation-sheet-participants-list > .no-participants-message {
   display: flex;
   margin: auto;
+  max-width: 310px;
+  text-align: center;
 }
 
 .conversation-sheet-content-wrapper {
