@@ -81,6 +81,8 @@ class ConversationHud {
     }
     element.innerHTML = renderedHtml;
 
+    game.ConversationHud.addDragDropListeners(element);
+
     const uiBottom = document.getElementById("ui-bottom");
     uiBottom.before(element);
 
@@ -105,6 +107,25 @@ class ConversationHud {
 
     // Set image
     game.ConversationHud.changeActiveImage(conversationData.activeParticipant);
+  }
+
+  // Function that activates listeners used for drag-drop functionality
+  addDragDropListeners(element) {
+    const conversationContent = element.querySelector("#conversation-hud-content");
+    const dragDropZone = element.querySelector("#conversation-hud-dropzone");
+    if (dragDropZone) {
+      conversationContent.ondragenter = () => {
+        conversationContent.classList.add("active-dropzone");
+      };
+
+      dragDropZone.ondragleave = () => {
+        conversationContent.classList.remove("active-dropzone");
+      };
+
+      conversationContent.ondrop = async (event) => {
+        game.ConversationHud.handleActorDrop(event);
+      };
+    }
   }
 
   // Function that removes the active conversation
@@ -170,6 +191,8 @@ class ConversationHud {
     const conversationHud = document.getElementById("ui-conversation-hud");
     if (conversationHud) {
       conversationHud.innerHTML = renderedHtml;
+
+      game.ConversationHud.addDragDropListeners(conversationHud);
 
       // Set image
       game.ConversationHud.changeActiveImage(conversationData.activeParticipant);
@@ -260,6 +283,26 @@ class ConversationHud {
     if (game.user.isGM) {
       const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));
       fileInputForm.render(true);
+    }
+  }
+
+  // Function that handles drag and drop for actors
+  async handleActorDrop(event) {
+    if (game.user.isGM) {
+      event.preventDefault();
+      const data = TextEditor.getDragEventData(event);
+      if (data.type == "Actor") {
+        const actor = await Actor.implementation.fromDropData(data);
+        if (actor) {
+          const data = {
+            name: actor.name || "",
+            img: actor.img || "",
+          };
+          this.#handleAddParticipant(data);
+        } else {
+          ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActor"));
+        }
+      }
     }
   }
 

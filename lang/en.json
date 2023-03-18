@@ -14,12 +14,14 @@
 
   "CHUD.currentParticipants": "Current Participants",
   "CHUD.noActiveParticipant": "No active participant",
-  "CHUD.noParticipantsInList": "Conversation has no participants. Try adding some.",
+  "CHUD.noParticipantsInList": "Conversation has no participants. Try adding some. (Actor drag and drop is supported)",
 
   "CHUD.newParticipant": "New Participant",
   "CHUD.addParticipant": "Add Participant",
   "CHUD.editParticipant": "Edit Participant",
   "CHUD.deleteParticipant": "Delete Participant",
+
+  "CHUD.dropActor": "Drop actor here to add them to the conversation",
 
   "CHUD.activateHUD": "Activate ConversationHUD",
   "CHUD.activateConversation": "Activate Conversation",
@@ -41,6 +43,7 @@
   "CHUD.errors": {
     "generic": "An unknown error occurred while trying to render the sheet. Are you sure this is a valid conversation sheet?",
     "failedToParse": "Failed to parse sheet data. Are you sure this is a valid conversation sheet?",
+    "invalidActor": "The provided actor is of an invalid format and could not be parsed properly.",
 
     "activateNoPages": "Tried to activate a conversation with a document containing no pages.",
     "activateNoInit": "Tried to activate a conversation when the ConversationHUD object was not yet initialized",

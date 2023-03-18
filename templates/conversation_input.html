@@ -14,33 +14,41 @@
       </button>
     </div>
 
-    <div class="conversation-sheet-participants-list">
-      {{#if participants}}
-        <div id="conversation-participants-list">
-          {{#each participants as |participant|}}
-            <div class="conversation-sheet-participant">
-              <div class="image">
-                <img src="{{participant.img}}"/>
-              </div>
 
-              <p class="name">{{participant.name}}</p>
-              
-              <div class="participant-controls">
-                <a id="participant-edit-button" class="edit" title="{{localize 'CHUD.editParticipant'}}">
-                  <i class="fas fa-pencil"></i>
-                </a>
-                <a id="participant-delete-button" class="delete" title="{{localize 'CHUD.deleteParticipant'}}">
-                  <i class="fas fa-trash"></i>
-                </a>
+    <div id="conversation-sheet-content-wrapper" class="conversation-sheet-content-wrapper">
+      <div id="conversation-sheet-dropzone" class="conversation-sheet-dropzone" >
+        <i class="far fa-square-plus"></i>
+        <p> {{localize 'CHUD.dropActor'}} </p>
+      </div>
+
+      <div class="conversation-sheet-participants-list">
+        {{#if participants}}
+          <div id="conversation-participants-list">
+            {{#each participants as |participant|}}
+              <div class="conversation-sheet-participant">
+                <div class="image">
+                  <img src="{{participant.img}}"/>
+                </div>
+
+                <p class="name">{{participant.name}}</p>
+                
+                <div class="participant-controls">
+                  <a id="participant-edit-button" class="edit" title="{{localize 'CHUD.editParticipant'}}">
+                    <i class="fas fa-pencil"></i>
+                  </a>
+                  <a id="participant-delete-button" class="delete" title="{{localize 'CHUD.deleteParticipant'}}">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </div>
               </div>
-            </div>
-          {{/each}}
-        </div>
-      {{else}}
-        <p class="no-participants-message">
-          {{localize 'CHUD.noParticipantsInList'}}
-        </p> 
-      {{/if}}
+            {{/each}}
+          </div>
+        {{else}}
+          <p class="no-participants-message">
+            {{localize 'CHUD.noParticipantsInList'}}
+          </p> 
+        {{/if}}
+      </div>
     </div>
   </div>
     
