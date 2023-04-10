@@ -56,6 +56,10 @@
     "noLibWrapper": "ConversationHUD requires the libWrapper module for full functionality. Please install and activate it."
   },
 
+  "CHUD.warnings": {
+    "noParticipantDataFound": "No viable participant data was found in this journal entry."
+  },
+
   "CHUD.info": {
     "saveSuccessful": "Current conversation has been saved successfully."
   }

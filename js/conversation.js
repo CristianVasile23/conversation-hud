@@ -295,8 +295,10 @@ class ConversationHud {
     if (game.user.isGM) {
       event.preventDefault();
       const data = await getActorDataFromDragEvent(event);
-      if (data) {
-        this.#handleAddParticipant(data);
+      if (data && data.length > 0) {
+        data.forEach((participant) => {
+          this.#handleAddParticipant(participant);
+        });
       }
     }
   }

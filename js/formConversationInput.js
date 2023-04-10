@@ -49,8 +49,10 @@ export class ConversationInputForm extends FormApplication {
       dragDropWrapper.ondrop = async (event) => {
         event.preventDefault();
         const data = await getActorDataFromDragEvent(event);
-        if (data) {
-          this.#handleAddParticipant(data);
+        if (data && data.length > 0) {
+          data.forEach((participant) => {
+            this.#handleAddParticipant(participant);
+          });
         }
         dragDropWrapper.classList.remove("active-dropzone");
       };
