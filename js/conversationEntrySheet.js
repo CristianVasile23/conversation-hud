@@ -32,7 +32,7 @@ export class ConversationEntrySheet extends JournalSheet {
       id: "conversation-entry-sheet",
       template: `modules/conversation-hud/templates/conversation_sheet.html`,
       width: 635,
-      height: "auto",
+      height: 500,
       resizable: false,
     });
   }

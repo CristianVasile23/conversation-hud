@@ -1,54 +1,51 @@
-<form class="flexcol">
-  <div class="start-conversation-form-wrapper">
-    <div class="flexrow conversation-sheet-header">
-      <p> {{localize 'CHUD.currentParticipants'}} </p>
-            
-      <button
-        type="button"
-        name="add-participant"
-        id="add-participant"
-        title="{{localize 'CHUD.addParticipant'}}"
-        class="conversation-control-button"
-      >
-        <i class="fas fa-user-plus"></i>
-      </button>
+<form class="flexcol" style="height: 100%">
+  <div class="flexrow conversation-sheet-header">
+    <p> {{localize 'CHUD.currentParticipants'}} </p>
+          
+    <button
+      type="button"
+      name="add-participant"
+      id="add-participant"
+      title="{{localize 'CHUD.addParticipant'}}"
+      class="conversation-control-button"
+    >
+      <i class="fas fa-user-plus"></i>
+    </button>
+  </div>
+
+  <div id="conversation-sheet-content-wrapper" class="conversation-sheet-content-wrapper">
+    <div id="conversation-sheet-dropzone" class="conversation-sheet-dropzone" >
+      <i class="far fa-square-plus"></i>
+      <p> {{localize 'CHUD.dropActor'}} </p>
     </div>
 
-
-    <div id="conversation-sheet-content-wrapper" class="conversation-sheet-content-wrapper">
-      <div id="conversation-sheet-dropzone" class="conversation-sheet-dropzone" >
-        <i class="far fa-square-plus"></i>
-        <p> {{localize 'CHUD.dropActor'}} </p>
-      </div>
-
-      <div class="conversation-sheet-participants-list">
-        {{#if participants}}
-          <div id="conversation-participants-list">
-            {{#each participants as |participant|}}
-              <div class="conversation-sheet-participant">
-                <div class="image">
-                  <img src="{{participant.img}}"/>
-                </div>
-
-                <p class="name">{{participant.name}}</p>
-                
-                <div class="participant-controls">
-                  <a id="participant-edit-button" class="edit" title="{{localize 'CHUD.editParticipant'}}">
-                    <i class="fas fa-pencil"></i>
-                  </a>
-                  <a id="participant-delete-button" class="delete" title="{{localize 'CHUD.deleteParticipant'}}">
-                    <i class="fas fa-trash"></i>
-                  </a>
-                </div>
+    <div class="conversation-sheet-participants-list">
+      {{#if participants}}
+        <div id="conversation-participants-list">
+          {{#each participants as |participant|}}
+            <div class="conversation-sheet-participant">
+              <div class="image">
+                <img src="{{participant.img}}"/>
               </div>
-            {{/each}}
-          </div>
-        {{else}}
-          <p class="no-participants-message">
-            {{localize 'CHUD.noParticipantsInList'}}
-          </p> 
-        {{/if}}
-      </div>
+
+              <p class="name">{{participant.name}}</p>
+                
+              <div class="participant-controls">
+                <a id="participant-edit-button" class="edit" title="{{localize 'CHUD.editParticipant'}}">
+                  <i class="fas fa-pencil"></i>
+                </a>
+                <a id="participant-delete-button" class="delete" title="{{localize 'CHUD.deleteParticipant'}}">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      {{else}}
+        <p class="no-participants-message">
+          {{localize 'CHUD.noParticipantsInList'}}
+        </p> 
+      {{/if}}
     </div>
   </div>
     

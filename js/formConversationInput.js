@@ -16,7 +16,7 @@ export class ConversationInputForm extends FormApplication {
       id: "conversation-start-form",
       title: game.i18n.localize("CHUD.createConversation"),
       width: 635,
-      height: "auto",
+      height: 500,
       resizable: false,
     });
   }
