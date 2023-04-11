@@ -1,4 +1,5 @@
 import { FileInputForm } from "./formAddParticipant.js";
+import { getActorDataFromDragEvent } from "./helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
   constructor(data, options) {
@@ -6,7 +7,7 @@ export class ConversationEntrySheet extends JournalSheet {
     this.dirty = false;
 
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
-    if (pages.length == 0) {
+    if (pages.length === 0) {
       this.participants = [];
     } else {
       try {
@@ -15,7 +16,7 @@ export class ConversationEntrySheet extends JournalSheet {
         if (error instanceof SyntaxError) {
           ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
         } else {
-          ui.notifications.error(game.i18n.localize("CHUD.errors.generic"));
+          ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
         }
         this.participants = [];
       }
@@ -31,7 +32,7 @@ export class ConversationEntrySheet extends JournalSheet {
       id: "conversation-entry-sheet",
       template: `modules/conversation-hud/templates/conversation_sheet.html`,
       width: 635,
-      height: "auto",
+      height: 500,
       resizable: false,
     });
   }
@@ -62,19 +63,13 @@ export class ConversationEntrySheet extends JournalSheet {
 
       dragDropWrapper.ondrop = async (event) => {
         event.preventDefault();
-        const data = TextEditor.getDragEventData(event);
-        if (data.type == "Actor") {
-          const actor = await Actor.implementation.fromDropData(data);
-          if (actor) {
-            const data = {
-              name: actor.name || "",
-              img: actor.img || "",
-            };
-            this.#handleAddParticipant(data);
-          } else {
-            ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActor"));
-          }
+        const data = await getActorDataFromDragEvent(event);
+        if (data && data.length > 0) {
+          data.forEach((participant) => {
+            this.#handleAddParticipant(participant);
+          });
         }
+        dragDropWrapper.classList.remove("active-dropzone");
       };
     }
 
@@ -102,6 +97,7 @@ export class ConversationEntrySheet extends JournalSheet {
       name: baseData.data.name,
       dirty: this.dirty,
       participants: this.participants,
+      data: baseData.data,
     };
 
     return data;
@@ -141,7 +137,7 @@ export class ConversationEntrySheet extends JournalSheet {
       await this.#handleSaveConversation();
     } else {
       const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
-      if (pages.length == 0) {
+      if (pages.length === 0) {
         this.participants = [];
       } else {
         this.participants = JSON.parse(pages[0].text.content);
@@ -162,7 +158,7 @@ export class ConversationEntrySheet extends JournalSheet {
           if (error instanceof SyntaxError) {
             ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
           } else {
-            ui.notifications.error(game.i18n.localize("CHUD.errors.generic"));
+            ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
           }
         }
       } else {
@@ -177,7 +173,7 @@ export class ConversationEntrySheet extends JournalSheet {
     // Get document pages
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
 
-    if (pages.length == 0) {
+    if (pages.length === 0) {
       // Create a document entry page if none are present
       await this.object.createEmbeddedDocuments("JournalEntryPage", [
         {

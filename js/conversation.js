@@ -1,6 +1,7 @@
 import { ConversationInputForm } from "./formConversationInput.js";
 import { FileInputForm } from "./formAddParticipant.js";
 import { ConversationEntrySheet } from "./conversationEntrySheet.js";
+import { getActorDataFromDragEvent } from "./helpers.js";
 
 class ConversationHud {
   // Function that initializes the class data
@@ -124,6 +125,7 @@ class ConversationHud {
 
       conversationContent.ondrop = async (event) => {
         game.ConversationHud.handleActorDrop(event);
+        conversationContent.classList.remove("active-dropzone");
       };
     }
   }
@@ -204,7 +206,9 @@ class ConversationHud {
     if (toggle) {
       if (!this.conversationIsActive) {
         // Set button active status to false until a successful form has been completed
-        ui.controls.controls.find((controls) => controls.name == "notes").tools.find((tools) => tools.name == "activateHud").active = false;
+        ui.controls.controls
+          .find((controls) => controls.name === "notes")
+          .tools.find((tools) => tools.name === "activateHud").active = false;
 
         // Create form
         new ConversationInputForm((data) => this.#handleConversationCreationData(data)).render(true);
@@ -290,18 +294,11 @@ class ConversationHud {
   async handleActorDrop(event) {
     if (game.user.isGM) {
       event.preventDefault();
-      const data = TextEditor.getDragEventData(event);
-      if (data.type == "Actor") {
-        const actor = await Actor.implementation.fromDropData(data);
-        if (actor) {
-          const data = {
-            name: actor.name || "",
-            img: actor.img || "",
-          };
-          this.#handleAddParticipant(data);
-        } else {
-          ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActor"));
-        }
+      const data = await getActorDataFromDragEvent(event);
+      if (data && data.length > 0) {
+        data.forEach((participant) => {
+          this.#handleAddParticipant(participant);
+        });
       }
     }
   }
@@ -389,6 +386,9 @@ class ConversationHud {
         {
           text: { content: JSON.stringify(this.activeConversation.participants) },
           name: "Conversation Participants",
+          flags: {
+            "conversation-hud": { type: "conversation" },
+          },
         },
       ]);
       ui.notifications.info(game.i18n.localize("CHUD.info.saveSuccessful"));
@@ -523,7 +523,7 @@ class ConversationHud {
   }
 
   updateActivateHudButton(status) {
-    ui.controls.controls.find((controls) => controls.name == "notes").tools.find((tools) => tools.name == "activateHud").active = status;
+    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = status;
     ui.controls.render();
   }
 

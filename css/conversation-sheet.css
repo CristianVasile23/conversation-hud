@@ -5,6 +5,7 @@
   margin-top: 5px;
   border-bottom: 1px solid var(--color-underline-header);
   height: 34px;
+  flex: 0;
 }
 
 .conversation-sheet-header > input {
@@ -32,27 +33,14 @@
 .conversation-sheet-participants-list {
   display: flex;
   flex-flow: column;
-
-  margin-left: 15px;
-  margin-right: 5px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-
-  padding-right: 10px;
-  padding-top: 5px;
-  padding-bottom: 5px;
-
-  height: 300px;
-  overflow-y: auto;
+  height: 100%;
 }
 
 .conversation-sheet-participant {
   display: flex;
   flex-flow: row;
   border-bottom: 1px solid var(--light-color);
-
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding: 5px;
 }
 
 .conversation-sheet-participant:last-child {
@@ -132,7 +120,11 @@
 }
 
 .conversation-sheet-content-wrapper {
+  height: 100%;
+  overflow-y: auto;
   position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
 }
 
 .conversation-sheet-content-wrapper .conversation-sheet-dropzone {
@@ -141,11 +133,13 @@
   align-items: center;
   justify-content: center;
 
-  position: absolute;
-  top: 0px;
-  bottom: 0px;
+  position: sticky;
+  top: 0;
+  bottom: 0;
   left: 0;
-  right: 0px;
+  right: 0;
+
+  height: 100%;
 
   border: 5px dashed var(--color-border-light-secondary);
 }
@@ -170,5 +164,5 @@
   display: flex;
 }
 .conversation-sheet-content-wrapper.active-dropzone .conversation-sheet-participants-list {
-  visibility: hidden;
+  display: none;
 }

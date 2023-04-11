@@ -41,9 +41,11 @@
   "CHUD.discardChanges": "Discard Changes",
 
   "CHUD.errors": {
-    "generic": "An unknown error occurred while trying to render the sheet. Are you sure this is a valid conversation sheet?",
+    "generic": "An unknown error has occurred, for more information check the console.",
+    "genericSheetError": "An unknown error occurred while trying to render the sheet. Are you sure this is a valid conversation sheet?",
     "failedToParse": "Failed to parse sheet data. Are you sure this is a valid conversation sheet?",
     "invalidActor": "The provided actor is of an invalid format and could not be parsed properly.",
+    "typeNotSupported": "This type of data is not supported by ConversationHUD.",
 
     "activateNoPages": "Tried to activate a conversation with a document containing no pages.",
     "activateNoInit": "Tried to activate a conversation when the ConversationHUD object was not yet initialized",
@@ -53,6 +55,10 @@
     "saveUnsuccessful": "Failed to save current conversation.",
 
     "noLibWrapper": "ConversationHUD requires the libWrapper module for full functionality. Please install and activate it."
+  },
+
+  "CHUD.warnings": {
+    "noParticipantDataFound": "No viable participant data was found in this journal entry."
   },
 
   "CHUD.info": {

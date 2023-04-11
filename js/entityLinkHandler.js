@@ -48,7 +48,7 @@ function handleOnClickContentLink(event, wrapped) {
               if (error instanceof SyntaxError) {
                 ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
               } else {
-                ui.notifications.error(game.i18n.localize("CHUD.errors.generic"));
+                ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
               }
             }
           } else {

@@ -1,3 +1,11 @@
+## 3.4.0
+
+- Improved the drag and drop functionality to allow journal entries as well
+  - Journal pages which have the _Image_ type will be treated as conversation participants on drag & drop
+  - Existing conversations can also be dragged into another conversation
+  - Most Monk's Enhanced Journal entries are also supported
+- Several bug fixes & improvements
+
 ## 3.3.0
 
 - Added option to drag and drop actors into conversations

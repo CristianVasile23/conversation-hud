@@ -1,4 +1,5 @@
 import { FileInputForm } from "./formAddParticipant.js";
+import { getActorDataFromDragEvent } from "./helpers.js";
 
 export class ConversationInputForm extends FormApplication {
   constructor(callbackFunction) {
@@ -11,11 +12,11 @@ export class ConversationInputForm extends FormApplication {
     return mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
-      template: `modules/conversation-hud/templates/conversation_input.html`,
+      template: "modules/conversation-hud/templates/conversation_input.html",
       id: "conversation-start-form",
       title: game.i18n.localize("CHUD.createConversation"),
       width: 635,
-      height: "auto",
+      height: 500,
       resizable: false,
     });
   }
@@ -47,19 +48,13 @@ export class ConversationInputForm extends FormApplication {
 
       dragDropWrapper.ondrop = async (event) => {
         event.preventDefault();
-        const data = TextEditor.getDragEventData(event);
-        if (data.type == "Actor") {
-          const actor = await Actor.implementation.fromDropData(data);
-          if (actor) {
-            const data = {
-              name: actor.name || "",
-              img: actor.img || "",
-            };
-            this.#handleAddParticipant(data);
-          } else {
-            ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActor"));
-          }
+        const data = await getActorDataFromDragEvent(event);
+        if (data && data.length > 0) {
+          data.forEach((participant) => {
+            this.#handleAddParticipant(participant);
+          });
         }
+        dragDropWrapper.classList.remove("active-dropzone");
       };
     }
 
