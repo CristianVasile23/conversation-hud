@@ -386,6 +386,9 @@ class ConversationHud {
         {
           text: { content: JSON.stringify(this.activeConversation.participants) },
           name: "Conversation Participants",
+          flags: {
+            "conversation-hud": { type: "conversation" },
+          },
         },
       ]);
       ui.notifications.info(game.i18n.localize("CHUD.info.saveSuccessful"));

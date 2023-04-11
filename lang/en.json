@@ -41,7 +41,8 @@
   "CHUD.discardChanges": "Discard Changes",
 
   "CHUD.errors": {
-    "generic": "An unknown error occurred while trying to render the sheet. Are you sure this is a valid conversation sheet?",
+    "generic": "An unknown error has occurred, for more information check the console.",
+    "genericSheetError": "An unknown error occurred while trying to render the sheet. Are you sure this is a valid conversation sheet?",
     "failedToParse": "Failed to parse sheet data. Are you sure this is a valid conversation sheet?",
     "invalidActor": "The provided actor is of an invalid format and could not be parsed properly.",
     "typeNotSupported": "This type of data is not supported by ConversationHUD.",
