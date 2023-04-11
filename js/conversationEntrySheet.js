@@ -97,6 +97,7 @@ export class ConversationEntrySheet extends JournalSheet {
       name: baseData.data.name,
       dirty: this.dirty,
       participants: this.participants,
+      data: baseData.data,
     };
 
     return data;
