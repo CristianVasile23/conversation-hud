@@ -34,12 +34,22 @@ export async function getActorDataFromDragEvent(event) {
               } else if (page.flags["monks-enhanced-journal"]) {
                 // Handle text pages with the the MEJ flag
                 const pageType = page.flags["monks-enhanced-journal"].type;
-                if (pageType && (pageType === "person" || pageType === "picture")) {
-                  participant = {
-                    name: page.name || "",
-                    img: page.src || "",
-                  };
-                  conversationParticipants.push(participant);
+                if (pageType) {
+                  switch (pageType) {
+                    case "person":
+                    case "picture":
+                    case "organization":
+                    case "loot":
+                    case "place":
+                    case "poi":
+                      participant = {
+                        name: page.name || "",
+                        img: page.src || "",
+                      };
+                      conversationParticipants.push(participant);
+                    default:
+                      break;
+                  }
                 }
               } else {
                 // Fallback for older saved conversations that have no flag attached
@@ -57,6 +67,18 @@ export async function getActorDataFromDragEvent(event) {
             case "image":
               participant = {
                 name: page.image.caption || "",
+                img: page.src || "",
+              };
+              conversationParticipants.push(participant);
+              break;
+            case "person":
+            case "picture":
+            case "organization":
+            case "loot":
+            case "place":
+            case "poi":
+              participant = {
+                name: page.name || "",
                 img: page.src || "",
               };
               conversationParticipants.push(participant);
