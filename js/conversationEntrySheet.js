@@ -30,7 +30,7 @@ export class ConversationEntrySheet extends JournalSheet {
       classes: ["sheet", "journal-sheet"],
       title: game.i18n.localize("CHUD.conversationEntry"),
       id: "conversation-entry-sheet",
-      template: `modules/conversation-hud/templates/conversation_sheet.html`,
+      template: `modules/conversation-hud/templates/conversation_sheet.hbs`,
       width: 635,
       height: 500,
       resizable: false,

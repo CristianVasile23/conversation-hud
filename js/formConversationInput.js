@@ -12,7 +12,7 @@ export class ConversationInputForm extends FormApplication {
     return mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
-      template: "modules/conversation-hud/templates/conversation_input.html",
+      template: "modules/conversation-hud/templates/conversation_input.hbs",
       id: "conversation-start-form",
       title: game.i18n.localize("CHUD.createConversation"),
       width: 635,

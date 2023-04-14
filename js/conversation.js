@@ -68,8 +68,8 @@ class ConversationHud {
     };
 
     // Render templates
-    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.html", template_data);
-    const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.html", {
+    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", template_data);
+    const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
       isGM: game.user.isGM,
       isMinimized: game.ConversationHud.conversationIsMinimized,
       isVisible: game.ConversationHud.conversationIsVisible,
@@ -191,7 +191,7 @@ class ConversationHud {
     };
 
     // Render template
-    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.html", template_data);
+    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", template_data);
 
     // Add rendered template to the conversation hud
     const conversationHud = document.getElementById("ui-conversation-hud");
@@ -348,7 +348,7 @@ class ConversationHud {
       if (this.activeConversation) {
         // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
         const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
-        const dialogContent = await renderTemplate("modules/conversation-hud/templates/conversation_save.html", {
+        const dialogContent = await renderTemplate("modules/conversation-hud/templates/conversation_save.hbs", {
           folders,
           name: game.i18n.format("DOCUMENT.New", { type: "Conversation Sheet" }),
         });

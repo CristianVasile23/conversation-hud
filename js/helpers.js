@@ -113,7 +113,7 @@ export async function updateConversationControls() {
     uiInterface.removeChild(controls);
   }
 
-  const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.html", {
+  const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
     isGM: game.user.isGM,
     isMinimized: game.ConversationHud.conversationIsMinimized,
     isVisible: game.ConversationHud.conversationIsVisible,

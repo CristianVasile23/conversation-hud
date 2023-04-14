@@ -325,6 +325,10 @@
   box-shadow: 0 0 10px var(--color-shadow-highlight);
 }
 
+.conversation-controls-button.margin {
+  margin-top: 30px;
+}
+
 .conversation-controls-button.toggle {
   background: rgba(30, 0, 60, 0.5);
   border: 1px solid #3b1893;

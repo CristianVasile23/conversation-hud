@@ -24,18 +24,20 @@
   </div>
 {{/if}}
 
-<div
-  class="conversation-controls-button"
-  onclick="game.ConversationHud.toggleActiveConversationMode()"
-  {{#if isMinimized}}
-    data-tooltip="{{localize 'CHUD.maximizeConversation'}}"
-  {{else}}
-    data-tooltip="{{localize 'CHUD.minimizeConversation'}}"
-  {{/if}}
->
-  {{#if isMinimized}}
-    <i class="fas fa-chevron-left"></i>
-  {{else}}
-    <i class="fas fa-chevron-right"></i>
-  {{/if}}
-</div>
+{{#if isVisible}}
+  <div
+    class="conversation-controls-button {{#if isGM}}margin{{/if}}"
+    onclick="game.ConversationHud.toggleActiveConversationMode()"
+    {{#if isMinimized}}
+      data-tooltip="{{localize 'CHUD.maximizeConversation'}}"
+    {{else}}
+      data-tooltip="{{localize 'CHUD.minimizeConversation'}}"
+    {{/if}}
+  >
+    {{#if isMinimized}}
+      <i class="fas fa-chevron-left"></i>
+    {{else}}
+      <i class="fas fa-chevron-right"></i>
+    {{/if}}
+  </div>
+{{/if}}
