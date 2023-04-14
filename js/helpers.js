@@ -103,3 +103,47 @@ export async function getActorDataFromDragEvent(event) {
     return null;
   }
 }
+
+export async function updateConversationControls() {
+  // Update the controls
+  const uiInterface = document.getElementById("interface");
+  const controls = document.getElementById("ui-conversation-controls");
+  if (controls) {
+    // Remove the old controls
+    uiInterface.removeChild(controls);
+  }
+
+  const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.html", {
+    isGM: game.user.isGM,
+    isMinimized: game.ConversationHud.conversationIsMinimized,
+    isVisible: game.ConversationHud.conversationIsVisible,
+    isSpeakingAs: game.ConversationHud.speakingAs,
+  });
+
+  const updatedControls = document.createElement("section");
+  updatedControls.id = "ui-conversation-controls";
+  updatedControls.setAttribute("data-tooltip-direction", "LEFT");
+  updatedControls.innerHTML = conversationControls;
+
+  const uiRight = document.getElementById("ui-right");
+  uiRight.before(updatedControls);
+}
+
+export async function updateConversationLayout() {
+  // Update the layout
+  const conversationHud = document.getElementById("ui-conversation-hud");
+  if (game.ConversationHud.conversationIsMinimized) {
+    conversationHud.classList.add("minimized");
+  } else {
+    conversationHud.classList.remove("minimized");
+  }
+
+  if (game.ConversationHud.conversationIsVisible) {
+    const conversationBackground = document.getElementById("conversation-background");
+    if (game.ConversationHud.conversationIsMinimized) {
+      conversationBackground.classList.remove("visible");
+    } else {
+      conversationBackground.classList.add("visible");
+    }
+  }
+}

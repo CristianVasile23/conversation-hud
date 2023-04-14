@@ -1,7 +1,7 @@
 import { ConversationInputForm } from "./formConversationInput.js";
 import { FileInputForm } from "./formAddParticipant.js";
 import { ConversationEntrySheet } from "./conversationEntrySheet.js";
-import { getActorDataFromDragEvent } from "./helpers.js";
+import { getActorDataFromDragEvent, updateConversationControls, updateConversationLayout } from "./helpers.js";
 
 class ConversationHud {
   // Function that initializes the class data
@@ -10,6 +10,7 @@ class ConversationHud {
     this.conversationIsActive = false;
     this.conversationIsVisible = false;
     this.conversationIsMinimized = false;
+    this.conversationIsSpeakingAs = false;
     this.activeConversation = null;
 
     // Register local hooks
@@ -71,6 +72,8 @@ class ConversationHud {
     const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.html", {
       isGM: game.user.isGM,
       isMinimized: game.ConversationHud.conversationIsMinimized,
+      isVisible: game.ConversationHud.conversationIsVisible,
+      isSpeakingAs: game.ConversationHud.conversationIsSpeakingAs,
     });
 
     // Create the conversation container
@@ -101,6 +104,7 @@ class ConversationHud {
     // Render conversation controls
     const controls = document.createElement("section");
     controls.id = "ui-conversation-controls";
+    controls.setAttribute("data-tooltip-direction", "LEFT");
     controls.innerHTML = conversationControls;
 
     const uiRight = document.getElementById("ui-right");
@@ -414,8 +418,8 @@ class ConversationHud {
   }
 
   setConversationHudVisibility(newVisibility) {
-    this.conversationIsVisible = newVisibility;
     game.ConversationHud.conversationIsVisible = newVisibility;
+    updateConversationControls();
 
     const conversationHud = document.getElementById("ui-conversation-hud");
     if (newVisibility) {
@@ -442,45 +446,15 @@ class ConversationHud {
 
   // Function that minimizes or maximizes the active conversation
   async toggleActiveConversationMode() {
-    const isMinimized = !this.conversationIsMinimized;
-    this.conversationIsMinimized = isMinimized;
+    this.conversationIsMinimized = !this.conversationIsMinimized;
+    updateConversationControls();
+    updateConversationLayout();
+  }
 
-    // Update the controls
-    const uiInterface = document.getElementById("interface");
-    const controls = document.getElementById("ui-conversation-controls");
-    if (controls) {
-      // Remove the old controls
-      uiInterface.removeChild(controls);
-    }
-
-    const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.html", {
-      isGM: game.user.isGM,
-      isMinimized: game.ConversationHud.conversationIsMinimized,
-    });
-
-    const updatedControls = document.createElement("section");
-    updatedControls.id = "ui-conversation-controls";
-    updatedControls.innerHTML = conversationControls;
-
-    const uiRight = document.getElementById("ui-right");
-    uiRight.before(updatedControls);
-
-    // Update the layout
-    const conversationHud = document.getElementById("ui-conversation-hud");
-    if (isMinimized) {
-      conversationHud.classList.add("minimized");
-    } else {
-      conversationHud.classList.remove("minimized");
-    }
-
-    if (game.ConversationHud.conversationIsVisible) {
-      const conversationBackground = document.getElementById("conversation-background");
-      if (isMinimized) {
-        conversationBackground.classList.remove("visible");
-      } else {
-        conversationBackground.classList.add("visible");
-      }
-    }
+  // Function that toggles the speaking as mode
+  async toggleSpeakingAsMode() {
+    this.conversationIsSpeakingAs = !this.conversationIsSpeakingAs;
+    updateConversationControls();
   }
 
   // Function that adds a single participant to the active conversation

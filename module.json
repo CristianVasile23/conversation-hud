@@ -37,7 +37,7 @@
       }
     ]
   },
-  "esmodules": ["js/controls.js", "js/conversation.js", "js/entityLinkHandler.js"],
+  "esmodules": ["js/controls.js", "js/conversation.js", "js/entityLinkHandler.js", "js/hooks.js"],
   "styles": ["css/main.css"],
   "languages": [
     {

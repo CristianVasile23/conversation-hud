@@ -28,6 +28,7 @@
   "CHUD.createConversation": "Create Conversation",
   "CHUD.startConversation": "Start Conversation",
 
+  "CHUD.toggleSpeakAs": "Toggle Speak As",
   "CHUD.toggleVisibility": "Toggle Visibility",
   "CHUD.saveConversation": "Save Conversation",
   "CHUD.maximizeConversation": "Maximize Conversation",

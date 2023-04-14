@@ -298,8 +298,7 @@
   z-index: 20;
 }
 
-.conversation-controls-minimize-button,
-.conversation-controls-save-button {
+.conversation-controls-button {
   display: flex;
   flex-flow: column;
   justify-content: center;
@@ -319,12 +318,27 @@
   border: 1px solid var(--color-border-dark);
   border-radius: 5px;
 }
-.conversation-controls-minimize-button:hover,
-.conversation-controls-save-button:hover {
+.conversation-controls-button:hover {
   color: var(--color-text-light-highlight);
   border: 1px solid var(--color-border-highlight-alt);
   border-bottom: 1px solid var(--color-border-highlight);
   box-shadow: 0 0 10px var(--color-shadow-highlight);
+}
+
+.conversation-controls-button.toggle {
+  background: rgba(30, 0, 60, 0.5);
+  border: 1px solid #3b1893;
+}
+.conversation-controls-button.toggle:hover {
+  background: rgba(60, 0, 120, 0.75);
+  border: 1px solid #9b8dff;
+  box-shadow: 0 0 10px #9b8dff;
+}
+
+.conversation-controls-button.toggle.active {
+  background: rgba(60, 0, 120, 0.75);
+  border: 1px solid #9b8dff;
+  box-shadow: 0 0 10px #9b8dff;
 }
 
 .conversation-hud-content .conversation-hud-dropzone {
