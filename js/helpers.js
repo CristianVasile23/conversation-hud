@@ -1,3 +1,5 @@
+import { socket } from "./init.js";
+
 export async function getActorDataFromDragEvent(event) {
   try {
     const data = TextEditor.getDragEventData(event);
@@ -104,6 +106,22 @@ export async function getActorDataFromDragEvent(event) {
   }
 }
 
+export async function checkConversationDataAvailability(users) {
+  // let userId = users[0].id;
+  for (let i = 0; i < users.length; i++) {
+    const result = await socket.executeAsUser("getActiveConversation", users[i].id);
+
+    // Check to see if we have a result and it is an active conversation
+    if (result) {
+      if (result.conversationIsActive) {
+        // We found an active conversation
+        const userId = users[i].id;
+        return { result, userId };
+      }
+    }
+  }
+}
+
 export async function updateConversationControls() {
   // Update the controls
   const uiInterface = document.getElementById("interface");
@@ -117,7 +135,7 @@ export async function updateConversationControls() {
     isGM: game.user.isGM,
     isMinimized: game.ConversationHud.conversationIsMinimized,
     isVisible: game.ConversationHud.conversationIsVisible,
-    isSpeakingAs: game.ConversationHud.speakingAs,
+    isSpeakingAs: game.ConversationHud.conversationIsSpeakingAs,
   });
 
   const updatedControls = document.createElement("section");
@@ -146,4 +164,52 @@ export async function updateConversationLayout() {
       conversationBackground.classList.add("visible");
     }
   }
+}
+
+export function handleOnClickContentLink(event, wrapped) {
+  event.preventDefault();
+  const currentTarget = event.currentTarget;
+  let document = null;
+
+  if (currentTarget.dataset.pack) {
+    return wrapped.bind(this)(event);
+  }
+
+  if (currentTarget.dataset.type !== "JournalEntry") {
+    return wrapped.bind(this)(event);
+  }
+
+  const collection = game.collections.get(currentTarget.dataset.type);
+  document = collection.get(currentTarget.dataset.id);
+
+  if (document?.flags?.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet") {
+    if (!document.testUserPermission(game.user, "LIMITED")) {
+      ui.notifications.warn(game.i18n.localize("CHUD.errors.activateNoPerms"));
+    } else {
+      if (event.ctrlKey) {
+        if (game.ConversationHud) {
+          const pages = document.getEmbeddedCollection("JournalEntryPage").contents;
+          if (pages.length > 0) {
+            try {
+              const conversationData = JSON.parse(pages[0].text.content);
+              game.ConversationHud.startConversationFromData(conversationData);
+            } catch (error) {
+              if (error instanceof SyntaxError) {
+                ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
+              } else {
+                ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
+              }
+            }
+          } else {
+            ui.notifications.error(game.i18n.localize("CHUD.errors.activateNoPages"));
+          }
+        } else {
+          ui.notifications.error(game.i18n.localize("CHUD.errors.activateNoInit"));
+        }
+        return;
+      }
+    }
+  }
+
+  return wrapped.bind(this)(event);
 }

@@ -8,11 +8,15 @@ Hooks.on("chatMessage", (chatLog, message, chatData) => {
   // Check for an active conversation
   if (!game.ConversationHud.conversationIsActive) return true;
 
+  // Check to see if the conversation is visible
+  if (!game.ConversationHud.conversationIsVisible) return true;
+
+  // Check to see if there is an active participant
   const activeParticipant = game.ConversationHud.activeConversation.activeParticipant;
   if (activeParticipant === -1) return true;
 
   // Check to see if the speaking as functionality is enabled
-  if (!game.ConversationHud.speakingAs) return true;
+  if (!game.ConversationHud.conversationIsSpeakingAs) return true;
 
   // Get active participant
   const participant = game.ConversationHud.activeConversation.participants[activeParticipant];
