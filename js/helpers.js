@@ -213,3 +213,19 @@ export function handleOnClickContentLink(event, wrapped) {
 
   return wrapped.bind(this)(event);
 }
+
+export function checkIfUserGM() {
+  if (!game.user.isGM) {
+    ui.notifications.error(game.i18n.localize("CHUD.errors.insufficientRights"));
+    return false;
+  }
+  return true;
+}
+
+export function checkIfConversationActive() {
+  if (!game.ConversationHud.conversationIsActive) {
+    ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
+    return false;
+  }
+  return true;
+}

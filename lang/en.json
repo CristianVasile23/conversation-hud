@@ -55,6 +55,10 @@
     "noActiveConversation": "No active conversation found.",
     "saveUnsuccessful": "Failed to save current conversation.",
 
+    "noSelectedTokens": "No tokens are selected.",
+    "conversationAlreadyActive": "Cannot create a new conversation as there is already an active conversation.",
+    "insufficientRights": "Insufficient user rights.",
+
     "noLibWrapper": "ConversationHUD requires the libWrapper module for full functionality. Please install and activate it."
   },
 

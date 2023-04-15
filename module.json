@@ -12,7 +12,7 @@
   },
   "authors": [
     {
-      "name": "Cristian Vasile",
+      "name": "Saervicus (Cristian Vasile)",
       "discord": "Saervicus#7305",
       "url": "https://github.com/CristianVasile23"
     }
@@ -39,6 +39,14 @@
   },
   "esmodules": ["js/init.js", "js/controls.js", "js/hooks.js"],
   "styles": ["css/main.css"],
+  "packs": [
+    {
+      "name": "conversation-hud-macros",
+      "label": "ConversationHUD Macros",
+      "path": "packs/macros.db",
+      "type": "Macro"
+    }
+  ],
   "languages": [
     {
       "lang": "en",
