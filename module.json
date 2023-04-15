@@ -12,7 +12,7 @@
   },
   "authors": [
     {
-      "name": "Cristian Vasile",
+      "name": "Cristian Vasile (Saervicus)",
       "discord": "Saervicus#7305",
       "url": "https://github.com/CristianVasile23"
     }
@@ -24,7 +24,7 @@
         "type": "module",
         "compatibility": {
           "minimum": "1.12.4.0",
-          "verified": "1.12.10.0"
+          "verified": "1.12.12.0"
         }
       },
       {
@@ -32,13 +32,21 @@
         "type": "module",
         "compatibility": {
           "minimum": "1.0.10",
-          "verified": "1.0.10"
+          "verified": "1.0.12"
         }
       }
     ]
   },
-  "esmodules": ["js/controls.js", "js/conversation.js", "js/entityLinkHandler.js"],
+  "esmodules": ["js/init.js", "js/controls.js", "js/hooks.js"],
   "styles": ["css/main.css"],
+  "packs": [
+    {
+      "name": "conversation-hud-macros",
+      "label": "ConversationHUD Macros",
+      "path": "packs/macros.db",
+      "type": "Macro"
+    }
+  ],
   "languages": [
     {
       "lang": "en",
@@ -50,6 +58,6 @@
   "url": "#{URL}#",
   "manifest": "#{MANIFEST}#",
   "download": "#{DOWNLOAD}#",
-  "license": "LICENSE",
-  "readme": "README.md"
+  "license": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/LICENSE",
+  "readme": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/README.md"
 }

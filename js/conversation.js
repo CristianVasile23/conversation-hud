@@ -1,15 +1,23 @@
 import { ConversationInputForm } from "./formConversationInput.js";
 import { FileInputForm } from "./formAddParticipant.js";
 import { ConversationEntrySheet } from "./conversationEntrySheet.js";
-import { getActorDataFromDragEvent } from "./helpers.js";
+import {
+  checkIfConversationActive,
+  checkIfUserGM,
+  getActorDataFromDragEvent,
+  updateConversationControls,
+  updateConversationLayout,
+} from "./helpers.js";
+import { socket } from "./init.js";
 
-class ConversationHud {
+export class ConversationHud {
   // Function that initializes the class data
   init() {
     // Initialize variables
     this.conversationIsActive = false;
     this.conversationIsVisible = false;
     this.conversationIsMinimized = false;
+    this.conversationIsSpeakingAs = false;
     this.activeConversation = null;
 
     // Register local hooks
@@ -67,10 +75,12 @@ class ConversationHud {
     };
 
     // Render templates
-    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.html", template_data);
-    const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.html", {
+    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", template_data);
+    const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
       isGM: game.user.isGM,
       isMinimized: game.ConversationHud.conversationIsMinimized,
+      isVisible: game.ConversationHud.conversationIsVisible,
+      isSpeakingAs: game.ConversationHud.conversationIsSpeakingAs,
     });
 
     // Create the conversation container
@@ -101,6 +111,7 @@ class ConversationHud {
     // Render conversation controls
     const controls = document.createElement("section");
     controls.id = "ui-conversation-controls";
+    controls.setAttribute("data-tooltip-direction", "LEFT");
     controls.innerHTML = conversationControls;
 
     const uiRight = document.getElementById("ui-right");
@@ -135,6 +146,7 @@ class ConversationHud {
     game.ConversationHud.conversationIsActive = false;
     game.ConversationHud.conversationIsVisible = false;
     game.ConversationHud.conversationIsMinimized = false;
+    game.ConversationHud.conversationIsSpeakingAs = false;
     game.ConversationHud.activeConversation = null;
 
     const body = document.body;
@@ -187,48 +199,46 @@ class ConversationHud {
     };
 
     // Render template
-    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.html", template_data);
+    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", template_data);
 
     // Add rendered template to the conversation hud
     const conversationHud = document.getElementById("ui-conversation-hud");
     if (conversationHud) {
       conversationHud.innerHTML = renderedHtml;
-
       game.ConversationHud.addDragDropListeners(conversationHud);
-
-      // Set image
       game.ConversationHud.changeActiveImage(conversationData.activeParticipant);
     }
   }
 
   // Function that either triggers the conversation creation form, or removes the active conversation
-  async onToggleConversation(toggle) {
-    if (toggle) {
-      if (!this.conversationIsActive) {
-        // Set button active status to false until a successful form has been completed
-        ui.controls.controls
-          .find((controls) => controls.name === "notes")
-          .tools.find((tools) => tools.name === "activateHud").active = false;
+  async onToggleConversation(shouldCreateConversation) {
+    if (checkIfUserGM()) {
+      if (shouldCreateConversation) {
+        if (!game.ConversationHud.conversationIsActive) {
+          // Set button active status to false until a successful form has been completed
+          ui.controls.controls
+            .find((controls) => controls.name === "notes")
+            .tools.find((tools) => tools.name === "activateHud").active = false;
 
-        // Create form
-        new ConversationInputForm((data) => this.#handleConversationCreationData(data)).render(true);
-      }
-    } else {
-      if (this.conversationIsActive) {
-        socket.executeForEveryone("removeConversation");
-        socket.executeForAllGMs("updateActivateHudButton", false);
+          // Create form
+          new ConversationInputForm((data) => this.#handleConversationCreationData(data)).render(true);
+        } else {
+          ui.notifications.error(game.i18n.localize("CHUD.errors.conversationAlreadyActive"));
+        }
+      } else {
+        if (game.ConversationHud.conversationIsActive) {
+          socket.executeForEveryone("removeConversation");
+          socket.executeForAllGMs("updateActivateHudButton", false);
+        } else {
+          ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
+        }
       }
     }
   }
 
-  // Function that returns whether or not a conversation is currently active
-  getConversationStatus() {
-    return this.conversationIsActive;
-  }
-
   // Function that changes the active participant
   changeActiveParticipant(index) {
-    if (game.user.isGM) {
+    if (checkIfUserGM()) {
       // If we have clicked on an already active participant, then we will remove them as active
       if (game.ConversationHud.activeConversation.activeParticipant === index) {
         index = -1;
@@ -240,10 +250,7 @@ class ConversationHud {
 
   // Function called by the socketlib sockets
   setActiveParticipant(index) {
-    // Change active participant
     game.ConversationHud.activeConversation.activeParticipant = index;
-
-    // Set the image
     game.ConversationHud.changeActiveImage(index);
   }
 
@@ -284,7 +291,7 @@ class ConversationHud {
 
   // Function that adds a participant to the active conversation
   addParticipantToActiveConversation() {
-    if (game.user.isGM) {
+    if (checkIfUserGM()) {
       const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));
       fileInputForm.render(true);
     }
@@ -292,7 +299,7 @@ class ConversationHud {
 
   // Function that handles drag and drop for actors
   async handleActorDrop(event) {
-    if (game.user.isGM) {
+    if (checkIfUserGM()) {
       event.preventDefault();
       const data = await getActorDataFromDragEvent(event);
       if (data && data.length > 0) {
@@ -305,7 +312,7 @@ class ConversationHud {
 
   // Function that removes a participant from the active conversation
   removeParticipantFromActiveConversation(index) {
-    if (game.user.isGM) {
+    if (checkIfUserGM()) {
       // Check to see if the removed participant is the active one
       // Otherwise, check to see if the removed participant is before the active one, in which case
       // we need to update the active participant index by lowering it by one
@@ -324,7 +331,7 @@ class ConversationHud {
 
   // Function that updates a participant from the active conversation
   updateParticipantFromActiveConversation(index) {
-    if (game.user.isGM) {
+    if (checkIfUserGM()) {
       if (index < 0 || this.activeConversation.participants.length < index) {
         console.error("ConversationHUD | Tried to update a participant with an invalid index");
         return;
@@ -340,11 +347,11 @@ class ConversationHud {
 
   // Function that saves the active conversation to a clipboard
   async saveActiveConversation() {
-    if (game.user.isGM) {
-      if (this.activeConversation) {
+    if (checkIfUserGM()) {
+      if (game.ConversationHud.activeConversation) {
         // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
         const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
-        const dialogContent = await renderTemplate("modules/conversation-hud/templates/conversation_save.html", {
+        const dialogContent = await renderTemplate("modules/conversation-hud/templates/conversation_save.hbs", {
           folders,
           name: game.i18n.format("DOCUMENT.New", { type: "Conversation Sheet" }),
         });
@@ -364,6 +371,103 @@ class ConversationHud {
       } else {
         ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
       }
+    }
+  }
+
+  updateActivateHudButton(status) {
+    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = status;
+    ui.controls.render();
+  }
+
+  // Function that can be called from a macro in order to trigger a conversation
+  startConversationFromData(participants) {
+    if (checkIfUserGM()) {
+      let conversationData = {};
+      conversationData.type = 1;
+      conversationData.participants = participants;
+      conversationData.activeParticipant = -1;
+
+      if (this.activeConversation) {
+        this.#handleConversationUpdateData(conversationData);
+      } else {
+        this.#handleConversationCreationData(conversationData);
+      }
+    }
+  }
+
+  setConversationHudVisibility(newVisibility) {
+    game.ConversationHud.conversationIsVisible = newVisibility;
+    updateConversationControls();
+
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    if (newVisibility) {
+      conversationHud.classList.add("visible");
+    } else {
+      conversationHud.classList.remove("visible");
+    }
+
+    const conversationBackground = document.getElementById("conversation-background");
+    if (newVisibility) {
+      if (!game.ConversationHud.conversationIsMinimized) {
+        conversationBackground.classList.add("visible");
+      }
+    } else {
+      conversationBackground.classList.remove("visible");
+    }
+  }
+
+  // Function that toggles the visibility of the active conversation
+  toggleActiveConversationVisibility() {
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      game.ConversationHud.conversationIsVisible = !game.ConversationHud.conversationIsVisible;
+      socket.executeForEveryone("setConversationHudVisibility", game.ConversationHud.conversationIsVisible);
+    }
+  }
+
+  // Function that minimizes or maximizes the active conversation
+  async toggleActiveConversationMode() {
+    if (checkIfConversationActive()) {
+      game.ConversationHud.conversationIsMinimized = !game.ConversationHud.conversationIsMinimized;
+      updateConversationControls();
+      updateConversationLayout();
+    }
+  }
+
+  // Function that toggles the speaking as mode
+  async toggleSpeakingAsMode() {
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      game.ConversationHud.conversationIsSpeakingAs = !game.ConversationHud.conversationIsSpeakingAs;
+      updateConversationControls();
+    }
+  }
+
+  // Function that adds token participants to a conversation
+  toggleTokenParticipantsConversationStatus(participants) {
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      const currentParticipants = game.ConversationHud.activeConversation.participants;
+
+      // Parse the list of current participants and check if there are any token participants within it
+      // If so, create separate list of indexes which will be used to remove the active token participants
+      let participantsToAdd = [];
+      let participantsIndexesToRemove = [];
+      participants.forEach((participant) => {
+        const index = currentParticipants.findIndex((e) => e.id === participant.id);
+        if (index !== -1) {
+          participantsIndexesToRemove.push(index);
+        } else {
+          participantsToAdd.push(participant);
+        }
+      });
+
+      // Sort indexes in descending order so as not to shift the array when removing participants
+      participantsIndexesToRemove = participantsIndexesToRemove.sort((a, b) => b - a);
+      participantsIndexesToRemove.forEach((index) => {
+        this.removeParticipantFromActiveConversation(index);
+      });
+
+      participantsToAdd.forEach((participant) => {
+        this.#handleAddParticipant(participant);
+      });
     }
   }
 
@@ -397,92 +501,6 @@ class ConversationHud {
     }
   }
 
-  // Function that can be called from a macro in order to trigger a conversation
-  startConversationFromData(participants) {
-    if (game.user.isGM) {
-      let conversationData = {};
-      conversationData.type = 1;
-      conversationData.participants = participants;
-      conversationData.activeParticipant = -1;
-
-      if (this.activeConversation) {
-        this.#handleConversationUpdateData(conversationData);
-      } else {
-        this.#handleConversationCreationData(conversationData);
-      }
-    }
-  }
-
-  setConversationHudVisibility(newVisibility) {
-    this.conversationIsVisible = newVisibility;
-    game.ConversationHud.conversationIsVisible = newVisibility;
-
-    const conversationHud = document.getElementById("ui-conversation-hud");
-    if (newVisibility) {
-      conversationHud.classList.add("visible");
-    } else {
-      conversationHud.classList.remove("visible");
-    }
-
-    const conversationBackground = document.getElementById("conversation-background");
-    if (newVisibility) {
-      if (!game.ConversationHud.conversationIsMinimized) {
-        conversationBackground.classList.add("visible");
-      }
-    } else {
-      conversationBackground.classList.remove("visible");
-    }
-  }
-
-  // Function that toggles the visibility of the active conversation
-  toggleActiveConversationVisibility() {
-    this.conversationIsVisible = !this.conversationIsVisible;
-    socket.executeForEveryone("setConversationHudVisibility", this.conversationIsVisible);
-  }
-
-  // Function that minimizes or maximizes the active conversation
-  async toggleActiveConversationMode() {
-    const isMinimized = !this.conversationIsMinimized;
-    this.conversationIsMinimized = isMinimized;
-
-    // Update the controls
-    const uiInterface = document.getElementById("interface");
-    const controls = document.getElementById("ui-conversation-controls");
-    if (controls) {
-      // Remove the old controls
-      uiInterface.removeChild(controls);
-    }
-
-    const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.html", {
-      isGM: game.user.isGM,
-      isMinimized: game.ConversationHud.conversationIsMinimized,
-    });
-
-    const updatedControls = document.createElement("section");
-    updatedControls.id = "ui-conversation-controls";
-    updatedControls.innerHTML = conversationControls;
-
-    const uiRight = document.getElementById("ui-right");
-    uiRight.before(updatedControls);
-
-    // Update the layout
-    const conversationHud = document.getElementById("ui-conversation-hud");
-    if (isMinimized) {
-      conversationHud.classList.add("minimized");
-    } else {
-      conversationHud.classList.remove("minimized");
-    }
-
-    if (game.ConversationHud.conversationIsVisible) {
-      const conversationBackground = document.getElementById("conversation-background");
-      if (isMinimized) {
-        conversationBackground.classList.remove("visible");
-      } else {
-        conversationBackground.classList.add("visible");
-      }
-    }
-  }
-
   // Function that adds a single participant to the active conversation
   #handleAddParticipant(data) {
     if (data.name === "") {
@@ -512,6 +530,11 @@ class ConversationHud {
 
   // Function that parses conversation input form data and then activates the conversation hud
   #handleConversationCreationData(formData) {
+    if (game.ConversationHud.conversationIsActive) {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.conversationAlreadyActive"));
+      return;
+    }
+
     let parsedData = {};
     parsedData.activeParticipant = -1;
     parsedData.participants = formData.participants;
@@ -520,11 +543,6 @@ class ConversationHud {
 
     // Finally, set the button status to active now that a conversation is active
     socket.executeForAllGMs("updateActivateHudButton", true);
-  }
-
-  updateActivateHudButton(status) {
-    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = status;
-    ui.controls.render();
   }
 
   // Function that parses conversation input form data and then updates the conversation hud
@@ -536,82 +554,3 @@ class ConversationHud {
     socket.executeForEveryone("updateActiveConversation", parsedData);
   }
 }
-
-async function checkConversationDataAvailability(users) {
-  // let userId = users[0].id;
-  for (let i = 0; i < users.length; i++) {
-    const result = await socket.executeAsUser("getActiveConversation", users[i].id);
-
-    // Check to see if we have a result and it is an active conversation
-    if (result) {
-      if (result.conversationIsActive) {
-        // We found an active conversation
-        const userId = users[i].id;
-        return { result, userId };
-      }
-    }
-  }
-}
-
-let socket;
-Hooks.once("socketlib.ready", () => {
-  socket = socketlib.registerModule("conversation-hud");
-});
-
-Hooks.on("init", () => {
-  game.ConversationHud = new ConversationHud();
-  game.ConversationHud.init();
-});
-
-Hooks.on("ready", async () => {
-  if (game.user.isGM) {
-    // Get a list of the connected users
-    const regularUsers = game.users.filter((item) => item.active && item.id !== game.user.id && !item.isGM);
-    const gmUsers = game.users.filter((item) => item.active && item.id !== game.user.id && item.isGM);
-
-    // Prioritize getting data from the GM users before trying to get data from the regular users
-    let conversationData;
-    if (gmUsers.length > 0) {
-      conversationData = await checkConversationDataAvailability(gmUsers);
-    }
-
-    // If we found no active conversation in the gm users, check to see if the regular users have one
-    if (!conversationData) {
-      if (regularUsers.length > 0) {
-        conversationData = await checkConversationDataAvailability(regularUsers);
-      }
-    }
-
-    if (conversationData) {
-      const visibility = await socket.executeAsUser("getActiveConversationVisibility", conversationData.userId);
-      game.ConversationHud.renderConversation(conversationData.result.activeConversation, visibility);
-    }
-  } else {
-    try {
-      // Get conversation data from a GM
-      const result = await socket.executeAsGM("getActiveConversation");
-
-      // If there is an active conversation, render it
-      if (result.conversationIsActive) {
-        const visibility = await socket.executeAsGM("getActiveConversationVisibility");
-        game.ConversationHud.renderConversation(result.activeConversation, visibility);
-      }
-    } catch (error) {
-      if (error.name === "SocketlibNoGMConnectedError") {
-        // If no GM is connected, try to get the data from another user
-        const users = game.users.filter((item) => item.active && item.id !== game.user.id);
-
-        if (users.length > 0) {
-          const { result, userId } = await checkConversationDataAvailability(users);
-
-          if (result) {
-            const visibility = await socket.executeAsUser("getActiveConversationVisibility", userId);
-            game.ConversationHud.renderConversation(result.activeConversation, visibility);
-          }
-        }
-      } else {
-        console.error(error);
-      }
-    }
-  }
-});

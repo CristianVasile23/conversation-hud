@@ -1,3 +1,9 @@
+## 3.5.0
+
+- Added the _Speak As_ functionality. When a conversation is active, the GM can now toggle if they want chat messages to be sent under the name of the currently active conversation participant.
+- Added macros which can be used to programmatically trigger several of the ConversationHUD functionalities.
+- Miscellaneous improvements and code refactoring.
+
 ## 3.4.0
 
 - Improved the drag and drop functionality to allow journal entries as well

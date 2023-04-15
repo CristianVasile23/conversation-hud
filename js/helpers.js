@@ -1,3 +1,5 @@
+import { socket } from "./init.js";
+
 export async function getActorDataFromDragEvent(event) {
   try {
     const data = TextEditor.getDragEventData(event);
@@ -102,4 +104,128 @@ export async function getActorDataFromDragEvent(event) {
     console.error(e);
     return null;
   }
+}
+
+export async function checkConversationDataAvailability(users) {
+  // let userId = users[0].id;
+  for (let i = 0; i < users.length; i++) {
+    const result = await socket.executeAsUser("getActiveConversation", users[i].id);
+
+    // Check to see if we have a result and it is an active conversation
+    if (result) {
+      if (result.conversationIsActive) {
+        // We found an active conversation
+        const userId = users[i].id;
+        return { result, userId };
+      }
+    }
+  }
+}
+
+export async function updateConversationControls() {
+  // Update the controls
+  const uiInterface = document.getElementById("interface");
+  const controls = document.getElementById("ui-conversation-controls");
+  if (controls) {
+    // Remove the old controls
+    uiInterface.removeChild(controls);
+  }
+
+  const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
+    isGM: game.user.isGM,
+    isMinimized: game.ConversationHud.conversationIsMinimized,
+    isVisible: game.ConversationHud.conversationIsVisible,
+    isSpeakingAs: game.ConversationHud.conversationIsSpeakingAs,
+  });
+
+  const updatedControls = document.createElement("section");
+  updatedControls.id = "ui-conversation-controls";
+  updatedControls.setAttribute("data-tooltip-direction", "LEFT");
+  updatedControls.innerHTML = conversationControls;
+
+  const uiRight = document.getElementById("ui-right");
+  uiRight.before(updatedControls);
+}
+
+export async function updateConversationLayout() {
+  // Update the layout
+  const conversationHud = document.getElementById("ui-conversation-hud");
+  if (game.ConversationHud.conversationIsMinimized) {
+    conversationHud.classList.add("minimized");
+  } else {
+    conversationHud.classList.remove("minimized");
+  }
+
+  if (game.ConversationHud.conversationIsVisible) {
+    const conversationBackground = document.getElementById("conversation-background");
+    if (game.ConversationHud.conversationIsMinimized) {
+      conversationBackground.classList.remove("visible");
+    } else {
+      conversationBackground.classList.add("visible");
+    }
+  }
+}
+
+export function handleOnClickContentLink(event, wrapped) {
+  event.preventDefault();
+  const currentTarget = event.currentTarget;
+  let document = null;
+
+  if (currentTarget.dataset.pack) {
+    return wrapped.bind(this)(event);
+  }
+
+  if (currentTarget.dataset.type !== "JournalEntry") {
+    return wrapped.bind(this)(event);
+  }
+
+  const collection = game.collections.get(currentTarget.dataset.type);
+  document = collection.get(currentTarget.dataset.id);
+
+  if (document?.flags?.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet") {
+    if (!document.testUserPermission(game.user, "LIMITED")) {
+      ui.notifications.warn(game.i18n.localize("CHUD.errors.activateNoPerms"));
+    } else {
+      if (event.ctrlKey) {
+        if (game.ConversationHud) {
+          const pages = document.getEmbeddedCollection("JournalEntryPage").contents;
+          if (pages.length > 0) {
+            try {
+              const conversationData = JSON.parse(pages[0].text.content);
+              game.ConversationHud.startConversationFromData(conversationData);
+            } catch (error) {
+              if (error instanceof SyntaxError) {
+                ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
+              } else {
+                ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
+              }
+            }
+          } else {
+            ui.notifications.error(game.i18n.localize("CHUD.errors.activateNoPages"));
+          }
+        } else {
+          ui.notifications.error(game.i18n.localize("CHUD.errors.activateNoInit"));
+        }
+        return;
+      }
+    }
+  }
+
+  return wrapped.bind(this)(event);
+}
+
+export function checkIfUserGM() {
+  if (!game.user.isGM) {
+    ui.notifications.error(game.i18n.localize("CHUD.errors.insufficientRights"));
+    return false;
+  }
+  return true;
+}
+
+export function checkIfConversationActive() {
+  if (!game.ConversationHud.conversationIsActive) {
+    ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
+    return false;
+  }
+  return true;
 }

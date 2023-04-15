@@ -10,7 +10,7 @@ export class FileInputForm extends FormApplication {
     return mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
-      template: `modules/conversation-hud/templates/add_edit_participant.html`,
+      template: `modules/conversation-hud/templates/add_edit_participant.hbs`,
       id: "conversation-add-participant",
       title: game.i18n.localize("CHUD.participantData"),
       width: 560,

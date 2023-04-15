@@ -7,7 +7,7 @@ Hooks.on("getSceneControlButtons", (controls) => {
         title: game.i18n.localize("CHUD.activateHUD"),
         icon: "fas fa-comments",
         toggle: true,
-        active: game.ConversationHud.getConversationStatus(),
+        active: game.ConversationHud.conversationIsActive,
         visible: game.user.isGM,
         onClick: (toggle) => {
           Hooks.call("toggleConversation", toggle);

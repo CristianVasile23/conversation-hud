@@ -1,22 +1,22 @@
 <form class="flexcol">
   <div>
     <div class="form-group">
-      <label>{{localize 'CHUD.name'}}</label>
+      <label>{{localize "CHUD.name"}}</label>
       <div class="form-fields">
         <input class="text" type="text" name="name" placeholder="{{localize 'CHUD.newParticipant'}}" value="{{participantData.name}}" />
       </div>
-      <p class="notes">{{localize 'CHUD.nameHint'}}</p>
+      <p class="notes">{{localize "CHUD.nameHint"}}</p>
     </div>
 
     <div class="form-group">
-      <label>{{localize 'CHUD.portrait'}}</label>
+      <label>{{localize "CHUD.portrait"}}</label>
       <div class="form-fields">
         <button type="button" class="file-picker" data-type="imagevideo" data-target="img" title="{{localize 'CHUD.browseFiles'}}">
           <i class="fas fa-file-import fa-fw"></i>
         </button>
         <input class="image" type="text" name="img" placeholder="{{localize 'CHUD.filePath'}}" value="{{participantData.img}}" />
       </div>
-      <p class="notes">{{localize 'CHUD.portraitHint'}}</p>
+      <p class="notes">{{localize "CHUD.portraitHint"}}</p>
     </div>
 
     <div class="image-list"></div>
@@ -24,7 +24,11 @@
     <footer class="sheet-footer flexrow">
       <button type="submit" name="submit">
         <i class="fa fa-check"></i>
-        {{#if isEditing}} {{localize 'CHUD.editParticipant'}} {{else}} {{localize 'CHUD.addParticipant'}} {{/if}}
+        {{#if isEditing}}
+          {{localize "CHUD.editParticipant"}}
+        {{else}}
+          {{localize "CHUD.addParticipant"}}
+        {{/if}}
       </button>
     </footer>
   </div>

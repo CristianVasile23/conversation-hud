@@ -1,0 +1,43 @@
+{{#if isGM}}
+  <div
+    class="conversation-controls-button toggle {{#if isVisible}}active{{/if}}"
+    onclick="game.ConversationHud.toggleActiveConversationVisibility()"
+    data-tooltip="{{localize 'CHUD.toggleVisibility'}}"
+  >
+    <i class="fas fa-eye"></i>
+  </div>
+
+  <div
+    class="conversation-controls-button toggle {{#if isSpeakingAs}}active{{/if}}"
+    onclick="game.ConversationHud.toggleSpeakingAsMode()"
+    data-tooltip="{{localize 'CHUD.toggleSpeakAs'}}"
+  >
+    <i class="fas fa-comment-quote"></i>
+  </div>
+
+  <div
+    class="conversation-controls-button"
+    onclick="game.ConversationHud.saveActiveConversation()"
+    data-tooltip="{{localize 'CHUD.saveConversation'}}"
+  >
+    <i class="fas fa-save"></i>
+  </div>
+{{/if}}
+
+{{#if isVisible}}
+  <div
+    class="conversation-controls-button {{#if isGM}}margin{{/if}}"
+    onclick="game.ConversationHud.toggleActiveConversationMode()"
+    {{#if isMinimized}}
+      data-tooltip="{{localize 'CHUD.maximizeConversation'}}"
+    {{else}}
+      data-tooltip="{{localize 'CHUD.minimizeConversation'}}"
+    {{/if}}
+  >
+    {{#if isMinimized}}
+      <i class="fas fa-chevron-left"></i>
+    {{else}}
+      <i class="fas fa-chevron-right"></i>
+    {{/if}}
+  </div>
+{{/if}}
