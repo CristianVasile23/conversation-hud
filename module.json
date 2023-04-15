@@ -12,7 +12,7 @@
   },
   "authors": [
     {
-      "name": "Saervicus (Cristian Vasile)",
+      "name": "Cristian Vasile (Saervicus)",
       "discord": "Saervicus#7305",
       "url": "https://github.com/CristianVasile23"
     }
@@ -24,7 +24,7 @@
         "type": "module",
         "compatibility": {
           "minimum": "1.12.4.0",
-          "verified": "1.12.10.0"
+          "verified": "1.12.12.0"
         }
       },
       {
@@ -32,7 +32,7 @@
         "type": "module",
         "compatibility": {
           "minimum": "1.0.10",
-          "verified": "1.0.10"
+          "verified": "1.0.12"
         }
       }
     ]
@@ -58,6 +58,6 @@
   "url": "#{URL}#",
   "manifest": "#{MANIFEST}#",
   "download": "#{DOWNLOAD}#",
-  "license": "LICENSE",
-  "readme": "README.md"
+  "license": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/LICENSE",
+  "readme": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/README.md"
 }
