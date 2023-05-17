@@ -1,5 +1,7 @@
+import { MODULE_NAME } from "./constants.js";
 import { ConversationHud } from "./conversation.js";
 import { checkConversationDataAvailability, handleOnClickContentLink } from "./helpers.js";
+import { registerSettings } from "./settings.js";
 
 // Warning hook in case libWrapper is not installed
 Hooks.once("ready", () => {
@@ -18,7 +20,7 @@ Hooks.on("init", () => {
   // Register the module within libWrapper
   if (libWrapper) {
     libWrapper.register(
-      "conversation-hud",
+      MODULE_NAME,
       "TextEditor._onClickContentLink",
       function (wrapped, event) {
         return handleOnClickContentLink.bind(this)(event, wrapped);
@@ -26,6 +28,9 @@ Hooks.on("init", () => {
       "MIXED"
     );
   }
+
+  // Register settings
+  registerSettings();
 
   // Initialize the ConversationHUD object
   game.ConversationHud = new ConversationHud();

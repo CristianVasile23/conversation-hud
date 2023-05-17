@@ -58,6 +58,7 @@
     "noSelectedTokens": "No tokens are selected.",
     "conversationAlreadyActive": "Cannot create a new conversation as there is already an active conversation.",
     "insufficientRights": "Insufficient user rights.",
+    "featureNotEnabled": "Feature is currently disabled. Enabled it in the settings if you wish to use it.",
 
     "noLibWrapper": "ConversationHUD requires the libWrapper module for full functionality. Please install and activate it."
   },
@@ -68,5 +69,45 @@
 
   "CHUD.info": {
     "saveSuccessful": "Current conversation has been saved successfully."
+  },
+
+  "CHUD.settings": {
+    "portraitStyle": {
+      "name": "Portrait Style",
+      "hint": "This option determines the orientation and style in which the portraits of the active participants will be displayed.",
+      "choices": {
+        "vertical": "Vertical",
+        "horizontal": "Horizontal",
+        "square": "Square"
+      }
+    },
+    "portraitAnchor": {
+      "name": "Portrait Anchor",
+      "hint": "The anchor represents a point of reference from which the portrait will begin to pe displayed. For example, with the Top option selected, the upper section of the portrait will always be displayed. This option has an impact only when the portrait displayed has an aspect ratio larger than the display area. In most cases, it shouldn't matter too much.",
+      "choices": {
+        "top": "Top",
+        "center": "Center",
+        "bottom": "Bottom"
+      }
+    },
+    "enableSpeakAs": {
+      "name": "Enable Speak As",
+      "hint": "Toggle the Speak As feature on or off. By default, the feature is on, but if you do not use it and do not want an extra button to appear, you can toggle it off."
+    },
+    "enableMinimize": {
+      "name": "Enable Minimize",
+      "hint": "Toggle the Minimize feature on or off. By default, the feature is on as it allows users to interact with the map while a conversation is active and visible. If you do not want this behavior, you can toggle the feature off."
+    },
+    "activeParticipantFontSize": {
+      "name": "Active Participant Font Size",
+      "hint": "This option determines the size of the font used to display the name of the currently active participant.",
+      "choices": {
+        "verySmall": "Very Small",
+        "small": "Small",
+        "regular": "Regular",
+        "large": "Large",
+        "veryLarge": "Very Large"
+      }
+    }
   }
 }
