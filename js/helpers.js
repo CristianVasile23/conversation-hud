@@ -1,4 +1,6 @@
 import { socket } from "./init.js";
+import { MODULE_NAME } from "./constants.js";
+import { ModuleSettings } from "./settings.js";
 
 export async function getActorDataFromDragEvent(event) {
   try {
@@ -136,6 +138,10 @@ export async function updateConversationControls() {
     isMinimized: game.ConversationHud.conversationIsMinimized,
     isVisible: game.ConversationHud.conversationIsVisible,
     isSpeakingAs: game.ConversationHud.conversationIsSpeakingAs,
+    features: {
+      minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
+      speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
+    },
   });
 
   const updatedControls = document.createElement("section");

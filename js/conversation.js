@@ -9,6 +9,8 @@ import {
   updateConversationLayout,
 } from "./helpers.js";
 import { socket } from "./init.js";
+import { MODULE_NAME } from "./constants.js";
+import { ModuleSettings } from "./settings.js";
 
 export class ConversationHud {
   // Function that initializes the class data
@@ -68,19 +70,23 @@ export class ConversationHud {
     game.ConversationHud.conversationIsVisible = conversationVisible;
     game.ConversationHud.activeConversation = conversationData;
 
-    // Data that is passed to the template
-    const template_data = {
+    // Render templates
+    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
       participants: conversationData.participants,
       isGM: game.user.isGM,
-    };
-
-    // Render templates
-    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", template_data);
+      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+    });
     const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
       isGM: game.user.isGM,
       isMinimized: game.ConversationHud.conversationIsMinimized,
       isVisible: game.ConversationHud.conversationIsVisible,
       isSpeakingAs: game.ConversationHud.conversationIsSpeakingAs,
+      features: {
+        minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
+        speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
+      },
     });
 
     // Create the conversation container
@@ -192,14 +198,14 @@ export class ConversationHud {
     // Set conversation data
     game.ConversationHud.activeConversation = conversationData;
 
-    // Data that is passed to the template
-    const template_data = {
+    // Render template
+    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
       participants: conversationData.participants,
       isGM: game.user.isGM,
-    };
-
-    // Render template
-    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", template_data);
+      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+    });
 
     // Add rendered template to the conversation hud
     const conversationHud = document.getElementById("ui-conversation-hud");
@@ -426,18 +432,26 @@ export class ConversationHud {
 
   // Function that minimizes or maximizes the active conversation
   async toggleActiveConversationMode() {
-    if (checkIfConversationActive()) {
-      game.ConversationHud.conversationIsMinimized = !game.ConversationHud.conversationIsMinimized;
-      updateConversationControls();
-      updateConversationLayout();
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
+      if (checkIfConversationActive()) {
+        game.ConversationHud.conversationIsMinimized = !game.ConversationHud.conversationIsMinimized;
+        updateConversationControls();
+        updateConversationLayout();
+      }
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
     }
   }
 
   // Function that toggles the speaking as mode
   async toggleSpeakingAsMode() {
-    if (checkIfUserGM() && checkIfConversationActive()) {
-      game.ConversationHud.conversationIsSpeakingAs = !game.ConversationHud.conversationIsSpeakingAs;
-      updateConversationControls();
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs)) {
+      if (checkIfUserGM() && checkIfConversationActive()) {
+        game.ConversationHud.conversationIsSpeakingAs = !game.ConversationHud.conversationIsSpeakingAs;
+        updateConversationControls();
+      }
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
     }
   }
 

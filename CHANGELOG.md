@@ -1,3 +1,9 @@
+## 4.0.0
+
+- Added module settings. You can now change the way some features look as well as toggling some on/off. More customization options will be added in the future.
+- Added support for FoundryVTT V11.
+- Fixed small bugs and added missing localization for some text.
+
 ## 3.5.0
 
 - Added the _Speak As_ functionality. When a conversation is active, the GM can now toggle if they want chat messages to be sent under the name of the currently active conversation participant.

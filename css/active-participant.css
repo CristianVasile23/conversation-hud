@@ -1,0 +1,103 @@
+.conversation-hud-active-participant {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Portrait types */
+.conversation-hud-active-participant.vertical {
+  height: 100%;
+  width: 30vw;
+  max-width: 420px;
+}
+.conversation-hud-active-participant.horizontal {
+  width: 40vw;
+  max-width: 620px;
+  aspect-ratio: 16/9;
+}
+.conversation-hud-active-participant.square {
+  width: min(30vw, 50vh);
+  height: min(30vw, 50vh);
+  max-width: 620px;
+  max-height: 620px;
+}
+
+.conversation-hud-active-participant img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: top center;
+  border-radius: 15px;
+  box-shadow: 0 0 10px var(--color-shadow-dark);
+}
+
+/* CSS rules for image anchor */
+.conversation-participant img.top,
+.conversation-hud-active-participant img.top {
+  object-position: top center;
+}
+.conversation-participant img.center,
+.conversation-hud-active-participant img.center {
+  object-position: center;
+}
+.conversation-participant img.bottom,
+.conversation-hud-active-participant img.bottom {
+  object-position: bottom center;
+}
+
+.active-participant-image {
+  display: none;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.active-participant-image.active {
+  display: block;
+}
+
+.active-participant-name {
+  display: none;
+  position: absolute;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  overflow: hidden;
+  white-space: nowrap;
+
+  font-size: 16px;
+  text-align: center;
+  color: var(--color-text-light-highlight);
+  text-overflow: ellipsis;
+
+  background-color: rgba(0, 0, 0, 0.65);
+  border-top: 1px solid var(--color-border-dark);
+  border-radius: 0px 0px 15px 15px;
+}
+.active-participant-name.active {
+  display: block;
+}
+
+/* Font sizes */
+.active-participant-name.verySmall {
+  font-size: 10px;
+}
+.active-participant-name.small {
+  font-size: 13px;
+}
+.active-participant-name.regular {
+  font-size: 16px;
+}
+.active-participant-name.large {
+  font-size: 19px;
+}
+.active-participant-name.veryLarge {
+  font-size: 22px;
+}

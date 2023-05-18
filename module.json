@@ -7,8 +7,8 @@
   "library": "false",
   "compatibility": {
     "minimum": 10,
-    "verified": 10,
-    "maximum": 10
+    "verified": 11,
+    "maximum": 11
   },
   "authors": [
     {
@@ -58,6 +58,6 @@
   "url": "#{URL}#",
   "manifest": "#{MANIFEST}#",
   "download": "#{DOWNLOAD}#",
-  "license": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/LICENSE",
-  "readme": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/README.md"
+  "license": "https://github.com/CristianVasile23/conversation-hud/blob/main/LICENSE",
+  "readme": "https://github.com/CristianVasile23/conversation-hud/blob/main/README.md"
 }

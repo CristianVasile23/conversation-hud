@@ -1,14 +1,15 @@
 <div id="conversation-hud-content" class="conversation-hud-content">
   <div id="conversation-hud-dropzone" class="conversation-hud-dropzone" >
     <i class="far fa-square-plus"></i>
-    <p>Drop actor here to add them to the conversation</p>
+    <p> {{localize 'CHUD.dropActor'}} </p>
   </div>
 
-  <div class="conversation-hud-active-participant">
-    <img id="conversationActiveParticipant" class="active-participant-image" src="" alt="active_participant" />
-    <p id="conversationActiveParticipantName" class="active-participant-name">
+  <div class="conversation-hud-active-participant {{portraitStyle}}">
+    <img id="conversationActiveParticipant" class="active-participant-image {{portraitAnchor}}" src="" alt="active_participant" />
+    <p id="conversationActiveParticipantName" class="active-participant-name {{activeParticipantFontSize}}">
       {{localize 'CHUD.anonymous'}}
     </p>
+    
     <p id="conversationNoActiveParticipantMsg" class="no-active-participant-text active">
       {{localize 'CHUD.noActiveParticipant'}}
     </p>
@@ -19,8 +20,8 @@
       {{#each participants as |participant index|}}
         <div class="conversation-participant has-control">
           <div class="conversation-participant-gm-wrapper" onclick="game.ConversationHud.changeActiveParticipant({{index}})">
-            <img src="{{participant.img}}" alt="image" />
-            <p class="name">{{participant.name}}</p>
+            <img src="{{participant.img}}" alt="image" class="{{portraitAnchor}}"/>
+            <p class="name" title="{{participant.name}}">{{participant.name}}</p>
           </div>
 
           <a class="conversation-participant-edit" onclick="game.ConversationHud.updateParticipantFromActiveConversation({{index}})">

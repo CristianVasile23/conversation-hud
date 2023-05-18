@@ -14,12 +14,6 @@ These conversations can then be saved, edited, and even embedded into other jour
 
 https://user-images.githubusercontent.com/51834117/223569960-3a119bb8-1a5f-4ad8-8f5d-d6a0b2d07e4f.mp4
 
-# Disclaimer
-
-Initially, this module was made as a very simple module to solve some of the issues I had as a GM during my sessions. As I added more features and polished it, I decided to also release it.
-
-As of this moment, I feel that the module is feature complete and has all the functionality I envisioned for it. I will continue to support the module for future versions of Foundry as well as fix any possible issues that may occur. That said, I don't think I will be adding additional features unless I feel that they would greatly benefit the module.
-
 # Known Issues
 
 If you encounter any issues, feel free to report them and I will look into them.
