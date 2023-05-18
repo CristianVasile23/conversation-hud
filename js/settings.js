@@ -62,7 +62,7 @@ export function registerSettings() {
   game.settings.register(MODULE_NAME, ModuleSettings.activeParticipantFontSize, {
     name: game.i18n.localize(`CHUD.settings.activeParticipantFontSize.name`),
     hint: game.i18n.localize(`CHUD.settings.activeParticipantFontSize.hint`),
-    scope: "user",
+    scope: "world",
     config: true,
     requiresReload: true,
     type: String,
