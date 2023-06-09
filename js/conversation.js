@@ -144,17 +144,17 @@ export class ConversationHud {
       }
     };
 
-    conversationContent.ondrop = async (event) => {
+    dragDropZone.ondragleave = () => {
       if (game.ConversationHud.dropzoneVisible) {
-        game.ConversationHud.handleActorDrop(event);
-
         game.ConversationHud.dropzoneVisible = false;
         conversationContent.classList.remove("active-dropzone");
       }
     };
 
-    dragDropZone.ondragleave = () => {
+    conversationContent.ondrop = async (event) => {
       if (game.ConversationHud.dropzoneVisible) {
+        game.ConversationHud.handleActorDrop(event);
+
         game.ConversationHud.dropzoneVisible = false;
         conversationContent.classList.remove("active-dropzone");
       }
