@@ -8,6 +8,9 @@ import {
   moveInArray,
   updateConversationControls,
   updateConversationLayout,
+  hideDragAndDropIndicator,
+  displayDragAndDropIndicator,
+  getDragAndDropIndex,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -184,26 +187,11 @@ export class ConversationHud {
         };
 
         conversationParticipants[i].ondragover = (event) => {
-          let bounding = event.target.getBoundingClientRect();
-          let offset = bounding.y + bounding.height / 2;
-
-          const topIndicator = conversationParticipants[i].querySelector("#drag-drop-indicator-top");
-          const bottomIndicator = conversationParticipants[i].querySelector("#drag-drop-indicator-bottom");
-
-          if (event.clientY - offset > 0) {
-            topIndicator.style["display"] = "none";
-            bottomIndicator.style["display"] = "block";
-          } else {
-            topIndicator.style["display"] = "block";
-            bottomIndicator.style["display"] = "none";
-          }
+          displayDragAndDropIndicator(conversationParticipants[i], event);
         };
 
         conversationParticipants[i].ondragleave = (event) => {
-          const topIndicator = conversationParticipants[i].querySelector("#drag-drop-indicator-top");
-          const bottomIndicator = conversationParticipants[i].querySelector("#drag-drop-indicator-bottom");
-          topIndicator.style["display"] = "none";
-          bottomIndicator.style["display"] = "none";
+          hideDragAndDropIndicator(conversationParticipants[i]);
         };
 
         conversationParticipants[i].ondrop = (event) => {
@@ -211,10 +199,7 @@ export class ConversationHud {
           const data = JSON.parse(event.dataTransfer.getData("text/plain"));
 
           if (data) {
-            const topIndicator = conversationParticipants[i].querySelector("#drag-drop-indicator-top");
-            const bottomIndicator = conversationParticipants[i].querySelector("#drag-drop-indicator-bottom");
-            topIndicator.style["display"] = "none";
-            bottomIndicator.style["display"] = "none";
+            hideDragAndDropIndicator(conversationParticipants[i]);
 
             const oldIndex = data.index;
 
@@ -223,26 +208,8 @@ export class ConversationHud {
               return;
             }
 
-            let bounding = event.target.getBoundingClientRect();
-            let offset = bounding.y + bounding.height / 2;
-
             // Get the new index of the dropped element
-            let newIndex;
-            if (event.clientY - offset > 0) {
-              // Element is dropped at the bottom
-              if (oldIndex > i) {
-                newIndex = i + 1;
-              } else {
-                newIndex = i;
-              }
-            } else {
-              // Element is dropped at the top
-              if (oldIndex > i) {
-                newIndex = i;
-              } else {
-                newIndex = i - 1;
-              }
-            }
+            let newIndex = getDragAndDropIndex(event, i, oldIndex);
 
             // Reorder the array
             moveInArray(participants, oldIndex, newIndex);
