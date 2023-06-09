@@ -109,7 +109,6 @@ export async function getActorDataFromDragEvent(event) {
 }
 
 export async function checkConversationDataAvailability(users) {
-  // let userId = users[0].id;
   for (let i = 0; i < users.length; i++) {
     const result = await socket.executeAsUser("getActiveConversation", users[i].id);
 
@@ -234,4 +233,9 @@ export function checkIfConversationActive() {
     return false;
   }
   return true;
+}
+
+export function moveInArray(arr, from, to) {
+  let item = arr.splice(from, 1);
+  arr.splice(to, 0, item[0]);
 }

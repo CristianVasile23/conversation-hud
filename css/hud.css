@@ -140,6 +140,10 @@
   height: 100px;
 }
 
+.conversation-participant-gm-wrapper * {
+  pointer-events: none;
+}
+
 .conversation-participant img {
   width: 100px;
   height: 100px;
