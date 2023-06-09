@@ -1,6 +1,7 @@
 import { MODULE_NAME } from "./constants.js";
 import { ConversationHud } from "./conversation.js";
 import { checkConversationDataAvailability, handleOnClickContentLink } from "./helpers.js";
+import { preloadTemplates } from "./preloadTemplates.js";
 import { registerSettings } from "./settings.js";
 
 // Warning hook in case libWrapper is not installed
@@ -16,7 +17,7 @@ Hooks.once("socketlib.ready", () => {
   socket = socketlib.registerModule("conversation-hud");
 });
 
-Hooks.on("init", () => {
+Hooks.on("init", async () => {
   // Register the module within libWrapper
   if (libWrapper) {
     libWrapper.register(
@@ -31,6 +32,9 @@ Hooks.on("init", () => {
 
   // Register settings
   registerSettings();
+
+  // Load templates
+  preloadTemplates();
 
   // Initialize the ConversationHUD object
   game.ConversationHud = new ConversationHud();
