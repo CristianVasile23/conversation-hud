@@ -1,8 +1,8 @@
 import { MODULE_NAME } from "./constants.js";
 import { ConversationHud } from "./conversation.js";
-import { checkConversationDataAvailability, handleOnClickContentLink } from "./helpers.js";
+import { checkConversationDataAvailability, fixRpgUiIncompatibility, handleOnClickContentLink } from "./helpers.js";
 import { preloadTemplates } from "./preloadTemplates.js";
-import { registerSettings } from "./settings.js";
+import { ModuleSettings, registerSettings } from "./settings.js";
 
 // Warning hook in case libWrapper is not installed
 Hooks.once("ready", () => {
@@ -39,6 +39,11 @@ Hooks.on("init", async () => {
   // Initialize the ConversationHUD object
   game.ConversationHud = new ConversationHud();
   game.ConversationHud.init();
+
+  // If RPG UI fix setting is enabled, add the fixed CSS class to the sidebar
+  if (game.settings.get(MODULE_NAME, ModuleSettings.rpgUiFix)) {
+    fixRpgUiIncompatibility();
+  }
 });
 
 Hooks.on("ready", async () => {

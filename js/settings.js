@@ -6,6 +6,7 @@ export const ModuleSettings = {
   enableMinimize: "enableMinimize",
   enableSpeakAs: "enableSpeakAs",
   activeParticipantFontSize: "activeParticipantFontSize",
+  rpgUiFix: "rpgUiFix",
 };
 
 export function registerSettings() {
@@ -74,5 +75,15 @@ export function registerSettings() {
       large: game.i18n.localize(`CHUD.settings.activeParticipantFontSize.choices.large`),
       veryLarge: game.i18n.localize(`CHUD.settings.activeParticipantFontSize.choices.veryLarge`),
     },
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.rpgUiFix, {
+    name: game.i18n.localize(`CHUD.settings.rpgUiFix.name`),
+    hint: game.i18n.localize(`CHUD.settings.rpgUiFix.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: Boolean,
+    default: false,
   });
 }
