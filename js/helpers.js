@@ -109,7 +109,6 @@ export async function getActorDataFromDragEvent(event) {
 }
 
 export async function checkConversationDataAvailability(users) {
-  // let userId = users[0].id;
   for (let i = 0; i < users.length; i++) {
     const result = await socket.executeAsUser("getActiveConversation", users[i].id);
 
@@ -234,4 +233,65 @@ export function checkIfConversationActive() {
     return false;
   }
   return true;
+}
+
+export function moveInArray(arr, from, to) {
+  let item = arr.splice(from, 1);
+  arr.splice(to, 0, item[0]);
+}
+
+export function displayDragAndDropIndicator(targetElement, event) {
+  let bounding = event.target.getBoundingClientRect();
+  let offset = bounding.y + bounding.height / 2;
+
+  const topIndicator = targetElement.querySelector("#drag-drop-indicator-top");
+  const bottomIndicator = targetElement.querySelector("#drag-drop-indicator-bottom");
+
+  if (event.clientY - offset > 0) {
+    topIndicator.style["display"] = "none";
+    bottomIndicator.style["display"] = "block";
+  } else {
+    topIndicator.style["display"] = "block";
+    bottomIndicator.style["display"] = "none";
+  }
+}
+
+export function hideDragAndDropIndicator(targetElement) {
+  const topIndicator = targetElement.querySelector("#drag-drop-indicator-top");
+  const bottomIndicator = targetElement.querySelector("#drag-drop-indicator-bottom");
+  topIndicator.style["display"] = "none";
+  bottomIndicator.style["display"] = "none";
+}
+
+export function getDragAndDropIndex(event, targetIndex, oldIndex) {
+  let bounding = event.target.getBoundingClientRect();
+  let offset = bounding.y + bounding.height / 2;
+
+  // Get the new index of the dropped element
+  let newIndex;
+  if (event.clientY - offset > 0) {
+    // Element is dropped at the bottom
+    if (oldIndex > targetIndex) {
+      newIndex = targetIndex + 1;
+    } else {
+      newIndex = targetIndex;
+    }
+  } else {
+    // Element is dropped at the top
+    if (oldIndex > targetIndex) {
+      newIndex = targetIndex;
+    } else {
+      newIndex = targetIndex - 1;
+    }
+  }
+
+  return newIndex;
+}
+
+export function fixRpgUiIncompatibility() {
+  let cssFix = document.createElement("link");
+  cssFix.rel = "stylesheet";
+  cssFix.type = "text/css";
+  cssFix.href = "modules/conversation-hud/css/rpg-ui-compatibility.css";
+  document.getElementsByTagName("head")[0].appendChild(cssFix);
 }

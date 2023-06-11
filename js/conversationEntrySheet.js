@@ -1,10 +1,19 @@
 import { FileInputForm } from "./formAddParticipant.js";
-import { getActorDataFromDragEvent } from "./helpers.js";
+import {
+  getActorDataFromDragEvent,
+  moveInArray,
+  hideDragAndDropIndicator,
+  displayDragAndDropIndicator,
+  getDragAndDropIndex,
+} from "./helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
   constructor(data, options) {
     super(data, options);
     this.dirty = false;
+
+    this.dropzoneVisible = false;
+    this.draggingParticipant = false;
 
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
     if (pages.length === 0) {
@@ -54,30 +63,97 @@ export class ConversationEntrySheet extends JournalSheet {
     const dragDropZone = html.find("#conversation-sheet-dropzone")[0];
     if (dragDropWrapper && dragDropZone) {
       dragDropWrapper.ondragenter = () => {
-        dragDropWrapper.classList.add("active-dropzone");
+        if (!this.draggingParticipant) {
+          this.dropzoneVisible = true;
+          dragDropWrapper.classList.add("active-dropzone");
+        }
       };
 
       dragDropZone.ondragleave = () => {
-        dragDropWrapper.classList.remove("active-dropzone");
+        if (this.dropzoneVisible) {
+          this.dropzoneVisible = false;
+          dragDropWrapper.classList.remove("active-dropzone");
+        }
       };
 
       dragDropWrapper.ondrop = async (event) => {
-        event.preventDefault();
-        const data = await getActorDataFromDragEvent(event);
-        if (data && data.length > 0) {
-          data.forEach((participant) => {
-            this.#handleAddParticipant(participant);
-          });
+        if (this.dropzoneVisible) {
+          event.preventDefault();
+
+          const data = await getActorDataFromDragEvent(event);
+          if (data && data.length > 0) {
+            data.forEach((participant) => {
+              this.#handleAddParticipant(participant);
+            });
+          }
+
+          this.dropzoneVisible = false;
+          dragDropWrapper.classList.remove("active-dropzone");
         }
-        dragDropWrapper.classList.remove("active-dropzone");
       };
     }
 
     const participantsObject = html.find("#conversation-participants-list")[0];
     if (participantsObject) {
-      const participants = participantsObject.children;
-      for (let i = 0; i < participants.length; i++) {
-        const controls = participants[i].children[2].children;
+      const conversationParticipants = participantsObject.children;
+      for (let i = 0; i < conversationParticipants.length; i++) {
+        // Add drag and drop functionality
+        const dragDropHandler = conversationParticipants[i].querySelector("#conversation-sheet-drag-drop-handler");
+
+        dragDropHandler.ondragstart = (event) => {
+          this.draggingParticipant = true;
+          event.dataTransfer.setDragImage(conversationParticipants[i], 0, 0);
+
+          // Save the index of the dragged participant in the data transfer object
+          event.dataTransfer.setData(
+            "text/plain",
+            JSON.stringify({
+              index: i,
+            })
+          );
+        };
+
+        dragDropHandler.ondragend = (event) => {
+          this.draggingParticipant = false;
+        };
+
+        conversationParticipants[i].ondragover = (event) => {
+          displayDragAndDropIndicator(conversationParticipants[i], event);
+        };
+
+        conversationParticipants[i].ondragleave = (event) => {
+          hideDragAndDropIndicator(conversationParticipants[i]);
+        };
+
+        conversationParticipants[i].ondrop = (event) => {
+          const data = JSON.parse(event.dataTransfer.getData("text/plain"));
+
+          if (data) {
+            hideDragAndDropIndicator(conversationParticipants[i]);
+
+            const oldIndex = data.index;
+
+            // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
+            if (oldIndex === i) {
+              return;
+            }
+
+            // Get the new index of the dropped element
+            let newIndex = getDragAndDropIndex(event, i, oldIndex);
+
+            // Reorder the array
+            moveInArray(this.participants, oldIndex, newIndex);
+            this.dirty = true;
+            this.render(false);
+          } else {
+            console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
+          }
+
+          this.draggingParticipant = false;
+        };
+
+        // Bind functions to the edit and remove buttons
+        const controls = conversationParticipants[i].querySelector(".participant-controls").children;
         controls[0].onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,

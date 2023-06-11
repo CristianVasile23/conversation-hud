@@ -1,0 +1,41 @@
+<div class="conversation-sheet-participants-list">
+  {{#if participants}}
+    <div id="conversation-participants-list">
+      {{#each participants as |participant|}}
+        <div class="participant-drag-drop-container">
+          <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
+
+          <div class="conversation-sheet-participant">
+            
+            <i
+              id="conversation-sheet-drag-drop-handler"
+              class="drag-drop-handler-icon fa-solid fa-arrows-up-down-left-right"
+              draggable="true"
+            ></i>
+
+            <div class="image">
+              <img src="{{participant.img}}"/>
+            </div>
+
+            <p class="name">{{participant.name}}</p>
+                  
+            <div class="participant-controls">
+              <a id="participant-edit-button" class="edit" title="{{localize 'CHUD.editParticipant'}}">
+                <i class="fas fa-pencil"></i>
+              </a>
+              <a id="participant-delete-button" class="delete" title="{{localize 'CHUD.deleteParticipant'}}">
+                <i class="fas fa-trash"></i>
+              </a>
+            </div>
+          </div>
+
+          <div id="drag-drop-indicator-bottom" class="drag-drop-indicator"></div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <p class="no-participants-message">
+      {{localize 'CHUD.noParticipantsInList'}}
+    </p> 
+  {{/if}}
+</div>

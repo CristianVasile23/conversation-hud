@@ -39,11 +39,14 @@
 .conversation-sheet-participant {
   display: flex;
   flex-flow: row;
-  border-bottom: 1px solid var(--light-color);
   padding: 5px;
 }
 
-.conversation-sheet-participant:last-child {
+.conversation-sheet-participants-list > div > div {
+  border-bottom: 1px solid var(--color-border-light-2);
+}
+
+.conversation-sheet-participants-list > div > div:last-child {
   border-bottom: none;
 }
 
@@ -165,4 +168,13 @@
 }
 .conversation-sheet-content-wrapper.active-dropzone .conversation-sheet-participants-list {
   display: none;
+}
+
+.drag-drop-handler-icon {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  margin-right: 10px;
 }

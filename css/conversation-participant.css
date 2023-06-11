@@ -1,0 +1,29 @@
+.participant-drag-drop-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.drag-drop-indicator {
+  height: 2px;
+  border-radius: 2px;
+  width: 100%;
+  background-color: var(--color-border-highlight);
+
+  display: none;
+  pointer-events: none;
+
+  position: absolute;
+}
+
+#drag-drop-indicator-top {
+  top: 0;
+}
+#drag-drop-indicator-bottom {
+  bottom: 0;
+}
+
+.conversation-hud-participant-list.drag-active .conversation-participant-edit,
+.conversation-hud-participant-list.drag-active .conversation-participant-remove {
+  pointer-events: none;
+}
