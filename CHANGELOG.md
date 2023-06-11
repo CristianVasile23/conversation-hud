@@ -1,3 +1,8 @@
+## 4.1.0
+
+- Added the ability to reorder conversation participants by drag and dropping.
+- Added a compatibility fix for custom UI modules that caused the conversation controls to be placed behind the sidebar. The fix can be enabled in the module settings.
+
 ## 4.0.0
 
 - Added module settings. You can now change the way some features look as well as toggling some on/off. More customization options will be added in the future.
