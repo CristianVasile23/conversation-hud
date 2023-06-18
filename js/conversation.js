@@ -11,6 +11,7 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
+  setDefaultDataForParticipant,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -616,12 +617,7 @@ export class ConversationHud {
 
   // Function that adds a single participant to the active conversation
   #handleAddParticipant(data) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
+    setDefaultDataForParticipant(data);
 
     // Push participant to the active conversation then update all the others
     game.ConversationHud.activeConversation.participants.push(data);
@@ -629,12 +625,7 @@ export class ConversationHud {
   }
 
   #handleUpdateParticipant(data, index) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
+    setDefaultDataForParticipant(data);
 
     // Update participant with the given index
     game.ConversationHud.activeConversation.participants[index] = data;

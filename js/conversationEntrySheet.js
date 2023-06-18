@@ -5,6 +5,7 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
+  setDefaultDataForParticipant,
 } from "./helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
@@ -282,12 +283,7 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   #handleEditParticipant(data, index) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
+    setDefaultDataForParticipant(data);
 
     this.participants[index] = data;
     this.dirty = true;
@@ -295,12 +291,7 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   #handleAddParticipant(data) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
+    setDefaultDataForParticipant(data);
 
     this.participants.push(data);
     this.dirty = true;

@@ -295,3 +295,21 @@ export function fixRpgUiIncompatibility() {
   cssFix.href = "modules/conversation-hud/css/rpg-ui-compatibility.css";
   document.getElementsByTagName("head")[0].appendChild(cssFix);
 }
+
+export function setDefaultDataForParticipant(data) {
+  if (data.name === "") {
+    data.name = game.i18n.localize("CHUD.anonymous");
+  }
+  if (data.img === "") {
+    data.img = "modules/conversation-hud/img/silhouette.jpg";
+  }
+  if (data.faction && data.faction.displayFaction) {
+    if (data.faction.factionName === "") {
+      data.faction.factionName = "Unknown Faction";
+    }
+    if (data.faction.factionLogo === "") {
+      data.faction.factionLogo = "icons/svg/book.svg";
+      data.faction.factionBannerEnabled = true;
+    }
+  }
+}

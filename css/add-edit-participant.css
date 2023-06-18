@@ -1,0 +1,98 @@
+#factionBannerShape {
+  visibility: hidden;
+}
+
+.banner-configuration {
+  display: flex;
+  flex-direction: row;
+}
+
+.faction-banner-options-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.faction-banner-options-wrapper {
+  display: flex;
+  flex-direction: row;
+  flex: 1 !important;
+}
+
+.faction-banner-options-wrapper button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  padding: 0;
+  margin: 0;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+.faction-banner-options-wrapper button img {
+  border: none;
+  height: 20px;
+  width: auto;
+}
+
+.banner-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 165px;
+  margin-left: 15px;
+  flex-shrink: 0;
+
+  padding: 5px;
+  border: 1px solid black;
+}
+
+.banner-preview-wrapper .banner-preview-image {
+  width: 165px;
+  height: 165px;
+  position: relative;
+}
+
+.banner-preview-wrapper .banner-preview-image img {
+  border: 0;
+}
+
+.banner-preview-wrapper .banner-preview-image #banner-preview-flag {
+  display: none;
+}
+.banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-flag {
+  display: block;
+}
+
+.banner-preview-wrapper .banner-preview-image #banner-preview-logo {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  max-width: 165px;
+  max-height: 165px;
+
+  margin: auto;
+}
+.banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-logo {
+  top: 30px;
+  bottom: unset;
+
+  max-width: 70px;
+  max-height: 70px;
+}
+.banner-preview-wrapper .banner-preview-image #banner-preview-logo[src=""] {
+  display: none;
+}
+
+.banner-shape-button.active {
+  background-color: red;
+}

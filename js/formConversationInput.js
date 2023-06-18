@@ -5,6 +5,7 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
+  setDefaultDataForParticipant,
 } from "./helpers.js";
 
 export class ConversationInputForm extends FormApplication {
@@ -144,6 +145,7 @@ export class ConversationInputForm extends FormApplication {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
+            faction: this.participants[i].faction,
           });
           fileInputForm.render(true);
         };
@@ -165,25 +167,13 @@ export class ConversationInputForm extends FormApplication {
   }
 
   #handleEditParticipant(data, index) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
-
+    setDefaultDataForParticipant(data);
     this.participants[index] = data;
     this.render(false);
   }
 
   #handleAddParticipant(data) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
-
+    setDefaultDataForParticipant(data);
     this.participants.push(data);
     this.render(false);
   }
