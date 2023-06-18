@@ -41,6 +41,42 @@
   "CHUD.unsavedChangesHint": "The conversation contains unsaved changes. Do you wish to save them?",
   "CHUD.discardChanges": "Discard Changes",
 
+  "CHUD.tabs": {
+    "participantConfig": "Participant Config",
+    "factionConfig": "Faction Config"
+  },
+
+  "CHUD.faction": {
+    "displayFaction": {
+      "name": "Display Faction",
+      "hint": "Toggle the display of the faction to which the participant belongs to."
+    },
+    "factionName": {
+      "name": "Faction Name",
+      "hint": "The name of the faction.",
+      "placeholder": "New Faction"
+    },
+    "factionLogo": {
+      "name": "Faction Symbol",
+      "hint": "The symbol representing the faction."
+    },
+    "displayFactionBanner": {
+      "name": "Display Banner",
+      "hint": "Toggle the display of a banner that appears in the background."
+    },
+    "factionBannerShape": {
+      "name": "Banner Shape",
+      "hint": "The shape of the banner."
+    },
+    "factionBannerColor": {
+      "name": "Banner Color",
+      "hint": "The color of the banner."
+    },
+
+    "noBannerPreview": "No banner preview available",
+    "bannerPreview": "Banner Preview"
+  },
+
   "CHUD.errors": {
     "generic": "An unknown error has occurred, for more information check the console.",
     "genericSheetError": "An unknown error occurred while trying to render the sheet. Are you sure this is a valid conversation sheet?",

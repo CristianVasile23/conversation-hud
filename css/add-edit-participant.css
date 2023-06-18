@@ -49,13 +49,17 @@
   flex-shrink: 0;
 
   padding: 5px;
-  border: 1px solid black;
 }
 
 .banner-preview-wrapper .banner-preview-image {
   width: 165px;
   height: 165px;
   position: relative;
+
+  border: 1px solid var(--color-border-light-tertiary);
+  border-radius: 3px;
+
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .banner-preview-wrapper .banner-preview-image img {
@@ -94,5 +98,23 @@
 }
 
 .banner-shape-button.active {
-  background-color: red;
+  background-color: var(--color-border-highlight);
+}
+
+.no-banner-preview-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: 0;
+
+  color: var(--color-text-dark-primary);
 }
