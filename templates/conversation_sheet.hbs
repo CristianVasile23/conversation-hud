@@ -7,7 +7,7 @@
       name="show-conversation"
       id="show-conversation"
       title="{{localize 'CHUD.activateConversation'}}"
-      class="conversation-control-button"
+      class="header-action-button"
     >
       <i class="fas fa-eye"></i>
     </button>
@@ -17,14 +17,14 @@
       name="add-participant"
       id="add-participant"
       title="{{localize 'CHUD.addParticipant'}}"
-      class="conversation-control-button"
+      class="header-action-button"
     >
       <i class="fas fa-user-plus"></i>
     </button>
   </div>
 
-  <div id="conversation-sheet-content-wrapper" class="conversation-sheet-content-wrapper">
-    <div id="conversation-sheet-dropzone" class="conversation-sheet-dropzone" >
+  <div id="conversation-sheet-content-wrapper" class="drag-and-drop-wrapper">
+    <div id="conversation-sheet-dropzone" class="dropzone" >
       <i class="far fa-square-plus"></i>
       <p> {{localize 'CHUD.dropActor'}} </p>
     </div>

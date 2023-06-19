@@ -33,6 +33,22 @@
 }
 /* #endregion */
 
+/* ----- Header buttons ----- */
+/* #region */
+.conversation-entry-sheet .header .header-action-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0;
+  width: 32px;
+  height: 32px;
+}
+
+.conversation-entry-sheet .header .header-action-button i {
+  margin: 0;
+}
+/* #endregion */
+
 /* ----- Footer ----- */
 /* #region */
 .conversation-entry-sheet .footer {
