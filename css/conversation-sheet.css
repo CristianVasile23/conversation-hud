@@ -1,100 +1,3 @@
-.conversation-sheet-header {
-  display: flex;
-  flex-flow: row;
-  align-items: center;
-  margin-top: 5px;
-  border-bottom: 1px solid var(--color-underline-header);
-  height: 34px;
-  flex: 0;
-}
-
-.conversation-sheet-header > input {
-  background: none !important;
-  border: 1px solid transparent !important;
-
-  color: var(--color-text-dark-primary) !important;
-  font-size: 1.5em !important;
-}
-.conversation-sheet-header > input:hover,
-.conversation-sheet-header > input:focus {
-  box-shadow: none !important;
-}
-
-.conversation-sheet-header > p {
-  display: flex;
-  align-items: center;
-  flex: 3;
-  margin: 0;
-
-  color: var(--color-text-dark-primary);
-  font-size: 1.5em;
-}
-
-.conversation-sheet-participants-list {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-}
-
-.conversation-sheet-participant {
-  display: flex;
-  flex-flow: row;
-  padding: 5px;
-}
-
-.conversation-sheet-participants-list > div > div {
-  border-bottom: 1px solid var(--color-border-light-2);
-}
-
-.conversation-sheet-participants-list > div > div:last-child {
-  border-bottom: none;
-}
-
-.conversation-sheet-participant .image {
-  height: 40px;
-  width: 40px;
-}
-
-.conversation-sheet-participant .image img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: top center;
-}
-
-.conversation-sheet-participant .name {
-  display: flex;
-  align-items: center;
-
-  margin: 0;
-  margin-left: 10px;
-  margin-right: auto;
-
-  font-weight: bold;
-  color: var(--color-text-dark-secondary);
-}
-
-.conversation-sheet-participant .participant-controls {
-  display: flex;
-  flex-direction: row;
-  margin-left: auto;
-}
-
-.conversation-sheet-participant .participant-controls .edit {
-  display: flex;
-  align-items: center;
-  margin-right: 10px;
-}
-
-.conversation-sheet-participant .participant-controls .delete {
-  display: flex;
-  align-items: center;
-}
-
-.conversation-sheet-footer {
-  flex: unset;
-}
-
 .conversation-control-button {
   position: relative;
   flex: 0;
@@ -113,13 +16,6 @@
 
 .conversation-control-button .fa-user-plus {
   margin: 0;
-}
-
-.conversation-sheet-participants-list > .no-participants-message {
-  display: flex;
-  margin: auto;
-  max-width: 310px;
-  text-align: center;
 }
 
 .conversation-sheet-content-wrapper {
@@ -166,7 +62,7 @@
 .conversation-sheet-content-wrapper.active-dropzone .conversation-sheet-dropzone {
   display: flex;
 }
-.conversation-sheet-content-wrapper.active-dropzone .conversation-sheet-participants-list {
+.conversation-sheet-content-wrapper.active-dropzone .participants-list {
   display: none;
 }
 

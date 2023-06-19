@@ -1,5 +1,5 @@
-<form class="flexcol" style="height: 100%">
-  <div class="flexrow conversation-sheet-header">
+<form class="flexcol conversation-entry-sheet" style="height: 100%">
+  <div class="flexrow header">
     <input name="name" type="text" value="{{name}}" placeholder="{{localize 'CHUD.conversationName'}}"/>
 
     <button
@@ -32,7 +32,7 @@
     {{> "modules/conversation-hud/templates/fragments/conversation_participants_list.hbs" participants=participants}}
   </div>
 
-  <div class="conversation-sheet-footer">
+  <div class="footer">
     <footer class="sheet-footer flexrow">
       <button
         type="button"

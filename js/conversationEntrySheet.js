@@ -48,6 +48,7 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   activateListeners(html) {
+    console.log(this.participants);
     super.activateListeners(html);
 
     html.find("#save-conversation").click(async (e) => this.#handleSaveConversation());
@@ -154,7 +155,7 @@ export class ConversationEntrySheet extends JournalSheet {
         };
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".participant-controls").children;
+        const controls = conversationParticipants[i].querySelector(".controls-wrapper").children;
         controls[0].onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,

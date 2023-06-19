@@ -140,7 +140,7 @@ export class ConversationInputForm extends FormApplication {
         };
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".participant-controls").children;
+        const controls = conversationParticipants[i].querySelector(".controls-wrapper").children;
         controls[0].onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
