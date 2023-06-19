@@ -1,25 +1,18 @@
-#factionBannerShape {
-  visibility: hidden;
-}
-
-.banner-configuration {
+/* ----- Banner configuration ----- */
+/* #region */
+.participant-add-edit-form .banner-configuration {
   display: flex;
   flex-direction: row;
 }
 
-.faction-banner-options-wrapper {
+.participant-add-edit-form .banner-options {
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-
-.faction-banner-options-wrapper {
-  display: flex;
-  flex-direction: row;
   flex: 1 !important;
 }
 
-.faction-banner-options-wrapper button {
+.participant-add-edit-form .banner-options .banner-shape-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -32,14 +25,20 @@
   margin-left: 4px;
   margin-right: 4px;
 }
+.participant-add-edit-form .banner-options .banner-shape-button.active {
+  background-color: var(--color-border-highlight);
+}
 
-.faction-banner-options-wrapper button img {
+.participant-add-edit-form .banner-options button img {
   border: none;
   height: 20px;
   width: auto;
 }
+/* #endregion */
 
-.banner-preview-wrapper {
+/* ----- Banner preview ----- */
+/* #region */
+.participant-add-edit-form .banner-preview-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -51,7 +50,7 @@
   padding: 5px;
 }
 
-.banner-preview-wrapper .banner-preview-image {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image {
   width: 165px;
   height: 165px;
   position: relative;
@@ -62,18 +61,18 @@
   background: rgba(0, 0, 0, 0.05);
 }
 
-.banner-preview-wrapper .banner-preview-image img {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image img {
   border: 0;
 }
 
-.banner-preview-wrapper .banner-preview-image #banner-preview-flag {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image #banner-preview-flag {
   display: none;
 }
-.banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-flag {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-flag {
   display: block;
 }
 
-.banner-preview-wrapper .banner-preview-image #banner-preview-logo {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image #banner-preview-logo {
   position: absolute;
 
   top: 0;
@@ -97,11 +96,7 @@
   display: none;
 }
 
-.banner-shape-button.active {
-  background-color: var(--color-border-highlight);
-}
-
-.no-banner-preview-text {
+.participant-add-edit-form .banner-preview-wrapper .no-banner-preview-text {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -118,3 +113,4 @@
 
   color: var(--color-text-dark-primary);
 }
+/* #endregion */
