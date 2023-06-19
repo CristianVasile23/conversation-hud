@@ -167,9 +167,11 @@ export class ConversationHud {
     // Drag & drop listeners for the participants list
     const conversationParticipantList = element.querySelector("#conversationParticipantList");
     const conversationParticipants = conversationParticipantList.children;
+
     if (conversationParticipants) {
       for (let i = 0; i < conversationParticipants.length - 1; i++) {
-        conversationParticipants[i].ondragstart = (event) => {
+        const participant = conversationParticipants[i].querySelector(".conversation-participant");
+        participant.ondragstart = (event) => {
           game.ConversationHud.draggingParticipant = true;
           conversationParticipantList.classList.add("drag-active");
 

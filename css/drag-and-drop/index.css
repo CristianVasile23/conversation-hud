@@ -1,3 +1,5 @@
+/* ----- General CSS for the drag and drop functionality ----- */
+/* #region */
 .drag-drop-indicator {
   height: 2px;
   border-radius: 2px;
@@ -22,8 +24,4 @@
   flex-direction: column;
   position: relative;
 }
-
-.conversation-hud-participant-list.drag-active .conversation-participant-edit,
-.conversation-hud-participant-list.drag-active .conversation-participant-remove {
-  pointer-events: none;
-}
+/* #endregion */

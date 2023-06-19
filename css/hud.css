@@ -92,12 +92,12 @@
 }
 
 /* CSS to center conversation participants while still respecting overflow */
-.conversation-hud-participant-list .conversation-participant:first-child {
+/* .conversation-hud-participant-list .conversation-participant:first-child {
   margin-top: auto;
 }
 .conversation-hud-participant-list .conversation-participant:last-child {
   margin-bottom: auto;
-}
+} */
 .conversation-hud-wrapper.minimized .conversation-hud-participant-list .conversation-participant:first-child {
   margin-top: auto;
 }
@@ -105,7 +105,7 @@
   margin-bottom: unset;
 }
 
-.conversation-participant {
+/* .conversation-participant {
   display: flex;
   flex-flow: column;
   position: relative;
@@ -123,28 +123,28 @@
   overflow: hidden;
 
   box-shadow: 0 0 10px var(--color-shadow-dark);
-}
-.conversation-participant.has-control:hover {
+} */
+/* .conversation-participant.has-control:hover {
   border: 1px solid var(--color-border-highlight-alt);
   border-bottom: 1px solid var(--color-border-highlight);
   box-shadow: 0 0 10px var(--color-shadow-highlight);
-}
+} */
 .participant-drag-drop-container.active .conversation-participant {
   border: 1px solid var(--color-border-highlight-alt);
   border-bottom: 1px solid var(--color-border-highlight);
   box-shadow: 0 0 10px var(--color-shadow-highlight);
 }
 
-.conversation-participant-gm-wrapper {
+/* .conversation-participant-gm-wrapper {
   width: 100px;
   height: 100px;
 }
 
 .conversation-participant-gm-wrapper * {
   pointer-events: none;
-}
+} */
 
-.conversation-participant img {
+/* .conversation-participant img {
   width: 100px;
   height: 100px;
   object-fit: cover;
@@ -152,9 +152,9 @@
 
   border: none;
   border-radius: 0;
-}
+} */
 
-.conversation-participant-edit,
+/* .conversation-participant-edit,
 .conversation-participant-remove {
   position: absolute;
   padding: 4px;
@@ -184,9 +184,9 @@
   top: 0;
   right: 0;
   border-radius: 0px 0px 0px 5px;
-}
+} */
 
-.conversation-participant > i {
+/* .conversation-participant > i {
   width: 100px;
   height: 100px;
 
@@ -196,9 +196,9 @@
   align-items: center;
   justify-content: center;
   font-size: 30px;
-}
+} */
 
-.conversation-participant .name {
+/* .conversation-participant .name {
   position: absolute;
 
   bottom: 0;
@@ -221,7 +221,7 @@
 
   background-color: rgba(0, 0, 0, 0.65);
   border-top: 1px solid var(--color-border-dark);
-}
+} */
 
 .no-active-participant-text {
   display: none;
@@ -293,6 +293,9 @@
   box-shadow: 0 0 10px #9b8dff;
 }
 
+/*  */
+/*  */
+/*  */
 /* Dropzone CSS */
 .conversation-hud-content .conversation-hud-dropzone {
   display: none;
