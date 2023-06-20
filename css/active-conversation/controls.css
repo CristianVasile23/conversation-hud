@@ -1,0 +1,55 @@
+/* ----- Conversation Controls ----- */
+/* #region */
+#ui-conversation-controls {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  z-index: 20;
+}
+
+#ui-conversation-controls .control-button {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 32px;
+  height: 32px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 4px;
+
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px var(--color-shadow-dark);
+  color: var(--color-text-light-heading);
+  text-align: center;
+
+  border: 1px solid var(--color-border-dark);
+  border-radius: 5px;
+}
+#ui-conversation-controls .control-button:hover {
+  color: var(--color-text-light-highlight);
+  border: 1px solid var(--color-border-highlight-alt);
+  border-bottom: 1px solid var(--color-border-highlight);
+  box-shadow: 0 0 10px var(--color-shadow-highlight);
+}
+
+#ui-conversation-controls .control-button.toggle {
+  background: rgba(30, 0, 60, 0.5);
+  border: 1px solid #3b1893;
+}
+#ui-conversation-controls .control-button.toggle:hover {
+  background: rgba(60, 0, 120, 0.75);
+  border: 1px solid #9b8dff;
+  box-shadow: 0 0 10px #9b8dff;
+}
+#ui-conversation-controls .control-button.toggle.active {
+  background: rgba(60, 0, 120, 0.75);
+  border: 1px solid #9b8dff;
+  box-shadow: 0 0 10px #9b8dff;
+}
+
+#ui-conversation-controls .control-button.margin {
+  margin-top: 30px;
+}
+/* #endregion */

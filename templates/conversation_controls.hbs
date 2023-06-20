@@ -1,6 +1,6 @@
 {{#if isGM}}
   <div
-    class="conversation-controls-button toggle {{#if isVisible}}active{{/if}}"
+    class="control-button toggle {{#if isVisible}}active{{/if}}"
     onclick="game.ConversationHud.toggleActiveConversationVisibility()"
     data-tooltip="{{localize 'CHUD.toggleVisibility'}}"
   >
@@ -9,7 +9,7 @@
 
   {{#if features.speakAsEnabled}}
     <div
-      class="conversation-controls-button toggle {{#if isSpeakingAs}}active{{/if}}"
+      class="control-button toggle {{#if isSpeakingAs}}active{{/if}}"
       onclick="game.ConversationHud.toggleSpeakingAsMode()"
       data-tooltip="{{localize 'CHUD.toggleSpeakAs'}}"
     >
@@ -18,7 +18,7 @@
   {{/if}}
 
   <div
-    class="conversation-controls-button"
+    class="control-button"
     onclick="game.ConversationHud.saveActiveConversation()"
     data-tooltip="{{localize 'CHUD.saveConversation'}}"
   >
@@ -29,7 +29,7 @@
 {{#if features.minimizeEnabled}}
   {{#if isVisible}}
     <div
-      class="conversation-controls-button {{#if isGM}}margin{{/if}}"
+      class="control-button {{#if isGM}}margin{{/if}}"
       onclick="game.ConversationHud.toggleActiveConversationMode()"
       {{#if isMinimized}}
         data-tooltip="{{localize 'CHUD.maximizeConversation'}}"

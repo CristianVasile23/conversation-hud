@@ -6,7 +6,7 @@
   </div>
 
   {{!-- Active participant --}}
-  <div class="conversation-hud-active-participant {{portraitStyle}}">
+  <div class="conversation-active-participant {{portraitStyle}}">
     <img id="conversationActiveParticipant" class="active-participant-image {{portraitAnchor}}" src="" alt="active_participant" />
     <p id="conversationActiveParticipantName" class="active-participant-name {{activeParticipantFontSize}}">
       {{localize 'CHUD.anonymous'}}
@@ -18,7 +18,7 @@
   </div>
 
   {{!-- Participants list --}}
-  <div id="conversationParticipantList" class="conversation-hud-participant-list">
+  <div id="conversationParticipantList" class="conversation-participant-list">
     {{#if isGM}}
       {{#each participants as |participant index|}}
         <div class="participant-drag-drop-container">

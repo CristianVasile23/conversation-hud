@@ -1,4 +1,5 @@
-.conversation-hud-active-participant {
+/* TODO: GO OVER CSS AND REWORK FILE */
+.conversation-active-participant {
   display: none;
   flex-direction: column;
   align-items: center;
@@ -7,24 +8,24 @@
 }
 
 /* Portrait types */
-.conversation-hud-active-participant.vertical {
+.conversation-active-participant.vertical {
   height: 100%;
   width: 30vw;
   max-width: 420px;
 }
-.conversation-hud-active-participant.horizontal {
+.conversation-active-participant.horizontal {
   width: 40vw;
   max-width: 620px;
   aspect-ratio: 16/9;
 }
-.conversation-hud-active-participant.square {
+.conversation-active-participant.square {
   width: min(30vw, 50vh);
   height: min(30vw, 50vh);
   max-width: 620px;
   max-height: 620px;
 }
 
-.conversation-hud-active-participant img {
+.conversation-active-participant img {
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -35,15 +36,15 @@
 
 /* CSS rules for image anchor */
 .conversation-participant img.top,
-.conversation-hud-active-participant img.top {
+.conversation-active-participant img.top {
   object-position: top center;
 }
 .conversation-participant img.center,
-.conversation-hud-active-participant img.center {
+.conversation-active-participant img.center {
   object-position: center;
 }
 .conversation-participant img.bottom,
-.conversation-hud-active-participant img.bottom {
+.conversation-active-participant img.bottom {
   object-position: bottom center;
 }
 
@@ -100,4 +101,20 @@
 }
 .active-participant-name.veryLarge {
   font-size: 22px;
+}
+
+.no-active-participant-text {
+  display: none;
+  max-width: 200px;
+  margin: 0;
+  text-align: center;
+  color: var(--color-text-light-highlight);
+  font-size: 30px;
+}
+.no-active-participant-text.active {
+  display: block;
+}
+
+.conversation-hud-wrapper.minimized .no-active-participant-text.active {
+  font-size: 26px;
 }

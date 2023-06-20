@@ -1,0 +1,86 @@
+/* TODO: GO OVER CSS AND REWORK FILE */
+.conversation-background.visible {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(4px);
+}
+
+.conversation-hud-wrapper {
+  display: flex;
+  flex-flow: column;
+  pointer-events: none;
+}
+.conversation-hud-wrapper.visible {
+  z-index: 10;
+}
+.conversation-hud-wrapper.minimized {
+  height: 100%;
+}
+
+.conversation-hud-content {
+  position: relative;
+
+  margin: auto;
+
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+  align-items: center;
+
+  height: 65vh;
+  max-height: 650px;
+
+  pointer-events: all;
+}
+.conversation-hud-wrapper.visible .conversation-hud-content {
+  display: flex;
+}
+.conversation-hud-wrapper.minimized .conversation-hud-content {
+  flex-direction: column;
+  justify-content: space-between;
+  margin-right: 10px;
+  height: 100%;
+  max-height: calc(100vh - 54px - 62px);
+}
+
+.conversation-hud-wrapper.visible .conversation-active-participant {
+  display: flex;
+}
+
+.conversation-hud-wrapper.minimized .conversation-active-participant {
+  height: 152px;
+  width: 152px;
+  flex: 0 0 auto;
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--color-border-dark);
+  border-radius: 15px;
+  box-shadow: 0 0 10px var(--color-shadow-dark);
+}
+
+.conversation-hud-wrapper.minimized .conversation-active-participant img {
+  border: 0;
+}
+
+.conversation-hud-wrapper.minimized .conversation-active-participant img {
+  box-shadow: unset;
+}
+
+.conversation-hud-wrapper.visible .conversation-participant-list {
+  display: flex;
+}
+
+.conversation-hud-wrapper.minimized .conversation-participant-list {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.conversation-hud-wrapper.minimized .conversation-participant-list .conversation-participant:first-child {
+  margin-top: auto;
+}
+.conversation-hud-wrapper.minimized .conversation-participant-list .conversation-participant:last-child {
+  margin-bottom: unset;
+}
