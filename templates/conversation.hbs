@@ -6,13 +6,13 @@
   </div>
 
   {{!-- Active participant --}}
-  <div class="conversation-active-participant {{portraitStyle}}">
-    <img id="conversationActiveParticipant" class="active-participant-image {{portraitAnchor}}" src="" alt="active_participant" />
-    <p id="conversationActiveParticipantName" class="active-participant-name {{activeParticipantFontSize}}">
+  <div class="active-participant {{portraitStyle}}">
+    <img id="conversationActiveParticipant" class="portrait {{portraitAnchor}}" src="" alt="Portrait" />
+    <p id="conversationActiveParticipantName" class="name {{activeParticipantFontSize}}">
       {{localize 'CHUD.anonymous'}}
     </p>
     
-    <p id="conversationNoActiveParticipantMsg" class="no-active-participant-text active">
+    <p id="conversationNoActiveParticipantMsg" class="no-participant-text active">
       {{localize 'CHUD.noActiveParticipant'}}
     </p>
   </div>
@@ -36,7 +36,7 @@
             </div>
 
             <div class="conversation-participant has-control" draggable="true" onclick="game.ConversationHud.changeActiveParticipant({{index}})">
-              <img class="portrait" src="{{participant.img}}" alt="image" />
+              <img class="portrait" src="{{participant.img}}" alt="Portrait" />
               <p class="name">{{participant.name}}</p>
             </div>
 

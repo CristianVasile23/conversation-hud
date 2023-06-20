@@ -42,7 +42,7 @@
 .conversation-hud-content.active-dropzone .conversation-hud-dropzone {
   display: flex;
 }
-.conversation-hud-content.active-dropzone > .conversation-active-participant,
+.conversation-hud-content.active-dropzone > .active-participant,
 .conversation-hud-content.active-dropzone > .conversation-participant-list {
   pointer-events: none;
 }
