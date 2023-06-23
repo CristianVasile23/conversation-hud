@@ -113,8 +113,8 @@ export class ConversationHud {
 
     // Create background
     const conversationBackground = document.createElement("div");
-    conversationBackground.id = "conversation-background";
-    conversationBackground.className = "conversation-background";
+    conversationBackground.id = "conversation-hud-background";
+    conversationBackground.className = "conversation-hud-background";
     if (conversationVisible) {
       conversationBackground.classList.add("visible");
     }
@@ -251,7 +251,7 @@ export class ConversationHud {
     game.ConversationHud.activeConversation = null;
 
     const body = document.body;
-    const conversationBackground = document.getElementById("conversation-background");
+    const conversationBackground = document.getElementById("conversation-hud-background");
     if (conversationBackground) {
       body.removeChild(conversationBackground);
     }
@@ -514,7 +514,7 @@ export class ConversationHud {
       conversationHud.classList.remove("visible");
     }
 
-    const conversationBackground = document.getElementById("conversation-background");
+    const conversationBackground = document.getElementById("conversation-hud-background");
     if (newVisibility) {
       if (!game.ConversationHud.conversationIsMinimized) {
         conversationBackground.classList.add("visible");

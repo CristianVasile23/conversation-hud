@@ -1,5 +1,6 @@
-/* TODO: GO OVER CSS AND REWORK FILE */
-.conversation-background.visible {
+/* ----- Conversation HUD background ----- */
+/* #region */
+.conversation-hud-background.visible {
   position: absolute;
   top: 0;
   bottom: 0;
@@ -8,19 +9,18 @@
   background-color: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(4px);
 }
+/* #endregion */
 
+/* ----- Conversation HUD wrapper ----- */
+/* #region */
 .conversation-hud-wrapper {
   display: flex;
   flex-flow: column;
   pointer-events: none;
 }
-.conversation-hud-wrapper.visible {
-  z-index: 10;
-}
-.conversation-hud-wrapper.minimized {
-  height: 100%;
-}
+/* #endregion */
 
+/* ----- Conversation HUD content ----- */
 .conversation-hud-content {
   position: relative;
 
@@ -36,9 +36,25 @@
 
   pointer-events: all;
 }
+
+/* ----- Conversation visible ----- */
 .conversation-hud-wrapper.visible .conversation-hud-content {
   display: flex;
 }
+
+.conversation-hud-wrapper.visible .active-participant {
+  display: flex;
+}
+
+.conversation-hud-wrapper.visible .conversation-participant-list {
+  display: flex;
+}
+
+/* ----- Conversation minimized ----- */
+.conversation-hud-wrapper.minimized {
+  height: 100%;
+}
+
 .conversation-hud-wrapper.minimized .conversation-hud-content {
   flex-direction: column;
   justify-content: space-between;
@@ -47,13 +63,9 @@
   max-height: calc(100vh - 54px - 62px);
 }
 
-.conversation-hud-wrapper.visible .active-participant {
-  display: flex;
-}
-
 .conversation-hud-wrapper.minimized .active-participant {
-  height: 152px;
-  width: 152px;
+  height: 124px;
+  width: 124px;
   flex: 0 0 auto;
   background: rgba(0, 0, 0, 0.5);
   border: 1px solid var(--color-border-dark);
@@ -69,20 +81,13 @@
   box-shadow: unset;
 }
 
-.conversation-hud-wrapper.visible .conversation-participant-list {
-  display: flex;
-}
-
 .conversation-hud-wrapper.minimized .conversation-participant-list {
   margin-top: 25px;
   margin-bottom: 25px;
 }
 
-.conversation-hud-wrapper.minimized .conversation-participant-list .conversation-participant:first-child {
+.conversation-hud-wrapper.minimized .conversation-participant-list .participant-drag-drop-container:first-child {
   margin-top: auto;
-}
-.conversation-hud-wrapper.minimized .conversation-participant-list .conversation-participant:last-child {
-  margin-bottom: unset;
 }
 
 .conversation-hud-wrapper.minimized .conversation-hud-content .no-participant-text.active {

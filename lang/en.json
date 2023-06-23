@@ -73,6 +73,7 @@
       "hint": "The color of the banner."
     },
 
+    "unaffiliated": "Unaffiliated",
     "noBannerPreview": "No banner preview available",
     "bannerPreview": "Banner Preview"
   },

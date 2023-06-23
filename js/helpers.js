@@ -162,7 +162,7 @@ export async function updateConversationLayout() {
   }
 
   if (game.ConversationHud.conversationIsVisible) {
-    const conversationBackground = document.getElementById("conversation-background");
+    const conversationBackground = document.getElementById("conversation-hud-background");
     if (game.ConversationHud.conversationIsMinimized) {
       conversationBackground.classList.remove("visible");
     } else {

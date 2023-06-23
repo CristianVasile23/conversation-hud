@@ -20,6 +20,24 @@
 }
 /* #endregion */
 
+/* ----- Active participant portrait types when conversation is minimized ----- */
+/* #region */
+.conversation-hud-wrapper.minimized .conversation-hud-content .active-participant.vertical {
+  height: 186px;
+  width: 124px;
+}
+
+.conversation-hud-wrapper.minimized .conversation-hud-content .active-participant.horizontal {
+  height: 124px;
+  width: 70px;
+}
+
+.conversation-hud-wrapper.minimized .conversation-hud-content .active-participant.square {
+  height: 124px;
+  width: 124px;
+}
+/* #endregion */
+
 /* ----- Active participant portrait anchors ----- */
 /* #region */
 .conversation-hud-content .conversation-participant .portrait.top,
