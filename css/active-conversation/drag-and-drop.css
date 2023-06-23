@@ -1,4 +1,5 @@
-/* TODO: GO OVER CSS AND REWORK FILE */
+/* ----- Conversation dropzone ----- */
+/* #region */
 .conversation-hud-content .conversation-hud-dropzone {
   display: none;
   flex-flow: column;
@@ -20,29 +21,30 @@
 
 .conversation-hud-content .conversation-hud-dropzone > i {
   font-size: 60px;
-
   color: var(--color-border-light-secondary);
 }
 
 .conversation-hud-content .conversation-hud-dropzone > p {
-  color: var(--color-border-light-secondary);
-
   margin-top: 15px;
   max-width: 200px;
   text-align: center;
-}
-.conversation-hud-wrapper.minimized .conversation-hud-content .conversation-hud-dropzone > p {
-  max-width: 120px;
+  color: var(--color-border-light-secondary);
 }
 
 .conversation-hud-content .conversation-hud-dropzone * {
+  /* Disable pointer events for all the children elements so as not to interfere with the drag and drop */
   pointer-events: none;
 }
+/* #endregion */
 
+/* ----- Active dropzone ----- */
+/* #region */
 .conversation-hud-content.active-dropzone .conversation-hud-dropzone {
   display: flex;
 }
+
 .conversation-hud-content.active-dropzone > .active-participant,
 .conversation-hud-content.active-dropzone > .conversation-participant-list {
   pointer-events: none;
 }
+/* #endregion */

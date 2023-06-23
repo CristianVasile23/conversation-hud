@@ -21,6 +21,7 @@
 /* #endregion */
 
 /* ----- Conversation HUD content ----- */
+/* #region */
 .conversation-hud-content {
   position: relative;
 
@@ -36,8 +37,10 @@
 
   pointer-events: all;
 }
+/* #endregion */
 
 /* ----- Conversation visible ----- */
+/* #region */
 .conversation-hud-wrapper.visible .conversation-hud-content {
   display: flex;
 }
@@ -49,8 +52,10 @@
 .conversation-hud-wrapper.visible .conversation-participant-list {
   display: flex;
 }
+/* #endregion */
 
 /* ----- Conversation minimized ----- */
+/* #region */
 .conversation-hud-wrapper.minimized {
   height: 100%;
 }
@@ -93,3 +98,8 @@
 .conversation-hud-wrapper.minimized .conversation-hud-content .no-participant-text.active {
   font-size: 26px;
 }
+
+.conversation-hud-wrapper.minimized .conversation-hud-content .conversation-hud-dropzone > p {
+  max-width: 120px;
+}
+/* #endregion */
