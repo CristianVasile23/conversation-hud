@@ -355,26 +355,17 @@ export class ConversationHud {
   }
 
   // Function that changes the active participant image
-  changeActiveImage(index) {
-    const image = document.getElementById("conversationActiveParticipant");
-    const imageText = document.getElementById("conversationActiveParticipantName");
-    const activeMsg = document.getElementById("conversationNoActiveParticipantMsg");
+  async changeActiveImage(index) {
+    const activeParticipantTemplate = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
+      displayParticipant: index === -1 ? false : true,
+      participant: game.ConversationHud.activeConversation.participants[index],
+      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+    });
 
-    if (index === -1) {
-      image.src = "";
-      image.classList.remove("active");
-      imageText.textContent = "";
-      imageText.classList.remove("active");
-
-      activeMsg.classList.add("active");
-    } else {
-      image.src = this.activeConversation.participants[index].img;
-      image.classList.add("active");
-      imageText.textContent = this.activeConversation.participants[index].name;
-      imageText.classList.add("active");
-
-      activeMsg.classList.remove("active");
-    }
+    const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
+    activeParticipantAnchorPoint.innerHTML = activeParticipantTemplate;
 
     // Change active class of all other elements
     const conversationParticipants = document.getElementById("conversationParticipantList").children;

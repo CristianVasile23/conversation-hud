@@ -6,7 +6,8 @@
   </div>
 
   {{!-- Active participant --}}
-  <div class="active-participant {{portraitStyle}}">
+  {{!-- TODO: Move this to a module that is rendered and the content of the parent wrapper is changed --}}
+  {{!-- <div class="active-participant {{portraitStyle}}">
     <img id="conversationActiveParticipant" class="portrait {{portraitAnchor}}" src="" alt="Portrait" />
     <p id="conversationActiveParticipantName" class="name {{activeParticipantFontSize}}">
       {{localize 'CHUD.anonymous'}}
@@ -15,6 +16,9 @@
     <p id="conversationNoActiveParticipantMsg" class="no-participant-text active">
       {{localize 'CHUD.noActiveParticipant'}}
     </p>
+  </div> --}}
+
+  <div id="active-participant-anchor-point">
   </div>
 
   {{!-- Participants list --}}
@@ -25,6 +29,7 @@
           <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
 
           <div class="conversation-participant-wrapper">
+            {{!-- Controls --}}
             <div class="controls">
               <a class="edit" onclick="game.ConversationHud.updateParticipantFromActiveConversation({{index}})">
                 <i class="fas fa-edit"></i>
@@ -35,32 +40,14 @@
               </a>
             </div>
 
+            {{!-- Participant --}}
             <div class="conversation-participant has-control" draggable="true" onclick="game.ConversationHud.changeActiveParticipant({{index}})">
               <img class="portrait" src="{{participant.img}}" alt="Portrait" />
               <p class="name">{{participant.name}}</p>
             </div>
 
-            <div class="faction-wrapper {{#if participant.faction.factionBannerEnabled}}has-banner{{/if}} {{#unless participant.faction.displayFaction}}disabled{{/unless}}">
-              <img class="faction-logo" src="{{participant.faction.factionLogo}}" alt="Faction Logo">
-
-              {{#if participant.faction.factionBannerEnabled}}
-                {{#if (eq participant.faction.factionBannerShape "shape-1")}}
-                  {{> "modules/conversation-hud/templates/banner-shapes/shape-1.hbs" color=participant.faction.factionBannerTint}}
-                {{/if}}
-
-                {{#if (eq participant.faction.factionBannerShape "shape-2")}}
-                  {{> "modules/conversation-hud/templates/banner-shapes/shape-2.hbs" color=participant.faction.factionBannerTint}}
-                {{/if}}
-
-                {{#if (eq participant.faction.factionBannerShape "shape-3")}}
-                  {{> "modules/conversation-hud/templates/banner-shapes/shape-3.hbs" color=participant.faction.factionBannerTint}}
-                {{/if}}
-
-                {{#if (eq participant.faction.factionBannerShape "shape-4")}}
-                  {{> "modules/conversation-hud/templates/banner-shapes/shape-4.hbs" color=participant.faction.factionBannerTint}}
-                {{/if}}
-              {{/if}}
-            </div>
+            {{!-- Faction wrapper --}}
+            {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
           </div>
 
           <div id="drag-drop-indicator-bottom" class="drag-drop-indicator"></div>
@@ -68,9 +55,15 @@
       {{/each}}
     {{else}}
       {{#each participants as |participant index|}}
-        <div class="conversation-participant">
-          <img class="portrait" src="{{participant.img}}" alt="image" />
-          <p class="name">{{participant.name}}</p>
+        <div class="conversation-participant-wrapper">
+          {{!-- Participant --}}
+          <div class="conversation-participant">
+            <img class="portrait" src="{{participant.img}}" alt="image" />
+            <p class="name">{{participant.name}}</p>
+          </div>
+
+          {{!-- Faction wrapper --}}
+          {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
         </div>
       {{/each}}
     {{/if}}

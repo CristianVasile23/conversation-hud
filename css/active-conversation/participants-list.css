@@ -12,7 +12,7 @@
 }
 
 @media only screen and (max-width: 1150px) {
-  /* On smaller screens, make the margin between the participant list adn the active participant smaller to gain some extra space*/
+  /* On smaller screens, make the margin between the participant list and the active participant smaller to gain some extra space*/
   .conversation-hud-content .conversation-participant-list {
     margin-left: 10px;
   }
@@ -27,17 +27,6 @@
 
   margin-top: 6px;
   margin-bottom: 6px;
-}
-.conversation-hud-content .conversation-participant-wrapper:first-child {
-  margin-top: auto;
-}
-.conversation-hud-content .conversation-participant-wrapper:last-child {
-  margin-bottom: auto;
-}
-
-.conversation-hud-content .conversation-participant-wrapper .conversation-participant {
-  margin-top: 0;
-  margin-bottom: 0;
 }
 /* #endregion */
 
@@ -99,6 +88,8 @@
   border-bottom: 1px solid var(--color-border-highlight);
   box-shadow: 0 0 10px var(--color-shadow-highlight);
 }
+
+.conversation-hud-content .conversation-participant-wrapper.active .conversation-participant,
 .conversation-hud-content .participant-drag-drop-container.active .conversation-participant {
   border: 1px solid var(--color-border-highlight-alt);
   border-bottom: 1px solid var(--color-border-highlight);
@@ -142,11 +133,6 @@
 
 .conversation-hud-content .conversation-participant * {
   pointer-events: none;
-}
-
-.conversation-hud-content .conversation-participant {
-  margin-top: 6px;
-  margin-bottom: 6px;
 }
 /* #endregion */
 
