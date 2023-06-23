@@ -157,13 +157,16 @@ export class ConversationEntrySheet extends JournalSheet {
         // Bind functions to the edit and remove buttons
         const controls = conversationParticipants[i].querySelector(".controls-wrapper").children;
         controls[0].onclick = () => {
+          // TODO: Duplicate logic
+        };
+        controls[1].onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
           });
           fileInputForm.render(true);
         };
-        controls[1].onclick = () => this.#handleRemoveParticipant(i);
+        controls[2].onclick = () => this.#handleRemoveParticipant(i);
       }
     }
   }

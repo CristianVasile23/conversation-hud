@@ -363,6 +363,7 @@ export class ConversationHud {
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
       portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+      activeParticipantFactionFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFactionFontSize),
     });
 
     const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
