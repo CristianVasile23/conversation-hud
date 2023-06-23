@@ -11,10 +11,10 @@
   padding: 10px;
 }
 
-/* TODO: Check this */
 @media only screen and (max-width: 1150px) {
+  /* On smaller screens, make the margin between the participant list adn the active participant smaller to gain some extra space*/
   .conversation-hud-content .conversation-participant-list {
-    margin-left: 20px;
+    margin-left: 10px;
   }
 }
 /* #endregion */
@@ -25,14 +25,19 @@
   display: flex;
   flex-direction: row;
 
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 .conversation-hud-content .conversation-participant-wrapper:first-child {
   margin-top: auto;
 }
 .conversation-hud-content .conversation-participant-wrapper:last-child {
   margin-bottom: auto;
+}
+
+.conversation-hud-content .conversation-participant-wrapper .conversation-participant {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 /* #endregion */
 
@@ -137,6 +142,11 @@
 
 .conversation-hud-content .conversation-participant * {
   pointer-events: none;
+}
+
+.conversation-hud-content .conversation-participant {
+  margin-top: 6px;
+  margin-bottom: 6px;
 }
 /* #endregion */
 

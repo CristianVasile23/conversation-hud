@@ -170,8 +170,7 @@ export class ConversationHud {
 
     if (conversationParticipants) {
       for (let i = 0; i < conversationParticipants.length - 1; i++) {
-        const participant = conversationParticipants[i].querySelector(".conversation-participant");
-        participant.ondragstart = (event) => {
+        conversationParticipants[i].ondragstart = (event) => {
           game.ConversationHud.draggingParticipant = true;
           conversationParticipantList.classList.add("drag-active");
 

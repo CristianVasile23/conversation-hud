@@ -91,8 +91,12 @@
   margin-bottom: 25px;
 }
 
-.conversation-hud-wrapper.minimized .conversation-participant-list .participant-drag-drop-container:first-child {
+.conversation-hud-wrapper.minimized .conversation-participant-list > :first-child {
   margin-top: auto;
+}
+
+.conversation-hud-wrapper.minimized .conversation-participant-list > :last-child {
+  margin-bottom: unset;
 }
 
 .conversation-hud-wrapper.minimized .conversation-hud-content .no-participant-text.active {
