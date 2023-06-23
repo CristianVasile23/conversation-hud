@@ -6,18 +6,6 @@
   </div>
 
   {{!-- Active participant --}}
-  {{!-- TODO: Move this to a module that is rendered and the content of the parent wrapper is changed --}}
-  {{!-- <div class="active-participant {{portraitStyle}}">
-    <img id="conversationActiveParticipant" class="portrait {{portraitAnchor}}" src="" alt="Portrait" />
-    <p id="conversationActiveParticipantName" class="name {{activeParticipantFontSize}}">
-      {{localize 'CHUD.anonymous'}}
-    </p>
-    
-    <p id="conversationNoActiveParticipantMsg" class="no-participant-text active">
-      {{localize 'CHUD.noActiveParticipant'}}
-    </p>
-  </div> --}}
-
   <div id="active-participant-anchor-point">
   </div>
 
@@ -68,6 +56,7 @@
       {{/each}}
     {{/if}}
     
+    {{!-- GMs also have an add participant button that needs to be rendered inside the list --}}
     {{#if isGM}}
       <div class="conversation-participant-wrapper">
         <a

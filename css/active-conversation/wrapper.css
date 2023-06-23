@@ -62,10 +62,16 @@
 
 .conversation-hud-wrapper.minimized .conversation-hud-content {
   flex-direction: column;
+  align-items: flex-end;
   justify-content: space-between;
   margin-right: 10px;
   height: 100%;
   max-height: calc(100vh - 54px - 62px);
+}
+
+/* Active participant */
+.conversation-hud-wrapper.minimized .active-participant-wrapper {
+  margin-right: 45px;
 }
 
 .conversation-hud-wrapper.minimized .active-participant {
@@ -78,14 +84,45 @@
   box-shadow: 0 0 10px var(--color-shadow-dark);
 }
 
-.conversation-hud-wrapper.minimized .active-participant img {
-  border: 0;
+.conversation-hud-wrapper.minimized .active-participant .name {
+  font-size: 12px !important;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 
-.conversation-hud-wrapper.minimized .active-participant img {
-  box-shadow: unset;
+/* Faction display for active participant */
+.conversation-hud-wrapper.minimized .active-participant-wrapper .active-participant-faction {
+  width: 84px;
 }
 
+.conversation-hud-wrapper.minimized .active-participant-wrapper .active-participant-faction .faction-wrapper {
+  width: 82px;
+  height: 82px;
+}
+
+.conversation-hud-wrapper.minimized .active-participant-wrapper .active-participant-faction .faction-wrapper .faction-logo {
+  max-width: 82px;
+  max-height: 82px;
+}
+
+.conversation-hud-wrapper.minimized .active-participant-wrapper .active-participant-faction .faction-wrapper.has-banner .faction-logo {
+  top: 14px;
+
+  max-width: 36px;
+  max-height: 36px;
+}
+
+.conversation-hud-wrapper.minimized .active-participant-wrapper .active-participant-faction .faction-name {
+  display: none;
+}
+
+.conversation-hud-wrapper.minimized .conversation-hud-content .no-participant-text {
+  font-size: 20px;
+}
+
+/* Participant list */
 .conversation-hud-wrapper.minimized .conversation-participant-list {
   margin-top: 25px;
   margin-bottom: 25px;
@@ -103,6 +140,7 @@
   font-size: 26px;
 }
 
+/* Dropzone */
 .conversation-hud-wrapper.minimized .conversation-hud-content .conversation-hud-dropzone > p {
   max-width: 120px;
 }

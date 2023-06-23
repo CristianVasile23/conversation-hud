@@ -1,19 +1,25 @@
-<div class="active-participant-wrapper">
+<div class="active-participant-wrapper" data-tooltip-direction="UP">
   {{!-- Faction wrapper --}}
-  <div class="active-participant-faction {{#unless participant.faction.displayFaction}}faction-disabled{{/unless}}">
+  <div
+    class="active-participant-faction {{#unless participant.faction.displayFaction}}faction-disabled{{/unless}}"
+    {{#if displayParticipant}}data-tooltip="{{participant.faction.factionName}}"{{/if}}
+  >
     {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
     <p class="faction-name">{{participant.faction.factionName}}</p>
   </div>
 
   {{!-- Participant display --}}
-  <div class="active-participant {{portraitStyle}}">
+  <div
+    class="active-participant {{portraitStyle}}"
+    {{#if displayParticipant}}data-tooltip="{{participant.name}}"{{/if}}
+  >
     {{#if displayParticipant}}
-      <img id="conversationActiveParticipant" class="portrait {{portraitAnchor}}" src="{{participant.img}}" alt="Portrait" />
-      <p id="conversationActiveParticipantName" class="name {{activeParticipantFontSize}}">
+      <img class="portrait {{portraitAnchor}}" src="{{participant.img}}" alt="Portrait" />
+      <p class="name {{activeParticipantFontSize}}">
         {{participant.name}}
       </p>
     {{else}}
-      <p id="conversationNoActiveParticipantMsg" class="no-participant-text">
+      <p class="no-participant-text">
         {{localize 'CHUD.noActiveParticipant'}}
       </p>
     {{/if}}

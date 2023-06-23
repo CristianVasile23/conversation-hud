@@ -98,6 +98,13 @@
   align-items: center;
   justify-content: center;
   position: relative;
+
+  border: 1px solid var(--color-border-dark);
+  border-radius: 15px;
+  box-shadow: 0 0 10px var(--color-shadow-dark);
+  background-color: rgba(0, 0, 0, 0.5);
+
+  overflow: hidden;
 }
 /* #endregion */
 
@@ -107,12 +114,10 @@
   height: 100%;
   width: 100%;
 
+  border: 0;
+
   object-fit: cover;
   object-position: top center;
-
-  border-radius: 15px;
-  box-shadow: 0 0 10px var(--color-shadow-dark);
-  background-color: rgba(0, 0, 0, 0.5);
 }
 /* #endregion */
 
@@ -148,11 +153,12 @@
 /* ----- No active participant text ----- */
 /* #region */
 .conversation-hud-content .no-participant-text {
-  display: block;
+  display: flex;
+  width: 100%;
   max-width: 200px;
   margin: 0;
   text-align: center;
   color: var(--color-text-light-highlight);
-  font-size: 30px;
+  font-size: 36px;
 }
 /* #endregion */

@@ -137,6 +137,7 @@ export class ConversationHud {
 
   // Function that activates listeners used for drag-drop functionality
   addDragDropListeners(element) {
+    // TODO: Only do this if the user is a GM
     // Drag & drop listeners for the dropzone
     const conversationContent = element.querySelector("#conversation-hud-content");
     const dragDropZone = element.querySelector("#conversation-hud-dropzone");

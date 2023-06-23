@@ -79,6 +79,7 @@
 
   box-shadow: 0 0 10px var(--color-shadow-dark);
 }
+
 .conversation-hud-content .conversation-participant.has-control {
   cursor: pointer;
 }
@@ -151,6 +152,7 @@
 
   border-radius: 5px;
 }
+
 .conversation-hud-content .conversation-participant-wrapper .faction-wrapper.disabled {
   visibility: hidden;
 }
@@ -168,6 +170,7 @@
 
   margin: auto;
 }
+
 .conversation-hud-content .conversation-participant-wrapper .faction-wrapper.has-banner .faction-logo {
   top: 6px;
   bottom: unset;
@@ -176,6 +179,7 @@
 
   border: 0;
 }
+
 .conversation-hud-content .conversation-participant-wrapper .faction-wrapper .faction-logo[src=""] {
   display: none;
 }
@@ -205,5 +209,16 @@
 .conversation-hud-content .conversation-participant-list.drag-active .controls,
 .conversation-hud-content .conversation-participant-list.drag-active .faction-wrapper {
   pointer-events: none;
+}
+/* #endregion */
+
+/* ----- CSS rules to center conversation participants inside the list view ----- */
+/* #region */
+.conversation-participant-list > :first-child {
+  margin-top: auto;
+}
+
+.conversation-participant-list > :last-child {
+  margin-bottom: auto;
 }
 /* #endregion */
