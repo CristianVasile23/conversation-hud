@@ -10,6 +10,8 @@ export async function preloadTemplates() {
     "modules/conversation-hud/templates/banner-shapes/shape-2.hbs",
     "modules/conversation-hud/templates/banner-shapes/shape-3.hbs",
     "modules/conversation-hud/templates/banner-shapes/shape-4.hbs",
+    "modules/conversation-hud/templates/banner-shapes/shape-5.hbs",
+    "modules/conversation-hud/templates/banner-shapes/shape-6.hbs",
   ];
   return loadTemplates(templates);
 }

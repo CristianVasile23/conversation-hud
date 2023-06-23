@@ -33,14 +33,13 @@
               class="conversation-participant has-control"
               draggable="true"
               onclick="game.ConversationHud.changeActiveParticipant({{index}})"
-              data-tooltip="{{participant.name}}"
             >
               <img class="portrait" src="{{participant.img}}" alt="Portrait" />
               <p class="name">{{participant.name}}</p>
             </div>
 
             {{!-- Faction wrapper --}}
-            <div data-tooltip="{{participant.faction.factionName}}" style="align-self: flex-start;">
+            <div style="align-self: flex-start;">
               {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
             </div>
           </div>
@@ -52,13 +51,15 @@
       {{#each participants as |participant index|}}
         <div class="conversation-participant-wrapper">
           {{!-- Participant --}}
-          <div class="conversation-participant">
+          <div class="conversation-participant" data-tooltip="{{participant.name}}">
             <img class="portrait" src="{{participant.img}}" alt="image" />
             <p class="name">{{participant.name}}</p>
           </div>
 
           {{!-- Faction wrapper --}}
-          {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
+          <div data-tooltip="{{participant.faction.factionName}}" style="align-self: flex-start;">
+            {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
+          </div>
         </div>
       {{/each}}
     {{/if}}

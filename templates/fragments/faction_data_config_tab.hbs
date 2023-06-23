@@ -49,19 +49,27 @@
 
         <div class="banner-options">
           <button id="shape-1" class="banner-shape-button {{#if (eq factionBannerShape "shape-1")}}active{{/if}}" type="button" name="shape-1">
-            <img src="modules/conversation-hud/img/banner-shapes/shape-1.svg" alt="Banner Shape 1">
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-1.hbs" color='#000000'}}
           </button>
 
           <button id="shape-2" class="banner-shape-button {{#if (eq factionBannerShape "shape-2")}}active{{/if}}" type="button" name="shape-2">
-            <img src="modules/conversation-hud/img/banner-shapes/shape-2.svg" alt="Banner Shape 2">
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-2.hbs" color='#000000'}}
           </button>
 
           <button id="shape-3" class="banner-shape-button {{#if (eq factionBannerShape "shape-3")}}active{{/if}}" type="button" name="shape-3">
-            <img src="modules/conversation-hud/img/banner-shapes/shape-3.svg" alt="Banner Shape 3">
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-3.hbs" color='#000000'}}
           </button>
 
           <button id="shape-4" class="banner-shape-button {{#if (eq factionBannerShape "shape-4")}}active{{/if}}" type="button" name="shape-4">
-            <img src="modules/conversation-hud/img/banner-shapes/shape-4.svg" alt="Banner Shape 4">
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-4.hbs" color='#000000'}}
+          </button>
+
+          <button id="shape-5" class="banner-shape-button {{#if (eq factionBannerShape "shape-5")}}active{{/if}}" type="button" name="shape-5">
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-5.hbs" color='#000000'}}
+          </button>
+
+          <button id="shape-6" class="banner-shape-button {{#if (eq factionBannerShape "shape-6")}}active{{/if}}" type="button" name="shape-6">
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-6.hbs" color='#000000'}}
           </button>
         </div>
       
@@ -103,6 +111,14 @@
 
           {{#if (eq factionBannerShape "shape-4")}}
             {{> "modules/conversation-hud/templates/banner-shapes/shape-4.hbs" color=factionBannerTint}}
+          {{/if}}
+
+          {{#if (eq factionBannerShape "shape-5")}}
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-5.hbs" color=factionBannerTint}}
+          {{/if}}
+
+          {{#if (eq factionBannerShape "shape-6")}}
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-6.hbs" color=factionBannerTint}}
           {{/if}}
         {{/if}}
       </div>
