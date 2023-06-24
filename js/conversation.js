@@ -137,107 +137,108 @@ export class ConversationHud {
 
   // Function that activates listeners used for drag-drop functionality
   addDragDropListeners(element) {
-    // TODO: Only do this if the user is a GM
-    // Drag & drop listeners for the dropzone
-    const conversationContent = element.querySelector("#conversation-hud-content");
-    const dragDropZone = element.querySelector("#conversation-hud-dropzone");
+    if (checkIfUserGM()) {
+      // Drag & drop listeners for the dropzone
+      const conversationContent = element.querySelector("#conversation-hud-content");
+      const dragDropZone = element.querySelector("#conversation-hud-dropzone");
 
-    conversationContent.ondragenter = (event) => {
-      if (!game.ConversationHud.draggingParticipant) {
-        game.ConversationHud.dropzoneVisible = true;
-        conversationContent.classList.add("active-dropzone");
-      }
-    };
+      conversationContent.ondragenter = (event) => {
+        if (!game.ConversationHud.draggingParticipant) {
+          game.ConversationHud.dropzoneVisible = true;
+          conversationContent.classList.add("active-dropzone");
+        }
+      };
 
-    dragDropZone.ondragleave = () => {
-      if (game.ConversationHud.dropzoneVisible) {
-        game.ConversationHud.dropzoneVisible = false;
-        conversationContent.classList.remove("active-dropzone");
-      }
-    };
+      dragDropZone.ondragleave = () => {
+        if (game.ConversationHud.dropzoneVisible) {
+          game.ConversationHud.dropzoneVisible = false;
+          conversationContent.classList.remove("active-dropzone");
+        }
+      };
 
-    conversationContent.ondrop = async (event) => {
-      if (game.ConversationHud.dropzoneVisible) {
-        game.ConversationHud.handleActorDrop(event);
+      conversationContent.ondrop = async (event) => {
+        if (game.ConversationHud.dropzoneVisible) {
+          game.ConversationHud.handleActorDrop(event);
 
-        game.ConversationHud.dropzoneVisible = false;
-        conversationContent.classList.remove("active-dropzone");
-      }
-    };
+          game.ConversationHud.dropzoneVisible = false;
+          conversationContent.classList.remove("active-dropzone");
+        }
+      };
 
-    // Drag & drop listeners for the participants list
-    const conversationParticipantList = element.querySelector("#conversationParticipantList");
-    const conversationParticipants = conversationParticipantList.children;
+      // Drag & drop listeners for the participants list
+      const conversationParticipantList = element.querySelector("#conversationParticipantList");
+      const conversationParticipants = conversationParticipantList.children;
 
-    if (conversationParticipants) {
-      for (let i = 0; i < conversationParticipants.length - 1; i++) {
-        conversationParticipants[i].ondragstart = (event) => {
-          game.ConversationHud.draggingParticipant = true;
-          conversationParticipantList.classList.add("drag-active");
+      if (conversationParticipants) {
+        for (let i = 0; i < conversationParticipants.length - 1; i++) {
+          conversationParticipants[i].ondragstart = (event) => {
+            game.ConversationHud.draggingParticipant = true;
+            conversationParticipantList.classList.add("drag-active");
 
-          // Save the index of the dragged participant in the data transfer object
-          event.dataTransfer.setData(
-            "text/plain",
-            JSON.stringify({
-              index: i,
-            })
-          );
-        };
+            // Save the index of the dragged participant in the data transfer object
+            event.dataTransfer.setData(
+              "text/plain",
+              JSON.stringify({
+                index: i,
+              })
+            );
+          };
 
-        conversationParticipants[i].ondragend = (event) => {
-          game.ConversationHud.draggingParticipant = false;
-          conversationParticipantList.classList.remove("drag-active");
-        };
+          conversationParticipants[i].ondragend = (event) => {
+            game.ConversationHud.draggingParticipant = false;
+            conversationParticipantList.classList.remove("drag-active");
+          };
 
-        conversationParticipants[i].ondragover = (event) => {
-          displayDragAndDropIndicator(conversationParticipants[i], event);
-        };
+          conversationParticipants[i].ondragover = (event) => {
+            displayDragAndDropIndicator(conversationParticipants[i], event);
+          };
 
-        conversationParticipants[i].ondragleave = (event) => {
-          hideDragAndDropIndicator(conversationParticipants[i]);
-        };
-
-        conversationParticipants[i].ondrop = (event) => {
-          const participants = game.ConversationHud.activeConversation?.participants;
-          const data = JSON.parse(event.dataTransfer.getData("text/plain"));
-
-          if (data) {
+          conversationParticipants[i].ondragleave = (event) => {
             hideDragAndDropIndicator(conversationParticipants[i]);
+          };
 
-            const oldIndex = data.index;
+          conversationParticipants[i].ondrop = (event) => {
+            const participants = game.ConversationHud.activeConversation?.participants;
+            const data = JSON.parse(event.dataTransfer.getData("text/plain"));
 
-            // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
-            if (oldIndex === i) {
-              return;
-            }
+            if (data) {
+              hideDragAndDropIndicator(conversationParticipants[i]);
 
-            // Get the new index of the dropped element
-            let newIndex = getDragAndDropIndex(event, i, oldIndex);
+              const oldIndex = data.index;
 
-            // Reorder the array
-            moveInArray(participants, oldIndex, newIndex);
+              // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
+              if (oldIndex === i) {
+                return;
+              }
 
-            // Update active participant index
-            const activeParticipantIndex = game.ConversationHud.activeConversation.activeParticipant;
-            if (activeParticipantIndex === oldIndex) {
-              game.ConversationHud.activeConversation.activeParticipant = newIndex;
+              // Get the new index of the dropped element
+              let newIndex = getDragAndDropIndex(event, i, oldIndex);
+
+              // Reorder the array
+              moveInArray(participants, oldIndex, newIndex);
+
+              // Update active participant index
+              const activeParticipantIndex = game.ConversationHud.activeConversation.activeParticipant;
+              if (activeParticipantIndex === oldIndex) {
+                game.ConversationHud.activeConversation.activeParticipant = newIndex;
+              } else {
+                if (activeParticipantIndex > oldIndex && activeParticipantIndex <= newIndex) {
+                  game.ConversationHud.activeConversation.activeParticipant -= 1;
+                }
+                if (activeParticipantIndex < oldIndex && activeParticipantIndex >= newIndex) {
+                  game.ConversationHud.activeConversation.activeParticipant += 1;
+                }
+              }
+
+              game.ConversationHud.activeConversation.participants = participants;
+              socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
             } else {
-              if (activeParticipantIndex > oldIndex && activeParticipantIndex <= newIndex) {
-                game.ConversationHud.activeConversation.activeParticipant -= 1;
-              }
-              if (activeParticipantIndex < oldIndex && activeParticipantIndex >= newIndex) {
-                game.ConversationHud.activeConversation.activeParticipant += 1;
-              }
+              console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
             }
 
-            game.ConversationHud.activeConversation.participants = participants;
-            socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
-          } else {
-            console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
-          }
-
-          game.ConversationHud.draggingParticipant = false;
-        };
+            game.ConversationHud.draggingParticipant = false;
+          };
+        }
       }
     }
   }
@@ -432,14 +433,15 @@ export class ConversationHud {
   // Function that updates a participant from the active conversation
   updateParticipantFromActiveConversation(index) {
     if (checkIfUserGM()) {
-      if (index < 0 || this.activeConversation.participants.length < index) {
+      if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
         console.error("ConversationHUD | Tried to update a participant with an invalid index");
         return;
       }
 
       const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
-        name: this.activeConversation.participants[index].name,
-        img: this.activeConversation.participants[index].img,
+        name: game.ConversationHud.activeConversation.participants[index].name,
+        img: game.ConversationHud.activeConversation.participants[index].img,
+        faction: game.ConversationHud.activeConversation.participants[index].faction,
       });
       fileInputForm.render(true);
     }
@@ -483,7 +485,6 @@ export class ConversationHud {
   startConversationFromData(participants) {
     if (checkIfUserGM()) {
       let conversationData = {};
-      conversationData.type = 1;
       conversationData.participants = participants;
       conversationData.activeParticipant = -1;
 

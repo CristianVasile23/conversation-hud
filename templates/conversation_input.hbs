@@ -1,12 +1,12 @@
 <form class="flexcol conversation-entry-sheet">
   <div class="flexrow header">
-    <p> {{localize 'CHUD.currentParticipants'}} </p>
+    <p> {{localize 'CHUD.strings.currentParticipants'}} </p>
           
     <button
       type="button"
       name="add-participant"
       id="add-participant"
-      title="{{localize 'CHUD.addParticipant'}}"
+      title="{{localize 'CHUD.actions.participant.add'}}"
       class="header-action-button"
     >
       <i class="fas fa-user-plus"></i>
@@ -16,7 +16,7 @@
   <div id="conversation-sheet-content-wrapper" class="drag-and-drop-wrapper">
     <div id="conversation-sheet-dropzone" class="dropzone" >
       <i class="far fa-square-plus"></i>
-      <p> {{localize 'CHUD.dropActor'}} </p>
+      <p> {{localize 'CHUD.strings.dropActor'}} </p>
     </div>
 
     {{> "modules/conversation-hud/templates/fragments/conversation_participants_list.hbs" participants=participants}}
@@ -27,10 +27,10 @@
       <button
         type="submit"
         name="submit"
-        title="{{localize 'CHUD.startConversation'}}"
+        title="{{localize 'CHUD.actions.startConversation'}}"
       >
         <i class="fa fa-check"></i>
-        {{localize 'CHUD.startConversation'}}
+        {{localize 'CHUD.actions.startConversation'}}
       </button>
     </footer>
   </div>

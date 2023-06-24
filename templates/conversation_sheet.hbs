@@ -1,12 +1,12 @@
 <form class="flexcol conversation-entry-sheet" style="height: 100%">
   <div class="flexrow header">
-    <input name="name" type="text" value="{{name}}" placeholder="{{localize 'CHUD.conversationName'}}"/>
+    <input name="name" type="text" value="{{name}}" placeholder="{{localize 'CHUD.strings.conversationName'}}"/>
 
     <button
       type="button"
       name="show-conversation"
       id="show-conversation"
-      title="{{localize 'CHUD.activateConversation'}}"
+      title="{{localize 'CHUD.actions.activateConversation'}}"
       class="header-action-button"
     >
       <i class="fas fa-eye"></i>
@@ -16,7 +16,7 @@
       type="button"
       name="add-participant"
       id="add-participant"
-      title="{{localize 'CHUD.addParticipant'}}"
+      title="{{localize 'CHUD.actions.participant.add'}}"
       class="header-action-button"
     >
       <i class="fas fa-user-plus"></i>
@@ -26,7 +26,7 @@
   <div id="conversation-sheet-content-wrapper" class="drag-and-drop-wrapper">
     <div id="conversation-sheet-dropzone" class="dropzone" >
       <i class="far fa-square-plus"></i>
-      <p> {{localize 'CHUD.dropActor'}} </p>
+      <p> {{localize 'CHUD.strings.dropActor'}} </p>
     </div>
 
     {{> "modules/conversation-hud/templates/fragments/conversation_participants_list.hbs" participants=participants}}
@@ -38,11 +38,11 @@
         type="button"
         name="save-conversation"
         id="save-conversation"
-        title="{{localize 'CHUD.saveConversation'}}"
+        title="{{localize 'CHUD.actions.saveConversation'}}"
         {{#unless dirty}} disabled {{/unless}}
       >
         <i class="fas fa-save"></i>
-        {{localize 'CHUD.saveConversation'}}
+        {{localize 'CHUD.actions.saveConversation'}}
       </button>
     </footer>
   </div>

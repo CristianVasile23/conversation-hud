@@ -24,7 +24,7 @@ export class ConversationInputForm extends FormApplication {
       popOut: true,
       template: "modules/conversation-hud/templates/conversation_input.hbs",
       id: "conversation-start-form",
-      title: game.i18n.localize("CHUD.createConversation"),
+      title: game.i18n.localize("CHUD.actions.createConversation"),
       width: 635,
       height: 500,
       resizable: false,
@@ -140,8 +140,13 @@ export class ConversationInputForm extends FormApplication {
         };
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".controls-wrapper").children;
-        controls[0].onclick = () => {
+        const controls = conversationParticipants[i].querySelector(".controls-wrapper");
+        controls.querySelector("#participant-clone-button").onclick = () => {
+          const clonedParticipant = this.participants[i];
+          this.participants.push(clonedParticipant);
+          this.render(false);
+        };
+        controls.querySelector("#participant-edit-button").onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
@@ -149,7 +154,7 @@ export class ConversationInputForm extends FormApplication {
           });
           fileInputForm.render(true);
         };
-        controls[1].onclick = () => this.#handleRemoveParticipant(i);
+        controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
       }
     }
   }

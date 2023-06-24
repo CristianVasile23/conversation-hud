@@ -38,7 +38,7 @@ export class ConversationEntrySheet extends JournalSheet {
 
     return mergeObject(defOptions, {
       classes: ["sheet", "journal-sheet"],
-      title: game.i18n.localize("CHUD.conversationEntry"),
+      title: game.i18n.localize("CHUD.strings.conversationEntry"),
       id: "conversation-entry-sheet",
       template: `modules/conversation-hud/templates/conversation_sheet.hbs`,
       width: 635,
@@ -48,7 +48,6 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   activateListeners(html) {
-    console.log(this.participants);
     super.activateListeners(html);
 
     html.find("#save-conversation").click(async (e) => this.#handleSaveConversation());
@@ -155,18 +154,22 @@ export class ConversationEntrySheet extends JournalSheet {
         };
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".controls-wrapper").children;
-        controls[0].onclick = () => {
-          // TODO: Duplicate logic
+        const controls = conversationParticipants[i].querySelector(".controls-wrapper");
+        controls.querySelector("#participant-clone-button").onclick = () => {
+          const clonedParticipant = this.participants[i];
+          this.participants.push(clonedParticipant);
+          this.dirty = true;
+          this.render(false);
         };
-        controls[1].onclick = () => {
+        controls.querySelector("#participant-edit-button").onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
+            faction: this.participants[i].faction,
           });
           fileInputForm.render(true);
         };
-        controls[2].onclick = () => this.#handleRemoveParticipant(i);
+        controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
       }
     }
   }
@@ -187,17 +190,17 @@ export class ConversationEntrySheet extends JournalSheet {
   close(options) {
     if (this.dirty) {
       const dialog = new Dialog({
-        title: game.i18n.localize("CHUD.unsavedChanges"),
-        content: game.i18n.localize("CHUD.unsavedChangesHint"),
+        title: game.i18n.localize("CHUD.strings.unsavedChanges"),
+        content: game.i18n.localize("CHUD.strings.unsavedChangesHint"),
         buttons: {
           yes: {
             icon: '<i class="fas fa-save"></i>',
-            label: game.i18n.localize("CHUD.save"),
+            label: game.i18n.localize("CHUD.actions.save"),
             callback: this.#handleConfirmationClose.bind(this, true),
           },
           no: {
             icon: '<i class="fas fa-trash"></i>',
-            label: game.i18n.localize("CHUD.discardChanges"),
+            label: game.i18n.localize("CHUD.actions.discardChanges"),
             callback: this.#handleConfirmationClose.bind(this, false),
           },
         },
@@ -259,7 +262,7 @@ export class ConversationEntrySheet extends JournalSheet {
       await this.object.createEmbeddedDocuments("JournalEntryPage", [
         {
           text: { content: JSON.stringify(this.participants) },
-          name: game.i18n.localize("CHUD.conversationParticipants"),
+          name: game.i18n.localize("CHUD.strings.conversationParticipants"),
         },
       ]);
     } else {

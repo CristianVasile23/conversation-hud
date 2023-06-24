@@ -298,16 +298,18 @@ export function fixRpgUiIncompatibility() {
 
 export function setDefaultDataForParticipant(data) {
   if (data.name === "") {
-    data.name = game.i18n.localize("CHUD.anonymous");
+    data.name = game.i18n.localize("CHUD.strings.anonymous");
   }
   if (data.img === "") {
     data.img = "modules/conversation-hud/img/silhouette.jpg";
   }
+
   if (data.faction && data.faction.displayFaction) {
+    // TODO: Improve the default data that is set for faction
     if (data.faction.factionName === "") {
-      data.faction.factionName = "Unknown Faction";
+      data.faction.factionName = game.i18n.localize("CHUD.faction.unknownFaction");
     }
-    if (data.faction.factionLogo === "") {
+    if (data.faction.factionLogo === "" && !data.faction.factionBannerEnabled) {
       data.faction.factionLogo = "icons/svg/book.svg";
       data.faction.factionBannerEnabled = true;
     }

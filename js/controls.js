@@ -4,7 +4,7 @@ Hooks.on("getSceneControlButtons", (controls) => {
     if (notesControl) {
       notesControl.tools.push({
         name: "activateHud",
-        title: game.i18n.localize("CHUD.activateHUD"),
+        title: game.i18n.localize("CHUD.actions.activateHUD"),
         icon: "fas fa-comments",
         toggle: true,
         active: game.ConversationHud.conversationIsActive,

@@ -24,7 +24,7 @@ export class FileInputForm extends FormApplication {
       popOut: true,
       template: `modules/conversation-hud/templates/add_edit_participant.hbs`,
       id: "conversation-add-participant",
-      title: game.i18n.localize("CHUD.participantData"),
+      title: game.i18n.localize("CHUD.strings.participantData"),
       width: 640,
       height: "auto",
       tabs: [{ navSelector: ".tabs", contentSelector: "form", initial: "participant-config" }],
@@ -99,7 +99,6 @@ export class FileInputForm extends FormApplication {
       },
     };
 
-    console.log(participantData);
     this.callbackFunction(participantData);
   }
 
