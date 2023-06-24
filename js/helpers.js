@@ -305,13 +305,12 @@ export function setDefaultDataForParticipant(data) {
   }
 
   if (data.faction && data.faction.displayFaction) {
-    // TODO: Improve the default data that is set for faction
     if (data.faction.factionName === "") {
       data.faction.factionName = game.i18n.localize("CHUD.faction.unknownFaction");
     }
+
     if (data.faction.factionLogo === "" && !data.faction.factionBannerEnabled) {
-      data.faction.factionLogo = "icons/svg/book.svg";
-      data.faction.factionBannerEnabled = true;
+      data.faction.factionLogo = "icons/svg/combat.svg";
     }
   }
 }
