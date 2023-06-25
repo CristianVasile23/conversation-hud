@@ -9,7 +9,7 @@ Version 5.0.0 brings a lot of changes and reworks to the internal code of the mo
 - Added numerous UI improvements and reworks for a more consistent and streamlined look across the module and FoundryVTT.
 - Several bug fixes and QoL changes.
 
-Disclaimer: Due to the large internal rework, some bugs may have slipped through the cracks. If you encounter any such bug, please do not hesitate to contact me or to open an issue on GitHub, and I will try to fix it as soon as possible.
+Disclaimer: Due to the large rework of the codebase, some bugs may have slipped through the cracks. If you encounter any such bug, please do not hesitate to contact me or to open an issue on GitHub, and I will try to fix it as soon as possible.
 
 ## 4.1.0
 
