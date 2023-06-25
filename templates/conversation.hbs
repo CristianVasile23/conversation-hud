@@ -34,7 +34,7 @@
               draggable="true"
               onclick="game.ConversationHud.changeActiveParticipant({{index}})"
             >
-              <img class="portrait" src="{{participant.img}}" alt="Portrait" />
+              <img class="portrait {{../portraitAnchor}}" src="{{participant.img}}" alt="Portrait" />
               <p class="name">{{participant.name}}</p>
             </div>
 
@@ -52,7 +52,7 @@
         <div class="conversation-participant-wrapper">
           {{!-- Participant --}}
           <div class="conversation-participant" data-tooltip="{{participant.name}}">
-            <img class="portrait" src="{{participant.img}}" alt="image" />
+            <img class="portrait {{../portraitAnchor}}" src="{{participant.img}}" alt="image" />
             <p class="name">{{participant.name}}</p>
           </div>
 

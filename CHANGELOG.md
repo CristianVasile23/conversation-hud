@@ -1,3 +1,7 @@
+## 5.0.1
+
+- Fixed a small bug which caused the image anchor setting to be applied only to the active participants and not to the other thumbnails.
+
 ## 5.0.0
 
 Version 5.0.0 brings a lot of changes and reworks to the internal code of the module to make it more modular and easy to understand (the first update of several), while also bringing a brand new feature and several bug fixes and UI improvements.
