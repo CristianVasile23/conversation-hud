@@ -1,3 +1,16 @@
+## 5.0.0
+
+Version 5.0.0 brings a lot of changes and reworks to the internal code of the module to make it more modular and easy to understand, while also bringing a brand new feature and several bug fixes and UI improvements.
+
+- Added support for factions, allowing each participant to have an associated faction.
+  - When creating or editing a conversation participant, a new tab has been added which allows GMs to configure the faction of that participant.
+  - In this tab, you can customize all the aspects of the faction, such as the name or the logo/image, and should you wish so you can also use several predefined shapes and a color picker to also create a banner for the faction. For more complex banner shapes, a standalone image of the banner is recommended.
+- Added the option of duplicating participants (this should help when creating multiple participants belonging to the same faction).
+- Added numerous UI improvements and reworks for a more consistent and streamlined look across the module and FoundryVTT.
+- Several bug fixes and QoL changes.
+
+Disclaimer: Due to the large internal rework, some bugs may have slipped through the cracks. If you encounter any such bug, please do not hesitate to contact me or to open an issue on GitHub, and I will try to fix it as soon as possible.
+
 ## 4.1.0
 
 - Added the ability to reorder conversation participants by drag and dropping.
