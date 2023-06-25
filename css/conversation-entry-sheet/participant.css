@@ -23,6 +23,8 @@
 .conversation-entry-sheet .faction-wrapper .faction-logo {
   position: absolute;
 
+  border: 0;
+
   top: 0;
   left: 0;
   right: 0;
@@ -38,8 +40,6 @@
   bottom: unset;
   max-width: 16px;
   max-height: 16px;
-
-  border: 0;
 }
 .conversation-entry-sheet .faction-wrapper .faction-logo[src=""] {
   display: none;

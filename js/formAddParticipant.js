@@ -64,7 +64,7 @@ export class FileInputForm extends FormApplication {
     const bannerShapeButtons = html.find(".banner-shape-button");
     for (const button of bannerShapeButtons) {
       const buttonId = button.getAttribute("id");
-      button.addEventListener("click", () => this.onUpdatePreview(buttonId));
+      button.addEventListener("click", () => this.onUpdateBannerShape(buttonId));
     }
   }
 
@@ -106,28 +106,24 @@ export class FileInputForm extends FormApplication {
     if (!event.target) return;
 
     this.participantName = event.target.value;
-    this.render(false);
   }
 
   onUpdateParticipantImg(event) {
     if (!event.target) return;
 
     this.participantImg = event.target.value;
-    this.render(false);
   }
 
   onToggleFactionDisplay(event) {
     if (!event.target) return;
 
     this.displayFaction = event.target.checked;
-    this.render(false);
   }
 
   onUpdateFactionName(event) {
     if (!event.target) return;
 
     this.factionName = event.target.value;
-    this.render(false);
   }
 
   onToggleFactionBanner(event) {
@@ -144,7 +140,7 @@ export class FileInputForm extends FormApplication {
     this.render(false);
   }
 
-  async onUpdatePreview(selectedShapeId) {
+  async onUpdateBannerShape(selectedShapeId) {
     this.factionBannerShape = selectedShapeId;
     this.render(false);
   }
