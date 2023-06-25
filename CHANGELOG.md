@@ -1,6 +1,6 @@
 ## 5.0.0
 
-Version 5.0.0 brings a lot of changes and reworks to the internal code of the module to make it more modular and easy to understand, while also bringing a brand new feature and several bug fixes and UI improvements.
+Version 5.0.0 brings a lot of changes and reworks to the internal code of the module to make it more modular and easy to understand (the first update of several), while also bringing a brand new feature and several bug fixes and UI improvements.
 
 - Added support for factions, allowing each participant to have an associated faction.
   - When creating or editing a conversation participant, a new tab has been added which allows GMs to configure the faction of that participant.
