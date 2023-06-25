@@ -34,9 +34,7 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   static get defaultOptions() {
-    let defOptions = super.defaultOptions;
-
-    return mergeObject(defOptions, {
+    return mergeObject(super.defaultOptions, {
       classes: ["sheet", "journal-sheet"],
       title: game.i18n.localize("CHUD.strings.conversationEntry"),
       id: "conversation-entry-sheet",

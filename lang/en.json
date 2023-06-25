@@ -92,6 +92,10 @@
     "bannerPreview": "Banner Preview"
   },
 
+  "CHUD.sheets": {
+    "entrySheet": "Conversation Entry Sheet"
+  },
+
   "CHUD.errors": {
     "generic": "An unknown error has occurred, for more information check the console.",
     "genericSheetError": "An unknown error occurred while trying to render the sheet. Are you sure this is a valid conversation sheet?",

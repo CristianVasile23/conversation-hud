@@ -66,8 +66,9 @@ export class ConversationHud {
   // Function that register the conversation sheet that is used to store conversations
   registerConversationSheet() {
     DocumentSheetConfig.registerSheet(JournalEntry, "conversation-entry-sheet", ConversationEntrySheet, {
-      label: "Conversation Entry Sheet",
+      types: ["base"],
       makeDefault: false,
+      label: game.i18n.localize("CHUD.sheets.entrySheet"),
     });
   }
 

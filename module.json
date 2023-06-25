@@ -10,12 +10,6 @@
     "verified": 11,
     "maximum": 11
   },
-  "flags": {
-    "hotReload": {
-      "extensions": ["css", "hbs", "json"],
-      "paths": ["templates", "css", "lang"]
-    }
-  },
   "authors": [
     {
       "name": "Cristian Vasile (Saervicus)",
@@ -65,5 +59,19 @@
   "manifest": "#{MANIFEST}#",
   "download": "#{DOWNLOAD}#",
   "license": "https://github.com/CristianVasile23/conversation-hud/blob/main/LICENSE",
-  "readme": "https://github.com/CristianVasile23/conversation-hud/blob/main/README.md"
+  "readme": "https://github.com/CristianVasile23/conversation-hud/blob/main/README.md",
+  "media": [
+    {
+      "type": "setup",
+      "url": "modules/conversation-hud/docs/icons/setup.jpg",
+      "loop": false,
+      "flags": {}
+    },
+    {
+      "type": "cover",
+      "url": "modules/conversation-hud/docs/icons/cover.jpg",
+      "loop": false,
+      "flags": {}
+    }
+  ]
 }
