@@ -1,6 +1,6 @@
 /* ----- General CSS ----- */
 /* #region */
-.conversation-entry-sheet .conversation-participant-TOFIX {
+.conversation-entry-sheet .conversation-participant {
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -14,6 +14,10 @@
   width: 40px;
   height: 40px;
   position: relative;
+}
+
+.conversation-entry-sheet .faction-wrapper.disabled > * {
+  visibility: hidden;
 }
 
 .conversation-entry-sheet .faction-wrapper .faction-logo {

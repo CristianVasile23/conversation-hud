@@ -48,6 +48,11 @@ export class ConversationEntrySheet extends JournalSheet {
   activateListeners(html) {
     super.activateListeners(html);
 
+    // Check to see if the user is a GM, and if not, exit function early so as not to bind the listeners
+    if (!game.user.isGM) {
+      return;
+    }
+
     html.find("#save-conversation").click(async (e) => this.#handleSaveConversation());
 
     html.find("#show-conversation").click(async (e) => this.#handleShowConversation());
@@ -176,9 +181,10 @@ export class ConversationEntrySheet extends JournalSheet {
     const baseData = super.getData(options);
 
     const data = {
-      name: baseData.data.name,
+      isGM: game.user.isGM,
       dirty: this.dirty,
       participants: this.participants,
+      name: baseData.data.name,
       data: baseData.data,
     };
 

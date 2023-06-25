@@ -5,34 +5,16 @@
         <div class="participant-drag-drop-container">
           <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
 
-          <div class="conversation-participant-TOFIX">
-            <i
-              id="conversation-sheet-drag-drop-handler"
-              class="drag-drop-handler fa-solid fa-arrows-up-down-left-right"
-              draggable="true"
-            ></i>
+          <div class="conversation-participant">
+            {{#if ../isGM}}
+              <i
+                id="conversation-sheet-drag-drop-handler"
+                class="drag-drop-handler fa-solid fa-arrows-up-down-left-right"
+                draggable="true"
+              ></i>
+            {{/if}}
 
-            <div class="faction-wrapper {{#if participant.faction.factionBannerEnabled}}has-banner{{/if}}">
-              <img class="faction-logo" src="{{participant.faction.factionLogo}}" alt="Faction Logo">
-
-              {{#if participant.faction.factionBannerEnabled}}
-                {{#if (eq participant.faction.factionBannerShape "shape-1")}}
-                  {{> "modules/conversation-hud/templates/banner-shapes/shape-1.hbs" color=participant.faction.factionBannerTint}}
-                {{/if}}
-
-                {{#if (eq participant.faction.factionBannerShape "shape-2")}}
-                  {{> "modules/conversation-hud/templates/banner-shapes/shape-2.hbs" color=participant.faction.factionBannerTint}}
-                {{/if}}
-
-                {{#if (eq participant.faction.factionBannerShape "shape-3")}}
-                  {{> "modules/conversation-hud/templates/banner-shapes/shape-3.hbs" color=participant.faction.factionBannerTint}}
-                {{/if}}
-
-                {{#if (eq participant.faction.factionBannerShape "shape-4")}}
-                  {{> "modules/conversation-hud/templates/banner-shapes/shape-4.hbs" color=participant.faction.factionBannerTint}}
-                {{/if}}
-              {{/if}}
-            </div>
+            {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
 
             <div class="portrait-wrapper">
               <img src="{{participant.img}}"/>
@@ -47,18 +29,20 @@
                 <p class="faction">{{localize 'CHUD.faction.unaffiliated'}}</p>
               {{/if}}
             </div>
-                  
-            <div class="controls-wrapper">
-              <a id="participant-clone-button" class="clone" title="{{localize 'CHUD.actions.participant.clone'}}">
-                <i class="fas fa-clone"></i>
-              </a>
-              <a id="participant-edit-button" class="edit" title="{{localize 'CHUD.actions.participant.edit'}}">
-                <i class="fas fa-pencil"></i>
-              </a>
-              <a id="participant-delete-button" class="delete" title="{{localize 'CHUD.actions.participant.delete'}}">
-                <i class="fas fa-trash"></i>
-              </a>
-            </div>
+            
+            {{#if ../isGM}}
+              <div class="controls-wrapper">
+                <a id="participant-clone-button" class="clone" title="{{localize 'CHUD.actions.participant.clone'}}">
+                  <i class="fas fa-clone"></i>
+                </a>
+                <a id="participant-edit-button" class="edit" title="{{localize 'CHUD.actions.participant.edit'}}">
+                  <i class="fas fa-pencil"></i>
+                </a>
+                <a id="participant-delete-button" class="delete" title="{{localize 'CHUD.actions.participant.delete'}}">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </div>
+            {{/if}}
           </div>
 
           <div id="drag-drop-indicator-bottom" class="drag-drop-indicator"></div>

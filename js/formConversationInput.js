@@ -33,6 +33,7 @@ export class ConversationInputForm extends FormApplication {
 
   getData() {
     return {
+      isGM: game.user.isGM,
       participants: this.participants,
     };
   }

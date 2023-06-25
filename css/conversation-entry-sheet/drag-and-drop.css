@@ -57,7 +57,7 @@
 
 /* ----- Drag and drop handler ----- */
 /* #region */
-.conversation-participant-TOFIX .drag-drop-handler {
+.conversation-participant .drag-drop-handler {
   display: flex;
   flex-flow: column;
   align-items: center;
