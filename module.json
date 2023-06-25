@@ -63,13 +63,13 @@
   "media": [
     {
       "type": "setup",
-      "url": "modules/conversation-hud/docs/icons/setup.jpg",
+      "url": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/docs/icons/setup.jpg",
       "loop": false,
       "flags": {}
     },
     {
       "type": "cover",
-      "url": "modules/conversation-hud/docs/icons/cover.jpg",
+      "url": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/docs/icons/cover.jpg",
       "loop": false,
       "flags": {}
     }
