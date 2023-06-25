@@ -1,45 +1,100 @@
 {
-  "CHUD.name": "Name",
-  "CHUD.portrait": "Portrait",
-  "CHUD.anonymous": "Anonymous",
-  "CHUD.browseFiles": "Browse Files",
-  "CHUD.filePath": "File Path",
-  "CHUD.save": "Save",
+  "CHUD.strings": {
+    "name": "Name",
+    "nameHint": "Name of the conversation participant.",
 
-  "CHUD.nameHint": "Name of the conversation participant.",
-  "CHUD.portraitHint": "Portrait of the conversation participant.",
+    "portrait": "Portrait",
+    "portraitHint": "Portrait of the conversation participant.",
 
-  "CHUD.conversationName": "Conversation Name",
-  "CHUD.conversationParticipants": "Conversation Participants",
+    "conversationName": "Conversation Name",
+    "conversationParticipants": "Conversation Participants",
 
-  "CHUD.currentParticipants": "Current Participants",
-  "CHUD.noActiveParticipant": "No active participant",
-  "CHUD.noParticipantsInList": "Conversation has no participants. Try adding some. (Actor drag and drop is supported)",
+    "newParticipant": "New Participant",
 
-  "CHUD.newParticipant": "New Participant",
-  "CHUD.addParticipant": "Add Participant",
-  "CHUD.editParticipant": "Edit Participant",
-  "CHUD.deleteParticipant": "Delete Participant",
+    "currentParticipants": "Current Participants",
+    "noActiveParticipant": "No active participant",
+    "noParticipantsInList": "Conversation has no participants. Try adding some. (Drag and drop is supported)",
 
-  "CHUD.dropActor": "Drop actor here to add them to the conversation",
+    "conversationEntry": "Conversation Entry",
+    "participantData": "Conversation Participant Data",
 
-  "CHUD.activateHUD": "Activate ConversationHUD",
-  "CHUD.activateConversation": "Activate Conversation",
-  "CHUD.createConversation": "Create Conversation",
-  "CHUD.startConversation": "Start Conversation",
+    "unsavedChanges": "Unsaved Changes",
+    "unsavedChangesHint": "The conversation contains unsaved changes. Do you wish to save them?",
 
-  "CHUD.toggleSpeakAs": "Toggle Speak As",
-  "CHUD.toggleVisibility": "Toggle Visibility",
-  "CHUD.saveConversation": "Save Conversation",
-  "CHUD.maximizeConversation": "Maximize Conversation",
-  "CHUD.minimizeConversation": "Minimize Conversation",
+    "browseFiles": "Browse Files",
+    "filePath": "File Path",
 
-  "CHUD.participantData": "Conversation Participant Data",
-  "CHUD.conversationEntry": "Conversation Entry",
+    "dropActor": "Drop actor here to add them to the conversation",
 
-  "CHUD.unsavedChanges": "Unsaved Changes",
-  "CHUD.unsavedChangesHint": "The conversation contains unsaved changes. Do you wish to save them?",
-  "CHUD.discardChanges": "Discard Changes",
+    "anonymous": "Anonymous"
+  },
+
+  "CHUD.actions": {
+    "save": "Save",
+
+    "activateHUD": "Activate ConversationHUD",
+    "activateConversation": "Activate Conversation",
+    "createConversation": "Create Conversation",
+    "startConversation": "Start Conversation",
+
+    "saveConversation": "Save Conversation",
+
+    "toggleSpeakAs": "Toggle Speak As",
+    "toggleVisibility": "Toggle Visibility",
+    "maximizeConversation": "Maximize Conversation",
+    "minimizeConversation": "Minimize Conversation",
+
+    "discardChanges": "Discard Changes",
+
+    "participant": {
+      "add": "Add Participant",
+      "clone": "Clone Participant",
+      "edit": "Edit Participant",
+      "delete": "Delete Participant"
+    }
+  },
+
+  "CHUD.tabs": {
+    "participantConfig": "Participant Config",
+    "factionConfig": "Faction Config"
+  },
+
+  "CHUD.faction": {
+    "displayFaction": {
+      "name": "Display Faction",
+      "hint": "Toggle the display of the faction to which the participant belongs to."
+    },
+    "factionName": {
+      "name": "Faction Name",
+      "hint": "The name of the faction.",
+      "placeholder": "New Faction"
+    },
+    "factionLogo": {
+      "name": "Faction Symbol",
+      "hint": "The symbol representing the faction."
+    },
+    "displayFactionBanner": {
+      "name": "Display Banner",
+      "hint": "Toggle the display of a banner that appears in the background."
+    },
+    "factionBannerShape": {
+      "name": "Banner Shape",
+      "hint": "The shape of the banner."
+    },
+    "factionBannerColor": {
+      "name": "Banner Color",
+      "hint": "The color of the banner."
+    },
+
+    "unknownFaction": "Unknown Faction",
+    "unaffiliated": "Unaffiliated",
+    "noBannerPreview": "No banner preview available",
+    "bannerPreview": "Banner Preview"
+  },
+
+  "CHUD.sheets": {
+    "entrySheet": "Conversation Entry Sheet"
+  },
 
   "CHUD.errors": {
     "generic": "An unknown error has occurred, for more information check the console.",
@@ -99,15 +154,19 @@
       "hint": "Toggle the Minimize feature on or off. By default, the feature is on as it allows users to interact with the map while a conversation is active and visible. If you do not want this behavior, you can toggle the feature off."
     },
     "activeParticipantFontSize": {
-      "name": "Active Participant Font Size",
-      "hint": "This option determines the size of the font used to display the name of the currently active participant.",
-      "choices": {
-        "verySmall": "Very Small",
-        "small": "Small",
-        "regular": "Regular",
-        "large": "Large",
-        "veryLarge": "Very Large"
-      }
+      "name": "Participant Font Size",
+      "hint": "This option determines the size of the font used to display the name of the currently active participant."
+    },
+    "activeParticipantFactionFontSize": {
+      "name": "Participant Faction Font Size",
+      "hint": "This option determines the size of the font used to display the name of the faction to which the currently active participant belongs to."
+    },
+    "fontSizeOptions": {
+      "verySmall": "Very Small",
+      "small": "Small",
+      "regular": "Regular",
+      "large": "Large",
+      "veryLarge": "Very Large"
     },
     "rpgUiFix": {
       "name": "Enable custom UI fix",

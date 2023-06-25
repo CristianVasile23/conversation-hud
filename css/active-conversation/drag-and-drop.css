@@ -1,0 +1,59 @@
+/* ----- Conversation dropzone ----- */
+/* #region */
+.conversation-hud-content .conversation-hud-dropzone {
+  display: none;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  position: absolute;
+  top: 0px;
+  bottom: 0px;
+  left: 0;
+  right: 0px;
+
+  border: 5px dashed var(--color-border-light-secondary);
+
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+.conversation-hud-content .conversation-hud-dropzone > i {
+  font-size: 60px;
+  color: var(--color-border-light-secondary);
+}
+
+.conversation-hud-content .conversation-hud-dropzone > p {
+  margin-top: 15px;
+  max-width: 200px;
+  text-align: center;
+  color: var(--color-border-light-secondary);
+}
+
+.conversation-hud-content .conversation-hud-dropzone * {
+  /* Disable pointer events for all the children elements so as not to interfere with the drag and drop */
+  pointer-events: none;
+}
+/* #endregion */
+
+/* ----- Active dropzone ----- */
+/* #region */
+.conversation-hud-content.active-dropzone .conversation-hud-dropzone {
+  display: flex;
+}
+
+.conversation-hud-content.active-dropzone > .active-participant,
+.conversation-hud-content.active-dropzone > .conversation-participant-list,
+.conversation-hud-content.active-dropzone .faction-wrapper {
+  pointer-events: none;
+}
+/* #endregion */
+
+/* ----- Drag-drop indicators ----- */
+/* #region */
+.conversation-hud-content .drag-drop-indicator {
+  width: calc(100% - 26px - 45px);
+  margin-left: 26px;
+}
+/* #endregion */

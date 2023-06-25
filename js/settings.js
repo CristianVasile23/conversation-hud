@@ -6,6 +6,7 @@ export const ModuleSettings = {
   enableMinimize: "enableMinimize",
   enableSpeakAs: "enableSpeakAs",
   activeParticipantFontSize: "activeParticipantFontSize",
+  activeParticipantFactionFontSize: "activeParticipantFactionFontSize",
   rpgUiFix: "rpgUiFix",
 };
 
@@ -69,11 +70,28 @@ export function registerSettings() {
     type: String,
     default: "regular",
     choices: {
-      verySmall: game.i18n.localize(`CHUD.settings.activeParticipantFontSize.choices.verySmall`),
-      small: game.i18n.localize(`CHUD.settings.activeParticipantFontSize.choices.small`),
-      regular: game.i18n.localize(`CHUD.settings.activeParticipantFontSize.choices.regular`),
-      large: game.i18n.localize(`CHUD.settings.activeParticipantFontSize.choices.large`),
-      veryLarge: game.i18n.localize(`CHUD.settings.activeParticipantFontSize.choices.veryLarge`),
+      verySmall: game.i18n.localize(`CHUD.settings.fontSizeOptions.verySmall`),
+      small: game.i18n.localize(`CHUD.settings.fontSizeOptions.small`),
+      regular: game.i18n.localize(`CHUD.settings.fontSizeOptions.regular`),
+      large: game.i18n.localize(`CHUD.settings.fontSizeOptions.large`),
+      veryLarge: game.i18n.localize(`CHUD.settings.fontSizeOptions.veryLarge`),
+    },
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.activeParticipantFactionFontSize, {
+    name: game.i18n.localize(`CHUD.settings.activeParticipantFactionFontSize.name`),
+    hint: game.i18n.localize(`CHUD.settings.activeParticipantFactionFontSize.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: String,
+    default: "regular",
+    choices: {
+      verySmall: game.i18n.localize(`CHUD.settings.fontSizeOptions.verySmall`),
+      small: game.i18n.localize(`CHUD.settings.fontSizeOptions.small`),
+      regular: game.i18n.localize(`CHUD.settings.fontSizeOptions.regular`),
+      large: game.i18n.localize(`CHUD.settings.fontSizeOptions.large`),
+      veryLarge: game.i18n.localize(`CHUD.settings.fontSizeOptions.veryLarge`),
     },
   });
 

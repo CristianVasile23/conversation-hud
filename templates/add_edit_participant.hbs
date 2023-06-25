@@ -1,33 +1,33 @@
-<form class="flexcol">
+<form class="sheet participant-add-edit-form">
+  {{!-- NAVIGATION TABS --}}
+  <nav class="sheet-tabs tabs" aria-role="{{localize 'SHEETS.FormNavLabel'}}">
+    <a class="item" data-tab="participant-config">
+      <i class="fas fa-user"></i> {{localize "CHUD.tabs.participantConfig"}}
+    </a>
+    
+    <a class="item" data-tab="faction-config">
+      <i class="fas fa-bookmark"></i> {{localize "CHUD.tabs.factionConfig"}}
+    </a>
+  </nav>
+
+  {{!-- CONTENT --}}
   <div>
-    <div class="form-group">
-      <label>{{localize "CHUD.name"}}</label>
-      <div class="form-fields">
-        <input class="text" type="text" name="name" placeholder="{{localize 'CHUD.newParticipant'}}" value="{{participantData.name}}" />
-      </div>
-      <p class="notes">{{localize "CHUD.nameHint"}}</p>
-    </div>
+    {{!-- PARTICIPANT CONFIG TAB --}}
+    {{> "modules/conversation-hud/templates/fragments/participant_data_config_tab.hbs" participantName=participantName participantImg=participantImg}}
 
-    <div class="form-group">
-      <label>{{localize "CHUD.portrait"}}</label>
-      <div class="form-fields">
-        <button type="button" class="file-picker" data-type="imagevideo" data-target="img" title="{{localize 'CHUD.browseFiles'}}">
-          <i class="fas fa-file-import fa-fw"></i>
-        </button>
-        <input class="image" type="text" name="img" placeholder="{{localize 'CHUD.filePath'}}" value="{{participantData.img}}" />
-      </div>
-      <p class="notes">{{localize "CHUD.portraitHint"}}</p>
-    </div>
-
-    <footer class="sheet-footer flexrow">
-      <button type="submit" name="submit">
-        <i class="fa fa-check"></i>
-        {{#if isEditing}}
-          {{localize "CHUD.editParticipant"}}
-        {{else}}
-          {{localize "CHUD.addParticipant"}}
-        {{/if}}
-      </button>
-    </footer>
+    {{!-- FACTION CONFIG TAB --}}
+    {{> "modules/conversation-hud/templates/fragments/faction_data_config_tab.hbs" displayFaction=displayFaction factionName=factionName factionLogo=factionLogo factionBannerEnabled=factionBannerEnabled factionBannerShape=factionBannerShape factionBannerTint=factionBannerTint}}
   </div>
+
+  {{!-- FOOTER --}}
+  <footer class="sheet-footer flexrow">
+    <button type="submit" name="submit">
+      <i class="fa fa-check"></i>
+      {{#if isEditing}}
+        {{localize "CHUD.actions.participant.edit"}}
+      {{else}}
+        {{localize "CHUD.actions.participant.add"}}
+      {{/if}}
+    </button>
+  </footer>
 </form>

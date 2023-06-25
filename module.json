@@ -59,5 +59,19 @@
   "manifest": "#{MANIFEST}#",
   "download": "#{DOWNLOAD}#",
   "license": "https://github.com/CristianVasile23/conversation-hud/blob/main/LICENSE",
-  "readme": "https://github.com/CristianVasile23/conversation-hud/blob/main/README.md"
+  "readme": "https://github.com/CristianVasile23/conversation-hud/blob/main/README.md",
+  "media": [
+    {
+      "type": "setup",
+      "url": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/docs/icons/setup.jpg",
+      "loop": false,
+      "flags": {}
+    },
+    {
+      "type": "cover",
+      "url": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/docs/icons/cover.jpg",
+      "loop": false,
+      "flags": {}
+    }
+  ]
 }

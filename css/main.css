@@ -1,4 +1,14 @@
-@import url("./hud.css");
-@import url("./active-participant.css");
-@import url("./conversation-sheet.css");
-@import url("./conversation-participant.css");
+/* CSS for the drag and drop functionality of conversation participants */
+@import url("./drag-and-drop/index.css");
+
+/* CSS for the conversation entry sheet */
+@import url("./conversation-entry-sheet/index.css");
+
+/* CSS for the participant add/edit form */
+@import url("./add-edit-participant-from/index.css");
+
+/* CSS for the active conversation */
+@import url("./active-conversation/index.css");
+
+/* Misc CSS used for various aspects of the module */
+@import url("./misc.css");

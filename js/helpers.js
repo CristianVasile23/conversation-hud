@@ -162,7 +162,7 @@ export async function updateConversationLayout() {
   }
 
   if (game.ConversationHud.conversationIsVisible) {
-    const conversationBackground = document.getElementById("conversation-background");
+    const conversationBackground = document.getElementById("conversation-hud-background");
     if (game.ConversationHud.conversationIsMinimized) {
       conversationBackground.classList.remove("visible");
     } else {
@@ -294,4 +294,23 @@ export function fixRpgUiIncompatibility() {
   cssFix.type = "text/css";
   cssFix.href = "modules/conversation-hud/css/rpg-ui-compatibility.css";
   document.getElementsByTagName("head")[0].appendChild(cssFix);
+}
+
+export function setDefaultDataForParticipant(data) {
+  if (data.name === "") {
+    data.name = game.i18n.localize("CHUD.strings.anonymous");
+  }
+  if (data.img === "") {
+    data.img = "modules/conversation-hud/img/silhouette.jpg";
+  }
+
+  if (data.faction && data.faction.displayFaction) {
+    if (data.faction.factionName === "") {
+      data.faction.factionName = game.i18n.localize("CHUD.faction.unknownFaction");
+    }
+
+    if (data.faction.factionLogo === "" && !data.faction.factionBannerEnabled) {
+      data.faction.factionLogo = "icons/svg/combat.svg";
+    }
+  }
 }

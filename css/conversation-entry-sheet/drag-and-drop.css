@@ -1,0 +1,68 @@
+/* ----- Drag and drop wrapper ----- */
+/* #region */
+.conversation-entry-sheet .drag-and-drop-wrapper {
+  height: 100%;
+  overflow-y: auto;
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+/* #endregion */
+
+/* ----- Dropzone ----- */
+/* #region */
+.conversation-entry-sheet .drag-and-drop-wrapper .dropzone {
+  display: none;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 100%;
+
+  border: 5px dashed var(--color-border-light-secondary);
+}
+
+.conversation-entry-sheet .drag-and-drop-wrapper .dropzone > i {
+  font-size: 60px;
+}
+
+.conversation-entry-sheet .drag-and-drop-wrapper .dropzone > p {
+  color: var(--color-text-dark-secondary);
+
+  margin-top: 15px;
+  max-width: 200px;
+  text-align: center;
+}
+
+.conversation-entry-sheet .drag-and-drop-wrapper .dropzone * {
+  pointer-events: none;
+}
+/* #endregion */
+
+/* ----- Active dropzone rule overrides ----- */
+/* #region */
+.conversation-entry-sheet .drag-and-drop-wrapper.active-dropzone .dropzone {
+  display: flex;
+}
+.conversation-entry-sheet .drag-and-drop-wrapper.active-dropzone .participants-list {
+  display: none;
+}
+/* #endregion */
+
+/* ----- Drag and drop handler ----- */
+/* #region */
+.conversation-participant .drag-drop-handler {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  margin-right: 10px;
+}
+/* #endregion */

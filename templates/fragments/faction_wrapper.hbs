@@ -1,0 +1,29 @@
+<div class="faction-wrapper {{#if faction.factionBannerEnabled}}has-banner{{/if}} {{#unless faction.displayFaction}}disabled{{/unless}}">
+  <img class="faction-logo" src="{{faction.factionLogo}}" alt="Faction Logo">
+
+  {{#if faction.factionBannerEnabled}}
+    {{#if (eq faction.factionBannerShape "shape-1")}}
+      {{> "modules/conversation-hud/templates/banner-shapes/shape-1.hbs" color=faction.factionBannerTint}}
+    {{/if}}
+
+    {{#if (eq faction.factionBannerShape "shape-2")}}
+      {{> "modules/conversation-hud/templates/banner-shapes/shape-2.hbs" color=faction.factionBannerTint}}
+    {{/if}}
+
+    {{#if (eq faction.factionBannerShape "shape-3")}}
+      {{> "modules/conversation-hud/templates/banner-shapes/shape-3.hbs" color=faction.factionBannerTint}}
+    {{/if}}
+
+    {{#if (eq faction.factionBannerShape "shape-4")}}
+      {{> "modules/conversation-hud/templates/banner-shapes/shape-4.hbs" color=faction.factionBannerTint}}
+    {{/if}}
+
+    {{#if (eq faction.factionBannerShape "shape-5")}}
+      {{> "modules/conversation-hud/templates/banner-shapes/shape-5.hbs" color=faction.factionBannerTint}}
+    {{/if}}
+
+    {{#if (eq faction.factionBannerShape "shape-6")}}
+      {{> "modules/conversation-hud/templates/banner-shapes/shape-6.hbs" color=faction.factionBannerTint}}
+    {{/if}}
+  {{/if}}
+</div>

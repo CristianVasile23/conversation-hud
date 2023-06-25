@@ -1,36 +1,36 @@
-<form class="flexcol" style="height: 100%">
-  <div class="flexrow conversation-sheet-header">
-    <p> {{localize 'CHUD.currentParticipants'}} </p>
+<form class="flexcol conversation-entry-sheet">
+  <div class="flexrow header">
+    <p> {{localize 'CHUD.strings.currentParticipants'}} </p>
           
     <button
       type="button"
       name="add-participant"
       id="add-participant"
-      title="{{localize 'CHUD.addParticipant'}}"
-      class="conversation-control-button"
+      title="{{localize 'CHUD.actions.participant.add'}}"
+      class="header-action-button"
     >
       <i class="fas fa-user-plus"></i>
     </button>
   </div>
 
-  <div id="conversation-sheet-content-wrapper" class="conversation-sheet-content-wrapper">
-    <div id="conversation-sheet-dropzone" class="conversation-sheet-dropzone" >
+  <div id="conversation-sheet-content-wrapper" class="drag-and-drop-wrapper">
+    <div id="conversation-sheet-dropzone" class="dropzone" >
       <i class="far fa-square-plus"></i>
-      <p> {{localize 'CHUD.dropActor'}} </p>
+      <p> {{localize 'CHUD.strings.dropActor'}} </p>
     </div>
 
-    {{> "modules/conversation-hud/templates/fragments/conversation_participants_list.hbs" participants=participants}}
+    {{> "modules/conversation-hud/templates/fragments/conversation_participants_list.hbs" participants=participants isGM=isGM}}
   </div>
     
-  <div class="conversation-sheet-footer">
+  <div class="footer">
     <footer class="sheet-footer flexrow">
       <button
         type="submit"
         name="submit"
-        title="{{localize 'CHUD.startConversation'}}"
+        title="{{localize 'CHUD.actions.startConversation'}}"
       >
         <i class="fa fa-check"></i>
-        {{localize 'CHUD.startConversation'}}
+        {{localize 'CHUD.actions.startConversation'}}
       </button>
     </footer>
   </div>

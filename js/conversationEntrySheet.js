@@ -5,6 +5,7 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
+  setDefaultDataForParticipant,
 } from "./helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
@@ -33,11 +34,9 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   static get defaultOptions() {
-    let defOptions = super.defaultOptions;
-
-    return mergeObject(defOptions, {
+    return mergeObject(super.defaultOptions, {
       classes: ["sheet", "journal-sheet"],
-      title: game.i18n.localize("CHUD.conversationEntry"),
+      title: game.i18n.localize("CHUD.strings.conversationEntry"),
       id: "conversation-entry-sheet",
       template: `modules/conversation-hud/templates/conversation_sheet.hbs`,
       width: 635,
@@ -48,6 +47,11 @@ export class ConversationEntrySheet extends JournalSheet {
 
   activateListeners(html) {
     super.activateListeners(html);
+
+    // Check to see if the user is a GM, and if not, exit function early so as not to bind the listeners
+    if (!game.user.isGM) {
+      return;
+    }
 
     html.find("#save-conversation").click(async (e) => this.#handleSaveConversation());
 
@@ -153,15 +157,22 @@ export class ConversationEntrySheet extends JournalSheet {
         };
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".participant-controls").children;
-        controls[0].onclick = () => {
+        const controls = conversationParticipants[i].querySelector(".controls-wrapper");
+        controls.querySelector("#participant-clone-button").onclick = () => {
+          const clonedParticipant = this.participants[i];
+          this.participants.push(clonedParticipant);
+          this.dirty = true;
+          this.render(false);
+        };
+        controls.querySelector("#participant-edit-button").onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
+            faction: this.participants[i].faction,
           });
           fileInputForm.render(true);
         };
-        controls[1].onclick = () => this.#handleRemoveParticipant(i);
+        controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
       }
     }
   }
@@ -170,9 +181,10 @@ export class ConversationEntrySheet extends JournalSheet {
     const baseData = super.getData(options);
 
     const data = {
-      name: baseData.data.name,
+      isGM: game.user.isGM,
       dirty: this.dirty,
       participants: this.participants,
+      name: baseData.data.name,
       data: baseData.data,
     };
 
@@ -182,17 +194,17 @@ export class ConversationEntrySheet extends JournalSheet {
   close(options) {
     if (this.dirty) {
       const dialog = new Dialog({
-        title: game.i18n.localize("CHUD.unsavedChanges"),
-        content: game.i18n.localize("CHUD.unsavedChangesHint"),
+        title: game.i18n.localize("CHUD.strings.unsavedChanges"),
+        content: game.i18n.localize("CHUD.strings.unsavedChangesHint"),
         buttons: {
           yes: {
             icon: '<i class="fas fa-save"></i>',
-            label: game.i18n.localize("CHUD.save"),
+            label: game.i18n.localize("CHUD.actions.save"),
             callback: this.#handleConfirmationClose.bind(this, true),
           },
           no: {
             icon: '<i class="fas fa-trash"></i>',
-            label: game.i18n.localize("CHUD.discardChanges"),
+            label: game.i18n.localize("CHUD.actions.discardChanges"),
             callback: this.#handleConfirmationClose.bind(this, false),
           },
         },
@@ -254,7 +266,7 @@ export class ConversationEntrySheet extends JournalSheet {
       await this.object.createEmbeddedDocuments("JournalEntryPage", [
         {
           text: { content: JSON.stringify(this.participants) },
-          name: game.i18n.localize("CHUD.conversationParticipants"),
+          name: game.i18n.localize("CHUD.strings.conversationParticipants"),
         },
       ]);
     } else {
@@ -282,12 +294,7 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   #handleEditParticipant(data, index) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
+    setDefaultDataForParticipant(data);
 
     this.participants[index] = data;
     this.dirty = true;
@@ -295,12 +302,7 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   #handleAddParticipant(data) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
+    setDefaultDataForParticipant(data);
 
     this.participants.push(data);
     this.dirty = true;

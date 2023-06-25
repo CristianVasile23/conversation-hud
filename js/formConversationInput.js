@@ -5,6 +5,7 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
+  setDefaultDataForParticipant,
 } from "./helpers.js";
 
 export class ConversationInputForm extends FormApplication {
@@ -23,7 +24,7 @@ export class ConversationInputForm extends FormApplication {
       popOut: true,
       template: "modules/conversation-hud/templates/conversation_input.hbs",
       id: "conversation-start-form",
-      title: game.i18n.localize("CHUD.createConversation"),
+      title: game.i18n.localize("CHUD.actions.createConversation"),
       width: 635,
       height: 500,
       resizable: false,
@@ -32,6 +33,7 @@ export class ConversationInputForm extends FormApplication {
 
   getData() {
     return {
+      isGM: game.user.isGM,
       participants: this.participants,
     };
   }
@@ -139,15 +141,21 @@ export class ConversationInputForm extends FormApplication {
         };
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".participant-controls").children;
-        controls[0].onclick = () => {
+        const controls = conversationParticipants[i].querySelector(".controls-wrapper");
+        controls.querySelector("#participant-clone-button").onclick = () => {
+          const clonedParticipant = this.participants[i];
+          this.participants.push(clonedParticipant);
+          this.render(false);
+        };
+        controls.querySelector("#participant-edit-button").onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
+            faction: this.participants[i].faction,
           });
           fileInputForm.render(true);
         };
-        controls[1].onclick = () => this.#handleRemoveParticipant(i);
+        controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
       }
     }
   }
@@ -165,25 +173,13 @@ export class ConversationInputForm extends FormApplication {
   }
 
   #handleEditParticipant(data, index) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
-
+    setDefaultDataForParticipant(data);
     this.participants[index] = data;
     this.render(false);
   }
 
   #handleAddParticipant(data) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
-
+    setDefaultDataForParticipant(data);
     this.participants.push(data);
     this.render(false);
   }

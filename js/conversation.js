@@ -11,6 +11,7 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
+  setDefaultDataForParticipant,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -65,8 +66,9 @@ export class ConversationHud {
   // Function that register the conversation sheet that is used to store conversations
   registerConversationSheet() {
     DocumentSheetConfig.registerSheet(JournalEntry, "conversation-entry-sheet", ConversationEntrySheet, {
-      label: "Conversation Entry Sheet",
+      types: ["base"],
       makeDefault: false,
+      label: game.i18n.localize("CHUD.sheets.entrySheet"),
     });
   }
 
@@ -112,8 +114,8 @@ export class ConversationHud {
 
     // Create background
     const conversationBackground = document.createElement("div");
-    conversationBackground.id = "conversation-background";
-    conversationBackground.className = "conversation-background";
+    conversationBackground.id = "conversation-hud-background";
+    conversationBackground.className = "conversation-hud-background";
     if (conversationVisible) {
       conversationBackground.classList.add("visible");
     }
@@ -136,105 +138,108 @@ export class ConversationHud {
 
   // Function that activates listeners used for drag-drop functionality
   addDragDropListeners(element) {
-    // Drag & drop listeners for the dropzone
-    const conversationContent = element.querySelector("#conversation-hud-content");
-    const dragDropZone = element.querySelector("#conversation-hud-dropzone");
+    if (game.user.isGM) {
+      // Drag & drop listeners for the dropzone
+      const conversationContent = element.querySelector("#conversation-hud-content");
+      const dragDropZone = element.querySelector("#conversation-hud-dropzone");
 
-    conversationContent.ondragenter = (event) => {
-      if (!game.ConversationHud.draggingParticipant) {
-        game.ConversationHud.dropzoneVisible = true;
-        conversationContent.classList.add("active-dropzone");
-      }
-    };
+      conversationContent.ondragenter = (event) => {
+        if (!game.ConversationHud.draggingParticipant) {
+          game.ConversationHud.dropzoneVisible = true;
+          conversationContent.classList.add("active-dropzone");
+        }
+      };
 
-    dragDropZone.ondragleave = () => {
-      if (game.ConversationHud.dropzoneVisible) {
-        game.ConversationHud.dropzoneVisible = false;
-        conversationContent.classList.remove("active-dropzone");
-      }
-    };
+      dragDropZone.ondragleave = () => {
+        if (game.ConversationHud.dropzoneVisible) {
+          game.ConversationHud.dropzoneVisible = false;
+          conversationContent.classList.remove("active-dropzone");
+        }
+      };
 
-    conversationContent.ondrop = async (event) => {
-      if (game.ConversationHud.dropzoneVisible) {
-        game.ConversationHud.handleActorDrop(event);
+      conversationContent.ondrop = async (event) => {
+        if (game.ConversationHud.dropzoneVisible) {
+          game.ConversationHud.handleActorDrop(event);
 
-        game.ConversationHud.dropzoneVisible = false;
-        conversationContent.classList.remove("active-dropzone");
-      }
-    };
+          game.ConversationHud.dropzoneVisible = false;
+          conversationContent.classList.remove("active-dropzone");
+        }
+      };
 
-    // Drag & drop listeners for the participants list
-    const conversationParticipantList = element.querySelector("#conversationParticipantList");
-    const conversationParticipants = conversationParticipantList.children;
-    if (conversationParticipants) {
-      for (let i = 0; i < conversationParticipants.length - 1; i++) {
-        conversationParticipants[i].ondragstart = (event) => {
-          game.ConversationHud.draggingParticipant = true;
-          conversationParticipantList.classList.add("drag-active");
+      // Drag & drop listeners for the participants list
+      const conversationParticipantList = element.querySelector("#conversationParticipantList");
+      const conversationParticipants = conversationParticipantList.children;
 
-          // Save the index of the dragged participant in the data transfer object
-          event.dataTransfer.setData(
-            "text/plain",
-            JSON.stringify({
-              index: i,
-            })
-          );
-        };
+      if (conversationParticipants) {
+        for (let i = 0; i < conversationParticipants.length - 1; i++) {
+          conversationParticipants[i].ondragstart = (event) => {
+            game.ConversationHud.draggingParticipant = true;
+            conversationParticipantList.classList.add("drag-active");
 
-        conversationParticipants[i].ondragend = (event) => {
-          game.ConversationHud.draggingParticipant = false;
-          conversationParticipantList.classList.remove("drag-active");
-        };
+            // Save the index of the dragged participant in the data transfer object
+            event.dataTransfer.setData(
+              "text/plain",
+              JSON.stringify({
+                index: i,
+              })
+            );
+          };
 
-        conversationParticipants[i].ondragover = (event) => {
-          displayDragAndDropIndicator(conversationParticipants[i], event);
-        };
+          conversationParticipants[i].ondragend = (event) => {
+            game.ConversationHud.draggingParticipant = false;
+            conversationParticipantList.classList.remove("drag-active");
+          };
 
-        conversationParticipants[i].ondragleave = (event) => {
-          hideDragAndDropIndicator(conversationParticipants[i]);
-        };
+          conversationParticipants[i].ondragover = (event) => {
+            displayDragAndDropIndicator(conversationParticipants[i], event);
+          };
 
-        conversationParticipants[i].ondrop = (event) => {
-          const participants = game.ConversationHud.activeConversation?.participants;
-          const data = JSON.parse(event.dataTransfer.getData("text/plain"));
-
-          if (data) {
+          conversationParticipants[i].ondragleave = (event) => {
             hideDragAndDropIndicator(conversationParticipants[i]);
+          };
 
-            const oldIndex = data.index;
+          conversationParticipants[i].ondrop = (event) => {
+            const participants = game.ConversationHud.activeConversation?.participants;
+            const data = JSON.parse(event.dataTransfer.getData("text/plain"));
 
-            // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
-            if (oldIndex === i) {
-              return;
-            }
+            if (data) {
+              hideDragAndDropIndicator(conversationParticipants[i]);
 
-            // Get the new index of the dropped element
-            let newIndex = getDragAndDropIndex(event, i, oldIndex);
+              const oldIndex = data.index;
 
-            // Reorder the array
-            moveInArray(participants, oldIndex, newIndex);
+              // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
+              if (oldIndex === i) {
+                return;
+              }
 
-            // Update active participant index
-            const activeParticipantIndex = game.ConversationHud.activeConversation.activeParticipant;
-            if (activeParticipantIndex === oldIndex) {
-              game.ConversationHud.activeConversation.activeParticipant = newIndex;
+              // Get the new index of the dropped element
+              let newIndex = getDragAndDropIndex(event, i, oldIndex);
+
+              // Reorder the array
+              moveInArray(participants, oldIndex, newIndex);
+
+              // Update active participant index
+              const activeParticipantIndex = game.ConversationHud.activeConversation.activeParticipant;
+              if (activeParticipantIndex === oldIndex) {
+                game.ConversationHud.activeConversation.activeParticipant = newIndex;
+              } else {
+                if (activeParticipantIndex > oldIndex && activeParticipantIndex <= newIndex) {
+                  game.ConversationHud.activeConversation.activeParticipant -= 1;
+                }
+                if (activeParticipantIndex < oldIndex && activeParticipantIndex >= newIndex) {
+                  game.ConversationHud.activeConversation.activeParticipant += 1;
+                }
+              }
+
+              game.ConversationHud.activeConversation.participants = participants;
+              socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
             } else {
-              if (activeParticipantIndex > oldIndex && activeParticipantIndex <= newIndex) {
-                game.ConversationHud.activeConversation.activeParticipant -= 1;
-              }
-              if (activeParticipantIndex < oldIndex && activeParticipantIndex >= newIndex) {
-                game.ConversationHud.activeConversation.activeParticipant += 1;
-              }
+              console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
             }
 
-            game.ConversationHud.activeConversation.participants = participants;
-            socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
-          } else {
-            console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
-          }
-
-          game.ConversationHud.draggingParticipant = false;
-        };
+            game.ConversationHud.draggingParticipant = false;
+          };
+        }
       }
     }
   }
@@ -248,7 +253,7 @@ export class ConversationHud {
     game.ConversationHud.activeConversation = null;
 
     const body = document.body;
-    const conversationBackground = document.getElementById("conversation-background");
+    const conversationBackground = document.getElementById("conversation-hud-background");
     if (conversationBackground) {
       body.removeChild(conversationBackground);
     }
@@ -353,26 +358,18 @@ export class ConversationHud {
   }
 
   // Function that changes the active participant image
-  changeActiveImage(index) {
-    const image = document.getElementById("conversationActiveParticipant");
-    const imageText = document.getElementById("conversationActiveParticipantName");
-    const activeMsg = document.getElementById("conversationNoActiveParticipantMsg");
+  async changeActiveImage(index) {
+    const activeParticipantTemplate = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
+      displayParticipant: index === -1 ? false : true,
+      participant: game.ConversationHud.activeConversation.participants[index],
+      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+      activeParticipantFactionFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFactionFontSize),
+    });
 
-    if (index === -1) {
-      image.src = "";
-      image.classList.remove("active");
-      imageText.textContent = "";
-      imageText.classList.remove("active");
-
-      activeMsg.classList.add("active");
-    } else {
-      image.src = this.activeConversation.participants[index].img;
-      image.classList.add("active");
-      imageText.textContent = this.activeConversation.participants[index].name;
-      imageText.classList.add("active");
-
-      activeMsg.classList.remove("active");
-    }
+    const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
+    activeParticipantAnchorPoint.innerHTML = activeParticipantTemplate;
 
     // Change active class of all other elements
     const conversationParticipants = document.getElementById("conversationParticipantList").children;
@@ -437,14 +434,15 @@ export class ConversationHud {
   // Function that updates a participant from the active conversation
   updateParticipantFromActiveConversation(index) {
     if (checkIfUserGM()) {
-      if (index < 0 || this.activeConversation.participants.length < index) {
+      if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
         console.error("ConversationHUD | Tried to update a participant with an invalid index");
         return;
       }
 
       const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
-        name: this.activeConversation.participants[index].name,
-        img: this.activeConversation.participants[index].img,
+        name: game.ConversationHud.activeConversation.participants[index].name,
+        img: game.ConversationHud.activeConversation.participants[index].img,
+        faction: game.ConversationHud.activeConversation.participants[index].faction,
       });
       fileInputForm.render(true);
     }
@@ -488,7 +486,6 @@ export class ConversationHud {
   startConversationFromData(participants) {
     if (checkIfUserGM()) {
       let conversationData = {};
-      conversationData.type = 1;
       conversationData.participants = participants;
       conversationData.activeParticipant = -1;
 
@@ -511,7 +508,7 @@ export class ConversationHud {
       conversationHud.classList.remove("visible");
     }
 
-    const conversationBackground = document.getElementById("conversation-background");
+    const conversationBackground = document.getElementById("conversation-hud-background");
     if (newVisibility) {
       if (!game.ConversationHud.conversationIsMinimized) {
         conversationBackground.classList.add("visible");
@@ -616,12 +613,7 @@ export class ConversationHud {
 
   // Function that adds a single participant to the active conversation
   #handleAddParticipant(data) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
+    setDefaultDataForParticipant(data);
 
     // Push participant to the active conversation then update all the others
     game.ConversationHud.activeConversation.participants.push(data);
@@ -629,12 +621,7 @@ export class ConversationHud {
   }
 
   #handleUpdateParticipant(data, index) {
-    if (data.name === "") {
-      data.name = game.i18n.localize("CHUD.anonymous");
-    }
-    if (data.img === "") {
-      data.img = "modules/conversation-hud/img/silhouette.jpg";
-    }
+    setDefaultDataForParticipant(data);
 
     // Update participant with the given index
     game.ConversationHud.activeConversation.participants[index] = data;

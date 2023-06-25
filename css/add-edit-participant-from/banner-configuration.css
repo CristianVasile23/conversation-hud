@@ -1,0 +1,116 @@
+/* ----- Banner configuration ----- */
+/* #region */
+.participant-add-edit-form .banner-configuration {
+  display: flex;
+  flex-direction: row;
+}
+
+.participant-add-edit-form .banner-options {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1 !important;
+}
+
+.participant-add-edit-form .banner-options .banner-shape-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  padding: 0;
+  margin: 0;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.participant-add-edit-form .banner-options .banner-shape-button.active {
+  background-color: var(--color-border-highlight);
+}
+
+.participant-add-edit-form .banner-options button img {
+  border: none;
+  height: 20px;
+  width: auto;
+}
+/* #endregion */
+
+/* ----- Banner preview ----- */
+/* #region */
+.participant-add-edit-form .banner-preview-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 165px;
+  margin-left: 15px;
+  flex-shrink: 0;
+
+  padding: 5px;
+}
+
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image {
+  width: 165px;
+  height: 165px;
+  position: relative;
+
+  border: 1px solid var(--color-border-light-tertiary);
+  border-radius: 3px;
+
+  background: rgba(0, 0, 0, 0.05);
+}
+
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image img {
+  border: 0;
+}
+
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image #banner-preview-flag {
+  display: none;
+}
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-flag {
+  display: block;
+}
+
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image #banner-preview-logo {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  max-width: 165px;
+  max-height: 165px;
+
+  margin: auto;
+}
+.banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-logo {
+  top: 30px;
+  bottom: unset;
+
+  max-width: 70px;
+  max-height: 70px;
+}
+.banner-preview-wrapper .banner-preview-image #banner-preview-logo[src=""] {
+  display: none;
+}
+
+.participant-add-edit-form .banner-preview-wrapper .no-banner-preview-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: 0;
+
+  color: var(--color-text-dark-primary);
+}
+/* #endregion */

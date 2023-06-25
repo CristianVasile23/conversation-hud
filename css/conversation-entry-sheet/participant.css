@@ -1,0 +1,117 @@
+/* ----- General CSS ----- */
+/* #region */
+.conversation-entry-sheet .conversation-participant {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  padding: 5px;
+}
+/* #endregion */
+
+/* ----- Faction Display ----- */
+/* #region */
+.conversation-entry-sheet .faction-wrapper {
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.conversation-entry-sheet .faction-wrapper.disabled > * {
+  visibility: hidden;
+}
+
+.conversation-entry-sheet .faction-wrapper .faction-logo {
+  position: absolute;
+
+  border: 0;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  max-width: 40px;
+  max-height: 40px;
+
+  margin: auto;
+}
+.conversation-entry-sheet .faction-wrapper.has-banner .faction-logo {
+  top: 6px;
+  bottom: unset;
+  max-width: 16px;
+  max-height: 16px;
+}
+.conversation-entry-sheet .faction-wrapper .faction-logo[src=""] {
+  display: none;
+}
+/* #endregion */
+
+/* ----- Portrait Display ----- */
+/* #region */
+.conversation-entry-sheet .portrait-wrapper {
+  height: 40px;
+  width: 40px;
+  margin-left: 5px;
+
+  border: 1px solid var(--color-border-dark);
+  border-radius: 3px;
+}
+
+.conversation-entry-sheet .portrait-wrapper img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: top center;
+  border: 0;
+  border-radius: 0;
+}
+/* #endregion */
+
+/* ----- Text Display ----- */
+/* #region */
+.conversation-entry-sheet .text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin-left: 10px;
+}
+
+.conversation-entry-sheet .text-wrapper .name {
+  margin: 0;
+  font-weight: bold;
+  color: var(--color-text-dark-secondary);
+}
+
+.conversation-entry-sheet .text-wrapper .faction {
+  margin: 0;
+  font-style: italic;
+  font-size: 11px;
+}
+/* #endregion */
+
+/* ----- Controls ----- */
+/* #region */
+.conversation-entry-sheet .controls-wrapper {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+}
+
+.conversation-entry-sheet .controls-wrapper .clone {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.conversation-entry-sheet .controls-wrapper .edit {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+}
+
+.conversation-entry-sheet .controls-wrapper .delete {
+  display: flex;
+  align-items: center;
+}
+/* #endregion */

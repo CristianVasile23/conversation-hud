@@ -1,0 +1,11 @@
+#ui-middle {
+  z-index: unset;
+}
+
+#ui-middle > *:not(#ui-conversation-hud) {
+  z-index: var(--z-index-app);
+}
+
+#ui-middle > #ui-conversation-hud {
+  z-index: 20;
+}

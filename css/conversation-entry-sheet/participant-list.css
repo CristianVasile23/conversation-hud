@@ -1,0 +1,20 @@
+.conversation-entry-sheet .participants-list {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.participants-list > div > div {
+  border-bottom: 1px solid var(--color-border-light-2);
+}
+
+.participants-list > div > div:last-child {
+  border-bottom: none;
+}
+
+.participants-list > .no-participants-message {
+  display: flex;
+  margin: auto;
+  max-width: 310px;
+  text-align: center;
+}

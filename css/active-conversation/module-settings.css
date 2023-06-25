@@ -1,0 +1,84 @@
+/* ----- Active participant portrait types ----- */
+/* #region */
+.conversation-hud-content .active-participant.vertical {
+  width: 30vw;
+  max-width: 420px;
+  aspect-ratio: 2/3;
+}
+
+.conversation-hud-content .active-participant.horizontal {
+  width: 40vw;
+  max-width: 620px;
+  aspect-ratio: 16/9;
+}
+
+.conversation-hud-content .active-participant.square {
+  width: min(30vw, 50vh);
+  max-width: 620px;
+  aspect-ratio: 1/1;
+}
+/* #endregion */
+
+/* ----- Active participant portrait types when conversation is minimized ----- */
+/* #region */
+.conversation-hud-wrapper.minimized .conversation-hud-content .active-participant.vertical {
+  height: 186px;
+  width: 124px;
+}
+
+.conversation-hud-wrapper.minimized .conversation-hud-content .active-participant.horizontal {
+  height: 124px;
+  width: 220px;
+}
+
+.conversation-hud-wrapper.minimized .conversation-hud-content .active-participant.square {
+  height: 124px;
+  width: 124px;
+}
+/* #endregion */
+
+/* ----- Active participant portrait anchors ----- */
+/* #region */
+.conversation-hud-content .conversation-participant .portrait.top,
+.conversation-hud-content .active-participant .portrait.top {
+  object-position: top center;
+}
+
+.conversation-hud-content .conversation-participant .portrait.center,
+.conversation-hud-content .active-participant .portrait.center {
+  object-position: center;
+}
+
+.conversation-hud-content .conversation-participant .portrait.bottom,
+.conversation-hud-content .active-participant .portrait.bottom {
+  object-position: bottom center;
+}
+/* #endregion */
+
+/* ----- Font sizes for participant and faction names ----- */
+/* #region */
+.conversation-hud-content .active-participant .name.verySmall,
+.conversation-hud-content .active-participant-faction .faction-name.verySmall {
+  font-size: 10px;
+}
+
+.conversation-hud-content .active-participant .name.small,
+.conversation-hud-content .active-participant-faction .faction-name.small {
+  font-size: 13px;
+}
+
+.conversation-hud-content .active-participant .name.regular,
+.conversation-hud-content .active-participant-faction .faction-name.regular {
+  font-size: 16px;
+}
+
+.conversation-hud-content .active-participant .name.large,
+.conversation-hud-content .active-participant-faction .faction-name.large {
+  font-size: 19px;
+}
+
+.conversation-hud-content .active-participant .name.veryLarge,
+.conversation-hud-content .active-participant-faction .faction-name.veryLarge {
+  font-size: 22px;
+}
+/* #endregion */
