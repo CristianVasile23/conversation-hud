@@ -1,0 +1,50 @@
+/* CSS responsiveness */
+/* #region */
+@media only screen and (max-width: 1410px) {
+  /* On smaller screens, make the margin between the participant list and the active participant smaller to gain some extra space*/
+  .conversation-hud-content .conversation-participant-list {
+    margin-left: 10px;
+  }
+
+  /* Shift the wrapper to the left by 100 pixels */
+  .conversation-hud-wrapper {
+    margin-left: -100px;
+  }
+}
+
+@media only screen and (max-width: 1200px) {
+  .conversation-hud-content {
+    margin: 0;
+  }
+
+  .conversation-hud-content .active-participant-wrapper .active-participant-faction {
+    width: 84px;
+  }
+
+  .conversation-hud-content .active-participant-faction .faction-wrapper {
+    width: 82px;
+    height: 82px;
+  }
+
+  .conversation-hud-content .active-participant-faction .faction-wrapper .faction-logo {
+    max-width: 82px;
+    max-height: 82px;
+  }
+
+  .conversation-hud-content .active-participant-faction .faction-wrapper.has-banner .faction-logo {
+    top: 15px;
+    max-width: 30px;
+    max-height: 30px;
+  }
+
+  .conversation-hud-content .active-participant-faction .faction-name {
+    display: none;
+  }
+}
+
+@media only screen and (max-width: 1124px) {
+  .conversation-hud-content .active-participant-wrapper .active-participant-faction {
+    display: none;
+  }
+}
+/* #endregion */
