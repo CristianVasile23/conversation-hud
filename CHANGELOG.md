@@ -1,3 +1,8 @@
+## 5.0.2
+
+- Fixed a bug that caused the faction of the active participant to not be hidden when conversation visibility was toggled off
+- Fixed an issue that caused the _No participant text_ to be mispositioned
+
 ## 5.0.1
 
 - Fixed a small bug which caused the image anchor setting to be applied only to the active participants and not to the other thumbnails.
