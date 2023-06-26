@@ -1,7 +1,7 @@
 /* ----- Participant list ----- */
 /* #region */
 .conversation-hud-content .conversation-participant-list {
-  display: none;
+  display: flex;
   flex-flow: column;
   align-items: flex-start;
   margin-left: 50px;

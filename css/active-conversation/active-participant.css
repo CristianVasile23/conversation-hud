@@ -93,14 +93,14 @@
 /* ----- Active participant ----- */
 /* #region */
 .conversation-hud-content .active-participant {
-  display: none;
+  display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
 
   border: 1px solid var(--color-border-dark);
-  border-radius: 15px;
+  border-radius: 5px;
   box-shadow: 0 0 10px var(--color-shadow-dark);
   background-color: rgba(0, 0, 0, 0.5);
 
@@ -153,6 +153,8 @@
 /* #region */
 .conversation-hud-content .no-participant-text {
   display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   max-width: 200px;
   margin: 0;
