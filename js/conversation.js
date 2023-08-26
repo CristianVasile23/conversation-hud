@@ -48,7 +48,6 @@ export class ConversationHud {
       socket.register("removeConversation", this.removeConversation);
 
       socket.register("getActiveConversation", this.getActiveConversation);
-      socket.register("setActiveConversation", this.setActiveConversation);
       socket.register("updateActiveConversation", this.updateActiveConversation);
 
       socket.register("setActiveParticipant", this.setActiveParticipant);
@@ -285,11 +284,6 @@ export class ConversationHud {
     return game.ConversationHud.conversationIsVisible;
   }
 
-  // Function that sets the data of the currently active conversation
-  setActiveConversation(conversationData) {
-    game.ConversationHud.activeConversation = conversationData;
-  }
-
   // Function that updates the data of the currently active conversation
   async updateActiveConversation(conversationData) {
     // Set conversation data
@@ -448,7 +442,7 @@ export class ConversationHud {
     }
   }
 
-  // Function that saves the active conversation to a clipboard
+  // Function that saves the active conversation to a journal entry
   async saveActiveConversation() {
     if (checkIfUserGM()) {
       if (game.ConversationHud.activeConversation) {
@@ -467,7 +461,7 @@ export class ConversationHud {
             const formElement = html[0].querySelector("form");
             const formData = new FormDataExtended(formElement);
             const formDataObject = formData.object;
-            this.#handleConversationSave(formDataObject);
+            this.#handleSaveConversation(formDataObject);
           },
           rejectClose: false,
         });
@@ -483,11 +477,25 @@ export class ConversationHud {
   }
 
   // Function that can be called from a macro in order to trigger a conversation
-  startConversationFromData(participants) {
+  startConversationFromData(data) {
     if (checkIfUserGM()) {
       let conversationData = {};
-      conversationData.participants = participants;
+
       conversationData.activeParticipant = -1;
+      conversationData.defaultActiveParticipant = undefined;
+
+      if (data instanceof Array) {
+        conversationData.participants = data;
+      } else {
+        const participants = data.participants;
+        const defaultActiveParticipant = data.defaultActiveParticipant;
+        if (participants) {
+          conversationData.participants = participants;
+          if (typeof defaultActiveParticipant !== "undefined") {
+            conversationData.defaultActiveParticipant = defaultActiveParticipant;
+          }
+        }
+      }
 
       if (this.activeConversation) {
         this.#handleConversationUpdateData(conversationData);
@@ -581,9 +589,10 @@ export class ConversationHud {
     }
   }
 
-  async #handleConversationSave(data) {
+  async #handleSaveConversation(data) {
     const permissions = {};
     game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
+
     const newConversationSheet = await JournalEntry.create({
       name: data.name || "New Conversation",
       folder: data.folder || "",
@@ -596,9 +605,13 @@ export class ConversationHud {
     });
 
     if (newConversationSheet) {
+      const dataToSave = {
+        defaultActiveParticipant: game.ConversationHud.activeConversation.defaultActiveParticipant,
+        participants: game.ConversationHud.activeConversation.participants,
+      };
       await newConversationSheet.createEmbeddedDocuments("JournalEntryPage", [
         {
-          text: { content: JSON.stringify(this.activeConversation.participants) },
+          text: { content: JSON.stringify(dataToSave) },
           name: "Conversation Participants",
           flags: {
             "conversation-hud": { type: "conversation" },
@@ -637,7 +650,11 @@ export class ConversationHud {
 
     let parsedData = {};
     parsedData.activeParticipant = -1;
+    if (typeof formData.defaultActiveParticipant !== "undefined") {
+      parsedData.activeParticipant = formData.defaultActiveParticipant;
+    }
     parsedData.participants = formData.participants;
+    parsedData.defaultActiveParticipant = formData.defaultActiveParticipant;
 
     socket.executeForEveryone("renderConversation", parsedData, true);
 
@@ -649,7 +666,11 @@ export class ConversationHud {
   #handleConversationUpdateData(formData) {
     let parsedData = {};
     parsedData.activeParticipant = -1;
+    if (typeof formData.defaultActiveParticipant !== "undefined") {
+      parsedData.activeParticipant = formData.defaultActiveParticipant;
+    }
     parsedData.participants = formData.participants;
+    parsedData.defaultActiveParticipant = formData.defaultActiveParticipant;
 
     socket.executeForEveryone("updateActiveConversation", parsedData);
   }
