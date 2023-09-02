@@ -8,6 +8,13 @@
 }
 /* #endregion */
 
+/* ----- Active bu default checkbox ----- */
+/* #region */
+.conversation-entry-sheet #participant-active-by-default {
+  margin-right: 20px;
+}
+/* #endregion */
+
 /* ----- Faction Display ----- */
 /* #region */
 .conversation-entry-sheet .faction-wrapper {
@@ -51,7 +58,7 @@
 .conversation-entry-sheet .portrait-wrapper {
   height: 40px;
   width: 40px;
-  margin-left: 5px;
+  margin-left: 15px;
 
   border: 1px solid var(--color-border-dark);
   border-radius: 3px;

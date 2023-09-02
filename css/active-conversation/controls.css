@@ -49,7 +49,15 @@
   box-shadow: 0 0 10px #9b8dff;
 }
 
-#ui-conversation-controls .control-button.margin {
+#ui-conversation-controls .control-button.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+#ui-conversation-controls .control-button.margin-top {
   margin-top: 30px;
+}
+#ui-conversation-controls .control-button.margin-bottom {
+  margin-bottom: 30px;
 }
 /* #endregion */

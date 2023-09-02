@@ -32,7 +32,16 @@ export async function getActorDataFromDragEvent(event) {
                 // Handle text pages with the the CHUD flag
                 const pageType = page.flags["conversation-hud"].type;
                 if (pageType && pageType === "conversation") {
-                  const participants = JSON.parse(page.text.content);
+                  const data = JSON.parse(page.text.content);
+                  let participants = [];
+
+                  // Determine if the data parsed respects the old data format or the new data format
+                  if (data instanceof Array) {
+                    participants = data;
+                  } else {
+                    participants = data.participants;
+                  }
+
                   conversationParticipants.push(...participants);
                 }
               } else if (page.flags["monks-enhanced-journal"]) {

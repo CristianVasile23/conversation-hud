@@ -1,5 +1,35 @@
 {{#if isGM}}
   <div
+    class="control-button"
+    onclick="game.ConversationHud.onToggleConversation(false)"
+    data-tooltip="{{localize 'CHUD.actions.closeConversation'}}"
+  >
+    <i class="fas fa-times"></i>
+  </div>
+{{/if}}
+
+{{#if features.minimizeEnabled}}
+  {{#if (or isVisible isGM)}}
+    <div
+      class="control-button {{#if isGM}}margin-bottom{{/if}} {{#unless isVisible}}disabled{{/unless}}"
+      onclick="game.ConversationHud.toggleActiveConversationMode()"
+      {{#if isMinimized}}
+        data-tooltip="{{localize 'CHUD.actions.maximizeConversation'}}"
+      {{else}}
+        data-tooltip="{{localize 'CHUD.actions.minimizeConversation'}}"
+      {{/if}}
+    >
+      {{#if isMinimized}}
+        <i class="fas fa-chevron-left"></i>
+      {{else}}
+        <i class="fas fa-chevron-right"></i>
+      {{/if}}
+    </div>
+  {{/if}}
+{{/if}}
+
+{{#if isGM}}
+  <div
     class="control-button toggle {{#if isVisible}}active{{/if}}"
     onclick="game.ConversationHud.toggleActiveConversationVisibility()"
     data-tooltip="{{localize 'CHUD.actions.toggleVisibility'}}"
@@ -18,30 +48,10 @@
   {{/if}}
 
   <div
-    class="control-button"
+    class="control-button margin-top"
     onclick="game.ConversationHud.saveActiveConversation()"
     data-tooltip="{{localize 'CHUD.actions.saveConversation'}}"
   >
     <i class="fas fa-save"></i>
   </div>
-{{/if}}
-
-{{#if features.minimizeEnabled}}
-  {{#if isVisible}}
-    <div
-      class="control-button {{#if isGM}}margin{{/if}}"
-      onclick="game.ConversationHud.toggleActiveConversationMode()"
-      {{#if isMinimized}}
-        data-tooltip="{{localize 'CHUD.actions.maximizeConversation'}}"
-      {{else}}
-        data-tooltip="{{localize 'CHUD.actions.minimizeConversation'}}"
-      {{/if}}
-    >
-      {{#if isMinimized}}
-        <i class="fas fa-chevron-left"></i>
-      {{else}}
-        <i class="fas fa-chevron-right"></i>
-      {{/if}}
-    </div>
-  {{/if}}
 {{/if}}

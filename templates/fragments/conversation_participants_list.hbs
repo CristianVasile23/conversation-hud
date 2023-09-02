@@ -1,5 +1,12 @@
 <div class="participants-list">
   {{#if participants}}
+    <div class="participants-list-header">
+      <p class="active-by-default">Active</p>
+      <p class="faction">Faction</p>
+      <p class="details">Details</p>
+      <p class="controls">Actions</p>
+    </div>
+
     <div id="conversation-participants-list">
       {{#each participants as |participant index|}}
         <div class="participant-drag-drop-container">
