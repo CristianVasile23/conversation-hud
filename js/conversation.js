@@ -12,6 +12,7 @@ import {
   displayDragAndDropIndicator,
   getDragAndDropIndex,
   setDefaultDataForParticipant,
+  getConfirmationFromUser,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -29,9 +30,6 @@ export class ConversationHud {
 
     this.dropzoneVisible = false;
     this.draggingParticipant = false;
-
-    // Register local hooks
-    Hooks.on("toggleConversation", this.onToggleConversation.bind(this));
 
     // Register socket hooks
     this.registerSocketFunctions();
@@ -404,6 +402,13 @@ export class ConversationHud {
         });
       }
     }
+  }
+
+  // Function that handles conversation being closed
+  handleCloseActiveConversation() {
+    getConfirmationFromUser("CHUD.dialogue.onCloseActiveConversation", () => {
+      game.ConversationHud.onToggleConversation(false);
+    });
   }
 
   // Function that removes a participant from the active conversation

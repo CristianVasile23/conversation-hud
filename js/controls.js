@@ -10,7 +10,11 @@ Hooks.on("getSceneControlButtons", (controls) => {
         active: game.ConversationHud.conversationIsActive,
         visible: game.user.isGM,
         onClick: (toggle) => {
-          Hooks.call("toggleConversation", toggle);
+          if (toggle) {
+            game.ConversationHud.onToggleConversation(true);
+          } else {
+            game.ConversationHud.handleCloseActiveConversation();
+          }
         },
         button: true,
       });

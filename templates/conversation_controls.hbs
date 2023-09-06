@@ -1,7 +1,7 @@
 {{#if isGM}}
   <div
     class="control-button"
-    onclick="game.ConversationHud.onToggleConversation(false)"
+    onclick="game.ConversationHud.handleCloseActiveConversation()"
     data-tooltip="{{localize 'CHUD.actions.closeConversation'}}"
   >
     <i class="fas fa-times"></i>

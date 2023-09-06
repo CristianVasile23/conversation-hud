@@ -6,6 +6,7 @@ import {
   displayDragAndDropIndicator,
   getDragAndDropIndex,
   setDefaultDataForParticipant,
+  getConfirmationFromUser,
 } from "./helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
@@ -220,33 +221,23 @@ export class ConversationEntrySheet extends JournalSheet {
     return data;
   }
 
-  close(options) {
+  async close(options) {
     if (this.dirty) {
-      const dialog = new Dialog({
-        title: game.i18n.localize("CHUD.strings.unsavedChanges"),
-        content: game.i18n.localize("CHUD.strings.unsavedChangesHint"),
-        buttons: {
-          yes: {
-            icon: '<i class="fas fa-save"></i>',
-            label: game.i18n.localize("CHUD.actions.save"),
-            callback: this.#handleConfirmationClose.bind(this, true),
-          },
-          no: {
-            icon: '<i class="fas fa-trash"></i>',
-            label: game.i18n.localize("CHUD.actions.discardChanges"),
-            callback: this.#handleConfirmationClose.bind(this, false),
-          },
-        },
-      });
-      dialog.render(true);
-      return Promise.resolve();
+      await getConfirmationFromUser(
+        "CHUD.dialogue.unsavedChanges",
+        this.#handleConfirmationClose.bind(this, true),
+        this.#handleConfirmationClose.bind(this, false),
+        '<i class="fas fa-save"></i>',
+        '<i class="fas fa-trash"></i>'
+      );
     } else {
       this.dirty = false;
       Object.values(this.editors).forEach((ed) => {
         if (ed.instance) ed.instance.destroy();
       });
-      return super.close({ submit: false });
     }
+
+    return super.close({ submit: false });
   }
 
   async #handleConfirmationClose(save) {
@@ -278,7 +269,6 @@ export class ConversationEntrySheet extends JournalSheet {
 
       this.dirty = false;
     }
-    return this.close();
   }
 
   #handleShowConversation() {

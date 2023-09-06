@@ -29,6 +29,21 @@
     "anonymous": "Anonymous"
   },
 
+  "CHUD.dialogue": {
+    "onCloseActiveConversation": {
+      "title": "Are you sure?",
+      "content": "Are you sure you want to close this conversation? Any unsaved changes or modifications will be lost.",
+      "confirm": "Yes",
+      "reject": "No"
+    },
+    "unsavedChanges": {
+      "title": "Unsaved Changes",
+      "content": "The conversation contains unsaved changes. Do you wish to save them?",
+      "confirm": "Save Changes",
+      "reject": "Discard Changes"
+    }
+  },
+
   "CHUD.actions": {
     "save": "Save",
 
