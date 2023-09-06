@@ -36,6 +36,12 @@
       "confirm": "Yes",
       "reject": "No"
     },
+    "onRemoveParticipant": {
+      "title": "Are you sure?",
+      "content": "Are you sure you want to remove this participant from the currently active conversation?",
+      "confirm": "Yes",
+      "reject": "No"
+    },
     "unsavedChanges": {
       "title": "Unsaved Changes",
       "content": "The conversation contains unsaved changes. Do you wish to save them?",

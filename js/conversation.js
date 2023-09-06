@@ -419,19 +419,21 @@ export class ConversationHud {
         return;
       }
 
-      // Check to see if the removed participant is the active one
-      // Otherwise, check to see if the removed participant is before the active one, in which case
-      // we need to update the active participant index by lowering it by one
-      if (game.ConversationHud.activeConversation.activeParticipant === index) {
-        game.ConversationHud.activeConversation.activeParticipant = -1;
-      } else if (index < game.ConversationHud.activeConversation.activeParticipant) {
-        game.ConversationHud.activeConversation.activeParticipant -= 1;
-      }
+      getConfirmationFromUser("CHUD.dialogue.onRemoveParticipant", () => {
+        // Check to see if the removed participant is the active one
+        // Otherwise, check to see if the removed participant is before the active one, in which case
+        // we need to update the active participant index by lowering it by one
+        if (game.ConversationHud.activeConversation.activeParticipant === index) {
+          game.ConversationHud.activeConversation.activeParticipant = -1;
+        } else if (index < game.ConversationHud.activeConversation.activeParticipant) {
+          game.ConversationHud.activeConversation.activeParticipant -= 1;
+        }
 
-      // Remove participant with the given index
-      game.ConversationHud.activeConversation.participants.splice(index, 1);
+        // Remove participant with the given index
+        game.ConversationHud.activeConversation.participants.splice(index, 1);
 
-      socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
+        socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
+      });
     }
   }
 
