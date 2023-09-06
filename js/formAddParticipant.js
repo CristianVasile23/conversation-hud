@@ -9,6 +9,9 @@ export class FileInputForm extends FormApplication {
     this.participantName = participantData?.name || "";
     this.participantImg = participantData?.img || "";
 
+    // Linked journal
+    this.linkedJournal = participantData?.linkedJournal || "";
+
     // Faction data
     this.displayFaction = participantData?.faction?.displayFaction || false;
     this.factionName = participantData?.faction?.factionName || "";
@@ -20,7 +23,7 @@ export class FileInputForm extends FormApplication {
 
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
-      classes: ["form"],
+      classes: ["form", "scene-sheet"],
       popOut: true,
       template: `modules/conversation-hud/templates/add_edit_participant.hbs`,
       id: "conversation-add-participant",
@@ -69,6 +72,11 @@ export class FileInputForm extends FormApplication {
   }
 
   getData(options) {
+    const journals = game.journal.map((doc) => {
+      return { id: doc.id, name: doc.name };
+    });
+    journals.sort((a, b) => a.name.localeCompare(b.name));
+
     return {
       isEditing: this.isEditing,
       participantData: this.participantData,
@@ -82,6 +90,9 @@ export class FileInputForm extends FormApplication {
       factionBannerEnabled: this.factionBannerEnabled,
       factionBannerShape: this.factionBannerShape,
       factionBannerTint: this.factionBannerTint,
+
+      linkedJournal: this.linkedJournal,
+      journals: journals,
     };
   }
 
@@ -89,6 +100,7 @@ export class FileInputForm extends FormApplication {
     const participantData = {
       name: formData.participantName,
       img: formData.participantImg,
+      linkedJournal: formData.linkedJournal,
       faction: {
         displayFaction: formData.displayFaction,
         factionName: formData.factionName,

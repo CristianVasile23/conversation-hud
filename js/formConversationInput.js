@@ -168,6 +168,7 @@ export class ConversationInputForm extends FormApplication {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
+            linkedJournal: this.participants[i].linkedJournal,
             faction: this.participants[i].faction,
           });
           fileInputForm.render(true);

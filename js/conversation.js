@@ -409,6 +409,11 @@ export class ConversationHud {
   // Function that removes a participant from the active conversation
   removeParticipantFromActiveConversation(index) {
     if (checkIfUserGM()) {
+      if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
+        console.error("ConversationHUD | Tried to update a participant with an invalid index");
+        return;
+      }
+
       // Check to see if the removed participant is the active one
       // Otherwise, check to see if the removed participant is before the active one, in which case
       // we need to update the active participant index by lowering it by one
@@ -436,6 +441,7 @@ export class ConversationHud {
       const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
         name: game.ConversationHud.activeConversation.participants[index].name,
         img: game.ConversationHud.activeConversation.participants[index].img,
+        linkedJournal: game.ConversationHud.activeConversation.participants[index].linkedJournal,
         faction: game.ConversationHud.activeConversation.participants[index].faction,
       });
       fileInputForm.render(true);
@@ -587,6 +593,38 @@ export class ConversationHud {
         this.#handleAddParticipant(participant);
       });
     }
+  }
+
+  // Function that displays the linked notes of the participant at the given index
+  async displayLinkedParticipantNotes(index) {
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
+        console.error("ConversationHUD | Tried to update a participant with an invalid index");
+        return;
+      }
+
+      const linkedJournal = game.ConversationHud.activeConversation.participants[index].linkedJournal;
+      if (linkedJournal) {
+        game.ConversationHud.renderJournalSheet(linkedJournal);
+      }
+    }
+  }
+
+  // Function that received a journal id and renders the referenced document in a separate sheet
+  async renderJournalSheet(journalId) {
+    let journal = game.journal.get(journalId);
+
+    // Handler for MEJ so that the referenced document is displayed in a separate popup sheet and not the regular MEJ journal
+    if (game.modules.get("monks-enhanced-journal")?.active) {
+      if (game.MonksEnhancedJournal.getMEJType(journal)) {
+        if (journal instanceof JournalEntry) {
+          journal = journal.pages.contents[0];
+        }
+        game.MonksEnhancedJournal.fixType(journal);
+      }
+    }
+
+    journal.sheet.render(true);
   }
 
   async #handleSaveConversation(data) {

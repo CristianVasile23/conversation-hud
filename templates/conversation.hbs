@@ -26,6 +26,12 @@
               <a class="remove" onclick="game.ConversationHud.removeParticipantFromActiveConversation({{index}})">
                 <i class="fas fa-trash"></i>
               </a>
+
+              {{#if participant.linkedJournal}}
+                <a class="notes" onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})">
+                  <i class="fas fa-book"></i>
+                </a>
+              {{/if}}
             </div>
 
             {{!-- Participant --}}
