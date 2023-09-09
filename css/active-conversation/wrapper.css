@@ -32,8 +32,7 @@
   justify-content: center;
   align-items: center;
 
-  height: 65vh;
-  max-height: 650px;
+  height: 100%;
 
   pointer-events: all;
 }
@@ -48,17 +47,11 @@
 
 /* ----- Conversation minimized ----- */
 /* #region */
-.conversation-hud-wrapper.minimized {
-  height: 100%;
-}
-
 .conversation-hud-wrapper.minimized .conversation-hud-content {
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-between;
   margin-right: 10px;
-  height: 100%;
-  max-height: calc(100vh - 54px - 62px);
 }
 
 /* Active participant */
@@ -112,6 +105,7 @@
 
 /* Participant list */
 .conversation-hud-wrapper.minimized .conversation-participant-list {
+  max-height: unset;
   margin-top: 25px;
   margin-bottom: 25px;
 }

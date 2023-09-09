@@ -8,4 +8,6 @@
 
 #ui-middle > #ui-conversation-hud {
   z-index: 20;
+  flex: 1;
+  min-height: 0;
 }

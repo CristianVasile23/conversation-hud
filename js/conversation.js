@@ -13,6 +13,7 @@ import {
   getDragAndDropIndex,
   setDefaultDataForParticipant,
   getConfirmationFromUser,
+  checkIfCameraDockOnBottomOrTop,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -78,6 +79,7 @@ export class ConversationHud {
 
     // Render templates
     const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
+      hasDock: checkIfCameraDockOnBottomOrTop(),
       participants: conversationData.participants,
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
@@ -289,6 +291,7 @@ export class ConversationHud {
 
     // Render template
     const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
+      hasDock: checkIfCameraDockOnBottomOrTop(),
       participants: conversationData.participants,
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
