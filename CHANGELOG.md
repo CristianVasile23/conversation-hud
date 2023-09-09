@@ -1,3 +1,13 @@
+## 5.1.0
+
+- Added the option to select a participant that will be enabled by default when a conversation is started
+- Added the option to link journal entries to participants (MEJ entries supported)
+- Added an additional button to the conversation controls that closes the currently active conversation
+- Added confirmation dialogues when trying to close an active conversation or when trying to delete a participant in an active conversation
+- Fixed an issue which caused UI elements to overflow when using the top or bottom position for the camera dock
+- Fixed an issue which caused the conversation sheet display to close before the user could confirm if they wanted to keep or discard the unsaved changes (affected MEJ users only)
+- Small UX and UI improvements
+
 ## 5.0.2
 
 - Fixed a bug that caused the faction of the active participant to not be hidden when conversation visibility was toggled off
