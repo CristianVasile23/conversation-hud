@@ -8,9 +8,14 @@ function registerLinkedJournalHelper() {
 
     if (journalId) {
       const document = game.journal.get(journalId);
-      html += `Linked journal: <a onclick="game.ConversationHud.renderJournalSheet('${journalId}')">${document.name}</a>`;
+      html += `${game.i18n.localize("CHUD.strings.linkedJournal")}: `;
+      if (document) {
+        html += `<a onclick="game.ConversationHud.renderJournalSheet('${journalId}')">${document.name}</a>`;
+      } else {
+        html += `${game.i18n.localize("CHUD.strings.invalidDocumentRef")}`;
+      }
     } else {
-      html += `No linked journal`;
+      html += `${game.i18n.localize("CHUD.strings.noLinkedJournal")}`;
     }
 
     html += `</p>`;

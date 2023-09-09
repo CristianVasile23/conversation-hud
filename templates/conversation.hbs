@@ -19,16 +19,28 @@
           <div class="conversation-participant-wrapper">
             {{!-- Controls --}}
             <div class="controls">
-              <a class="edit" onclick="game.ConversationHud.updateParticipantFromActiveConversation({{index}})">
+              <a
+                class="edit"
+                title="{{localize 'CHUD.actions.participant.edit'}}"
+                onclick="game.ConversationHud.updateParticipantFromActiveConversation({{index}})"
+              >
                 <i class="fas fa-edit"></i>
               </a>
 
-              <a class="remove" onclick="game.ConversationHud.removeParticipantFromActiveConversation({{index}})">
+              <a
+                class="remove"
+                title="{{localize 'CHUD.actions.participant.delete'}}"
+                onclick="game.ConversationHud.removeParticipantFromActiveConversation({{index}})"
+              >
                 <i class="fas fa-trash"></i>
               </a>
 
               {{#if participant.linkedJournal}}
-                <a class="notes" onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})">
+                <a
+                  class="notes"
+                  title="{{localize 'CHUD.strings.linkedJournal'}}"
+                  onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})"
+                >
                   <i class="fas fa-book"></i>
                 </a>
               {{/if}}

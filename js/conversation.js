@@ -624,17 +624,21 @@ export class ConversationHud {
   async renderJournalSheet(journalId) {
     let journal = game.journal.get(journalId);
 
-    // Handler for MEJ so that the referenced document is displayed in a separate popup sheet and not the regular MEJ journal
-    if (game.modules.get("monks-enhanced-journal")?.active) {
-      if (game.MonksEnhancedJournal.getMEJType(journal)) {
-        if (journal instanceof JournalEntry) {
-          journal = journal.pages.contents[0];
+    if (!journal) {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.invalidJournalEntry"));
+    } else {
+      // Handler for MEJ so that the referenced document is displayed in a separate popup sheet and not the regular MEJ journal
+      if (game.modules.get("monks-enhanced-journal")?.active) {
+        if (game.MonksEnhancedJournal.getMEJType(journal)) {
+          if (journal instanceof JournalEntry) {
+            journal = journal.pages.contents[0];
+          }
+          game.MonksEnhancedJournal.fixType(journal);
         }
-        game.MonksEnhancedJournal.fixType(journal);
       }
-    }
 
-    journal.sheet.render(true);
+      journal.sheet.render(true);
+    }
   }
 
   async #handleSaveConversation(data) {
