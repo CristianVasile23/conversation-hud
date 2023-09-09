@@ -1,5 +1,6 @@
 import { MODULE_NAME } from "./constants.js";
 import { ConversationHud } from "./conversation.js";
+import { registerHandlebarHelpers } from "./handlebar-helpers.js";
 import { checkConversationDataAvailability, fixRpgUiIncompatibility, handleOnClickContentLink } from "./helpers.js";
 import { preloadTemplates } from "./preloadTemplates.js";
 import { ModuleSettings, registerSettings } from "./settings.js";
@@ -32,6 +33,9 @@ Hooks.on("init", async () => {
 
   // Register settings
   registerSettings();
+
+  // Register handlebar helpers
+  registerHandlebarHelpers();
 
   // Load templates
   preloadTemplates();

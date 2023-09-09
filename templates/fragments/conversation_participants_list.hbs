@@ -2,7 +2,7 @@
   {{#if participants}}
     <div class="participants-list-header">
       <p class="active-by-default">Active</p>
-      <p class="faction">Faction</p>
+      <p class="faction">Banner</p>
       <p class="details">Details</p>
       <p class="controls">Actions</p>
     </div>
@@ -37,6 +37,8 @@
               {{else}}
                 <p class="faction">{{localize 'CHUD.faction.unaffiliated'}}</p>
               {{/if}}
+
+              {{{renderParticipantLinkedJournal participant.linkedJournal}}}
             </div>
             
             {{#if ../isGM}}
