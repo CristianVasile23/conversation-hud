@@ -32,7 +32,16 @@ export async function getActorDataFromDragEvent(event) {
                 // Handle text pages with the the CHUD flag
                 const pageType = page.flags["conversation-hud"].type;
                 if (pageType && pageType === "conversation") {
-                  const participants = JSON.parse(page.text.content);
+                  const data = JSON.parse(page.text.content);
+                  let participants = [];
+
+                  // Determine if the data parsed respects the old data format or the new data format
+                  if (data instanceof Array) {
+                    participants = data;
+                  } else {
+                    participants = data.participants;
+                  }
+
                   conversationParticipants.push(...participants);
                 }
               } else if (page.flags["monks-enhanced-journal"]) {
@@ -313,4 +322,58 @@ export function setDefaultDataForParticipant(data) {
       data.faction.factionLogo = "icons/svg/combat.svg";
     }
   }
+}
+
+export function getConfirmationFromUser(
+  localizationString,
+  onConfirm,
+  onReject = () => {},
+  confirmIcon = '<i class="fas fa-check"></i>',
+  rejectIcon = '<i class="fas fa-times"></i>'
+) {
+  const dialogPromise = new Promise((resolve, reject) => {
+    const titleText = game.i18n.localize(`${localizationString}.title`);
+    const contentText = game.i18n.localize(`${localizationString}.content`);
+    const confirmText = game.i18n.localize(`${localizationString}.confirm`);
+    const rejectText = game.i18n.localize(`${localizationString}.reject`);
+
+    const dialog = new Dialog({
+      title: titleText,
+      content: `<div style="margin-bottom: 8px;">${game.i18n.localize(contentText)}</div>`,
+      buttons: {
+        confirm: {
+          icon: confirmIcon,
+          label: confirmText,
+          callback: () => {
+            onConfirm();
+            resolve(true);
+          },
+        },
+        reject: {
+          icon: rejectIcon,
+          label: rejectText,
+          callback: () => {
+            onReject();
+            resolve(false);
+          },
+        },
+      },
+      default: "confirm",
+    });
+    dialog.render(true);
+  });
+
+  return dialogPromise;
+}
+
+export function checkIfCameraDockOnBottomOrTop() {
+  const cameraViews = document.getElementById("camera-views");
+
+  if (cameraViews) {
+    if (cameraViews.classList.contains("camera-position-bottom") || cameraViews.classList.contains("camera-position-top")) {
+      return true;
+    }
+  }
+
+  return false;
 }

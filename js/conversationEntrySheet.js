@@ -6,6 +6,7 @@ import {
   displayDragAndDropIndicator,
   getDragAndDropIndex,
   setDefaultDataForParticipant,
+  getConfirmationFromUser,
 } from "./helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
@@ -16,19 +17,33 @@ export class ConversationEntrySheet extends JournalSheet {
     this.dropzoneVisible = false;
     this.draggingParticipant = false;
 
+    this.participants = [];
+    this.defaultActiveParticipant = undefined;
+
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
-    if (pages.length === 0) {
-      this.participants = [];
-    } else {
+    if (pages.length > 0) {
       try {
-        this.participants = JSON.parse(pages[0].text.content);
+        const data = JSON.parse(pages[0].text.content);
+        if (data instanceof Array) {
+          this.participants = data;
+        } else {
+          const participants = data.participants;
+          const defaultActiveParticipant = data.defaultActiveParticipant;
+          if (participants) {
+            this.participants = participants;
+            if (typeof defaultActiveParticipant !== "undefined") {
+              this.defaultActiveParticipant = defaultActiveParticipant;
+            }
+          } else {
+            throw new SyntaxError();
+          }
+        }
       } catch (error) {
         if (error instanceof SyntaxError) {
           ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
         } else {
           ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
         }
-        this.participants = [];
       }
     }
   }
@@ -147,6 +162,20 @@ export class ConversationEntrySheet extends JournalSheet {
 
             // Reorder the array
             moveInArray(this.participants, oldIndex, newIndex);
+
+            // Update active participant index
+            const defaultActiveParticipantIndex = this.defaultActiveParticipant;
+            if (defaultActiveParticipantIndex === oldIndex) {
+              this.defaultActiveParticipant = newIndex;
+            } else {
+              if (defaultActiveParticipantIndex > oldIndex && defaultActiveParticipantIndex <= newIndex) {
+                this.defaultActiveParticipant -= 1;
+              }
+              if (defaultActiveParticipantIndex < oldIndex && defaultActiveParticipantIndex >= newIndex) {
+                this.defaultActiveParticipant += 1;
+              }
+            }
+
             this.dirty = true;
             this.render(false);
           } else {
@@ -156,23 +185,23 @@ export class ConversationEntrySheet extends JournalSheet {
           this.draggingParticipant = false;
         };
 
+        // Bind function to the set active by default checkbox
+        conversationParticipants[i].querySelector("#participant-active-by-default").onchange = (event) =>
+          this.#handleSetDefaultActiveParticipant(event, i);
+
         // Bind functions to the edit and remove buttons
         const controls = conversationParticipants[i].querySelector(".controls-wrapper");
-        controls.querySelector("#participant-clone-button").onclick = () => {
-          const clonedParticipant = this.participants[i];
-          this.participants.push(clonedParticipant);
-          this.dirty = true;
-          this.render(false);
-        };
+        controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
+        controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
+            linkedJournal: this.participants[i].linkedJournal,
             faction: this.participants[i].faction,
           });
           fileInputForm.render(true);
         };
-        controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
       }
     }
   }
@@ -183,6 +212,7 @@ export class ConversationEntrySheet extends JournalSheet {
     const data = {
       isGM: game.user.isGM,
       dirty: this.dirty,
+      defaultActiveParticipant: this.defaultActiveParticipant,
       participants: this.participants,
       name: baseData.data.name,
       data: baseData.data,
@@ -191,33 +221,23 @@ export class ConversationEntrySheet extends JournalSheet {
     return data;
   }
 
-  close(options) {
+  async close(options) {
     if (this.dirty) {
-      const dialog = new Dialog({
-        title: game.i18n.localize("CHUD.strings.unsavedChanges"),
-        content: game.i18n.localize("CHUD.strings.unsavedChangesHint"),
-        buttons: {
-          yes: {
-            icon: '<i class="fas fa-save"></i>',
-            label: game.i18n.localize("CHUD.actions.save"),
-            callback: this.#handleConfirmationClose.bind(this, true),
-          },
-          no: {
-            icon: '<i class="fas fa-trash"></i>',
-            label: game.i18n.localize("CHUD.actions.discardChanges"),
-            callback: this.#handleConfirmationClose.bind(this, false),
-          },
-        },
-      });
-      dialog.render(true);
-      return Promise.resolve();
+      await getConfirmationFromUser(
+        "CHUD.dialogue.unsavedChanges",
+        this.#handleConfirmationClose.bind(this, true),
+        this.#handleConfirmationClose.bind(this, false),
+        '<i class="fas fa-save"></i>',
+        '<i class="fas fa-trash"></i>'
+      );
     } else {
       this.dirty = false;
       Object.values(this.editors).forEach((ed) => {
         if (ed.instance) ed.instance.destroy();
       });
-      return super.close({ submit: false });
     }
+
+    return super.close({ submit: false });
   }
 
   async #handleConfirmationClose(save) {
@@ -225,14 +245,30 @@ export class ConversationEntrySheet extends JournalSheet {
       await this.#handleSaveConversation();
     } else {
       const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
+
       if (pages.length === 0) {
         this.participants = [];
+        this.defaultActiveParticipant = undefined;
       } else {
-        this.participants = JSON.parse(pages[0].text.content);
+        this.defaultActiveParticipant = undefined;
+
+        const data = JSON.parse(pages[0].text.content);
+        if (data instanceof Array) {
+          this.participants = data;
+        } else {
+          const participants = data.participants;
+          const defaultActiveParticipant = data.defaultActiveParticipant;
+          if (participants) {
+            this.participants = participants;
+            if (typeof defaultActiveParticipant !== "undefined") {
+              this.defaultActiveParticipant = defaultActiveParticipant;
+            }
+          }
+        }
       }
+
       this.dirty = false;
     }
-    return this.close();
   }
 
   #handleShowConversation() {
@@ -260,18 +296,22 @@ export class ConversationEntrySheet extends JournalSheet {
   async #handleSaveConversation() {
     // Get document pages
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
+    const dataToSave = {
+      defaultActiveParticipant: this.defaultActiveParticipant,
+      participants: this.participants,
+    };
 
     if (pages.length === 0) {
       // Create a document entry page if none are present
       await this.object.createEmbeddedDocuments("JournalEntryPage", [
         {
-          text: { content: JSON.stringify(this.participants) },
+          text: { content: JSON.stringify(dataToSave) },
           name: game.i18n.localize("CHUD.strings.conversationParticipants"),
         },
       ]);
     } else {
       // Otherwise, update the first (and realistically the only) entry page
-      pages[0].text.content = JSON.stringify(this.participants);
+      pages[0].text.content = JSON.stringify(dataToSave);
       await this.object.updateEmbeddedDocuments(
         "JournalEntryPage",
         [
@@ -311,6 +351,26 @@ export class ConversationEntrySheet extends JournalSheet {
 
   #handleRemoveParticipant(index) {
     this.participants.splice(index, 1);
+    this.dirty = true;
+    this.render(false);
+  }
+
+  #handleCloneParticipant(index) {
+    const clonedParticipant = this.participants[i];
+    this.participants.push(clonedParticipant);
+    this.dirty = true;
+    this.render(false);
+  }
+
+  #handleSetDefaultActiveParticipant(event, index) {
+    if (!event.target) return;
+
+    if (event.target.checked) {
+      this.defaultActiveParticipant = index;
+    } else {
+      this.defaultActiveParticipant = undefined;
+    }
+
     this.dirty = true;
     this.render(false);
   }

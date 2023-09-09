@@ -6,6 +6,10 @@
     "portrait": "Portrait",
     "portraitHint": "Portrait of the conversation participant.",
 
+    "linkedJournal": "Linked Journal",
+    "linkedJournalHint": "Journal entry that will be linked to the conversation participant.",
+    "noLinkedJournal": "No linked journal",
+
     "conversationName": "Conversation Name",
     "conversationParticipants": "Conversation Participants",
 
@@ -26,7 +30,34 @@
 
     "dropActor": "Drop actor here to add them to the conversation",
 
-    "anonymous": "Anonymous"
+    "anonymous": "Anonymous",
+    "active": "Active",
+    "banner": "Banner",
+    "details": "Details",
+    "actions": "Actions",
+
+    "invalidDocumentRef": "Invalid document reference"
+  },
+
+  "CHUD.dialogue": {
+    "onCloseActiveConversation": {
+      "title": "Are you sure?",
+      "content": "Are you sure you want to close this conversation? Any unsaved changes will be lost.",
+      "confirm": "Yes",
+      "reject": "No"
+    },
+    "onRemoveParticipant": {
+      "title": "Are you sure?",
+      "content": "Are you sure you want to remove this participant from the currently active conversation?",
+      "confirm": "Yes",
+      "reject": "No"
+    },
+    "unsavedChanges": {
+      "title": "Unsaved Changes",
+      "content": "The conversation contains unsaved changes. Do you wish to save them?",
+      "confirm": "Save Changes",
+      "reject": "Discard Changes"
+    }
   },
 
   "CHUD.actions": {
@@ -36,6 +67,7 @@
     "activateConversation": "Activate Conversation",
     "createConversation": "Create Conversation",
     "startConversation": "Start Conversation",
+    "closeConversation": "Close Conversation",
 
     "saveConversation": "Save Conversation",
 
@@ -115,7 +147,9 @@
     "insufficientRights": "Insufficient user rights.",
     "featureNotEnabled": "Feature is currently disabled. Enabled it in the settings if you wish to use it.",
 
-    "noLibWrapper": "ConversationHUD requires the libWrapper module for full functionality. Please install and activate it."
+    "noLibWrapper": "ConversationHUD requires the libWrapper module for full functionality. Please install and activate it.",
+
+    "invalidJournalEntry": "Invalid journal entry provided, please make sure that the provided journal entry is valid and has not been removed."
   },
 
   "CHUD.warnings": {

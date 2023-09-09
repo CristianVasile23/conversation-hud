@@ -12,6 +12,8 @@ import {
   displayDragAndDropIndicator,
   getDragAndDropIndex,
   setDefaultDataForParticipant,
+  getConfirmationFromUser,
+  checkIfCameraDockOnBottomOrTop,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -30,9 +32,6 @@ export class ConversationHud {
     this.dropzoneVisible = false;
     this.draggingParticipant = false;
 
-    // Register local hooks
-    Hooks.on("toggleConversation", this.onToggleConversation.bind(this));
-
     // Register socket hooks
     this.registerSocketFunctions();
 
@@ -48,7 +47,6 @@ export class ConversationHud {
       socket.register("removeConversation", this.removeConversation);
 
       socket.register("getActiveConversation", this.getActiveConversation);
-      socket.register("setActiveConversation", this.setActiveConversation);
       socket.register("updateActiveConversation", this.updateActiveConversation);
 
       socket.register("setActiveParticipant", this.setActiveParticipant);
@@ -81,6 +79,7 @@ export class ConversationHud {
 
     // Render templates
     const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
+      hasDock: checkIfCameraDockOnBottomOrTop(),
       participants: conversationData.participants,
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
@@ -285,11 +284,6 @@ export class ConversationHud {
     return game.ConversationHud.conversationIsVisible;
   }
 
-  // Function that sets the data of the currently active conversation
-  setActiveConversation(conversationData) {
-    game.ConversationHud.activeConversation = conversationData;
-  }
-
   // Function that updates the data of the currently active conversation
   async updateActiveConversation(conversationData) {
     // Set conversation data
@@ -297,6 +291,7 @@ export class ConversationHud {
 
     // Render template
     const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
+      hasDock: checkIfCameraDockOnBottomOrTop(),
       participants: conversationData.participants,
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
@@ -412,22 +407,36 @@ export class ConversationHud {
     }
   }
 
+  // Function that handles conversation being closed
+  handleCloseActiveConversation() {
+    getConfirmationFromUser("CHUD.dialogue.onCloseActiveConversation", () => {
+      game.ConversationHud.onToggleConversation(false);
+    });
+  }
+
   // Function that removes a participant from the active conversation
   removeParticipantFromActiveConversation(index) {
     if (checkIfUserGM()) {
-      // Check to see if the removed participant is the active one
-      // Otherwise, check to see if the removed participant is before the active one, in which case
-      // we need to update the active participant index by lowering it by one
-      if (game.ConversationHud.activeConversation.activeParticipant === index) {
-        game.ConversationHud.activeConversation.activeParticipant = -1;
-      } else if (index < game.ConversationHud.activeConversation.activeParticipant) {
-        game.ConversationHud.activeConversation.activeParticipant -= 1;
+      if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
+        console.error("ConversationHUD | Tried to update a participant with an invalid index");
+        return;
       }
 
-      // Remove participant with the given index
-      game.ConversationHud.activeConversation.participants.splice(index, 1);
+      getConfirmationFromUser("CHUD.dialogue.onRemoveParticipant", () => {
+        // Check to see if the removed participant is the active one
+        // Otherwise, check to see if the removed participant is before the active one, in which case
+        // we need to update the active participant index by lowering it by one
+        if (game.ConversationHud.activeConversation.activeParticipant === index) {
+          game.ConversationHud.activeConversation.activeParticipant = -1;
+        } else if (index < game.ConversationHud.activeConversation.activeParticipant) {
+          game.ConversationHud.activeConversation.activeParticipant -= 1;
+        }
 
-      socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
+        // Remove participant with the given index
+        game.ConversationHud.activeConversation.participants.splice(index, 1);
+
+        socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
+      });
     }
   }
 
@@ -442,13 +451,14 @@ export class ConversationHud {
       const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
         name: game.ConversationHud.activeConversation.participants[index].name,
         img: game.ConversationHud.activeConversation.participants[index].img,
+        linkedJournal: game.ConversationHud.activeConversation.participants[index].linkedJournal,
         faction: game.ConversationHud.activeConversation.participants[index].faction,
       });
       fileInputForm.render(true);
     }
   }
 
-  // Function that saves the active conversation to a clipboard
+  // Function that saves the active conversation to a journal entry
   async saveActiveConversation() {
     if (checkIfUserGM()) {
       if (game.ConversationHud.activeConversation) {
@@ -467,7 +477,7 @@ export class ConversationHud {
             const formElement = html[0].querySelector("form");
             const formData = new FormDataExtended(formElement);
             const formDataObject = formData.object;
-            this.#handleConversationSave(formDataObject);
+            this.#handleSaveConversation(formDataObject);
           },
           rejectClose: false,
         });
@@ -483,11 +493,25 @@ export class ConversationHud {
   }
 
   // Function that can be called from a macro in order to trigger a conversation
-  startConversationFromData(participants) {
+  startConversationFromData(data) {
     if (checkIfUserGM()) {
       let conversationData = {};
-      conversationData.participants = participants;
+
       conversationData.activeParticipant = -1;
+      conversationData.defaultActiveParticipant = undefined;
+
+      if (data instanceof Array) {
+        conversationData.participants = data;
+      } else {
+        const participants = data.participants;
+        const defaultActiveParticipant = data.defaultActiveParticipant;
+        if (participants) {
+          conversationData.participants = participants;
+          if (typeof defaultActiveParticipant !== "undefined") {
+            conversationData.defaultActiveParticipant = defaultActiveParticipant;
+          }
+        }
+      }
 
       if (this.activeConversation) {
         this.#handleConversationUpdateData(conversationData);
@@ -581,9 +605,46 @@ export class ConversationHud {
     }
   }
 
-  async #handleConversationSave(data) {
+  // Function that displays the linked notes of the participant at the given index
+  async displayLinkedParticipantNotes(index) {
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
+        console.error("ConversationHUD | Tried to update a participant with an invalid index");
+        return;
+      }
+
+      const linkedJournal = game.ConversationHud.activeConversation.participants[index].linkedJournal;
+      if (linkedJournal) {
+        game.ConversationHud.renderJournalSheet(linkedJournal);
+      }
+    }
+  }
+
+  // Function that received a journal id and renders the referenced document in a separate sheet
+  async renderJournalSheet(journalId) {
+    let journal = game.journal.get(journalId);
+
+    if (!journal) {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.invalidJournalEntry"));
+    } else {
+      // Handler for MEJ so that the referenced document is displayed in a separate popup sheet and not the regular MEJ journal
+      if (game.modules.get("monks-enhanced-journal")?.active) {
+        if (game.MonksEnhancedJournal.getMEJType(journal)) {
+          if (journal instanceof JournalEntry) {
+            journal = journal.pages.contents[0];
+          }
+          game.MonksEnhancedJournal.fixType(journal);
+        }
+      }
+
+      journal.sheet.render(true);
+    }
+  }
+
+  async #handleSaveConversation(data) {
     const permissions = {};
     game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
+
     const newConversationSheet = await JournalEntry.create({
       name: data.name || "New Conversation",
       folder: data.folder || "",
@@ -596,9 +657,13 @@ export class ConversationHud {
     });
 
     if (newConversationSheet) {
+      const dataToSave = {
+        defaultActiveParticipant: game.ConversationHud.activeConversation.defaultActiveParticipant,
+        participants: game.ConversationHud.activeConversation.participants,
+      };
       await newConversationSheet.createEmbeddedDocuments("JournalEntryPage", [
         {
-          text: { content: JSON.stringify(this.activeConversation.participants) },
+          text: { content: JSON.stringify(dataToSave) },
           name: "Conversation Participants",
           flags: {
             "conversation-hud": { type: "conversation" },
@@ -637,7 +702,11 @@ export class ConversationHud {
 
     let parsedData = {};
     parsedData.activeParticipant = -1;
+    if (typeof formData.defaultActiveParticipant !== "undefined") {
+      parsedData.activeParticipant = formData.defaultActiveParticipant;
+    }
     parsedData.participants = formData.participants;
+    parsedData.defaultActiveParticipant = formData.defaultActiveParticipant;
 
     socket.executeForEveryone("renderConversation", parsedData, true);
 
@@ -649,7 +718,11 @@ export class ConversationHud {
   #handleConversationUpdateData(formData) {
     let parsedData = {};
     parsedData.activeParticipant = -1;
+    if (typeof formData.defaultActiveParticipant !== "undefined") {
+      parsedData.activeParticipant = formData.defaultActiveParticipant;
+    }
     parsedData.participants = formData.participants;
+    parsedData.defaultActiveParticipant = formData.defaultActiveParticipant;
 
     socket.executeForEveryone("updateActiveConversation", parsedData);
   }

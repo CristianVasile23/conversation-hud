@@ -1,7 +1,14 @@
 <div class="participants-list">
   {{#if participants}}
+    <div class="participants-list-header">
+      <p class="active-by-default">{{localize 'CHUD.strings.active'}}</p>
+      <p class="faction">{{localize 'CHUD.strings.banner'}}</p>
+      <p class="details">{{localize 'CHUD.strings.details'}}</p>
+      <p class="controls">{{localize 'CHUD.strings.actions'}}</p>
+    </div>
+
     <div id="conversation-participants-list">
-      {{#each participants as |participant|}}
+      {{#each participants as |participant index|}}
         <div class="participant-drag-drop-container">
           <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
 
@@ -12,6 +19,8 @@
                 class="drag-drop-handler fa-solid fa-arrows-up-down-left-right"
                 draggable="true"
               ></i>
+
+              <input id="participant-active-by-default" type="checkbox" {{#if (eq index ../defaultActiveParticipant)}}checked="checked"{{/if}}>
             {{/if}}
 
             {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
@@ -28,6 +37,8 @@
               {{else}}
                 <p class="faction">{{localize 'CHUD.faction.unaffiliated'}}</p>
               {{/if}}
+
+              {{{renderParticipantLinkedJournal participant.linkedJournal}}}
             </div>
             
             {{#if ../isGM}}

@@ -1,3 +1,37 @@
+.conversation-entry-sheet .participants-list-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.conversation-entry-sheet .participants-list-header p {
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--color-text-dark-secondary);
+}
+
+.conversation-entry-sheet .participants-list-header .active-by-default {
+  margin-left: 28px;
+}
+
+.conversation-entry-sheet .participants-list-header .faction {
+  margin-left: 14px;
+}
+
+.conversation-entry-sheet .participants-list-header .details {
+  margin-left: 14px;
+}
+
+.conversation-entry-sheet .participants-list-header .controls {
+  margin-left: auto;
+  margin-right: 24px;
+}
+
 .conversation-entry-sheet .participants-list {
   display: flex;
   flex-flow: column;

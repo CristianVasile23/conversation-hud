@@ -13,6 +13,7 @@ export class ConversationInputForm extends FormApplication {
     super();
     this.callbackFunction = callbackFunction;
     this.participants = [];
+    this.defaultActiveParticipant = undefined;
 
     this.dropzoneVisible = false;
     this.draggingParticipant = false;
@@ -35,6 +36,7 @@ export class ConversationInputForm extends FormApplication {
     return {
       isGM: game.user.isGM,
       participants: this.participants,
+      defaultActiveParticipant: this.defaultActiveParticipant,
     };
   }
 
@@ -131,7 +133,21 @@ export class ConversationInputForm extends FormApplication {
 
             // Reorder the array
             moveInArray(this.participants, oldIndex, newIndex);
-            this.dirty = true;
+
+            // Update active participant index
+            const defaultActiveParticipantIndex = this.defaultActiveParticipant;
+            if (defaultActiveParticipantIndex === oldIndex) {
+              this.defaultActiveParticipant = newIndex;
+            } else {
+              if (defaultActiveParticipantIndex > oldIndex && defaultActiveParticipantIndex <= newIndex) {
+                this.defaultActiveParticipant -= 1;
+              }
+              if (defaultActiveParticipantIndex < oldIndex && defaultActiveParticipantIndex >= newIndex) {
+                this.defaultActiveParticipant += 1;
+              }
+            }
+
+            // Update sheet
             this.render(false);
           } else {
             console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
@@ -140,22 +156,23 @@ export class ConversationInputForm extends FormApplication {
           this.draggingParticipant = false;
         };
 
+        // Bind function to the set active by default checkbox
+        conversationParticipants[i].querySelector("#participant-active-by-default").onchange = (event) =>
+          this.#handleSetDefaultActiveParticipant(event, i);
+
         // Bind functions to the edit and remove buttons
         const controls = conversationParticipants[i].querySelector(".controls-wrapper");
-        controls.querySelector("#participant-clone-button").onclick = () => {
-          const clonedParticipant = this.participants[i];
-          this.participants.push(clonedParticipant);
-          this.render(false);
-        };
+        controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
+        controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
+            linkedJournal: this.participants[i].linkedJournal,
             faction: this.participants[i].faction,
           });
           fileInputForm.render(true);
         };
-        controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
       }
     }
   }
@@ -167,6 +184,7 @@ export class ConversationInputForm extends FormApplication {
     // Data type is added as a way of future-proofing the code
     parsedData.type = 0;
     parsedData.participants = this.participants;
+    parsedData.defaultActiveParticipant = this.defaultActiveParticipant;
 
     // Pass data to conversation class
     this.callbackFunction(parsedData);
@@ -186,6 +204,24 @@ export class ConversationInputForm extends FormApplication {
 
   #handleRemoveParticipant(index) {
     this.participants.splice(index, 1);
+    this.render(false);
+  }
+
+  #handleCloneParticipant(index) {
+    const clonedParticipant = this.participants[index];
+    this.participants.push(clonedParticipant);
+    this.render(false);
+  }
+
+  #handleSetDefaultActiveParticipant(event, index) {
+    if (!event.target) return;
+
+    if (event.target.checked) {
+      this.defaultActiveParticipant = index;
+    } else {
+      this.defaultActiveParticipant = undefined;
+    }
+
     this.render(false);
   }
 }
