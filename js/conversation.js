@@ -410,7 +410,7 @@ export class ConversationHud {
 
   // Function that handles conversation being closed
   handleCloseActiveConversation() {
-    getConfirmationFromUser("CHUD.dialogue.onCloseActiveConversation", () => {
+    return getConfirmationFromUser("CHUD.dialogue.onCloseActiveConversation", () => {
       game.ConversationHud.onToggleConversation(false);
     });
   }
