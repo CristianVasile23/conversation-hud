@@ -1,3 +1,6 @@
+import { MODULE_NAME } from "./constants.js";
+import { ModuleSettings } from "./settings.js";
+
 Hooks.on("chatMessage", (chatLog, message, chatData) => {
   // Check to see if the message is a command, in which case we ignore it
   if (message[0] === "/") return true;
@@ -37,24 +40,28 @@ Hooks.on("chatMessage", (chatLog, message, chatData) => {
 
 // Hook that injects scene conversation HTML into the scene config screen
 Hooks.on("renderSceneConfig", async (app, html, data) => {
-  const conversations = game.journal.filter((item) => item.flags.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet");
-  const linkedConversation = data.data["flags"]["conversation-hud"]?.sceneConversation || undefined;
+  if (game.settings.get(MODULE_NAME, ModuleSettings.enableSceneConversations)) {
+    const conversations = game.journal.filter((item) => item.flags.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet");
+    const linkedConversation = data.data["flags"]["conversation-hud"]?.sceneConversation || undefined;
 
-  const renderedHtml = await renderTemplate("modules/conversation-hud/templates/fragments/scene_conversation_selector.hbs", {
-    conversations: conversations,
-    linkedConversation: linkedConversation,
-  });
+    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/fragments/scene_conversation_selector.hbs", {
+      conversations: conversations,
+      linkedConversation: linkedConversation,
+    });
 
-  html.find('div[data-tab="ambience"] > .form-group').last().after(renderedHtml);
-  app.setPosition({ height: "auto" });
+    html.find('div[data-tab="ambience"] > .form-group').last().after(renderedHtml);
+    app.setPosition({ height: "auto" });
+  }
 });
 
 // Hook that starts a conversation if there is one associated to the currently active scene
 Hooks.on("updateScene", (scene, data, options) => {
-  if (scene.active) {
-    const journalId = scene["flags"]["conversation-hud"]?.sceneConversation;
-    if (journalId) {
-      game.ConversationHud.startConversationFromJournalId(journalId);
+  if (game.settings.get(MODULE_NAME, ModuleSettings.enableSceneConversations)) {
+    if (scene.active) {
+      const journalId = scene["flags"]["conversation-hud"]?.sceneConversation;
+      if (journalId) {
+        game.ConversationHud.startConversationFromJournalId(journalId);
+      }
     }
   }
 });
