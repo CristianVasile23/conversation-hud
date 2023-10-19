@@ -14,6 +14,7 @@ import {
   setDefaultDataForParticipant,
   getConfirmationFromUser,
   checkIfCameraDockOnBottomOrTop,
+  getConversationDataFromJournalId,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -490,6 +491,13 @@ export class ConversationHud {
   updateActivateHudButton(status) {
     ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = status;
     ui.controls.render();
+  }
+
+  startConversationFromJournalId(journalId) {
+    const conversationData = getConversationDataFromJournalId(journalId);
+    if (conversationData) {
+      game.ConversationHud.startConversationFromData(conversationData);
+    }
   }
 
   // Function that can be called from a macro in order to trigger a conversation

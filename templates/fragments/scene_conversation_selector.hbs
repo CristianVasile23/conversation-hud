@@ -1,0 +1,26 @@
+<hr>
+<div class="form-group">
+  <label>{{localize 'CHUD.strings.sceneConversation.title'}}</label>
+  <div class="form-fields">
+    <select name="flags.conversation-hud.sceneConversation">
+      {{#select linkedConversation}}
+        <option value=""></option>
+        {{#each conversations}}
+          <option value="{{ this.id }}">{{ this.name }}</option>
+        {{/each}}
+      {{/select}}
+    </select>
+
+    <button
+      type="button"
+      class="capture-position"
+      id="activate-conversation"
+      title="{{localize 'CHUD.actions.activateConversation'}}"
+      onclick="game.ConversationHud.startConversationFromJournalId('{{linkedConversation}}')"
+      {{#unless linkedConversation}} disabled {{/unless}}
+    >
+      <i class="fas fa-eye fa-fw"></i>
+    </button>
+  </div>
+  <p class="notes">{{localize 'CHUD.strings.sceneConversation.hint'}}</p>
+</div>

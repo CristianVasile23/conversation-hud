@@ -36,7 +36,12 @@
     "details": "Details",
     "actions": "Actions",
 
-    "invalidDocumentRef": "Invalid document reference"
+    "invalidDocumentRef": "Invalid document reference",
+
+    "sceneConversation": {
+      "title": "Scene Conversation",
+      "hint": "A linked conversation that will activate automatically whenever the scene is activated."
+    }
   },
 
   "CHUD.dialogue": {
