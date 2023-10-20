@@ -5,6 +5,7 @@ export const ModuleSettings = {
   portraitAnchor: "portraitAnchor",
   enableMinimize: "enableMinimize",
   enableSpeakAs: "enableSpeakAs",
+  enableSceneConversations: "enableSceneConversations",
   activeParticipantFontSize: "activeParticipantFontSize",
   activeParticipantFactionFontSize: "activeParticipantFactionFontSize",
   rpgUiFix: "rpgUiFix",
@@ -54,6 +55,16 @@ export function registerSettings() {
   game.settings.register(MODULE_NAME, ModuleSettings.enableMinimize, {
     name: game.i18n.localize(`CHUD.settings.enableMinimize.name`),
     hint: game.i18n.localize(`CHUD.settings.enableMinimize.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: Boolean,
+    default: true,
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.enableSceneConversations, {
+    name: game.i18n.localize(`CHUD.settings.enableSceneConversations.name`),
+    hint: game.i18n.localize(`CHUD.settings.enableSceneConversations.hint`),
     scope: "world",
     config: true,
     requiresReload: true,

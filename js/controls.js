@@ -7,12 +7,18 @@ Hooks.on("getSceneControlButtons", (controls) => {
         title: game.i18n.localize("CHUD.actions.activateHUD"),
         icon: "fas fa-comments",
         toggle: true,
-        active: game.ConversationHud.conversationIsActive,
+        active: game.ConversationHud.conversationIsActive || false,
         visible: game.user.isGM,
         onClick: (toggle) => {
           if (toggle) {
             game.ConversationHud.onToggleConversation(true);
           } else {
+            // Update the controls to be active again as we have yet to receive the user's decision
+            ui.controls.controls
+              .find((controls) => controls.name === "notes")
+              .tools.find((tools) => tools.name === "activateHud").active = true;
+
+            // Display conversation closing confirmation dialog
             game.ConversationHud.handleCloseActiveConversation();
           }
         },
