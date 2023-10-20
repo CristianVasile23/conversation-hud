@@ -1,3 +1,8 @@
+## 5.2.0
+
+- Added the option to link a conversation to a scene. This option can be found in the _Scene Config_ screen on the _Ambience_ tab. Linked conversations will open automatically whenever the scene is activated.
+- Fixed a bug that caused the _Activate Conversation_ button to be toggled off before the user confirmed their selection in the dialogue popup.
+
 ## 5.1.0
 
 - Added the option to select a participant that will be enabled by default when a conversation is started
