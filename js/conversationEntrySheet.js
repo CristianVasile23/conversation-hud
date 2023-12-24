@@ -356,7 +356,7 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   #handleCloneParticipant(index) {
-    const clonedParticipant = this.participants[i];
+    const clonedParticipant = this.participants[index];
     this.participants.push(clonedParticipant);
     this.dirty = true;
     this.render(false);

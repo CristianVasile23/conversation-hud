@@ -1,18 +1,21 @@
 /* ----- Banner configuration ----- */
 /* #region */
-.participant-add-edit-form .banner-configuration {
+.participant-add-edit-form .banner-configuration,
+.conversation-faction-sheet .banner-configuration {
   display: flex;
   flex-direction: row;
 }
 
-.participant-add-edit-form .banner-options {
+.participant-add-edit-form .banner-options,
+.conversation-faction-sheet .banner-options {
   display: flex;
   flex-direction: row;
   align-items: center;
   flex: 1 !important;
 }
 
-.participant-add-edit-form .banner-options .banner-shape-button {
+.participant-add-edit-form .banner-options .banner-shape-button,
+.conversation-faction-sheet .banner-options .banner-shape-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -25,11 +28,13 @@
   margin-left: 4px;
   margin-right: 4px;
 }
-.participant-add-edit-form .banner-options .banner-shape-button.active {
+.participant-add-edit-form .banner-options .banner-shape-button.active,
+.conversation-faction-sheet .banner-options .banner-shape-button.active {
   background-color: var(--color-border-highlight);
 }
 
-.participant-add-edit-form .banner-options button img {
+.participant-add-edit-form .banner-options button img,
+.conversation-faction-sheet .banner-options button img {
   border: none;
   height: 20px;
   width: auto;
@@ -38,7 +43,8 @@
 
 /* ----- Banner preview ----- */
 /* #region */
-.participant-add-edit-form .banner-preview-wrapper {
+.participant-add-edit-form .banner-preview-wrapper,
+.conversation-faction-sheet .banner-preview-wrapper {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -50,7 +56,8 @@
   padding: 5px;
 }
 
-.participant-add-edit-form .banner-preview-wrapper .banner-preview-image {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image,
+.conversation-faction-sheet .banner-preview-wrapper .banner-preview-image {
   width: 165px;
   height: 165px;
   position: relative;
@@ -61,18 +68,22 @@
   background: rgba(0, 0, 0, 0.05);
 }
 
-.participant-add-edit-form .banner-preview-wrapper .banner-preview-image img {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image img,
+.conversation-faction-sheet .banner-preview-wrapper .banner-preview-image img {
   border: 0;
 }
 
-.participant-add-edit-form .banner-preview-wrapper .banner-preview-image #banner-preview-flag {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image #banner-preview-flag,
+.conversation-faction-sheet .banner-preview-wrapper .banner-preview-image #banner-preview-flag {
   display: none;
 }
-.participant-add-edit-form .banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-flag {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-flag,
+.conversation-faction-sheet .banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-flag {
   display: block;
 }
 
-.participant-add-edit-form .banner-preview-wrapper .banner-preview-image #banner-preview-logo {
+.participant-add-edit-form .banner-preview-wrapper .banner-preview-image #banner-preview-logo,
+.conversation-faction-sheet .banner-preview-wrapper .banner-preview-image #banner-preview-logo {
   position: absolute;
 
   top: 0;
@@ -85,18 +96,21 @@
 
   margin: auto;
 }
-.banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-logo {
+.banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-logo,
+.conversation-faction-sheet .banner-preview-image.has-banner #banner-preview-logo {
   top: 30px;
   bottom: unset;
 
   max-width: 70px;
   max-height: 70px;
 }
-.banner-preview-wrapper .banner-preview-image #banner-preview-logo[src=""] {
+.banner-preview-wrapper .banner-preview-image #banner-preview-logo[src=""],
+.conversation-faction-sheet .banner-preview-image #banner-preview-logo[src=""] {
   display: none;
 }
 
-.participant-add-edit-form .banner-preview-wrapper .no-banner-preview-text {
+.participant-add-edit-form .banner-preview-wrapper .no-banner-preview-text,
+.conversation-faction-sheet .banner-preview-wrapper .no-banner-preview-text {
   display: flex;
   align-items: center;
   justify-content: center;

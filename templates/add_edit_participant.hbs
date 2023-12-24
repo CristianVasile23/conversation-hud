@@ -16,8 +16,10 @@
     {{> "modules/conversation-hud/templates/fragments/participant_data_config_tab.hbs" participantName=participantName participantImg=participantImg}}
 
     {{!-- FACTION CONFIG TAB --}}
-    {{> "modules/conversation-hud/templates/fragments/faction_data_config_tab.hbs" displayFaction=displayFaction factionName=factionName factionLogo=factionLogo factionBannerEnabled=factionBannerEnabled factionBannerShape=factionBannerShape factionBannerTint=factionBannerTint}}
-  </div>
+    <div class="tab" data-tab="faction-config">
+      {{> "modules/conversation-hud/templates/fragments/faction_data_config_tab.hbs" displayFaction=displayFaction factionName=factionName factionLogo=factionLogo factionBannerEnabled=factionBannerEnabled factionBannerShape=factionBannerShape factionBannerTint=factionBannerTint}}
+    </div>
+ </div>
 
   {{!-- FOOTER --}}
   <footer class="sheet-footer flexrow">

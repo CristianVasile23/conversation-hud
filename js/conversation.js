@@ -1,6 +1,7 @@
 import { ConversationInputForm } from "./formConversationInput.js";
 import { FileInputForm } from "./formAddParticipant.js";
 import { ConversationEntrySheet } from "./conversationEntrySheet.js";
+import { ConversationFactionSheet } from "./sheets/FactionSheet.js";
 import {
   checkIfConversationActive,
   checkIfUserGM,
@@ -68,6 +69,12 @@ export class ConversationHud {
       types: ["base"],
       makeDefault: false,
       label: game.i18n.localize("CHUD.sheets.entrySheet"),
+    });
+
+    DocumentSheetConfig.registerSheet(JournalEntry, "conversation-faction-sheet", ConversationFactionSheet, {
+      types: ["base"],
+      makeDefault: false,
+      label: game.i18n.localize("CHUD.sheets.factionSheet"),
     });
   }
 
@@ -507,6 +514,8 @@ export class ConversationHud {
 
       conversationData.activeParticipant = -1;
       conversationData.defaultActiveParticipant = undefined;
+
+      console.log(data);
 
       if (data instanceof Array) {
         conversationData.participants = data;
