@@ -128,3 +128,12 @@
   color: var(--color-text-dark-primary);
 }
 /* #endregion */
+
+/* ----- View only ----- */
+/* #region */
+.participant-add-edit-form .view-only .banner-shape-button:disabled,
+.conversation-faction-sheet .view-only .banner-shape-button:disabled {
+  opacity: 0.65;
+  cursor: initial;
+}
+/* #endregion */

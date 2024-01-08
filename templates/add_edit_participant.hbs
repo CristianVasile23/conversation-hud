@@ -14,7 +14,10 @@
   <div>
     {{!-- PARTICIPANT CONFIG TAB --}}
     <div class="tab" data-tab="participant-config">
-      {{> "modules/conversation-hud/templates/fragments/participant_data_config_tab.hbs" participantName=participantName participantImg=participantImg}}
+      {{> "modules/conversation-hud/templates/fragments/participant_data_config_tab.hbs"
+        participantName=participantName
+        participantImg=participantImg
+      }}
     </div>
 
     {{!-- FACTION CONFIG TAB --}}
@@ -46,7 +49,15 @@
 
       <hr>
 
-      {{> "modules/conversation-hud/templates/fragments/faction_data_config_tab.hbs" displayFaction=displayFaction factionName=factionName factionLogo=factionLogo factionBannerEnabled=factionBannerEnabled factionBannerShape=factionBannerShape factionBannerTint=factionBannerTint}}
+      {{> "modules/conversation-hud/templates/fragments/faction_data_config_tab.hbs"
+        displayFaction=displayFaction
+        factionName=factionName
+        factionLogo=factionLogo
+        factionBannerEnabled=factionBannerEnabled
+        factionBannerShape=factionBannerShape
+        factionBannerTint=factionBannerTint
+        hasSelectedFaction=selectedFaction
+      }}
     </div>
  </div>
 
