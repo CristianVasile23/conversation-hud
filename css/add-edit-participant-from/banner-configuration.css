@@ -131,9 +131,17 @@
 
 /* ----- View only ----- */
 /* #region */
-.participant-add-edit-form .view-only .banner-shape-button:disabled,
-.conversation-faction-sheet .view-only .banner-shape-button:disabled {
+.participant-add-edit-form .view-only .banner-shape-button,
+.conversation-faction-sheet .view-only .banner-shape-button {
   opacity: 0.65;
   cursor: initial;
+  pointer-events: none;
+}
+
+.participant-add-edit-form .view-only input,
+.conversation-faction-sheet .view-only input {
+  pointer-events: none;
+  border: none;
+  color: var(--color-text-dark-secondary);
 }
 /* #endregion */
