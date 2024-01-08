@@ -13,10 +13,39 @@
   {{!-- CONTENT --}}
   <div>
     {{!-- PARTICIPANT CONFIG TAB --}}
-    {{> "modules/conversation-hud/templates/fragments/participant_data_config_tab.hbs" participantName=participantName participantImg=participantImg}}
+    <div class="tab" data-tab="participant-config">
+      {{> "modules/conversation-hud/templates/fragments/participant_data_config_tab.hbs" participantName=participantName participantImg=participantImg}}
+    </div>
 
     {{!-- FACTION CONFIG TAB --}}
     <div class="tab" data-tab="faction-config">
+      {{!-- Saved factions select --}}
+      <div class="form-group">
+        <label>{{localize 'CHUD.faction.factionSelector.title'}}</label>
+        <div class="form-fields">
+          <select name="selectedFaction">
+            {{#select selectedFaction}}
+              <option value="">New Faction</option>
+              {{#each savedFactions}}
+                <option value="{{ this.id }}">{{ this.name }}</option>
+              {{/each}}
+            {{/select}}
+          </select>
+        </div>
+        <p class="notes">{{localize "CHUD.faction.factionSelector.hint"}}</p>
+      </div>
+
+      {{!-- Faction display toggle --}}
+      <div class="form-group">
+        <label>{{localize "CHUD.faction.displayFaction.name"}}</label>
+        <div class="form-fields">
+          <input type="checkbox" name="displayFaction" {{checked displayFaction}}>
+        </div>
+        <p class="notes">{{localize "CHUD.faction.displayFaction.hint"}}</p>
+      </div>
+
+      <hr>
+
       {{> "modules/conversation-hud/templates/fragments/faction_data_config_tab.hbs" displayFaction=displayFaction factionName=factionName factionLogo=factionLogo factionBannerEnabled=factionBannerEnabled factionBannerShape=factionBannerShape factionBannerTint=factionBannerTint}}
     </div>
  </div>

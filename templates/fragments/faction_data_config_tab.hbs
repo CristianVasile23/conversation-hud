@@ -1,27 +1,3 @@
-{{!-- <div class="form-group">
-  <label>{{localize 'CHUD.faction.factionSelector.title'}}</label>
-  <div class="form-fields">
-    <select name="flags.conversation-hud.sceneConversation">
-      {{#select linkedConversation}}
-        <option value=""></option>
-        {{#each conversations}}
-          <option value="{{ this.id }}">{{ this.name }}</option>
-        {{/each}}
-      {{/select}}
-    </select>
-  </div>
-  <p class="notes">{{localize "CHUD.faction.factionSelector.hint"}}</p>
-</div> --}}
-
-{{!-- Faction display toggle --}}
-<div class="form-group">
-  <label>{{localize "CHUD.faction.displayFaction.name"}}</label>
-  <div class="form-fields">
-    <input type="checkbox" name="displayFaction" {{checked displayFaction}}>
-  </div>
-  <p class="notes">{{localize "CHUD.faction.displayFaction.hint"}}</p>
-</div>
-
 {{!-- Faction name --}}
 <div class="form-group">
   <label>{{localize "CHUD.faction.factionName.name"}}</label>
@@ -30,8 +6,6 @@
   </div>
   <p class="notes">{{localize "CHUD.faction.factionName.hint"}}</p>
 </div>
-
-<hr>
 
 <div class="banner-configuration">
   {{!-- Banner config --}}

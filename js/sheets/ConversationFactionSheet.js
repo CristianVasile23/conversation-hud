@@ -54,9 +54,6 @@ export class ConversationFactionSheet extends JournalSheet {
       return;
     }
 
-    const displayFactionToggle = html.find("[name=displayFaction]")[0];
-    displayFactionToggle.addEventListener("change", (event) => this.onToggleFactionDisplay(event));
-
     const factionNameInput = html.find("[name=factionName]")[0];
     factionNameInput.addEventListener("change", (event) => this.onUpdateFactionName(event));
 

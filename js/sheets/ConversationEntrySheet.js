@@ -1,4 +1,4 @@
-import { FileInputForm } from "./formAddParticipant.js";
+import { FileInputForm } from "../formAddParticipant.js";
 import {
   getActorDataFromDragEvent,
   moveInArray,
@@ -7,7 +7,7 @@ import {
   getDragAndDropIndex,
   setDefaultDataForParticipant,
   getConfirmationFromUser,
-} from "./helpers.js";
+} from "../helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
   constructor(data, options) {

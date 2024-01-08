@@ -1,3 +1,5 @@
+import { getConversationDataFromJournalId } from "./helpers.js";
+
 export class FileInputForm extends FormApplication {
   constructor(isEditing, callbackFunction, participantData) {
     super();
@@ -13,6 +15,7 @@ export class FileInputForm extends FormApplication {
     this.linkedJournal = participantData?.linkedJournal || "";
 
     // Faction data
+    this.selectedFaction = participantData?.faction?.selectedFaction || "";
     this.displayFaction = participantData?.faction?.displayFaction || false;
     this.factionName = participantData?.faction?.factionName || "";
     this.factionLogo = participantData?.faction?.factionLogo || "";
@@ -45,6 +48,9 @@ export class FileInputForm extends FormApplication {
     participantImgInput.addEventListener("change", (event) => this.onUpdateParticipantImg(event));
 
     // Listeners in the faction form
+    const selectedFaction = html.find("[name=selectedFaction]")[0];
+    selectedFaction.addEventListener("change", (event) => this.onChangeSelectedFaction(event));
+
     const displayFactionToggle = html.find("[name=displayFaction]")[0];
     displayFactionToggle.addEventListener("change", (event) => this.onToggleFactionDisplay(event));
 
@@ -77,6 +83,26 @@ export class FileInputForm extends FormApplication {
     });
     journals.sort((a, b) => a.name.localeCompare(b.name));
 
+    // Get a list of all the saved factions
+    const savedFactions = game.journal.filter(
+      (item) => item.flags.core?.sheetClass === "conversation-faction-sheet.ConversationFactionSheet"
+    );
+
+    let selectedFactionData = {
+      displayFaction: this.displayFaction,
+      factionName: this.factionName,
+      factionLogo: this.factionLogo,
+      factionBannerEnabled: this.factionBannerEnabled,
+      factionBannerShape: this.factionBannerShape,
+      factionBannerTint: this.factionBannerTint,
+    };
+
+    if (this.selectedFaction) {
+      const factionData = getConversationDataFromJournalId(this.selectedFaction);
+      selectedFactionData = factionData.faction;
+      this.factionBannerShape = factionData.faction.factionBannerShape;
+    }
+
     return {
       isEditing: this.isEditing,
       participantData: this.participantData,
@@ -84,14 +110,18 @@ export class FileInputForm extends FormApplication {
       participantName: this.participantName,
       participantImg: this.participantImg,
 
+      selectedFaction: this.selectedFaction,
+
       displayFaction: this.displayFaction,
-      factionName: this.factionName,
-      factionLogo: this.factionLogo,
-      factionBannerEnabled: this.factionBannerEnabled,
-      factionBannerShape: this.factionBannerShape,
-      factionBannerTint: this.factionBannerTint,
+      factionName: selectedFactionData.factionName,
+      factionLogo: selectedFactionData.factionLogo,
+      factionBannerEnabled: selectedFactionData.factionBannerEnabled,
+      factionBannerShape: selectedFactionData.factionBannerShape,
+      factionBannerTint: selectedFactionData.factionBannerTint,
 
       linkedJournal: this.linkedJournal,
+
+      savedFactions: savedFactions,
       journals: journals,
     };
   }
@@ -102,6 +132,7 @@ export class FileInputForm extends FormApplication {
       img: formData.participantImg,
       linkedJournal: formData.linkedJournal,
       faction: {
+        selectedFaction: formData.selectedFaction,
         displayFaction: formData.displayFaction,
         factionName: formData.factionName,
         factionLogo: formData.factionImg,
@@ -124,6 +155,23 @@ export class FileInputForm extends FormApplication {
     if (!event.target) return;
 
     this.participantImg = event.target.value;
+  }
+
+  onChangeSelectedFaction(event) {
+    if (!event.target) return;
+
+    this.selectedFaction = event.target.value;
+
+    // If the new value is the 'Create New Faction' option, reset the form data
+    if (event.target.value === "") {
+      this.factionName = "";
+      this.factionLogo = "";
+      this.factionBannerEnabled = false;
+      this.factionBannerShape = "shape-1";
+      this.factionBannerTint = "#000000";
+    }
+
+    this.render(false);
   }
 
   onToggleFactionDisplay(event) {
