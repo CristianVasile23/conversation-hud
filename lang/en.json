@@ -21,6 +21,7 @@
 
     "conversationEntry": "Conversation Entry",
     "participantData": "Conversation Participant Data",
+    "factionData": "Conversation Faction Data",
 
     "unsavedChanges": "Unsaved Changes",
     "unsavedChangesHint": "The conversation contains unsaved changes. Do you wish to save them?",
@@ -75,6 +76,8 @@
     "closeConversation": "Close Conversation",
 
     "saveConversation": "Save Conversation",
+    "saveFaction": "Save Faction",
+    "exportFaction": "Export Faction",
 
     "toggleSpeakAs": "Toggle Speak As",
     "toggleVisibility": "Toggle Visibility",
@@ -97,6 +100,10 @@
   },
 
   "CHUD.faction": {
+    "factionSelector": {
+      "name": "Faction Selector",
+      "hint": "Create a new faction or select an already existing one."
+    },
     "displayFaction": {
       "name": "Display Faction",
       "hint": "Toggle the display of the faction to which the participant belongs to."
@@ -130,7 +137,8 @@
   },
 
   "CHUD.sheets": {
-    "entrySheet": "Conversation Entry Sheet"
+    "entrySheet": "Conversation Entry Sheet",
+    "factionSheet": "Conversation Faction Sheet"
   },
 
   "CHUD.errors": {

@@ -11,6 +11,17 @@
         value="{{factionName}}"
         {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
       />
+
+      {{#unless hasSelectedFaction}}
+        <button
+          type="button"
+          id="exportFaction"
+          name="exportFaction"
+          title="{{localize 'CHUD.actions.exportFaction'}}"
+        >
+          <i class="fa fa-save"></i>
+        </button>
+      {{/unless}}
     </div>
     <p class="notes">{{localize "CHUD.faction.factionName.hint"}}</p>
   </div>

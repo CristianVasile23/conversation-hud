@@ -145,3 +145,19 @@
   color: var(--color-text-dark-secondary);
 }
 /* #endregion */
+
+/* ----- Faction export button ----- */
+/* #region */
+.participant-add-edit-form #exportFaction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0;
+  width: 36px;
+  height: 28px;
+}
+
+.conversation-faction-sheet #exportFaction {
+  display: none;
+}
+/* #endregion */

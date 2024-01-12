@@ -1,4 +1,5 @@
 import { getConversationDataFromJournalId } from "./helpers.js";
+import { ConversationFactionSheet } from "./sheets/ConversationFactionSheet.js";
 
 export class FileInputForm extends FormApplication {
   constructor(isEditing, callbackFunction, participantData) {
@@ -74,6 +75,13 @@ export class FileInputForm extends FormApplication {
     for (const button of bannerShapeButtons) {
       const buttonId = button.getAttribute("id");
       button.addEventListener("click", () => this.onUpdateBannerShape(buttonId));
+    }
+
+    // Faction save button
+    const exportFaction = html.find("[name=exportFaction]")[0];
+    console.log(exportFaction);
+    if (exportFaction) {
+      exportFaction.addEventListener("click", () => this.saveFaction());
     }
   }
 
@@ -210,5 +218,70 @@ export class FileInputForm extends FormApplication {
 
     this.factionBannerTint = event.target.value;
     this.render(false);
+  }
+
+  // Function that saves the active conversation to a journal entry
+  async saveFaction() {
+    // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
+    const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
+    const dialogContent = await renderTemplate("modules/conversation-hud/templates/conversation_save.hbs", {
+      folders,
+      name: game.i18n.format("DOCUMENT.New", { type: "Faction Sheet" }),
+    });
+
+    return Dialog.prompt({
+      title: "Save Faction",
+      content: dialogContent,
+      label: "Save Faction",
+      callback: (html) => {
+        console.log();
+        const formElement = html[0].querySelector("form");
+        const formData = new FormDataExtended(formElement);
+        const formDataObject = formData.object;
+        this.#handleSaveFaction(formDataObject);
+      },
+      rejectClose: false,
+    });
+  }
+
+  async #handleSaveFaction(data) {
+    const permissions = {};
+    game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
+
+    const newFactionSheet = await JournalEntry.create({
+      name: data.name || "New Faction",
+      folder: data.folder || "",
+      flags: {
+        core: {
+          sheetClass: `conversation-faction-sheet.${ConversationFactionSheet.name}`,
+        },
+      },
+      ownership: permissions,
+    });
+
+    if (newFactionSheet) {
+      const dataToSave = {
+        faction: {
+          displayFaction: false,
+          factionName: this.factionName,
+          factionLogo: this.factionLogo,
+          factionBannerEnabled: this.factionBannerEnabled,
+          factionBannerShape: this.factionBannerShape,
+          factionBannerTint: this.factionBannerTint,
+        },
+      };
+      await newFactionSheet.createEmbeddedDocuments("JournalEntryPage", [
+        {
+          text: { content: JSON.stringify(dataToSave) },
+          name: "Faction Sheet",
+          flags: {
+            "conversation-hud": { type: "faction" },
+          },
+        },
+      ]);
+      ui.notifications.info(game.i18n.localize("CHUD.info.saveSuccessful"));
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.saveUnsuccessful"));
+    }
   }
 }
