@@ -66,20 +66,22 @@
         </div>
       {{/each}}
     {{else}}
-      {{#each participants as |participant index|}}
-        <div class="conversation-participant-wrapper">
-          {{!-- Participant --}}
-          <div class="conversation-participant" data-tooltip="{{participant.name}}">
-            <img class="portrait {{../portraitAnchor}}" src="{{participant.img}}" alt="image" />
-            <p class="name">{{participant.name}}</p>
-          </div>
+      {{#if displayParticipantsToPlayers}}
+        {{#each participants as |participant index|}}
+          <div class="conversation-participant-wrapper">
+            {{!-- Participant --}}
+            <div class="conversation-participant" data-tooltip="{{participant.name}}">
+              <img class="portrait {{../portraitAnchor}}" src="{{participant.img}}" alt="image" />
+              <p class="name">{{participant.name}}</p>
+            </div>
 
-          {{!-- Faction wrapper --}}
-          <div data-tooltip="{{participant.faction.factionName}}" style="align-self: flex-start;">
-            {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
+            {{!-- Faction wrapper --}}
+            <div data-tooltip="{{participant.faction.factionName}}" style="align-self: flex-start;">
+              {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
+            </div>
           </div>
-        </div>
-      {{/each}}
+        {{/each}}
+      {{/if}}
     {{/if}}
     
     {{!-- GMs also have an add participant button that needs to be rendered inside the list --}}

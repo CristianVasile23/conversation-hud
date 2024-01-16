@@ -92,8 +92,10 @@ export class ConversationHud {
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
       portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+      displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
     });
+
     const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
       isGM: game.user.isGM,
       isMinimized: game.ConversationHud.conversationIsMinimized,
@@ -304,6 +306,7 @@ export class ConversationHud {
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
       portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+      displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
     });
 
@@ -362,14 +365,20 @@ export class ConversationHud {
 
   // Function that changes the active participant image
   async changeActiveImage(index) {
-    const activeParticipantTemplate = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
-      displayParticipant: index === -1 ? false : true,
-      participant: game.ConversationHud.activeConversation.participants[index],
-      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
-      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
-      activeParticipantFactionFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFactionFontSize),
-    });
+    const activeParticipantTemplate = await renderTemplate(
+      "modules/conversation-hud/templates/fragments/active_participant.hbs",
+      {
+        displayParticipant: index === -1 ? false : true,
+        participant: game.ConversationHud.activeConversation.participants[index],
+        portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+        portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+        activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+        activeParticipantFactionFontSize: game.settings.get(
+          MODULE_NAME,
+          ModuleSettings.activeParticipantFactionFontSize
+        ),
+      }
+    );
 
     const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
     activeParticipantAnchorPoint.innerHTML = activeParticipantTemplate;
@@ -496,7 +505,9 @@ export class ConversationHud {
   }
 
   updateActivateHudButton(status) {
-    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = status;
+    ui.controls.controls
+      .find((controls) => controls.name === "notes")
+      .tools.find((tools) => tools.name === "activateHud").active = status;
     ui.controls.render();
   }
 

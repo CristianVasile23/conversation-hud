@@ -192,6 +192,10 @@
         "bottom": "Bottom"
       }
     },
+    "displayAllParticipantsToPlayers": {
+      "name": "Display Participants List",
+      "hint": "Toggle whether or not to display the list of all the conversation participants to the players. The GM will still be able to see this list."
+    },
     "enableSpeakAs": {
       "name": "Enable Speak As",
       "hint": "Toggle the Speak As feature on or off. By default, the feature is on, but if you do not use it and do not want an extra button to appear, you can toggle it off."

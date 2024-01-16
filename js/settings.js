@@ -3,6 +3,7 @@ import { MODULE_NAME } from "./constants.js";
 export const ModuleSettings = {
   portraitStyle: "portraitStyle",
   portraitAnchor: "portraitAnchor",
+  displayAllParticipantsToPlayers: "displayAllParticipantsToPlayers",
   enableMinimize: "enableMinimize",
   enableSpeakAs: "enableSpeakAs",
   enableSceneConversations: "enableSceneConversations",
@@ -40,6 +41,16 @@ export function registerSettings() {
       center: game.i18n.localize(`CHUD.settings.portraitAnchor.choices.center`),
       bottom: game.i18n.localize(`CHUD.settings.portraitAnchor.choices.bottom`),
     },
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers, {
+    name: game.i18n.localize(`CHUD.settings.displayAllParticipantsToPlayers.name`),
+    hint: game.i18n.localize(`CHUD.settings.displayAllParticipantsToPlayers.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: Boolean,
+    default: true,
   });
 
   game.settings.register(MODULE_NAME, ModuleSettings.enableSpeakAs, {
