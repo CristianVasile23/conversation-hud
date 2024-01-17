@@ -1,4 +1,5 @@
 import { FileInputForm } from "./formAddParticipant.js";
+import { PullParticipantsForm } from "./formPullParticipants.js";
 import {
   getActorDataFromDragEvent,
   moveInArray,
@@ -41,6 +42,16 @@ export class ConversationInputForm extends FormApplication {
   }
 
   activateListeners(html) {
+    // Add event listener on the pull participants from scene button
+    html.find("#pull-participants-from-scene").click(async (e) => {
+      const pullParticipantsForm = new PullParticipantsForm((data) => {
+        for (const participant of data) {
+          this.#handleAddParticipant(participant);
+        }
+      });
+      return pullParticipantsForm.render(true);
+    });
+
     // Add event listener on the add participant button
     html.find("#add-participant").click(async (e) => {
       const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));

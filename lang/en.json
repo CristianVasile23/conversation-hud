@@ -42,7 +42,9 @@
     "sceneConversation": {
       "title": "Scene Conversation",
       "hint": "A linked conversation that will activate automatically whenever the scene is activated."
-    }
+    },
+
+    "sceneActors": "Actors in scene"
   },
 
   "CHUD.dialogue": {
@@ -91,7 +93,16 @@
       "clone": "Clone Participant",
       "edit": "Edit Participant",
       "delete": "Delete Participant"
-    }
+    },
+
+    "selection": {
+      "selectAll": "Select All",
+      "selectVisible": "Select Visible",
+      "deselectAll": "Deselect All"
+    },
+
+    "pullParticipants": "Pull Participants from Scene",
+    "addActors": "Add Actors"
   },
 
   "CHUD.tabs": {
