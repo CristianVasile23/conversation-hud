@@ -1,5 +1,6 @@
 import { ConversationInputForm } from "./formConversationInput.js";
 import { FileInputForm } from "./formAddParticipant.js";
+import { PullParticipantsForm } from "./formPullParticipants.js";
 import { ConversationEntrySheet } from "./sheets/ConversationEntrySheet.js";
 import { ConversationFactionSheet } from "./sheets/ConversationFactionSheet.js";
 import {
@@ -16,6 +17,7 @@ import {
   getConfirmationFromUser,
   checkIfCameraDockOnBottomOrTop,
   getConversationDataFromJournalId,
+  convertActorToParticipant,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -404,6 +406,26 @@ export class ConversationHud {
     }
   }
 
+  // Function that adds an actor to the active conversation
+  addActorToActiveConversation(actorId) {
+    if (checkIfUserGM()) {
+      const actor = game.actors.get(actorId);
+      const participant = convertActorToParticipant(actor);
+      this.#handleAddParticipant(participant);
+    }
+  }
+
+  // Function that adds multiple actors to active conversation
+  addActorsToActiveConversation(arrayOfActorIds) {
+    if (checkIfUserGM()) {
+      for (const actorId of arrayOfActorIds) {
+        const actor = game.actors.get(actorId);
+        const participant = convertActorToParticipant(actor);
+        this.#handleAddParticipant(participant);
+      }
+    }
+  }
+
   // Function that handles drag and drop order rearrangement of conversation participants
   async handleParticipantDrop(event) {
     if (checkIfUserGM()) {
@@ -664,6 +686,18 @@ export class ConversationHud {
       }
 
       journal.sheet.render(true);
+    }
+  }
+
+  // Function that pulls actors from the current scene
+  pullActorsFromScene() {
+    if (checkIfUserGM()) {
+      const pullParticipantsForm = new PullParticipantsForm((data) => {
+        for (const participant of data) {
+          this.#handleAddParticipant(participant);
+        }
+      });
+      return pullParticipantsForm.render(true);
     }
   }
 

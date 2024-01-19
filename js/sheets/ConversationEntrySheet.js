@@ -1,4 +1,5 @@
 import { FileInputForm } from "../formAddParticipant.js";
+import { PullParticipantsForm } from "../formPullParticipants.js";
 import {
   getActorDataFromDragEvent,
   moveInArray,
@@ -71,6 +72,15 @@ export class ConversationEntrySheet extends JournalSheet {
     html.find("#save-conversation").click(async (e) => this.#handleSaveConversation());
 
     html.find("#show-conversation").click(async (e) => this.#handleShowConversation());
+
+    html.find("#pull-participants-from-scene").click(async (e) => {
+      const pullParticipantsForm = new PullParticipantsForm((data) => {
+        for (const participant of data) {
+          this.#handleAddParticipant(participant);
+        }
+      });
+      return pullParticipantsForm.render(true);
+    });
 
     html.find("#add-participant").click(async (e) => {
       const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));

@@ -1,3 +1,5 @@
+import { EMPTY_FACTION } from "./constants.js";
+
 export class PullParticipantsForm extends FormApplication {
   constructor(callbackFunction) {
     super();
@@ -43,7 +45,13 @@ export class PullParticipantsForm extends FormApplication {
     const selectedParticipants = [];
     for (const participant of this.participants) {
       if (participant.checked) {
-        selectedParticipants.push(participant);
+        const parsedParticipant = {
+          faction: EMPTY_FACTION,
+          img: participant.img,
+          linkedJournal: "",
+          name: participant.name,
+        };
+        selectedParticipants.push(parsedParticipant);
       }
     }
     this.callbackFunction(selectedParticipants);
