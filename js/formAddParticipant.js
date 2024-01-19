@@ -79,7 +79,6 @@ export class FileInputForm extends FormApplication {
 
     // Faction save button
     const exportFaction = html.find("[name=exportFaction]")[0];
-    console.log(exportFaction);
     if (exportFaction) {
       exportFaction.addEventListener("click", () => this.saveFaction());
     }
@@ -234,7 +233,6 @@ export class FileInputForm extends FormApplication {
       content: dialogContent,
       label: "Save Faction",
       callback: (html) => {
-        console.log();
         const formElement = html[0].querySelector("form");
         const formData = new FormDataExtended(formElement);
         const formDataObject = formData.object;
