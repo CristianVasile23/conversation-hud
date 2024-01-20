@@ -7,6 +7,7 @@ import {
   displayDragAndDropIndicator,
   getDragAndDropIndex,
   setDefaultDataForParticipant,
+  updateParticipantFactionBasedOnSelectedFaction,
 } from "./helpers.js";
 
 export class ConversationInputForm extends FormApplication {
@@ -34,6 +35,12 @@ export class ConversationInputForm extends FormApplication {
   }
 
   getData() {
+    for (const participant of this.participants) {
+      if (participant.faction.selectedFaction) {
+        updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+    }
+
     return {
       isGM: game.user.isGM,
       participants: this.participants,
@@ -209,6 +216,11 @@ export class ConversationInputForm extends FormApplication {
 
   #handleAddParticipant(data) {
     setDefaultDataForParticipant(data);
+
+    if (data.faction.selectedFaction) {
+      updateParticipantFactionBasedOnSelectedFaction(data);
+    }
+
     this.participants.push(data);
     this.render(false);
   }

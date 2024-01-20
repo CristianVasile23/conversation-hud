@@ -24,6 +24,14 @@ Hooks.on("chatMessage", (chatLog, message, chatData) => {
   // Get active participant
   const participant = game.ConversationHud.activeConversation.participants[activeParticipant];
 
+  // Additional check if using tabbed-chatlog to see if the OOC tab is selected, in which case
+  // we render the original unchanged message
+  if (game.modules.get("tabbed-chatlog")?.active) {
+    if ($(".tabbedchatlog a.active").hasClass("ooc")) {
+      return true;
+    }
+  }
+
   // Remove leading commands if there are any
   message = message.replace(/\\n/g, "<br>");
   let newChatData = {

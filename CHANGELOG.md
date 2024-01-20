@@ -1,3 +1,11 @@
+## 5.3.0
+
+- Added a new sheet used for CHUD factions. You can now save created factions into their respective sheets, which can then be assigned to conversation participants. This means you can now create a faction, save it, and then easily assign it to multiple participants using the _Faction Selector_ dropdown found in the _Faction Config_ tab.
+- Added the option to pull scene actors into a conversation. By using the _Pull Participants from Scene_ button, you can select which actors are present in the current scene to pull into the conversation.
+- Added the option to hide the conversation participants list for the players, who will only be able to see the currently active speaker. This feature can be toggled on or off in the module settings.
+- Fixed the missing message type when using the _Speak As_ feature.
+- Small UI improvements and fixes.
+
 ## 5.2.0
 
 - Added the option to link a conversation to a scene. This option can be found in the _Scene Config_ screen on the _Ambience_ tab. Linked conversations will open automatically whenever the scene is activated.
@@ -5,18 +13,18 @@
 
 ## 5.1.0
 
-- Added the option to select a participant that will be enabled by default when a conversation is started
-- Added the option to link journal entries to participants (MEJ entries supported)
-- Added an additional button to the conversation controls that closes the currently active conversation
-- Added confirmation dialogues when trying to close an active conversation or when trying to delete a participant in an active conversation
-- Fixed an issue which caused UI elements to overflow when using the top or bottom position for the camera dock
-- Fixed an issue which caused the conversation sheet display to close before the user could confirm if they wanted to keep or discard the unsaved changes (affected MEJ users only)
-- Small UX and UI improvements
+- Added the option to select a participant that will be enabled by default when a conversation is started.
+- Added the option to link journal entries to participants (MEJ entries supported).
+- Added an additional button to the conversation controls that closes the currently active conversation.
+- Added confirmation dialogues when trying to close an active conversation or when trying to delete a participant in an active conversation.
+- Fixed an issue which caused UI elements to overflow when using the top or bottom position for the camera dock.
+- Fixed an issue which caused the conversation sheet display to close before the user could confirm if they wanted to keep or discard the unsaved changes (affected MEJ users only).
+- Small UX and UI improvements.
 
 ## 5.0.2
 
-- Fixed a bug that caused the faction of the active participant to not be hidden when conversation visibility was toggled off
-- Fixed an issue that caused the _No participant text_ to be mispositioned
+- Fixed a bug that caused the faction of the active participant to not be hidden when conversation visibility was toggled off.
+- Fixed an issue that caused the _No participant text_ to be mispositioned.
 
 ## 5.0.1
 

@@ -8,6 +8,7 @@ import {
   getDragAndDropIndex,
   setDefaultDataForParticipant,
   getConfirmationFromUser,
+  updateParticipantFactionBasedOnSelectedFaction,
 } from "../helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
@@ -219,6 +220,12 @@ export class ConversationEntrySheet extends JournalSheet {
   getData(options) {
     const baseData = super.getData(options);
 
+    for (const participant of this.participants) {
+      if (participant.faction.selectedFaction) {
+        updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+    }
+
     const data = {
       isGM: game.user.isGM,
       dirty: this.dirty,
@@ -353,6 +360,10 @@ export class ConversationEntrySheet extends JournalSheet {
 
   #handleAddParticipant(data) {
     setDefaultDataForParticipant(data);
+
+    if (data.faction.selectedFaction) {
+      updateParticipantFactionBasedOnSelectedFaction(data);
+    }
 
     this.participants.push(data);
     this.dirty = true;

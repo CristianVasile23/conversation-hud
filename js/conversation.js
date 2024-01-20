@@ -18,6 +18,7 @@ import {
   checkIfCameraDockOnBottomOrTop,
   getConversationDataFromJournalId,
   convertActorToParticipant,
+  updateParticipantFactionBasedOnSelectedFaction,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -86,6 +87,13 @@ export class ConversationHud {
     game.ConversationHud.conversationIsActive = true;
     game.ConversationHud.conversationIsVisible = conversationVisible;
     game.ConversationHud.activeConversation = conversationData;
+
+    // Update faction banners
+    for (const participant of conversationData.participants) {
+      if (participant.faction.selectedFaction) {
+        updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+    }
 
     // Render templates
     const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
@@ -300,6 +308,13 @@ export class ConversationHud {
   async updateActiveConversation(conversationData) {
     // Set conversation data
     game.ConversationHud.activeConversation = conversationData;
+
+    // Update faction banners
+    for (const participant of conversationData.participants) {
+      if (participant.faction.selectedFaction) {
+        updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+    }
 
     // Render template
     const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
@@ -739,6 +754,10 @@ export class ConversationHud {
   // Function that adds a single participant to the active conversation
   #handleAddParticipant(data) {
     setDefaultDataForParticipant(data);
+
+    if (data.faction.selectedFaction) {
+      updateParticipantFactionBasedOnSelectedFaction(data);
+    }
 
     // Push participant to the active conversation then update all the others
     game.ConversationHud.activeConversation.participants.push(data);
