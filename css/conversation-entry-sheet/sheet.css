@@ -1,6 +1,7 @@
 /* ----- Header ----- */
 /* #region */
-.conversation-entry-sheet .header {
+.conversation-entry-sheet .header,
+.conversation-faction-sheet .header {
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -10,7 +11,8 @@
   flex: 0;
 }
 
-.conversation-entry-sheet .header > input {
+.conversation-entry-sheet .header > input,
+.conversation-faction-sheet .header > input {
   background: none !important;
   border: 1px solid transparent !important;
 
@@ -18,11 +20,14 @@
   font-size: 1.5em !important;
 }
 .conversation-entry-sheet .header > input:hover,
-.conversation-entry-sheet .header > input:focus {
+.conversation-entry-sheet .header > input:focus,
+.conversation-faction-sheet .header > input:hover,
+.conversation-faction-sheet .header > input:focus {
   box-shadow: none !important;
 }
 
-.conversation-entry-sheet .header > p {
+.conversation-entry-sheet .header > p,
+.conversation-faction-sheet .header > p {
   display: flex;
   align-items: center;
   flex: 3;
@@ -39,7 +44,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  flex: 0;
+  flex: 0 0 32px;
   width: 32px;
   height: 32px;
 }

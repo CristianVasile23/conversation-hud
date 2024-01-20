@@ -24,11 +24,20 @@ Hooks.on("chatMessage", (chatLog, message, chatData) => {
   // Get active participant
   const participant = game.ConversationHud.activeConversation.participants[activeParticipant];
 
+  // Additional check if using tabbed-chatlog to see if the OOC tab is selected, in which case
+  // we render the original unchanged message
+  if (game.modules.get("tabbed-chatlog")?.active) {
+    if ($(".tabbedchatlog a.active").hasClass("ooc")) {
+      return true;
+    }
+  }
+
   // Remove leading commands if there are any
   message = message.replace(/\\n/g, "<br>");
   let newChatData = {
     content: message,
     ...chatData,
+    type: CONST.CHAT_MESSAGE_TYPES.IC,
   };
   newChatData.speaker.alias = participant.name;
   newChatData.speaker.actor = null;
@@ -41,13 +50,18 @@ Hooks.on("chatMessage", (chatLog, message, chatData) => {
 // Hook that injects scene conversation HTML into the scene config screen
 Hooks.on("renderSceneConfig", async (app, html, data) => {
   if (game.settings.get(MODULE_NAME, ModuleSettings.enableSceneConversations)) {
-    const conversations = game.journal.filter((item) => item.flags.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet");
+    const conversations = game.journal.filter(
+      (item) => item.flags.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet"
+    );
     const linkedConversation = data.data["flags"]["conversation-hud"]?.sceneConversation || undefined;
 
-    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/fragments/scene_conversation_selector.hbs", {
-      conversations: conversations,
-      linkedConversation: linkedConversation,
-    });
+    const renderedHtml = await renderTemplate(
+      "modules/conversation-hud/templates/fragments/scene_conversation_selector.hbs",
+      {
+        conversations: conversations,
+        linkedConversation: linkedConversation,
+      }
+    );
 
     html.find('div[data-tab="ambience"] > .form-group').last().after(renderedHtml);
     app.setPosition({ height: "auto" });

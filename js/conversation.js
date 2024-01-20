@@ -1,6 +1,8 @@
 import { ConversationInputForm } from "./formConversationInput.js";
 import { FileInputForm } from "./formAddParticipant.js";
-import { ConversationEntrySheet } from "./conversationEntrySheet.js";
+import { PullParticipantsForm } from "./formPullParticipants.js";
+import { ConversationEntrySheet } from "./sheets/ConversationEntrySheet.js";
+import { ConversationFactionSheet } from "./sheets/ConversationFactionSheet.js";
 import {
   checkIfConversationActive,
   checkIfUserGM,
@@ -15,6 +17,8 @@ import {
   getConfirmationFromUser,
   checkIfCameraDockOnBottomOrTop,
   getConversationDataFromJournalId,
+  convertActorToParticipant,
+  updateParticipantFactionBasedOnSelectedFaction,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { MODULE_NAME } from "./constants.js";
@@ -69,6 +73,12 @@ export class ConversationHud {
       makeDefault: false,
       label: game.i18n.localize("CHUD.sheets.entrySheet"),
     });
+
+    DocumentSheetConfig.registerSheet(JournalEntry, "conversation-faction-sheet", ConversationFactionSheet, {
+      types: ["base"],
+      makeDefault: false,
+      label: game.i18n.localize("CHUD.sheets.factionSheet"),
+    });
   }
 
   // Function that renders the conversation hud
@@ -78,6 +88,13 @@ export class ConversationHud {
     game.ConversationHud.conversationIsVisible = conversationVisible;
     game.ConversationHud.activeConversation = conversationData;
 
+    // Update faction banners
+    for (const participant of conversationData.participants) {
+      if (participant.faction.selectedFaction) {
+        updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+    }
+
     // Render templates
     const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
       hasDock: checkIfCameraDockOnBottomOrTop(),
@@ -85,8 +102,10 @@ export class ConversationHud {
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
       portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+      displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
     });
+
     const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
       isGM: game.user.isGM,
       isMinimized: game.ConversationHud.conversationIsMinimized,
@@ -290,6 +309,13 @@ export class ConversationHud {
     // Set conversation data
     game.ConversationHud.activeConversation = conversationData;
 
+    // Update faction banners
+    for (const participant of conversationData.participants) {
+      if (participant.faction.selectedFaction) {
+        updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+    }
+
     // Render template
     const renderedHtml = await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
       hasDock: checkIfCameraDockOnBottomOrTop(),
@@ -297,6 +323,7 @@ export class ConversationHud {
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
       portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+      displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
     });
 
@@ -355,14 +382,20 @@ export class ConversationHud {
 
   // Function that changes the active participant image
   async changeActiveImage(index) {
-    const activeParticipantTemplate = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
-      displayParticipant: index === -1 ? false : true,
-      participant: game.ConversationHud.activeConversation.participants[index],
-      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
-      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
-      activeParticipantFactionFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFactionFontSize),
-    });
+    const activeParticipantTemplate = await renderTemplate(
+      "modules/conversation-hud/templates/fragments/active_participant.hbs",
+      {
+        displayParticipant: index === -1 ? false : true,
+        participant: game.ConversationHud.activeConversation.participants[index],
+        portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+        portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
+        activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+        activeParticipantFactionFontSize: game.settings.get(
+          MODULE_NAME,
+          ModuleSettings.activeParticipantFactionFontSize
+        ),
+      }
+    );
 
     const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
     activeParticipantAnchorPoint.innerHTML = activeParticipantTemplate;
@@ -385,6 +418,26 @@ export class ConversationHud {
     if (checkIfUserGM()) {
       const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));
       fileInputForm.render(true);
+    }
+  }
+
+  // Function that adds an actor to the active conversation
+  addActorToActiveConversation(actorId) {
+    if (checkIfUserGM()) {
+      const actor = game.actors.get(actorId);
+      const participant = convertActorToParticipant(actor);
+      this.#handleAddParticipant(participant);
+    }
+  }
+
+  // Function that adds multiple actors to active conversation
+  addActorsToActiveConversation(arrayOfActorIds) {
+    if (checkIfUserGM()) {
+      for (const actorId of arrayOfActorIds) {
+        const actor = game.actors.get(actorId);
+        const participant = convertActorToParticipant(actor);
+        this.#handleAddParticipant(participant);
+      }
     }
   }
 
@@ -489,7 +542,9 @@ export class ConversationHud {
   }
 
   updateActivateHudButton(status) {
-    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = status;
+    ui.controls.controls
+      .find((controls) => controls.name === "notes")
+      .tools.find((tools) => tools.name === "activateHud").active = status;
     ui.controls.render();
   }
 
@@ -649,6 +704,18 @@ export class ConversationHud {
     }
   }
 
+  // Function that pulls actors from the current scene
+  pullActorsFromScene() {
+    if (checkIfUserGM()) {
+      const pullParticipantsForm = new PullParticipantsForm((data) => {
+        for (const participant of data) {
+          this.#handleAddParticipant(participant);
+        }
+      });
+      return pullParticipantsForm.render(true);
+    }
+  }
+
   async #handleSaveConversation(data) {
     const permissions = {};
     game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
@@ -687,6 +754,10 @@ export class ConversationHud {
   // Function that adds a single participant to the active conversation
   #handleAddParticipant(data) {
     setDefaultDataForParticipant(data);
+
+    if (data.faction.selectedFaction) {
+      updateParticipantFactionBasedOnSelectedFaction(data);
+    }
 
     // Push participant to the active conversation then update all the others
     game.ConversationHud.activeConversation.participants.push(data);

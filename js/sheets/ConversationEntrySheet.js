@@ -1,4 +1,5 @@
-import { FileInputForm } from "./formAddParticipant.js";
+import { FileInputForm } from "../formAddParticipant.js";
+import { PullParticipantsForm } from "../formPullParticipants.js";
 import {
   getActorDataFromDragEvent,
   moveInArray,
@@ -7,7 +8,8 @@ import {
   getDragAndDropIndex,
   setDefaultDataForParticipant,
   getConfirmationFromUser,
-} from "./helpers.js";
+  updateParticipantFactionBasedOnSelectedFaction,
+} from "../helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
   constructor(data, options) {
@@ -71,6 +73,15 @@ export class ConversationEntrySheet extends JournalSheet {
     html.find("#save-conversation").click(async (e) => this.#handleSaveConversation());
 
     html.find("#show-conversation").click(async (e) => this.#handleShowConversation());
+
+    html.find("#pull-participants-from-scene").click(async (e) => {
+      const pullParticipantsForm = new PullParticipantsForm((data) => {
+        for (const participant of data) {
+          this.#handleAddParticipant(participant);
+        }
+      });
+      return pullParticipantsForm.render(true);
+    });
 
     html.find("#add-participant").click(async (e) => {
       const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));
@@ -209,6 +220,12 @@ export class ConversationEntrySheet extends JournalSheet {
   getData(options) {
     const baseData = super.getData(options);
 
+    for (const participant of this.participants) {
+      if (participant.faction.selectedFaction) {
+        updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+    }
+
     const data = {
       isGM: game.user.isGM,
       dirty: this.dirty,
@@ -344,6 +361,10 @@ export class ConversationEntrySheet extends JournalSheet {
   #handleAddParticipant(data) {
     setDefaultDataForParticipant(data);
 
+    if (data.faction.selectedFaction) {
+      updateParticipantFactionBasedOnSelectedFaction(data);
+    }
+
     this.participants.push(data);
     this.dirty = true;
     this.render(false);
@@ -356,7 +377,7 @@ export class ConversationEntrySheet extends JournalSheet {
   }
 
   #handleCloneParticipant(index) {
-    const clonedParticipant = this.participants[i];
+    const clonedParticipant = this.participants[index];
     this.participants.push(clonedParticipant);
     this.dirty = true;
     this.render(false);

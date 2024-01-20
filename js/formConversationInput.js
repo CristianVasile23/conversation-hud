@@ -1,4 +1,5 @@
 import { FileInputForm } from "./formAddParticipant.js";
+import { PullParticipantsForm } from "./formPullParticipants.js";
 import {
   getActorDataFromDragEvent,
   moveInArray,
@@ -6,6 +7,7 @@ import {
   displayDragAndDropIndicator,
   getDragAndDropIndex,
   setDefaultDataForParticipant,
+  updateParticipantFactionBasedOnSelectedFaction,
 } from "./helpers.js";
 
 export class ConversationInputForm extends FormApplication {
@@ -33,6 +35,12 @@ export class ConversationInputForm extends FormApplication {
   }
 
   getData() {
+    for (const participant of this.participants) {
+      if (participant.faction.selectedFaction) {
+        updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+    }
+
     return {
       isGM: game.user.isGM,
       participants: this.participants,
@@ -41,6 +49,16 @@ export class ConversationInputForm extends FormApplication {
   }
 
   activateListeners(html) {
+    // Add event listener on the pull participants from scene button
+    html.find("#pull-participants-from-scene").click(async (e) => {
+      const pullParticipantsForm = new PullParticipantsForm((data) => {
+        for (const participant of data) {
+          this.#handleAddParticipant(participant);
+        }
+      });
+      return pullParticipantsForm.render(true);
+    });
+
     // Add event listener on the add participant button
     html.find("#add-participant").click(async (e) => {
       const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));
@@ -198,6 +216,11 @@ export class ConversationInputForm extends FormApplication {
 
   #handleAddParticipant(data) {
     setDefaultDataForParticipant(data);
+
+    if (data.faction.selectedFaction) {
+      updateParticipantFactionBasedOnSelectedFaction(data);
+    }
+
     this.participants.push(data);
     this.render(false);
   }

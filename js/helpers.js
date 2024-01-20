@@ -1,5 +1,5 @@
 import { socket } from "./init.js";
-import { MODULE_NAME } from "./constants.js";
+import { EMPTY_FACTION, MODULE_NAME } from "./constants.js";
 import { ModuleSettings } from "./settings.js";
 
 export async function getActorDataFromDragEvent(event) {
@@ -370,7 +370,10 @@ export function checkIfCameraDockOnBottomOrTop() {
   const cameraViews = document.getElementById("camera-views");
 
   if (cameraViews) {
-    if (cameraViews.classList.contains("camera-position-bottom") || cameraViews.classList.contains("camera-position-top")) {
+    if (
+      cameraViews.classList.contains("camera-position-bottom") ||
+      cameraViews.classList.contains("camera-position-top")
+    ) {
       return true;
     }
   }
@@ -397,4 +400,27 @@ export function getConversationDataFromJournalId(journalId) {
   }
 
   return null;
+}
+
+export function convertActorToParticipant(actor) {
+  const participant = {
+    faction: EMPTY_FACTION,
+    img: actor.img,
+    linkedJournal: "",
+    name: actor.name,
+  };
+
+  return participant;
+}
+
+export function updateParticipantFactionBasedOnSelectedFaction(participant) {
+  if (participant.faction.selectedFaction) {
+    const factionData = getConversationDataFromJournalId(participant.faction.selectedFaction);
+    const selectedFactionData = factionData.faction;
+    participant.faction = {
+      ...selectedFactionData,
+      displayFaction: participant.faction.displayFaction,
+      selectedFaction: participant.faction.selectedFaction,
+    };
+  }
 }

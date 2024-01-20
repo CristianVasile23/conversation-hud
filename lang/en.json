@@ -21,6 +21,7 @@
 
     "conversationEntry": "Conversation Entry",
     "participantData": "Conversation Participant Data",
+    "factionData": "Conversation Faction Data",
 
     "unsavedChanges": "Unsaved Changes",
     "unsavedChangesHint": "The conversation contains unsaved changes. Do you wish to save them?",
@@ -41,7 +42,9 @@
     "sceneConversation": {
       "title": "Scene Conversation",
       "hint": "A linked conversation that will activate automatically whenever the scene is activated."
-    }
+    },
+
+    "sceneActors": "Actors in scene"
   },
 
   "CHUD.dialogue": {
@@ -75,6 +78,8 @@
     "closeConversation": "Close Conversation",
 
     "saveConversation": "Save Conversation",
+    "saveFaction": "Save Faction",
+    "exportFaction": "Export Faction",
 
     "toggleSpeakAs": "Toggle Speak As",
     "toggleVisibility": "Toggle Visibility",
@@ -88,7 +93,16 @@
       "clone": "Clone Participant",
       "edit": "Edit Participant",
       "delete": "Delete Participant"
-    }
+    },
+
+    "selection": {
+      "selectAll": "Select All",
+      "selectVisible": "Select Visible",
+      "deselectAll": "Deselect All"
+    },
+
+    "pullParticipants": "Pull Participants from Scene",
+    "addActors": "Add Actors"
   },
 
   "CHUD.tabs": {
@@ -97,6 +111,10 @@
   },
 
   "CHUD.faction": {
+    "factionSelector": {
+      "name": "Faction Selector",
+      "hint": "Create a new faction or select an already existing one."
+    },
     "displayFaction": {
       "name": "Display Faction",
       "hint": "Toggle the display of the faction to which the participant belongs to."
@@ -130,7 +148,8 @@
   },
 
   "CHUD.sheets": {
-    "entrySheet": "Conversation Entry Sheet"
+    "entrySheet": "Conversation Entry Sheet",
+    "factionSheet": "Conversation Faction Sheet"
   },
 
   "CHUD.errors": {
@@ -183,6 +202,10 @@
         "center": "Center",
         "bottom": "Bottom"
       }
+    },
+    "displayAllParticipantsToPlayers": {
+      "name": "Display Participants List",
+      "hint": "Toggle whether or not to display the list of all the conversation participants to the players. The GM will still be able to see this list."
     },
     "enableSpeakAs": {
       "name": "Enable Speak As",

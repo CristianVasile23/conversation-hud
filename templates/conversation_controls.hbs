@@ -48,6 +48,14 @@
   {{/if}}
 
   <div
+    class="control-button"
+    onclick="game.ConversationHud.pullActorsFromScene()"
+    data-tooltip="{{localize 'CHUD.actions.pullParticipants'}}"
+  >
+    <i class="fas fa-up-from-bracket"></i>
+  </div>
+
+  <div
     class="control-button margin-top"
     onclick="game.ConversationHud.saveActiveConversation()"
     data-tooltip="{{localize 'CHUD.actions.saveConversation'}}"

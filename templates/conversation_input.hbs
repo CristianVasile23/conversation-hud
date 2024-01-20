@@ -1,6 +1,16 @@
-<form class="flexcol conversation-entry-sheet">
+<form class="flexcol conversation-entry-sheet" style="height: 100%">
   <div class="flexrow header">
     <p> {{localize 'CHUD.strings.currentParticipants'}} </p>
+
+    <button
+      type="button"
+      name="pull-participants-from-scene"
+      id="pull-participants-from-scene"
+      title="{{localize 'CHUD.actions.pullParticipants'}}"
+      class="header-action-button"
+    >
+      <i class="fas fa-up-from-bracket"></i>
+    </button>
           
     <button
       type="button"

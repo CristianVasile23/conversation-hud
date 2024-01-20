@@ -7,11 +7,19 @@
   margin-top: 5px;
   margin-bottom: 5px;
 }
+
+.conversation-faction-sheet .drag-and-drop-wrapper {
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 /* #endregion */
 
 /* ----- Dropzone ----- */
 /* #region */
-.conversation-entry-sheet .drag-and-drop-wrapper .dropzone {
+.conversation-entry-sheet .drag-and-drop-wrapper .dropzone,
+.conversation-faction-sheet .drag-and-drop-wrapper .dropzone {
   display: none;
   flex-flow: column;
   align-items: center;
@@ -28,11 +36,13 @@
   border: 5px dashed var(--color-border-light-secondary);
 }
 
-.conversation-entry-sheet .drag-and-drop-wrapper .dropzone > i {
+.conversation-entry-sheet .drag-and-drop-wrapper .dropzone > i,
+.conversation-faction-sheet .drag-and-drop-wrapper .dropzone > i {
   font-size: 60px;
 }
 
-.conversation-entry-sheet .drag-and-drop-wrapper .dropzone > p {
+.conversation-entry-sheet .drag-and-drop-wrapper .dropzone > p,
+.conversation-faction-sheet .drag-and-drop-wrapper .dropzone > p {
   color: var(--color-text-dark-secondary);
 
   margin-top: 15px;
@@ -40,17 +50,20 @@
   text-align: center;
 }
 
-.conversation-entry-sheet .drag-and-drop-wrapper .dropzone * {
+.conversation-entry-sheet .drag-and-drop-wrapper .dropzone *,
+.conversation-faction-sheet .drag-and-drop-wrapper .dropzone * {
   pointer-events: none;
 }
 /* #endregion */
 
 /* ----- Active dropzone rule overrides ----- */
 /* #region */
-.conversation-entry-sheet .drag-and-drop-wrapper.active-dropzone .dropzone {
+.conversation-entry-sheet .drag-and-drop-wrapper.active-dropzone .dropzone,
+.conversation-faction-sheet .drag-and-drop-wrapper.active-dropzone .dropzone {
   display: flex;
 }
-.conversation-entry-sheet .drag-and-drop-wrapper.active-dropzone .participants-list {
+.conversation-entry-sheet .drag-and-drop-wrapper.active-dropzone .participants-list,
+.conversation-faction-sheet .drag-and-drop-wrapper.active-dropzone .participants-list {
   display: none;
 }
 /* #endregion */

@@ -1,3 +1,6 @@
+import { getConversationDataFromJournalId } from "./helpers.js";
+import { ConversationFactionSheet } from "./sheets/ConversationFactionSheet.js";
+
 export class FileInputForm extends FormApplication {
   constructor(isEditing, callbackFunction, participantData) {
     super();
@@ -13,6 +16,7 @@ export class FileInputForm extends FormApplication {
     this.linkedJournal = participantData?.linkedJournal || "";
 
     // Faction data
+    this.selectedFaction = participantData?.faction?.selectedFaction || "";
     this.displayFaction = participantData?.faction?.displayFaction || false;
     this.factionName = participantData?.faction?.factionName || "";
     this.factionLogo = participantData?.faction?.factionLogo || "";
@@ -45,6 +49,9 @@ export class FileInputForm extends FormApplication {
     participantImgInput.addEventListener("change", (event) => this.onUpdateParticipantImg(event));
 
     // Listeners in the faction form
+    const selectedFaction = html.find("[name=selectedFaction]")[0];
+    selectedFaction.addEventListener("change", (event) => this.onChangeSelectedFaction(event));
+
     const displayFactionToggle = html.find("[name=displayFaction]")[0];
     displayFactionToggle.addEventListener("change", (event) => this.onToggleFactionDisplay(event));
 
@@ -69,6 +76,12 @@ export class FileInputForm extends FormApplication {
       const buttonId = button.getAttribute("id");
       button.addEventListener("click", () => this.onUpdateBannerShape(buttonId));
     }
+
+    // Faction save button
+    const exportFaction = html.find("[name=exportFaction]")[0];
+    if (exportFaction) {
+      exportFaction.addEventListener("click", () => this.saveFaction());
+    }
   }
 
   getData(options) {
@@ -77,6 +90,26 @@ export class FileInputForm extends FormApplication {
     });
     journals.sort((a, b) => a.name.localeCompare(b.name));
 
+    // Get a list of all the saved factions
+    const savedFactions = game.journal.filter(
+      (item) => item.flags.core?.sheetClass === "conversation-faction-sheet.ConversationFactionSheet"
+    );
+
+    let selectedFactionData = {
+      displayFaction: this.displayFaction,
+      factionName: this.factionName,
+      factionLogo: this.factionLogo,
+      factionBannerEnabled: this.factionBannerEnabled,
+      factionBannerShape: this.factionBannerShape,
+      factionBannerTint: this.factionBannerTint,
+    };
+
+    if (this.selectedFaction) {
+      const factionData = getConversationDataFromJournalId(this.selectedFaction);
+      selectedFactionData = factionData.faction;
+      this.factionBannerShape = factionData.faction.factionBannerShape;
+    }
+
     return {
       isEditing: this.isEditing,
       participantData: this.participantData,
@@ -84,14 +117,18 @@ export class FileInputForm extends FormApplication {
       participantName: this.participantName,
       participantImg: this.participantImg,
 
+      selectedFaction: this.selectedFaction,
+
       displayFaction: this.displayFaction,
-      factionName: this.factionName,
-      factionLogo: this.factionLogo,
-      factionBannerEnabled: this.factionBannerEnabled,
-      factionBannerShape: this.factionBannerShape,
-      factionBannerTint: this.factionBannerTint,
+      factionName: selectedFactionData.factionName,
+      factionLogo: selectedFactionData.factionLogo,
+      factionBannerEnabled: selectedFactionData.factionBannerEnabled,
+      factionBannerShape: selectedFactionData.factionBannerShape,
+      factionBannerTint: selectedFactionData.factionBannerTint,
 
       linkedJournal: this.linkedJournal,
+
+      savedFactions: savedFactions,
       journals: journals,
     };
   }
@@ -102,6 +139,7 @@ export class FileInputForm extends FormApplication {
       img: formData.participantImg,
       linkedJournal: formData.linkedJournal,
       faction: {
+        selectedFaction: formData.selectedFaction,
         displayFaction: formData.displayFaction,
         factionName: formData.factionName,
         factionLogo: formData.factionImg,
@@ -124,6 +162,23 @@ export class FileInputForm extends FormApplication {
     if (!event.target) return;
 
     this.participantImg = event.target.value;
+  }
+
+  onChangeSelectedFaction(event) {
+    if (!event.target) return;
+
+    this.selectedFaction = event.target.value;
+
+    // If the new value is the 'Create New Faction' option, reset the form data
+    if (event.target.value === "") {
+      this.factionName = "";
+      this.factionLogo = "";
+      this.factionBannerEnabled = false;
+      this.factionBannerShape = "shape-1";
+      this.factionBannerTint = "#000000";
+    }
+
+    this.render(false);
   }
 
   onToggleFactionDisplay(event) {
@@ -162,5 +217,69 @@ export class FileInputForm extends FormApplication {
 
     this.factionBannerTint = event.target.value;
     this.render(false);
+  }
+
+  // Function that saves the active conversation to a journal entry
+  async saveFaction() {
+    // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
+    const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
+    const dialogContent = await renderTemplate("modules/conversation-hud/templates/conversation_save.hbs", {
+      folders,
+      name: game.i18n.format("DOCUMENT.New", { type: "Faction Sheet" }),
+    });
+
+    return Dialog.prompt({
+      title: "Save Faction",
+      content: dialogContent,
+      label: "Save Faction",
+      callback: (html) => {
+        const formElement = html[0].querySelector("form");
+        const formData = new FormDataExtended(formElement);
+        const formDataObject = formData.object;
+        this.#handleSaveFaction(formDataObject);
+      },
+      rejectClose: false,
+    });
+  }
+
+  async #handleSaveFaction(data) {
+    const permissions = {};
+    game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
+
+    const newFactionSheet = await JournalEntry.create({
+      name: data.name || "New Faction",
+      folder: data.folder || "",
+      flags: {
+        core: {
+          sheetClass: `conversation-faction-sheet.${ConversationFactionSheet.name}`,
+        },
+      },
+      ownership: permissions,
+    });
+
+    if (newFactionSheet) {
+      const dataToSave = {
+        faction: {
+          displayFaction: false,
+          factionName: this.factionName,
+          factionLogo: this.factionLogo,
+          factionBannerEnabled: this.factionBannerEnabled,
+          factionBannerShape: this.factionBannerShape,
+          factionBannerTint: this.factionBannerTint,
+        },
+      };
+      await newFactionSheet.createEmbeddedDocuments("JournalEntryPage", [
+        {
+          text: { content: JSON.stringify(dataToSave) },
+          name: "Faction Sheet",
+          flags: {
+            "conversation-hud": { type: "faction" },
+          },
+        },
+      ]);
+      ui.notifications.info(game.i18n.localize("CHUD.info.saveSuccessful"));
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.saveUnsuccessful"));
+    }
   }
 }

@@ -1,0 +1,78 @@
+<form class="flexcol pull-participants-from-scene-form" style="height: 100%">
+  <div class="flexrow header">
+    <p> {{localize 'CHUD.strings.sceneActors'}} </p>
+
+    <button
+      type="button"
+      name="deselect-all"
+      id="deselect-all"
+      title="{{localize 'CHUD.actions.selection.deselectAll'}}"
+      class="header-action-button"
+    >
+      <i class="fa-regular fa-square"></i>
+    </button>
+
+    <button
+      type="button"
+      name="select-visible"
+      id="select-visible"
+      title="{{localize 'CHUD.actions.selection.selectVisible'}}"
+      class="header-action-button"
+    >
+      <i class="fa-regular fa-square-minus"></i>
+    </button>
+          
+    <button
+      type="button"
+      name="select-all"
+      id="select-all"
+      title="{{localize 'CHUD.actions.selection.selectAll'}}"
+      class="header-action-button"
+    >
+      <i class="fa-regular fa-square-check"></i>
+    </button>
+  </div>
+
+  {{!-- Actors pulled from current scene --}}
+  <div class="list-wrapper">
+    <div id="participants-pulled-from-scene">
+      {{#each participants as |participant index|}}
+        <div class="pulled-participant">
+          <div class="portrait-wrapper">
+            <img src="{{participant.img}}"/>
+          </div>
+
+          <div class="text-wrapper">
+            <p class="name">{{participant.name}}</p>
+            {{#if participant.hidden}}
+              <div class="is-hidden">
+                <i class="fa-regular fa-eye-slash"></i>
+                <p>Token is hidden</p>
+              </div>
+            {{/if}}
+          </div>
+
+          <input
+            id="pull-participant-checkbox"
+            class="pull-participant-checkbox"
+            type="checkbox"
+            {{#if participant.checked}}checked="checked"{{/if}}
+          >
+        </div>
+      {{/each}}
+    </div>
+  </div>
+
+  <div class="footer">
+    <footer class="sheet-footer flexrow">
+      <button
+        type="submit"
+        name="submit"
+        title="{{localize 'CHUD.actions.startConversation'}}"
+      >
+        <i class="fa fa-plus"></i>
+        {{localize 'CHUD.actions.addActors'}}
+      </button>
+    </footer>
+  </div>
+</form>
