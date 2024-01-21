@@ -90,7 +90,7 @@ export class ConversationHud {
 
     // Update faction banners
     for (const participant of conversationData.participants) {
-      if (participant.faction.selectedFaction) {
+      if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
       }
     }
@@ -311,7 +311,7 @@ export class ConversationHud {
 
     // Update faction banners
     for (const participant of conversationData.participants) {
-      if (participant.faction.selectedFaction) {
+      if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
       }
     }
@@ -755,7 +755,7 @@ export class ConversationHud {
   #handleAddParticipant(data) {
     setDefaultDataForParticipant(data);
 
-    if (data.faction.selectedFaction) {
+    if (data.faction?.selectedFaction) {
       updateParticipantFactionBasedOnSelectedFaction(data);
     }
 
