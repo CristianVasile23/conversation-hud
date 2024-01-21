@@ -36,7 +36,7 @@ export class ConversationInputForm extends FormApplication {
 
   getData() {
     for (const participant of this.participants) {
-      if (participant.faction.selectedFaction) {
+      if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
       }
     }
@@ -217,7 +217,7 @@ export class ConversationInputForm extends FormApplication {
   #handleAddParticipant(data) {
     setDefaultDataForParticipant(data);
 
-    if (data.faction.selectedFaction) {
+    if (data.faction?.selectedFaction) {
       updateParticipantFactionBasedOnSelectedFaction(data);
     }
 

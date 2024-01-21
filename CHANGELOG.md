@@ -1,3 +1,7 @@
+## 5.3.1
+
+- Fixed a bug that caused the drag and drop functionality to no longer work for tokens and actors.
+
 ## 5.3.0
 
 - Added a new sheet used for CHUD factions. You can now save created factions into their respective sheets, which can then be assigned to conversation participants. This means you can now create a faction, save it, and then easily assign it to multiple participants using the _Faction Selector_ dropdown found in the _Faction Config_ tab.

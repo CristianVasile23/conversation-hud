@@ -221,7 +221,7 @@ export class ConversationEntrySheet extends JournalSheet {
     const baseData = super.getData(options);
 
     for (const participant of this.participants) {
-      if (participant.faction.selectedFaction) {
+      if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
       }
     }
@@ -361,7 +361,7 @@ export class ConversationEntrySheet extends JournalSheet {
   #handleAddParticipant(data) {
     setDefaultDataForParticipant(data);
 
-    if (data.faction.selectedFaction) {
+    if (data.faction?.selectedFaction) {
       updateParticipantFactionBasedOnSelectedFaction(data);
     }
 
