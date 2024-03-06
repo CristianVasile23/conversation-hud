@@ -370,10 +370,7 @@ export function checkIfCameraDockOnBottomOrTop() {
   const cameraViews = document.getElementById("camera-views");
 
   if (cameraViews) {
-    if (
-      cameraViews.classList.contains("camera-position-bottom") ||
-      cameraViews.classList.contains("camera-position-top")
-    ) {
+    if (cameraViews.classList.contains("camera-position-bottom") || cameraViews.classList.contains("camera-position-top")) {
       return true;
     }
   }
@@ -423,4 +420,11 @@ export function updateParticipantFactionBasedOnSelectedFaction(participant) {
       selectedFaction: participant.faction.selectedFaction,
     };
   }
+}
+
+export function getPortraitAnchorObjectFromParticipant(participant) {
+  return {
+    vertical: participant?.portraitAnchor?.vertical || game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchorVertical),
+    horizontal: participant?.portraitAnchor?.horizontal || game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchorHorizontal),
+  };
 }

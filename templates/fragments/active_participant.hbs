@@ -14,7 +14,7 @@
     {{#if displayParticipant}}data-tooltip="{{participant.name}}"{{/if}}
   >
     {{#if displayParticipant}}
-      <img class="portrait {{portraitAnchor}}" src="{{participant.img}}" alt="Portrait" />
+      <img class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}" src="{{participant.img}}" alt="Portrait" style="scale: {{participant.imgScale}};"/>
       <p class="name {{activeParticipantFontSize}}">
         {{participant.name}}
       </p>

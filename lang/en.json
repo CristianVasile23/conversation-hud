@@ -6,6 +6,22 @@
     "portrait": "Portrait",
     "portraitHint": "Portrait of the conversation participant.",
 
+    "portraitScale": {
+      "name": "Portrait scale",
+      "hint": "The scale of the portrait. By default, a scale of 1 will fill the container. Lower values will decrease the size and add padding, while higher values will zoom the picture in."
+    },
+
+    "portraitAnchor": {
+      "vertical": {
+        "name": "Vertical Portrait Anchor",
+        "hint": "The vertical point which is considered the origin from which the image will begin to display."
+      },
+      "horizontal": {
+        "name": "Horizontal Portrait Anchor",
+        "hint": "The horizontal point which is considered the origin from which the image will begin to display."
+      }
+    },
+
     "linkedJournal": "Linked Journal",
     "linkedJournalHint": "Journal entry that will be linked to the conversation participant.",
     "noLinkedJournal": "No linked journal",
@@ -194,13 +210,22 @@
         "square": "Square"
       }
     },
-    "portraitAnchor": {
-      "name": "Portrait Anchor",
-      "hint": "The anchor represents a point of reference from which the portrait will begin to pe displayed. For example, with the Top option selected, the upper section of the portrait will always be displayed. This option has an impact only when the portrait displayed has an aspect ratio larger than the display area. In most cases, it shouldn't matter too much.",
+    "portraitAnchorVertical": {
+      "name": "Portrait Anchor - Vertical",
+      "hint": "The vertical anchor point of reference from which the portrait will begin to pe displayed. For example, with the Top option selected, the upper section of the portrait will always be displayed.",
       "choices": {
         "top": "Top",
         "center": "Center",
         "bottom": "Bottom"
+      }
+    },
+    "portraitAnchorHorizontal": {
+      "name": "Portrait Anchor - Horizontal",
+      "hint": "The horizontal anchor point of reference from which the portrait will begin to pe displayed. For example, with the Left option selected, the leftmost section of the portrait will always be displayed.",
+      "choices": {
+        "left": "Left",
+        "center": "Center",
+        "right": "Right"
       }
     },
     "displayAllParticipantsToPlayers": {

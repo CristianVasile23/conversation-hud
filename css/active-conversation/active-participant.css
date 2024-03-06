@@ -111,13 +111,13 @@
 /* ----- Active participant portrait ----- */
 /* #region */
 .conversation-hud-content .active-participant .portrait {
+  position: absolute;
+
   height: 100%;
-  width: 100%;
+  width: auto;
+  max-width: unset;
 
   border: 0;
-
-  object-fit: cover;
-  object-position: top center;
 }
 /* #endregion */
 

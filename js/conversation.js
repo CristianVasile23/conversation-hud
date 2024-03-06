@@ -19,9 +19,10 @@ import {
   getConversationDataFromJournalId,
   convertActorToParticipant,
   updateParticipantFactionBasedOnSelectedFaction,
+  getPortraitAnchorObjectFromParticipant,
 } from "./helpers.js";
 import { socket } from "./init.js";
-import { MODULE_NAME } from "./constants.js";
+import { ANCHOR_OPTIONS, MODULE_NAME } from "./constants.js";
 import { ModuleSettings } from "./settings.js";
 
 export class ConversationHud {
@@ -88,10 +89,15 @@ export class ConversationHud {
     game.ConversationHud.conversationIsVisible = conversationVisible;
     game.ConversationHud.activeConversation = conversationData;
 
-    // Update faction banners
     for (const participant of conversationData.participants) {
+      // Update faction banners
       if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+
+      // Add anchor object if missing
+      if (!participant.portraitAnchor) {
+        participant.portraitAnchor = getPortraitAnchorObjectFromParticipant(participant);
       }
     }
 
@@ -101,7 +107,6 @@ export class ConversationHud {
       participants: conversationData.participants,
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
       displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
     });
@@ -314,6 +319,11 @@ export class ConversationHud {
       if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
       }
+
+      // Add anchor object if missing
+      if (!participant.portraitAnchor) {
+        participant.portraitAnchor = getPortraitAnchorObjectFromParticipant(participant);
+      }
     }
 
     // Render template
@@ -322,7 +332,6 @@ export class ConversationHud {
       participants: conversationData.participants,
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
       displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
     });
@@ -382,20 +391,13 @@ export class ConversationHud {
 
   // Function that changes the active participant image
   async changeActiveImage(index) {
-    const activeParticipantTemplate = await renderTemplate(
-      "modules/conversation-hud/templates/fragments/active_participant.hbs",
-      {
-        displayParticipant: index === -1 ? false : true,
-        participant: game.ConversationHud.activeConversation.participants[index],
-        portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-        portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
-        activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
-        activeParticipantFactionFontSize: game.settings.get(
-          MODULE_NAME,
-          ModuleSettings.activeParticipantFactionFontSize
-        ),
-      }
-    );
+    const activeParticipantTemplate = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
+      displayParticipant: index === -1 ? false : true,
+      participant: game.ConversationHud.activeConversation.participants[index],
+      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+      activeParticipantFactionFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFactionFontSize),
+    });
 
     const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
     activeParticipantAnchorPoint.innerHTML = activeParticipantTemplate;
@@ -505,8 +507,11 @@ export class ConversationHud {
       const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
         name: game.ConversationHud.activeConversation.participants[index].name,
         img: game.ConversationHud.activeConversation.participants[index].img,
+        imgScale: game.ConversationHud.activeConversation.participants[index].imgScale,
         linkedJournal: game.ConversationHud.activeConversation.participants[index].linkedJournal,
         faction: game.ConversationHud.activeConversation.participants[index].faction,
+        anchorOptions: ANCHOR_OPTIONS,
+        portraitAnchor: getPortraitAnchorObjectFromParticipant(game.ConversationHud.activeConversation.participants[index]),
       });
       fileInputForm.render(true);
     }
@@ -542,9 +547,7 @@ export class ConversationHud {
   }
 
   updateActivateHudButton(status) {
-    ui.controls.controls
-      .find((controls) => controls.name === "notes")
-      .tools.find((tools) => tools.name === "activateHud").active = status;
+    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = status;
     ui.controls.render();
   }
 
@@ -757,6 +760,11 @@ export class ConversationHud {
 
     if (data.faction?.selectedFaction) {
       updateParticipantFactionBasedOnSelectedFaction(data);
+    }
+
+    // Add anchor object if missing
+    if (!data.portraitAnchor) {
+      data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
     }
 
     // Push participant to the active conversation then update all the others

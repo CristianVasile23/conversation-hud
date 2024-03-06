@@ -1,3 +1,4 @@
+import { ANCHOR_OPTIONS } from "../constants.js";
 import { FileInputForm } from "../formAddParticipant.js";
 import { PullParticipantsForm } from "../formPullParticipants.js";
 import {
@@ -9,6 +10,7 @@ import {
   setDefaultDataForParticipant,
   getConfirmationFromUser,
   updateParticipantFactionBasedOnSelectedFaction,
+  getPortraitAnchorObjectFromParticipant,
 } from "../helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
@@ -208,8 +210,11 @@ export class ConversationEntrySheet extends JournalSheet {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             img: this.participants[i].img,
+            imgScale: this.participants[i].imgScale,
             linkedJournal: this.participants[i].linkedJournal,
             faction: this.participants[i].faction,
+            anchorOptions: ANCHOR_OPTIONS,
+            portraitAnchor: getPortraitAnchorObjectFromParticipant(this.participants[i]),
           });
           fileInputForm.render(true);
         };
@@ -223,6 +228,11 @@ export class ConversationEntrySheet extends JournalSheet {
     for (const participant of this.participants) {
       if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+
+      // Add anchor object if missing
+      if (!participant.portraitAnchor) {
+        participant.portraitAnchor = getPortraitAnchorObjectFromParticipant(participant);
       }
     }
 
@@ -363,6 +373,11 @@ export class ConversationEntrySheet extends JournalSheet {
 
     if (data.faction?.selectedFaction) {
       updateParticipantFactionBasedOnSelectedFaction(data);
+    }
+
+    // Add anchor object if missing
+    if (!data.portraitAnchor) {
+      data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
     }
 
     this.participants.push(data);
