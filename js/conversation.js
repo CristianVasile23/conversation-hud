@@ -33,6 +33,7 @@ export class ConversationHud {
     this.conversationIsVisible = false;
     this.conversationIsMinimized = false;
     this.conversationIsSpeakingAs = false;
+    this.conversationIsBlurred = true;
     this.activeConversation = null;
 
     this.dropzoneVisible = false;
@@ -116,9 +117,11 @@ export class ConversationHud {
       isMinimized: game.ConversationHud.conversationIsMinimized,
       isVisible: game.ConversationHud.conversationIsVisible,
       isSpeakingAs: game.ConversationHud.conversationIsSpeakingAs,
+      isBlurred: game.ConversationHud.conversationIsBlurred,
       features: {
         minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
         speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
+        toggleBlurEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableBlurToggle),
       },
     });
 
@@ -140,6 +143,10 @@ export class ConversationHud {
     const conversationBackground = document.createElement("div");
     conversationBackground.id = "conversation-hud-background";
     conversationBackground.className = "conversation-hud-background";
+
+    const blurAmount = game.settings.get(MODULE_NAME, ModuleSettings.blurAmount);
+    conversationBackground.style = `backdrop-filter: blur(${blurAmount}px);`;
+
     if (conversationVisible) {
       conversationBackground.classList.add("visible");
     }
@@ -274,6 +281,7 @@ export class ConversationHud {
     game.ConversationHud.conversationIsVisible = false;
     game.ConversationHud.conversationIsMinimized = false;
     game.ConversationHud.conversationIsSpeakingAs = false;
+    game.ConversationHud.conversationIsBlurred = true;
     game.ConversationHud.activeConversation = null;
 
     const body = document.body;
@@ -634,6 +642,26 @@ export class ConversationHud {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs)) {
       if (checkIfUserGM() && checkIfConversationActive()) {
         game.ConversationHud.conversationIsSpeakingAs = !game.ConversationHud.conversationIsSpeakingAs;
+        updateConversationControls();
+      }
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+    }
+  }
+
+  // Function that toggles the conversation background blur
+  async toggleBackgroundBlur() {
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableBlurToggle)) {
+      if (checkIfUserGM() && checkIfConversationActive()) {
+        game.ConversationHud.conversationIsBlurred = !game.ConversationHud.conversationIsBlurred;
+
+        const conversationBackground = document.getElementById("conversation-hud-background");
+        if (game.ConversationHud.conversationIsBlurred) {
+          conversationBackground.style.display = "";
+        } else {
+          conversationBackground.style.display = "none";
+        }
+
         updateConversationControls();
       }
     } else {

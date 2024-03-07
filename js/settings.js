@@ -8,6 +8,8 @@ export const ModuleSettings = {
   enableMinimize: "enableMinimize",
   enableSpeakAs: "enableSpeakAs",
   enableSceneConversations: "enableSceneConversations",
+  enableBlurToggle: "enableBlurToggle",
+  blurAmount: "blurAmount",
   activeParticipantFontSize: "activeParticipantFontSize",
   activeParticipantFactionFontSize: "activeParticipantFactionFontSize",
   rpgUiFix: "rpgUiFix",
@@ -97,6 +99,31 @@ export function registerSettings() {
     requiresReload: true,
     type: Boolean,
     default: true,
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.enableBlurToggle, {
+    name: game.i18n.localize(`CHUD.settings.enableBlurToggle.name`),
+    hint: game.i18n.localize(`CHUD.settings.enableBlurToggle.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: Boolean,
+    default: true,
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.blurAmount, {
+    name: game.i18n.localize(`CHUD.settings.blurAmount.name`),
+    hint: game.i18n.localize(`CHUD.settings.blurAmount.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: Number,
+    range: {
+      min: 0,
+      max: 15,
+      step: 1,
+    },
+    default: 5,
   });
 
   game.settings.register(MODULE_NAME, ModuleSettings.activeParticipantFontSize, {
