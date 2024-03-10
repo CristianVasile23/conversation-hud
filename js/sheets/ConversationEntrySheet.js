@@ -209,6 +209,7 @@ export class ConversationEntrySheet extends JournalSheet {
         controls.querySelector("#participant-edit-button").onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
+            displayName: this.participants[i].displayName,
             img: this.participants[i].img,
             imgScale: this.participants[i].imgScale,
             linkedJournal: this.participants[i].linkedJournal,

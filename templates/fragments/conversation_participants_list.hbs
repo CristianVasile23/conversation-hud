@@ -30,7 +30,13 @@
             </div>
 
             <div class="text-wrapper">
-              <p class="name">{{participant.name}}</p>
+              <p class="name">
+                {{#if (eq participant.displayName false)}}
+                  Unknown
+                {{else}}
+                  {{participant.name}}
+                {{/if}}
+              </p>
 
               {{#if participant.faction.displayFaction}}
                 <p class="faction">{{participant.faction.factionName}}</p>

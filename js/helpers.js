@@ -430,3 +430,21 @@ export function getPortraitAnchorObjectFromParticipant(participant) {
     horizontal: participant?.portraitAnchor?.horizontal || game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchorHorizontal),
   };
 }
+
+// Function used to normalize participant data structure for those participants that have been created with previous version of CHUD
+export function normalizeParticipantDataStructure(participant) {
+  const normalizedParticipant = {
+    ...participant,
+  };
+
+  normalizedParticipant.name = participant.name || "";
+
+  normalizedParticipant.imgScale = participant.imgScale || 1;
+
+  normalizedParticipant.displayName = participant.displayName === undefined ? true : participant.displayName;
+  normalizedParticipant.faction = participant.faction || EMPTY_FACTION;
+
+  normalizedParticipant.linkedJournal = participant.linkedJournal || "";
+
+  return normalizedParticipant;
+}

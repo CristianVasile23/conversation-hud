@@ -11,12 +11,16 @@
   {{!-- Participant display --}}
   <div
     class="active-participant {{portraitStyle}}"
-    {{#if displayParticipant}}data-tooltip="{{participant.name}}"{{/if}}
+    {{#if (and displayParticipant participant.displayName)}}data-tooltip="{{participant.name}}"{{/if}}
   >
     {{#if displayParticipant}}
       <img class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}" src="{{participant.img}}" alt="Portrait" style="scale: {{participant.imgScale}};"/>
       <p class="name {{activeParticipantFontSize}}">
-        {{participant.name}}
+        {{#if (eq participant.displayName false)}}
+          Unknown
+        {{else}}
+          {{participant.name}}
+        {{/if}}
       </p>
     {{else}}
       <p class="no-participant-text">

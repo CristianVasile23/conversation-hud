@@ -53,7 +53,13 @@
               onclick="game.ConversationHud.changeActiveParticipant({{index}})"
             >
               <img class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}" src="{{participant.img}}" alt="Portrait" />
-              <p class="name">{{participant.name}}</p>
+              <p class="name">
+                {{#if (eq participant.displayName false)}}
+                  Unknown
+                {{else}}
+                  {{participant.name}}
+                {{/if}}
+              </p>
             </div>
 
             {{!-- Faction wrapper --}}
@@ -72,7 +78,13 @@
             {{!-- Participant --}}
             <div class="conversation-participant" data-tooltip="{{participant.name}}">
               <img class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}" src="{{participant.img}}" alt="image" />
-              <p class="name">{{participant.name}}</p>
+              <p class="name">
+                {{#if (eq participant.displayName false)}}
+                  Unknown
+                {{else}}
+                  {{participant.name}}
+                {{/if}}
+              </p>
             </div>
 
             {{!-- Faction wrapper --}}

@@ -11,6 +11,7 @@ export class FileInputForm extends FormApplication {
 
     // Participant data
     this.participantName = participantData?.name || "";
+    this.displayParticipantName = participantData?.displayName === undefined ? true : participantData?.displayName;
     this.participantImg = participantData?.img || "";
     this.participantImgScale = participantData?.imgScale || 1;
 
@@ -48,6 +49,9 @@ export class FileInputForm extends FormApplication {
     // Listeners in the participant form
     const participantNameInput = html.find("[name=participantName]")[0];
     participantNameInput.addEventListener("change", (event) => this.onUpdateParticipantName(event));
+
+    const displayParticipantNameInput = html.find("[name=displayParticipantName]")[0];
+    displayParticipantNameInput.addEventListener("change", (event) => this.onUpdateDisplayParticipantNameInput(event));
 
     const participantImgInput = html.find("[name=participantImg]")[0];
     participantImgInput.addEventListener("change", (event) => this.onUpdateParticipantImg(event));
@@ -128,6 +132,7 @@ export class FileInputForm extends FormApplication {
       participantData: this.participantData,
 
       participantName: this.participantName,
+      displayParticipantName: this.displayParticipantName,
       participantImg: this.participantImg,
       participantImgScale: this.participantImgScale,
 
@@ -153,6 +158,7 @@ export class FileInputForm extends FormApplication {
   async _updateObject(event, formData) {
     const participantData = {
       name: formData.participantName,
+      displayName: formData.displayParticipantName,
       img: formData.participantImg,
       imgScale: formData.participantImgScale,
       portraitAnchor: this.portraitAnchor,
@@ -175,6 +181,12 @@ export class FileInputForm extends FormApplication {
     if (!event.target) return;
 
     this.participantName = event.target.value;
+  }
+
+  onUpdateDisplayParticipantNameInput(event) {
+    if (!event.target) return;
+
+    this.displayParticipantName = event.target.checked;
   }
 
   onUpdateParticipantImg(event) {

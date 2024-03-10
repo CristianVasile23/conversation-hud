@@ -20,6 +20,7 @@ import {
   convertActorToParticipant,
   updateParticipantFactionBasedOnSelectedFaction,
   getPortraitAnchorObjectFromParticipant,
+  normalizeParticipantDataStructure,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { ANCHOR_OPTIONS, MODULE_NAME } from "./constants.js";
@@ -90,7 +91,12 @@ export class ConversationHud {
     game.ConversationHud.conversationIsVisible = conversationVisible;
     game.ConversationHud.activeConversation = conversationData;
 
-    for (const participant of conversationData.participants) {
+    for (let i = 0; i < conversationData.participants.length; i++) {
+      let participant = conversationData.participants[i];
+
+      // Normalize participant data
+      participant = normalizeParticipantDataStructure(participant);
+
       // Update faction banners
       if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
@@ -514,6 +520,7 @@ export class ConversationHud {
 
       const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
         name: game.ConversationHud.activeConversation.participants[index].name,
+        displayName: game.ConversationHud.activeConversation.participants[index].displayName,
         img: game.ConversationHud.activeConversation.participants[index].img,
         imgScale: game.ConversationHud.activeConversation.participants[index].imgScale,
         linkedJournal: game.ConversationHud.activeConversation.participants[index].linkedJournal,
