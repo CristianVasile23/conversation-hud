@@ -141,6 +141,8 @@ export class ConversationEntrySheet extends JournalSheet {
             "text/plain",
             JSON.stringify({
               index: i,
+              type: "ConversationParticipant",
+              participant: this.participants[i],
             })
           );
         };

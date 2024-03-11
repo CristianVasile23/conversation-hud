@@ -218,6 +218,8 @@ export class ConversationHud {
               "text/plain",
               JSON.stringify({
                 index: i,
+                type: "ConversationParticipant",
+                participant: game.ConversationHud.activeConversation.participants[i],
               })
             );
           };

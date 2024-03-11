@@ -7,6 +7,8 @@ export async function getActorDataFromDragEvent(event) {
     const data = TextEditor.getDragEventData(event);
 
     switch (data.type) {
+      case "ConversationParticipant":
+        return [data.participant];
       case "Actor":
         const actor = await Actor.implementation.fromDropData(data);
         if (actor) {

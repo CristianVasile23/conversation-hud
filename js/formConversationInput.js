@@ -124,6 +124,8 @@ export class ConversationInputForm extends FormApplication {
             "text/plain",
             JSON.stringify({
               index: i,
+              type: "ConversationParticipant",
+              participant: this.participants[i],
             })
           );
         };
