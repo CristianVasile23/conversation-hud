@@ -14,10 +14,15 @@
     {{#if (and displayParticipant participant.displayName)}}data-tooltip="{{participant.name}}"{{/if}}
   >
     {{#if displayParticipant}}
-      <img class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}" src="{{participant.img}}" alt="Portrait" style="scale: {{participant.imgScale}};"/>
+      <img
+        class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}"
+        src="{{participant.img}}"
+        alt="Portrait"
+        style="scale: {{participant.imgScale}};"
+      />
       <p class="name {{activeParticipantFontSize}}">
         {{#if (eq participant.displayName false)}}
-          Unknown
+          {{localize 'CHUD.strings.unknown'}}
         {{else}}
           {{participant.name}}
         {{/if}}

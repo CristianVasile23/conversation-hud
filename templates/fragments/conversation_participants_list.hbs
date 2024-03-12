@@ -32,7 +32,7 @@
             <div class="text-wrapper">
               <p class="name">
                 {{#if (eq participant.displayName false)}}
-                  Unknown
+                  {{localize 'CHUD.strings.unknown'}}
                 {{else}}
                   {{participant.name}}
                 {{/if}}

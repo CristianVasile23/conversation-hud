@@ -55,7 +55,7 @@
               <img class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}" src="{{participant.img}}" alt="Portrait" />
               <p class="name">
                 {{#if (eq participant.displayName false)}}
-                  Unknown
+                  {{localize 'CHUD.strings.unknown'}}
                 {{else}}
                   {{participant.name}}
                 {{/if}}
@@ -80,7 +80,7 @@
               <img class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}" src="{{participant.img}}" alt="image" />
               <p class="name">
                 {{#if (eq participant.displayName false)}}
-                  Unknown
+                  {{localize 'CHUD.strings.unknown'}}
                 {{else}}
                   {{participant.name}}
                 {{/if}}

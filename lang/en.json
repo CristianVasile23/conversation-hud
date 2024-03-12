@@ -53,6 +53,8 @@
     "dropActor": "Drop actor here to add them to the conversation",
 
     "anonymous": "Anonymous",
+    "unknown": "Unknown",
+
     "active": "Active",
     "banner": "Banner",
     "details": "Details",
