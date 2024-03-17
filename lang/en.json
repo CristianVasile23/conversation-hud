@@ -63,8 +63,13 @@
     "invalidDocumentRef": "Invalid document reference",
 
     "sceneConversation": {
-      "title": "Scene Conversation",
+      "name": "Scene Conversation",
       "hint": "A linked conversation that will activate automatically whenever the scene is activated."
+    },
+
+    "sceneConversationVisibilityOff": {
+      "name": "Conversation Visibility Off",
+      "hint": "Set whether or not to start the conversation with the visibility off. When unchecked, the conversation will start as visible."
     },
 
     "sceneActors": "Actors in scene"

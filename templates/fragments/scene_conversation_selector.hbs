@@ -1,6 +1,6 @@
 <hr>
 <div class="form-group">
-  <label>{{localize 'CHUD.strings.sceneConversation.title'}}</label>
+  <label>{{localize 'CHUD.strings.sceneConversation.name'}}</label>
   <div class="form-fields">
     <select name="flags.conversation-hud.sceneConversation">
       {{#select linkedConversation}}
@@ -23,4 +23,16 @@
     </button>
   </div>
   <p class="notes">{{localize 'CHUD.strings.sceneConversation.hint'}}</p>
+</div>
+
+<div class="form-group">
+  <label>{{localize 'CHUD.strings.sceneConversationVisibilityOff.name'}}</label>
+  <div class="form-fields">
+    <input
+      type="checkbox"
+      name="flags.conversation-hud.sceneConversationVisibilityOff"
+      {{checked sceneConversationVisibilityOff}}
+    >
+  </div>
+  <p class="notes">{{localize 'CHUD.strings.sceneConversationVisibilityOff.hint'}}</p>
 </div>
