@@ -1,15 +1,19 @@
 {
   "CHUD.strings": {
-    "name": "Name",
-    "nameHint": "Name of the conversation participant.",
+    "participantName": {
+      "name": "Name",
+      "hint": "Name of the conversation participant."
+    },
 
     "displayName": {
       "name": "Display name",
       "hint": "Toggle the display of the participant's name. When off, Unknown will be displayed instead of the name."
     },
 
-    "portrait": "Portrait",
-    "portraitHint": "Portrait of the conversation participant.",
+    "portrait": {
+      "name": "Portrait",
+      "hint": "Portrait of the conversation participant."
+    },
 
     "portraitScale": {
       "name": "Portrait scale",
