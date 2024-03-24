@@ -46,12 +46,13 @@ function registerPortraitParamsObjectHelper() {
 }
 
 function registerParticipantPortraitHelper() {
-  const isVideo = ["mpg", "mp2", "mpeg", "mpe", "mpv", "mp4"];
+  const videoFormats = ["mpg", "mp2", "mpeg", "mpe", "mpv", "mp4"];
 
   Handlebars.registerHelper("renderParticipantPortrait", (portraitPath, additionalParams) => {
+    const isVideo = videoFormats.includes(portraitPath.split(".")[1]);
     let html;
 
-    if (isVideo.includes(portraitPath.split(".")[1])) {
+    if (isVideo) {
       html = `<video src="${portraitPath}" autoplay loop muted `;
     } else {
       html = `<img src="${portraitPath}" `;
@@ -63,7 +64,14 @@ function registerParticipantPortraitHelper() {
       }
     }
 
-    html += "/>";
+    html += ">";
+
+    if (isVideo) {
+      html += `</video>`;
+    } else {
+      html += `</img>`;
+    }
+
     return html;
   });
 }
