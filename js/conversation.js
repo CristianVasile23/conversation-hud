@@ -764,6 +764,13 @@ export class ConversationHud {
     }
   }
 
+  // Function that calls the convertActor
+  actorToParticipant(actor) {
+    if (checkIfUserGM()) {
+      return convertActorToParticipant(actor);
+    }
+  }
+
   async #handleSaveConversation(data) {
     const permissions = {};
     game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
