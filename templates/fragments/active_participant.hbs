@@ -11,15 +11,18 @@
   {{!-- Participant display --}}
   <div
     class="active-participant {{portraitStyle}}"
-    {{#if (and displayParticipant participant.displayName)}}data-tooltip="{{participant.name}}"{{/if}}
+    {{#if (and displayParticipant participant.displayName)}} data-tooltip="{{participant.name}}"{{/if}}
   >
     {{#if displayParticipant}}
-      <img
-        class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}"
-        src="{{participant.img}}"
-        alt="Portrait"
-        style="scale: {{participant.imgScale}};"
-      />
+      {{{renderParticipantPortrait
+        participant.img
+        (portraitParamsObject
+          class=(concat "portrait " participant.portraitAnchor.vertical " " participant.portraitAnchor.horizontal)
+          alt="Portrait"
+          style=(concat "scale: " participant.imgScale ";")
+        )
+      }}}
+
       <p class="name {{activeParticipantFontSize}}">
         {{#if (eq participant.displayName false)}}
           {{localize 'CHUD.strings.unknown'}}

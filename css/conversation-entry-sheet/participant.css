@@ -64,7 +64,7 @@
   border-radius: 3px;
 }
 
-.conversation-entry-sheet .portrait-wrapper img {
+.conversation-entry-sheet .portrait-wrapper > * {
   height: 100%;
   width: 100%;
   object-fit: cover;

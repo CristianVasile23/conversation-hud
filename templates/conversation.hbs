@@ -52,7 +52,15 @@
               draggable="true"
               onclick="game.ConversationHud.changeActiveParticipant({{index}})"
             >
-              <img class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}" src="{{participant.img}}" alt="Portrait" />
+              {{{renderParticipantPortrait
+                participant.img
+                (portraitParamsObject
+                  class=(concat "portrait " participant.portraitAnchor.vertical " " participant.portraitAnchor.horizontal)
+                  alt="Portrait"
+                  style=(concat "scale: " participant.imgScale ";")
+                )
+              }}}
+
               <p class="name">
                 {{#if (eq participant.displayName false)}}
                   {{localize 'CHUD.strings.unknown'}}
@@ -77,7 +85,15 @@
           <div class="conversation-participant-wrapper">
             {{!-- Participant --}}
             <div class="conversation-participant" data-tooltip="{{participant.name}}">
-              <img class="portrait {{participant.portraitAnchor.vertical}} {{participant.portraitAnchor.horizontal}}" src="{{participant.img}}" alt="image" />
+              {{{renderParticipantPortrait
+                participant.img
+                (portraitParamsObject
+                  class=(concat "portrait " participant.portraitAnchor.vertical " " participant.portraitAnchor.horizontal)
+                  alt="Portrait"
+                  style=(concat "scale: " participant.imgScale ";")
+                )
+              }}}
+              
               <p class="name">
                 {{#if (eq participant.displayName false)}}
                   {{localize 'CHUD.strings.unknown'}}

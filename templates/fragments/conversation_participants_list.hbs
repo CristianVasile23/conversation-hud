@@ -26,7 +26,10 @@
             {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
 
             <div class="portrait-wrapper">
-              <img src="{{participant.img}}"/>
+              {{{renderParticipantPortrait
+                participant.img
+                null
+              }}}
             </div>
 
             <div class="text-wrapper">
