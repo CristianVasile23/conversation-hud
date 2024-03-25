@@ -5,6 +5,7 @@
 - Added the option to temporarily toggle the background blur on/off.
 - Reworked the way portraits are anchored. You can now specify both a horizontal and vertical anchor point which should allow for more flexibility when displaying portraits.
 - Added the option to set portrait anchors for each participant individually. By default, the global options are used.
+- Added the option to scale the portraits.
 - Added the option to drag and drop participants from one conversation to another.
 - Added the option to start scene conversations with their visibility off.
 - Added support for video portraits.
