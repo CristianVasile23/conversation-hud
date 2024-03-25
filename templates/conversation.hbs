@@ -52,8 +52,22 @@
               draggable="true"
               onclick="game.ConversationHud.changeActiveParticipant({{index}})"
             >
-              <img class="portrait {{../portraitAnchor}}" src="{{participant.img}}" alt="Portrait" />
-              <p class="name">{{participant.name}}</p>
+              {{{renderParticipantPortrait
+                participant.img
+                (portraitParamsObject
+                  class=(concat "portrait " participant.portraitAnchor.vertical " " participant.portraitAnchor.horizontal)
+                  alt="Portrait"
+                  style=(concat "scale: " participant.imgScale ";")
+                )
+              }}}
+
+              <p class="name">
+                {{#if (eq participant.displayName false)}}
+                  {{localize 'CHUD.strings.unknown'}}
+                {{else}}
+                  {{participant.name}}
+                {{/if}}
+              </p>
             </div>
 
             {{!-- Faction wrapper --}}
@@ -71,8 +85,22 @@
           <div class="conversation-participant-wrapper">
             {{!-- Participant --}}
             <div class="conversation-participant" data-tooltip="{{participant.name}}">
-              <img class="portrait {{../portraitAnchor}}" src="{{participant.img}}" alt="image" />
-              <p class="name">{{participant.name}}</p>
+              {{{renderParticipantPortrait
+                participant.img
+                (portraitParamsObject
+                  class=(concat "portrait " participant.portraitAnchor.vertical " " participant.portraitAnchor.horizontal)
+                  alt="Portrait"
+                  style=(concat "scale: " participant.imgScale ";")
+                )
+              }}}
+              
+              <p class="name">
+                {{#if (eq participant.displayName false)}}
+                  {{localize 'CHUD.strings.unknown'}}
+                {{else}}
+                  {{participant.name}}
+                {{/if}}
+              </p>
             </div>
 
             {{!-- Faction wrapper --}}

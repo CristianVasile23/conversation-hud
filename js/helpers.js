@@ -7,6 +7,8 @@ export async function getActorDataFromDragEvent(event) {
     const data = TextEditor.getDragEventData(event);
 
     switch (data.type) {
+      case "ConversationParticipant":
+        return [data.participant];
       case "Actor":
         const actor = await Actor.implementation.fromDropData(data);
         if (actor) {
@@ -146,9 +148,11 @@ export async function updateConversationControls() {
     isMinimized: game.ConversationHud.conversationIsMinimized,
     isVisible: game.ConversationHud.conversationIsVisible,
     isSpeakingAs: game.ConversationHud.conversationIsSpeakingAs,
+    isBlurred: game.ConversationHud.conversationIsBlurred,
     features: {
       minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
       speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
+      toggleBlurEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableBlurToggle),
     },
   });
 
@@ -370,10 +374,7 @@ export function checkIfCameraDockOnBottomOrTop() {
   const cameraViews = document.getElementById("camera-views");
 
   if (cameraViews) {
-    if (
-      cameraViews.classList.contains("camera-position-bottom") ||
-      cameraViews.classList.contains("camera-position-top")
-    ) {
+    if (cameraViews.classList.contains("camera-position-bottom") || cameraViews.classList.contains("camera-position-top")) {
       return true;
     }
   }
@@ -408,6 +409,7 @@ export function convertActorToParticipant(actor) {
     img: actor.img,
     linkedJournal: "",
     name: actor.name,
+    displayName: true,
   };
 
   return participant;
@@ -423,4 +425,29 @@ export function updateParticipantFactionBasedOnSelectedFaction(participant) {
       selectedFaction: participant.faction.selectedFaction,
     };
   }
+}
+
+export function getPortraitAnchorObjectFromParticipant(participant) {
+  return {
+    vertical: participant?.portraitAnchor?.vertical || game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchorVertical),
+    horizontal: participant?.portraitAnchor?.horizontal || game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchorHorizontal),
+  };
+}
+
+// Function used to normalize participant data structure for those participants that have been created with previous version of CHUD
+export function normalizeParticipantDataStructure(participant) {
+  const normalizedParticipant = {
+    ...participant,
+  };
+
+  normalizedParticipant.name = participant.name || "";
+
+  normalizedParticipant.imgScale = participant.imgScale || 1;
+
+  normalizedParticipant.displayName = participant.displayName === undefined ? true : participant.displayName;
+  normalizedParticipant.faction = participant.faction || EMPTY_FACTION;
+
+  normalizedParticipant.linkedJournal = participant.linkedJournal || "";
+
+  return normalizedParticipant;
 }

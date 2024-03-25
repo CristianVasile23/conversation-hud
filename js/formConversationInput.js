@@ -1,3 +1,4 @@
+import { ANCHOR_OPTIONS } from "./constants.js";
 import { FileInputForm } from "./formAddParticipant.js";
 import { PullParticipantsForm } from "./formPullParticipants.js";
 import {
@@ -8,6 +9,7 @@ import {
   getDragAndDropIndex,
   setDefaultDataForParticipant,
   updateParticipantFactionBasedOnSelectedFaction,
+  getPortraitAnchorObjectFromParticipant,
 } from "./helpers.js";
 
 export class ConversationInputForm extends FormApplication {
@@ -38,6 +40,11 @@ export class ConversationInputForm extends FormApplication {
     for (const participant of this.participants) {
       if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+
+      // Add anchor object if missing
+      if (!participant.portraitAnchor) {
+        participant.portraitAnchor = getPortraitAnchorObjectFromParticipant(participant);
       }
     }
 
@@ -117,6 +124,8 @@ export class ConversationInputForm extends FormApplication {
             "text/plain",
             JSON.stringify({
               index: i,
+              type: "ConversationParticipant",
+              participant: this.participants[i],
             })
           );
         };
@@ -185,9 +194,13 @@ export class ConversationInputForm extends FormApplication {
         controls.querySelector("#participant-edit-button").onclick = () => {
           const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
+            displayName: this.participants[i].displayName,
             img: this.participants[i].img,
+            imgScale: this.participants[i].imgScale,
             linkedJournal: this.participants[i].linkedJournal,
             faction: this.participants[i].faction,
+            anchorOptions: ANCHOR_OPTIONS,
+            portraitAnchor: getPortraitAnchorObjectFromParticipant(this.participants[i]),
           });
           fileInputForm.render(true);
         };
@@ -219,6 +232,11 @@ export class ConversationInputForm extends FormApplication {
 
     if (data.faction?.selectedFaction) {
       updateParticipantFactionBasedOnSelectedFaction(data);
+    }
+
+    // Add anchor object if missing
+    if (!data.portraitAnchor) {
+      data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
     }
 
     this.participants.push(data);

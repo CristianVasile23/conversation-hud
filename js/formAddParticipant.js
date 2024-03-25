@@ -1,4 +1,5 @@
-import { getConversationDataFromJournalId } from "./helpers.js";
+import { ANCHOR_OPTIONS } from "./constants.js";
+import { getConversationDataFromJournalId, getPortraitAnchorObjectFromParticipant } from "./helpers.js";
 import { ConversationFactionSheet } from "./sheets/ConversationFactionSheet.js";
 
 export class FileInputForm extends FormApplication {
@@ -10,7 +11,11 @@ export class FileInputForm extends FormApplication {
 
     // Participant data
     this.participantName = participantData?.name || "";
+    this.displayParticipantName = participantData?.displayName === undefined ? true : participantData?.displayName;
     this.participantImg = participantData?.img || "";
+    this.participantImgScale = participantData?.imgScale || 1;
+
+    this.portraitAnchor = getPortraitAnchorObjectFromParticipant(participantData);
 
     // Linked journal
     this.linkedJournal = participantData?.linkedJournal || "";
@@ -45,8 +50,20 @@ export class FileInputForm extends FormApplication {
     const participantNameInput = html.find("[name=participantName]")[0];
     participantNameInput.addEventListener("change", (event) => this.onUpdateParticipantName(event));
 
+    const displayParticipantNameInput = html.find("[name=displayParticipantName]")[0];
+    displayParticipantNameInput.addEventListener("change", (event) => this.onUpdateDisplayParticipantNameInput(event));
+
     const participantImgInput = html.find("[name=participantImg]")[0];
     participantImgInput.addEventListener("change", (event) => this.onUpdateParticipantImg(event));
+
+    const participantImgScaleInput = html.find("[name=participantImgScale]")[0];
+    participantImgScaleInput.addEventListener("change", (event) => this.onUpdateParticipantImgScale(event));
+
+    const participantImgVerticalAnchorInput = html.find("[name=portraitAnchorVertical]")[0];
+    participantImgVerticalAnchorInput.addEventListener("change", (event) => this.onUpdateParticipantImgAnchor(event, "vertical"));
+
+    const participantImgHorizontalAnchorInput = html.find("[name=portraitAnchorHorizontal]")[0];
+    participantImgHorizontalAnchorInput.addEventListener("change", (event) => this.onUpdateParticipantImgAnchor(event, "horizontal"));
 
     // Listeners in the faction form
     const selectedFaction = html.find("[name=selectedFaction]")[0];
@@ -115,7 +132,12 @@ export class FileInputForm extends FormApplication {
       participantData: this.participantData,
 
       participantName: this.participantName,
+      displayParticipantName: this.displayParticipantName,
       participantImg: this.participantImg,
+      participantImgScale: this.participantImgScale,
+
+      anchorOptions: ANCHOR_OPTIONS,
+      portraitAnchor: this.portraitAnchor,
 
       selectedFaction: this.selectedFaction,
 
@@ -136,7 +158,10 @@ export class FileInputForm extends FormApplication {
   async _updateObject(event, formData) {
     const participantData = {
       name: formData.participantName,
+      displayName: formData.displayParticipantName,
       img: formData.participantImg,
+      imgScale: formData.participantImgScale,
+      portraitAnchor: this.portraitAnchor,
       linkedJournal: formData.linkedJournal,
       faction: {
         selectedFaction: formData.selectedFaction,
@@ -158,10 +183,28 @@ export class FileInputForm extends FormApplication {
     this.participantName = event.target.value;
   }
 
+  onUpdateDisplayParticipantNameInput(event) {
+    if (!event.target) return;
+
+    this.displayParticipantName = event.target.checked;
+  }
+
   onUpdateParticipantImg(event) {
     if (!event.target) return;
 
     this.participantImg = event.target.value;
+  }
+
+  onUpdateParticipantImgScale(event) {
+    if (!event.target) return;
+
+    this.participantImgScale = event.target.value;
+  }
+
+  onUpdateParticipantImgAnchor(event, type) {
+    if (!event.target) return;
+
+    this.portraitAnchor[type] = event.target.value;
   }
 
   onChangeSelectedFaction(event) {

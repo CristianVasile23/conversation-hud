@@ -19,9 +19,11 @@ import {
   getConversationDataFromJournalId,
   convertActorToParticipant,
   updateParticipantFactionBasedOnSelectedFaction,
+  getPortraitAnchorObjectFromParticipant,
+  normalizeParticipantDataStructure,
 } from "./helpers.js";
 import { socket } from "./init.js";
-import { MODULE_NAME } from "./constants.js";
+import { ANCHOR_OPTIONS, MODULE_NAME } from "./constants.js";
 import { ModuleSettings } from "./settings.js";
 
 export class ConversationHud {
@@ -32,6 +34,7 @@ export class ConversationHud {
     this.conversationIsVisible = false;
     this.conversationIsMinimized = false;
     this.conversationIsSpeakingAs = false;
+    this.conversationIsBlurred = true;
     this.activeConversation = null;
 
     this.dropzoneVisible = false;
@@ -88,10 +91,20 @@ export class ConversationHud {
     game.ConversationHud.conversationIsVisible = conversationVisible;
     game.ConversationHud.activeConversation = conversationData;
 
-    // Update faction banners
-    for (const participant of conversationData.participants) {
+    for (let i = 0; i < conversationData.participants.length; i++) {
+      let participant = conversationData.participants[i];
+
+      // Normalize participant data
+      participant = normalizeParticipantDataStructure(participant);
+
+      // Update faction banners
       if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+
+      // Add anchor object if missing
+      if (!participant.portraitAnchor) {
+        participant.portraitAnchor = getPortraitAnchorObjectFromParticipant(participant);
       }
     }
 
@@ -101,20 +114,8 @@ export class ConversationHud {
       participants: conversationData.participants,
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
       displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
-    });
-
-    const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
-      isGM: game.user.isGM,
-      isMinimized: game.ConversationHud.conversationIsMinimized,
-      isVisible: game.ConversationHud.conversationIsVisible,
-      isSpeakingAs: game.ConversationHud.conversationIsSpeakingAs,
-      features: {
-        minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
-        speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
-      },
     });
 
     // Create the conversation container
@@ -135,6 +136,10 @@ export class ConversationHud {
     const conversationBackground = document.createElement("div");
     conversationBackground.id = "conversation-hud-background";
     conversationBackground.className = "conversation-hud-background";
+
+    const blurAmount = game.settings.get(MODULE_NAME, ModuleSettings.blurAmount);
+    conversationBackground.style = `backdrop-filter: blur(${blurAmount}px);`;
+
     if (conversationVisible) {
       conversationBackground.classList.add("visible");
     }
@@ -143,13 +148,7 @@ export class ConversationHud {
     body.append(conversationBackground);
 
     // Render conversation controls
-    const controls = document.createElement("section");
-    controls.id = "ui-conversation-controls";
-    controls.setAttribute("data-tooltip-direction", "LEFT");
-    controls.innerHTML = conversationControls;
-
-    const uiRight = document.getElementById("ui-right");
-    uiRight.before(controls);
+    updateConversationControls();
 
     // Set image
     game.ConversationHud.changeActiveImage(conversationData.activeParticipant);
@@ -200,6 +199,8 @@ export class ConversationHud {
               "text/plain",
               JSON.stringify({
                 index: i,
+                type: "ConversationParticipant",
+                participant: game.ConversationHud.activeConversation.participants[i],
               })
             );
           };
@@ -269,6 +270,7 @@ export class ConversationHud {
     game.ConversationHud.conversationIsVisible = false;
     game.ConversationHud.conversationIsMinimized = false;
     game.ConversationHud.conversationIsSpeakingAs = false;
+    game.ConversationHud.conversationIsBlurred = true;
     game.ConversationHud.activeConversation = null;
 
     const body = document.body;
@@ -304,8 +306,26 @@ export class ConversationHud {
     return game.ConversationHud.conversationIsVisible;
   }
 
+  // Function that toggles the visibility of the active conversation
+  toggleActiveConversationVisibility() {
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      game.ConversationHud.conversationIsVisible = !game.ConversationHud.conversationIsVisible;
+      socket.executeForEveryone("setConversationHudVisibility", game.ConversationHud.conversationIsVisible);
+    }
+  }
+
+  // Function that toggles the visibility of the active conversation
+  setActiveConversationVisibility(visibility) {
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      if (typeof visibility !== "boolean") {
+        return;
+      }
+      socket.executeForEveryone("setConversationHudVisibility", visibility);
+    }
+  }
+
   // Function that updates the data of the currently active conversation
-  async updateActiveConversation(conversationData) {
+  async updateActiveConversation(conversationData, visibility) {
     // Set conversation data
     game.ConversationHud.activeConversation = conversationData;
 
@@ -313,6 +333,11 @@ export class ConversationHud {
     for (const participant of conversationData.participants) {
       if (participant.faction?.selectedFaction) {
         updateParticipantFactionBasedOnSelectedFaction(participant);
+      }
+
+      // Add anchor object if missing
+      if (!participant.portraitAnchor) {
+        participant.portraitAnchor = getPortraitAnchorObjectFromParticipant(participant);
       }
     }
 
@@ -322,7 +347,6 @@ export class ConversationHud {
       participants: conversationData.participants,
       isGM: game.user.isGM,
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
       displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
     });
@@ -333,6 +357,10 @@ export class ConversationHud {
       conversationHud.innerHTML = renderedHtml;
       game.ConversationHud.addDragDropListeners(conversationHud);
       game.ConversationHud.changeActiveImage(conversationData.activeParticipant);
+    }
+
+    if (visibility !== undefined) {
+      game.ConversationHud.setActiveConversationVisibility(visibility);
     }
   }
 
@@ -382,20 +410,13 @@ export class ConversationHud {
 
   // Function that changes the active participant image
   async changeActiveImage(index) {
-    const activeParticipantTemplate = await renderTemplate(
-      "modules/conversation-hud/templates/fragments/active_participant.hbs",
-      {
-        displayParticipant: index === -1 ? false : true,
-        participant: game.ConversationHud.activeConversation.participants[index],
-        portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-        portraitAnchor: game.settings.get(MODULE_NAME, ModuleSettings.portraitAnchor),
-        activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
-        activeParticipantFactionFontSize: game.settings.get(
-          MODULE_NAME,
-          ModuleSettings.activeParticipantFactionFontSize
-        ),
-      }
-    );
+    const activeParticipantTemplate = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
+      displayParticipant: index === -1 ? false : true,
+      participant: game.ConversationHud.activeConversation.participants[index],
+      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+      activeParticipantFactionFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFactionFontSize),
+    });
 
     const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
     activeParticipantAnchorPoint.innerHTML = activeParticipantTemplate;
@@ -504,9 +525,13 @@ export class ConversationHud {
 
       const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
         name: game.ConversationHud.activeConversation.participants[index].name,
+        displayName: game.ConversationHud.activeConversation.participants[index].displayName,
         img: game.ConversationHud.activeConversation.participants[index].img,
+        imgScale: game.ConversationHud.activeConversation.participants[index].imgScale,
         linkedJournal: game.ConversationHud.activeConversation.participants[index].linkedJournal,
         faction: game.ConversationHud.activeConversation.participants[index].faction,
+        anchorOptions: ANCHOR_OPTIONS,
+        portraitAnchor: getPortraitAnchorObjectFromParticipant(game.ConversationHud.activeConversation.participants[index]),
       });
       fileInputForm.render(true);
     }
@@ -542,21 +567,12 @@ export class ConversationHud {
   }
 
   updateActivateHudButton(status) {
-    ui.controls.controls
-      .find((controls) => controls.name === "notes")
-      .tools.find((tools) => tools.name === "activateHud").active = status;
+    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = status;
     ui.controls.render();
   }
 
-  startConversationFromJournalId(journalId) {
-    const conversationData = getConversationDataFromJournalId(journalId);
-    if (conversationData) {
-      game.ConversationHud.startConversationFromData(conversationData);
-    }
-  }
-
   // Function that can be called from a macro in order to trigger a conversation
-  startConversationFromData(data) {
+  startConversationFromData(data, visibility) {
     if (checkIfUserGM()) {
       let conversationData = {};
 
@@ -576,10 +592,18 @@ export class ConversationHud {
         }
       }
 
+      let parsedVisibility = true;
+      if (game.ConversationHud.conversationIsVisible !== undefined) {
+        parsedVisibility = game.ConversationHud.conversationIsVisible;
+      }
+      if (visibility !== undefined) {
+        parsedVisibility = visibility;
+      }
+
       if (this.activeConversation) {
-        this.#handleConversationUpdateData(conversationData);
+        this.#handleConversationUpdateData(conversationData, visibility);
       } else {
-        this.#handleConversationCreationData(conversationData);
+        this.#handleConversationCreationData(conversationData, visibility);
       }
     }
   }
@@ -589,27 +613,31 @@ export class ConversationHud {
     updateConversationControls();
 
     const conversationHud = document.getElementById("ui-conversation-hud");
-    if (newVisibility) {
-      conversationHud.classList.add("visible");
-    } else {
-      conversationHud.classList.remove("visible");
+    if (conversationHud) {
+      if (newVisibility) {
+        conversationHud.classList.add("visible");
+      } else {
+        conversationHud.classList.remove("visible");
+      }
     }
 
     const conversationBackground = document.getElementById("conversation-hud-background");
-    if (newVisibility) {
-      if (!game.ConversationHud.conversationIsMinimized) {
-        conversationBackground.classList.add("visible");
+    if (conversationBackground) {
+      if (newVisibility) {
+        if (!game.ConversationHud.conversationIsMinimized) {
+          conversationBackground.classList.add("visible");
+        }
+      } else {
+        conversationBackground.classList.remove("visible");
       }
-    } else {
-      conversationBackground.classList.remove("visible");
     }
   }
 
-  // Function that toggles the visibility of the active conversation
-  toggleActiveConversationVisibility() {
-    if (checkIfUserGM() && checkIfConversationActive()) {
-      game.ConversationHud.conversationIsVisible = !game.ConversationHud.conversationIsVisible;
-      socket.executeForEveryone("setConversationHudVisibility", game.ConversationHud.conversationIsVisible);
+  startConversationFromJournalId(journalId, startHidden = false) {
+    const conversationData = getConversationDataFromJournalId(journalId);
+    if (conversationData) {
+      const visibility = startHidden === true ? false : true;
+      game.ConversationHud.startConversationFromData(conversationData, visibility);
     }
   }
 
@@ -631,6 +659,26 @@ export class ConversationHud {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs)) {
       if (checkIfUserGM() && checkIfConversationActive()) {
         game.ConversationHud.conversationIsSpeakingAs = !game.ConversationHud.conversationIsSpeakingAs;
+        updateConversationControls();
+      }
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+    }
+  }
+
+  // Function that toggles the conversation background blur
+  async toggleBackgroundBlur() {
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableBlurToggle)) {
+      if (checkIfUserGM() && checkIfConversationActive()) {
+        game.ConversationHud.conversationIsBlurred = !game.ConversationHud.conversationIsBlurred;
+
+        const conversationBackground = document.getElementById("conversation-hud-background");
+        if (game.ConversationHud.conversationIsBlurred) {
+          conversationBackground.style.display = "";
+        } else {
+          conversationBackground.style.display = "none";
+        }
+
         updateConversationControls();
       }
     } else {
@@ -716,6 +764,23 @@ export class ConversationHud {
     }
   }
 
+  // Function that transform an actor to a participant and can be called from anywhere
+  actorToParticipant(actor) {
+    if (checkIfUserGM()) {
+      return convertActorToParticipant(actor);
+    }
+  }
+
+  // Function that transform a token to a participant and can be called from anywhere
+  tokenToParticipant(token) {
+    if (checkIfUserGM()) {
+      const participant = convertActorToParticipant(token.actor);
+      participant.name = token.name;
+      participant.id = token.id;
+      return participant;
+    }
+  }
+
   async #handleSaveConversation(data) {
     const permissions = {};
     game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
@@ -759,6 +824,11 @@ export class ConversationHud {
       updateParticipantFactionBasedOnSelectedFaction(data);
     }
 
+    // Add anchor object if missing
+    if (!data.portraitAnchor) {
+      data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
+    }
+
     // Push participant to the active conversation then update all the others
     game.ConversationHud.activeConversation.participants.push(data);
     socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
@@ -773,7 +843,7 @@ export class ConversationHud {
   }
 
   // Function that parses conversation input form data and then activates the conversation hud
-  #handleConversationCreationData(formData) {
+  #handleConversationCreationData(formData, visibility = true) {
     if (game.ConversationHud.conversationIsActive) {
       ui.notifications.error(game.i18n.localize("CHUD.errors.conversationAlreadyActive"));
       return;
@@ -787,14 +857,14 @@ export class ConversationHud {
     parsedData.participants = formData.participants;
     parsedData.defaultActiveParticipant = formData.defaultActiveParticipant;
 
-    socket.executeForEveryone("renderConversation", parsedData, true);
+    socket.executeForEveryone("renderConversation", parsedData, visibility);
 
     // Finally, set the button status to active now that a conversation is active
     socket.executeForAllGMs("updateActivateHudButton", true);
   }
 
   // Function that parses conversation input form data and then updates the conversation hud
-  #handleConversationUpdateData(formData) {
+  #handleConversationUpdateData(formData, visibility) {
     let parsedData = {};
     parsedData.activeParticipant = -1;
     if (typeof formData.defaultActiveParticipant !== "undefined") {
@@ -803,6 +873,6 @@ export class ConversationHud {
     parsedData.participants = formData.participants;
     parsedData.defaultActiveParticipant = formData.defaultActiveParticipant;
 
-    socket.executeForEveryone("updateActiveConversation", parsedData);
+    socket.executeForEveryone("updateActiveConversation", parsedData, visibility);
   }
 }

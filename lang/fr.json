@@ -1,0 +1,292 @@
+{
+  "CHUD.strings": {
+    "participantName": {
+      "name": "Nom",
+      "hint": "Nom du participant à la conversation."
+    },
+
+    "displayName": {
+      "name": "Display name",
+      "hint": "Toggle the display of the participant's name. When off, Unknown will be displayed instead of the name."
+    },
+
+    "portrait": {
+      "name": "Portrait",
+      "hint": "Portrait du participant à la conversation."
+    },
+
+    "portraitScale": {
+      "name": "Portrait scale",
+      "hint": "The scale of the portrait. By default, a scale of 1 will fill the container. Lower values will decrease the size and add padding, while higher values will zoom the picture in."
+    },
+
+    "portraitAnchor": {
+      "vertical": {
+        "name": "Vertical Portrait Anchor",
+        "hint": "The vertical point which is considered the origin from which the image will begin to display."
+      },
+      "horizontal": {
+        "name": "Horizontal Portrait Anchor",
+        "hint": "The horizontal point which is considered the origin from which the image will begin to display."
+      }
+    },
+
+    "linkedJournal": "Journal Lié",
+    "linkedJournalHint": "Entrée de journal qui sera liée au participant de la conversation.",
+    "noLinkedJournal": "Aucun journal lié",
+
+    "conversationName": "Nom de la Conversation",
+    "conversationParticipants": "Participants à la Conversation",
+
+    "newParticipant": "Nouveau Participant",
+
+    "currentParticipants": "Participants Actuels",
+    "noActiveParticipant": "Aucun participant actif",
+    "noParticipantsInList": "La conversation n'a pas de participants. Essayez d'en ajouter. (Glisser-déposer est pris en charge)",
+
+    "conversationEntry": "Entrée de Conversation",
+    "participantData": "Données du Participant à la Conversation",
+    "factionData": "Données de la Faction de la Conversation",
+
+    "unsavedChanges": "Modifications Non Enregistrées",
+    "unsavedChangesHint": "La conversation contient des modifications non enregistrées. Souhaitez-vous les enregistrer ?",
+
+    "browseFiles": "Parcourir les Fichiers",
+    "filePath": "Chemin du Fichier",
+
+    "dropActor": "Déposez un acteur ici pour l'ajouter à la conversation",
+
+    "anonymous": "Anonyme",
+    "unknown": "Unknown",
+
+    "active": "Actif",
+    "banner": "Bannière",
+    "details": "Détails",
+    "actions": "Actions",
+
+    "invalidDocumentRef": "Référence de document invalide",
+
+    "sceneConversation": {
+      "title": "Conversation de Scène",
+      "hint": "Une conversation liée qui s'activera automatiquement chaque fois que la scène est activée."
+    },
+
+    "sceneConversationVisibilityOff": {
+      "name": "Conversation Visibility Off",
+      "hint": "Set whether or not to start the conversation with the visibility off. When unchecked, the conversation will start as visible."
+    },
+
+    "sceneActors": "Acteurs dans la scène"
+  },
+
+  "CHUD.dialogue": {
+    "onCloseActiveConversation": {
+      "title": "Êtes-vous sûr ?",
+      "content": "Êtes-vous sûr de vouloir fermer cette conversation ? Toutes les modifications non enregistrées seront perdues.",
+      "confirm": "Oui",
+      "reject": "Non"
+    },
+    "onRemoveParticipant": {
+      "title": "Êtes-vous sûr ?",
+      "content": "Êtes-vous sûr de vouloir retirer ce participant de la conversation active ?",
+      "confirm": "Oui",
+      "reject": "Non"
+    },
+    "unsavedChanges": {
+      "title": "Modifications Non Enregistrées",
+      "content": "La conversation contient des modifications non enregistrées. Souhaitez-vous les enregistrer ?",
+      "confirm": "Enregistrer les Modifications",
+      "reject": "Ignorer les Modifications"
+    }
+  },
+
+  "CHUD.actions": {
+    "save": "Enregistrer",
+
+    "activateHUD": "Activer ConversationHUD",
+    "activateConversation": "Activer la Conversation",
+    "createConversation": "Créer une Conversation",
+    "startConversation": "Démarrer une Conversation",
+    "closeConversation": "Fermer la Conversation",
+
+    "saveConversation": "Enregistrer la Conversation",
+    "saveFaction": "Enregistrer la Faction",
+    "exportFaction": "Exporter la Faction",
+
+    "toggleSpeakAs": "Basculer Parler Comme",
+    "toggleVisibility": "Basculer la Visibilité",
+    "toggleBackgroundBlur": "Toggle Background Blur",
+    "maximizeConversation": "Maximiser la conversation",
+    "minimizeConversation": "Minimiser la conversation",
+
+    "discardChanges": "Ignorer les Modifications",
+
+    "participant": {
+      "add": "Ajouter un Participant",
+      "clone": "Cloner un Participant",
+      "edit": "Modifier un Participant",
+      "delete": "Supprimer un Participant"
+    },
+
+    "selection": {
+      "selectAll": "Tout Sélectionner",
+      "selectVisible": "Sélectionner les Visibles",
+      "deselectAll": "Tout Désélectionner"
+    },
+
+    "pullParticipants": "Extraire les Participants de la Scène",
+    "addActors": "Ajouter des Acteurs"
+  },
+
+  "CHUD.tabs": {
+    "participantConfig": "Configuration du Participant",
+    "factionConfig": "Configuration de la Faction"
+  },
+
+  "CHUD.faction": {
+    "factionSelector": {
+      "name": "Sélecteur de Faction",
+      "hint": "Créez une nouvelle faction ou sélectionnez-en une déjà existante."
+    },
+    "displayFaction": {
+      "name": "Afficher la Faction",
+      "hint": "Basculer l'affichage de la faction à laquelle appartient le participant."
+    },
+    "factionName": {
+      "name": "Nom de la Faction",
+      "hint": "Le nom de la faction.",
+      "placeholder": "Nouvelle Faction"
+    },
+    "factionLogo": {
+      "name": "Symbole de la Faction",
+      "hint": "Le symbole représentant la faction."
+    },
+    "displayFactionBanner": {
+      "name": "Afficher la Bannière",
+      "hint": "Basculer l'affichage d'une bannière qui apparaît en arrière-plan."
+    },
+    "factionBannerShape": {
+      "name": "Forme de la Bannière",
+      "hint": "La forme de la bannière."
+    },
+    "factionBannerColor": {
+      "name": "Couleur de la Bannière",
+      "hint": "La couleur de la bannière."
+    },
+
+    "unknownFaction": "Faction Inconnue",
+    "unaffiliated": "Non affilié",
+    "noBannerPreview": "Aucun aperçu de bannière disponible",
+    "bannerPreview": "Aperçu de la Bannière"
+  },
+
+  "CHUD.sheets": {
+    "entrySheet": "Feuille d'Entrée de Conversation",
+    "factionSheet": "Feuille de Faction de Conversation"
+  },
+
+  "CHUD.errors": {
+    "generic": "Une erreur inconnue s'est produite, pour plus d'informations consultez la console.",
+    "genericSheetError": "Une erreur inconnue est survenue lors de la tentative de rendu de la feuille. Êtes-vous sûr que c'est une feuille de conversation valide ?",
+    "failedToParse": "Échec de l'analyse des données de la feuille. Êtes-vous sûr que c'est une feuille de conversation valide ?",
+    "invalidActor": "L'acteur fourni est d'un format invalide et n'a pas pu être analysé correctement.",
+    "typeNotSupported": "Ce type de données n'est pas pris en charge par ConversationHUD.",
+
+    "activateNoPages": "Tentative d'activer une conversation avec un document ne contenant aucune page.",
+    "activateNoInit": "Tentative d'activer une conversation alors que l'objet ConversationHUD n'était pas encore initialisé",
+    "activateNoPerms": "Vous n'avez pas la permission d'activer cette conversation.",
+
+    "noActiveConversation": "Aucune conversation active trouvée.",
+    "saveUnsuccessful": "Échec de l'enregistrement de la conversation en cours.",
+
+    "noSelectedTokens": "Aucun jeton sélectionné.",
+    "conversationAlreadyActive": "Impossible de créer une nouvelle conversation car il y a déjà une conversation active.",
+    "insufficientRights": "Droits d'utilisateur insuffisants.",
+    "featureNotEnabled": "La fonctionnalité est actuellement désactivée. Activez-la dans les paramètres si vous souhaitez l'utiliser.",
+
+    "noLibWrapper": "ConversationHUD nécessite le module libWrapper pour une fonctionnalité complète. Veuillez l'installer et l'activer.",
+
+    "invalidJournalEntry": "Entrée de journal invalide fournie, veuillez vous assurer que l'entrée de journal fournie est valide et n'a pas été supprimée."
+  },
+
+  "CHUD.warnings": {
+    "noParticipantDataFound": "Aucune donnée de participant viable n'a été trouvée dans cette entrée de journal."
+  },
+
+  "CHUD.info": {
+    "saveSuccessful": "La conversation en cours a été enregistrée avec succès."
+  },
+
+  "CHUD.settings": {
+    "portraitStyle": {
+      "name": "Style de Portrait",
+      "hint": "Cette option détermine l'orientation et le style dans lesquels les portraits des participants actifs seront affichés.",
+      "choices": {
+        "vertical": "Vertical",
+        "horizontal": "Horizontal",
+        "square": "Carré"
+      }
+    },
+    "portraitAnchorVertical": {
+      "name": "Portrait Anchor - Vertical",
+      "hint": "The vertical anchor point of reference from which the portrait will begin to pe displayed. For example, with the Top option selected, the upper section of the portrait will always be displayed.",
+      "choices": {
+        "top": "Haut",
+        "center": "Centre",
+        "bottom": "Bas"
+      }
+    },
+    "portraitAnchorHorizontal": {
+      "name": "Portrait Anchor - Horizontal",
+      "hint": "The horizontal anchor point of reference from which the portrait will begin to pe displayed. For example, with the Left option selected, the leftmost section of the portrait will always be displayed.",
+      "choices": {
+        "left": "Left",
+        "center": "Centre",
+        "right": "Right"
+      }
+    },
+    "displayAllParticipantsToPlayers": {
+      "name": "Afficher la Liste des Participants",
+      "hint": "Basculer l'affichage ou non de la liste de tous les participants à la conversation aux joueurs. Le MJ pourra toujours voir cette liste."
+    },
+    "enableSpeakAs": {
+      "name": "Activer Parler Comme",
+      "hint": "Basculer la fonctionnalité Parler Comme on ou off. Par défaut, la fonctionnalité est activée, mais si vous ne l'utilisez pas et ne voulez pas qu'un bouton supplémentaire apparaisse, vous pouvez la désactiver."
+    },
+    "enableMinimize": {
+      "name": "Activer Minimiser",
+      "hint": "Basculer la fonctionnalité Minimiser on ou off. Par défaut, la fonctionnalité est activée car elle permet aux utilisateurs d'interagir avec la carte pendant qu'une conversation est active et visible. Si vous ne souhaitez pas ce comportement, vous pouvez désactiver la fonctionnalité."
+    },
+    "enableSceneConversations": {
+      "name": "Activer les Conversations de Scène",
+      "hint": "Basculer la fonctionnalité Conversation de Scène on ou off. Par défaut, la fonctionnalité est activée et elle permet aux utilisateurs de lier une conversation à une scène et lorsque la scène est activée, la conversation s'ouvrira automatiquement. Le sélecteur de conversation se trouve sur l'onglet Ambiance de la Feuille de Configuration de Scène. Si vous ne souhaitez pas ce comportement, vous pouvez désactiver la fonctionnalité."
+    },
+    "enableBlurToggle": {
+      "name": "Enable Background Blur Toggle",
+      "hint": "Toggle to Background Blur Toggle feature on or off. By default, the feature is on as it allows the DM to showcase the background image without minimizing the conversation. If you do not want this behavior, you can toggle the feature off."
+    },
+    "blurAmount": {
+      "name": "Blur Amount",
+      "hint": "The amount of blur (in pixels) that will be applied to the background when a conversation is active. An amount of zero pixels will disable the background blur completely."
+    },
+    "activeParticipantFontSize": {
+      "name": "Taille de la Police du Participant",
+      "hint": "Cette option détermine la taille de la police utilisée pour afficher le nom du participant actuellement actif."
+    },
+    "activeParticipantFactionFontSize": {
+      "name": "Taille de la Police de la Faction du Participant",
+      "hint": "Cette option détermine la taille de la police utilisée pour afficher le nom de la faction à laquelle appartient le participant actuellement actif."
+    },
+    "fontSizeOptions": {
+      "verySmall": "Très Petit",
+      "small": "Petit",
+      "regular": "Régulier",
+      "large": "Grand",
+      "veryLarge": "Très Grand"
+    },
+    "rpgUiFix": {
+      "name": "Activer la correction de l'interface utilisateur personnalisée",
+      "hint": "Si vous utilisez un module qui change l'apparence de l'interface utilisateur et que vous rencontrez un problème qui fait que la barre latérale chevauche l'interface de conversation ou les boutons de contrôle, activer cette fonctionnalité devrait résoudre les problèmes."
+    }
+  }
+}

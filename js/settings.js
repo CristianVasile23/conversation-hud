@@ -2,11 +2,14 @@ import { MODULE_NAME } from "./constants.js";
 
 export const ModuleSettings = {
   portraitStyle: "portraitStyle",
-  portraitAnchor: "portraitAnchor",
+  portraitAnchorVertical: "portraitAnchorVertical",
+  portraitAnchorHorizontal: "portraitAnchorHorizontal",
   displayAllParticipantsToPlayers: "displayAllParticipantsToPlayers",
   enableMinimize: "enableMinimize",
   enableSpeakAs: "enableSpeakAs",
   enableSceneConversations: "enableSceneConversations",
+  enableBlurToggle: "enableBlurToggle",
+  blurAmount: "blurAmount",
   activeParticipantFontSize: "activeParticipantFontSize",
   activeParticipantFactionFontSize: "activeParticipantFactionFontSize",
   rpgUiFix: "rpgUiFix",
@@ -28,18 +31,33 @@ export function registerSettings() {
     },
   });
 
-  game.settings.register(MODULE_NAME, ModuleSettings.portraitAnchor, {
-    name: game.i18n.localize(`CHUD.settings.portraitAnchor.name`),
-    hint: game.i18n.localize(`CHUD.settings.portraitAnchor.hint`),
+  game.settings.register(MODULE_NAME, ModuleSettings.portraitAnchorVertical, {
+    name: game.i18n.localize(`CHUD.settings.portraitAnchorVertical.name`),
+    hint: game.i18n.localize(`CHUD.settings.portraitAnchorVertical.hint`),
     scope: "world",
     config: true,
     requiresReload: true,
     type: String,
-    default: "center",
+    default: "centerVertical",
     choices: {
-      top: game.i18n.localize(`CHUD.settings.portraitAnchor.choices.top`),
-      center: game.i18n.localize(`CHUD.settings.portraitAnchor.choices.center`),
-      bottom: game.i18n.localize(`CHUD.settings.portraitAnchor.choices.bottom`),
+      top: game.i18n.localize(`CHUD.settings.portraitAnchorVertical.choices.top`),
+      centerVertical: game.i18n.localize(`CHUD.settings.portraitAnchorVertical.choices.center`),
+      bottom: game.i18n.localize(`CHUD.settings.portraitAnchorVertical.choices.bottom`),
+    },
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.portraitAnchorHorizontal, {
+    name: game.i18n.localize(`CHUD.settings.portraitAnchorHorizontal.name`),
+    hint: game.i18n.localize(`CHUD.settings.portraitAnchorHorizontal.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: String,
+    default: "centerHorizontal",
+    choices: {
+      left: game.i18n.localize(`CHUD.settings.portraitAnchorHorizontal.choices.left`),
+      centerHorizontal: game.i18n.localize(`CHUD.settings.portraitAnchorHorizontal.choices.center`),
+      right: game.i18n.localize(`CHUD.settings.portraitAnchorHorizontal.choices.right`),
     },
   });
 
@@ -81,6 +99,31 @@ export function registerSettings() {
     requiresReload: true,
     type: Boolean,
     default: true,
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.enableBlurToggle, {
+    name: game.i18n.localize(`CHUD.settings.enableBlurToggle.name`),
+    hint: game.i18n.localize(`CHUD.settings.enableBlurToggle.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: Boolean,
+    default: true,
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.blurAmount, {
+    name: game.i18n.localize(`CHUD.settings.blurAmount.name`),
+    hint: game.i18n.localize(`CHUD.settings.blurAmount.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: Number,
+    range: {
+      min: 0,
+      max: 15,
+      step: 1,
+    },
+    default: 5,
   });
 
   game.settings.register(MODULE_NAME, ModuleSettings.activeParticipantFontSize, {

@@ -37,22 +37,63 @@
 }
 /* #endregion */
 
-/* ----- Active participant portrait anchors ----- */
+/* ----- Participant portrait anchors ----- */
 /* #region */
-.conversation-hud-content .conversation-participant .portrait.top,
-.conversation-hud-content .active-participant .portrait.top {
-  object-position: top center;
+.conversation-hud-content .conversation-participant .portrait.top.left,
+.conversation-hud-content .active-participant .portrait.top.left {
+  top: 0;
+  left: 0;
+  transform-origin: top left;
+  object-position: top left;
+}
+.conversation-hud-content .conversation-participant .portrait.top.centerHorizontal,
+.conversation-hud-content .active-participant .portrait.top.centerHorizontal {
+  top: 0;
+  transform-origin: top;
+  object-position: top;
+}
+.conversation-hud-content .conversation-participant .portrait.top.right,
+.conversation-hud-content .active-participant .portrait.top.right {
+  top: 0;
+  right: 0;
+  transform-origin: top right;
+  object-position: top right;
 }
 
-.conversation-hud-content .conversation-participant .portrait.center,
-.conversation-hud-content .active-participant .portrait.center {
-  object-position: center;
+.conversation-hud-content .conversation-participant .portrait.centerVertical.left,
+.conversation-hud-content .active-participant .portrait.centerVertical.left {
+  left: 0;
+  transform-origin: left;
+  object-position: left;
+}
+.conversation-hud-content .conversation-participant .portrait.centerVertical.right,
+.conversation-hud-content .active-participant .portrait.centerVertical.right {
+  right: 0;
+  transform-origin: right;
+  object-position: right;
 }
 
-.conversation-hud-content .conversation-participant .portrait.bottom,
-.conversation-hud-content .active-participant .portrait.bottom {
-  object-position: bottom center;
+.conversation-hud-content .conversation-participant .portrait.bottom.left,
+.conversation-hud-content .active-participant .portrait.bottom.left {
+  bottom: 0;
+  left: 0;
+  transform-origin: bottom left;
+  object-position: bottom left;
 }
+.conversation-hud-content .conversation-participant .portrait.bottom.centerHorizontal,
+.conversation-hud-content .active-participant .portrait.bottom.centerHorizontal {
+  bottom: 0;
+  transform-origin: bottom;
+  object-position: bottom;
+}
+.conversation-hud-content .conversation-participant .portrait.bottom.right,
+.conversation-hud-content .active-participant .portrait.bottom.right {
+  bottom: 0;
+  right: 0;
+  transform-origin: bottom right;
+  object-position: bottom right;
+}
+
 /* #endregion */
 
 /* ----- Font sizes for participant and faction names ----- */
