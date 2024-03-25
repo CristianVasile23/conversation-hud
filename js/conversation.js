@@ -764,10 +764,20 @@ export class ConversationHud {
     }
   }
 
-  // Function that calls the convertActor
+  // Function that transform an actor to a participant and can be called from anywhere
   actorToParticipant(actor) {
     if (checkIfUserGM()) {
       return convertActorToParticipant(actor);
+    }
+  }
+
+  // Function that transform a token to a participant and can be called from anywhere
+  tokenToParticipant(token) {
+    if (checkIfUserGM()) {
+      const participant = convertActorToParticipant(token.actor);
+      participant.name = token.name;
+      participant.id = token.id;
+      return participant;
     }
   }
 

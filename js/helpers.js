@@ -409,6 +409,7 @@ export function convertActorToParticipant(actor) {
     img: actor.img,
     linkedJournal: "",
     name: actor.name,
+    displayName: true,
   };
 
   return participant;
