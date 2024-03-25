@@ -1,3 +1,16 @@
+## 5.4.0
+
+- Added the option to hide participant names.
+- Added the option to customize the amount of blur that is applied to the conversation background. Setting the background blur to 0 pixels will permanently toggle it off.
+- Added the option to temporarily toggle the background blur on/off.
+- Reworked the way portraits are anchored. You can now specify both a horizontal and vertical anchor point which should allow for more flexibility when displaying portraits.
+- Added the option to set portrait anchors for each participant individually. By default, the global options are used.
+- Added the option to drag and drop participants from one conversation to another.
+- Added the option to start scene conversations with their visibility off.
+- Added support for video portraits.
+- Added two extra API functions which can be used by macros (_actorToParticipant_ and _tokenToParticipant_).
+- Added French translation (credit goes to MastaGooz).
+
 ## 5.3.1
 
 - Fixed a bug that caused the drag and drop functionality to no longer work for tokens and actors.
