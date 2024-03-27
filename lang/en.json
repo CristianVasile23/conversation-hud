@@ -257,6 +257,10 @@
       "name": "Enable Minimize",
       "hint": "Toggle the Minimize feature on or off. By default, the feature is on as it allows users to interact with the map while a conversation is active and visible. If you do not want this behavior, you can toggle the feature off."
     },
+    "keepMinimize": {
+      "name": "Keep Minimize",
+      "hint": "Remember minimization in the current local client session. By default, the feature is off so that every new conversation will start maximized. Set this to on to have new conversations pick up the previous state."
+    },
     "enableSceneConversations": {
       "name": "Enable Scene Conversations",
       "hint": "Toggle the Scene Conversation feature on or off. By default, the feature is on and it allows users to link a conversation to a scene and when the scene is activated the conversation will open automatically. The conversation selector can be found on the Ambience tab of the Scene Config Sheet. If you do not want this behavior, you can toggle the feature off."
