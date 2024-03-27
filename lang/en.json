@@ -224,7 +224,8 @@
       "choices": {
         "vertical": "Vertical",
         "horizontal": "Horizontal",
-        "square": "Square"
+        "square": "Square",
+        "auto": "Auto"
       }
     },
     "portraitAnchorVertical": {

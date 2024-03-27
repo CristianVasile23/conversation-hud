@@ -17,6 +17,12 @@
   max-width: 620px;
   aspect-ratio: 1/1;
 }
+
+.conversation-hud-content .active-participant.auto .portrait {
+  position: relative;
+  max-width: min(620px, 30vw, 50vh);
+  max-height: min(620px, 30vw, 50vh);
+}
 /* #endregion */
 
 /* ----- Active participant portrait types when conversation is minimized ----- */
@@ -34,6 +40,15 @@
 .conversation-hud-wrapper.minimized .conversation-hud-content .active-participant.square {
   height: 124px;
   width: 124px;
+}
+
+.conversation-hud-wrapper.minimized .conversation-hud-content .active-participant.auto {
+  height: unset;
+  width: unset;
+}
+.conversation-hud-wrapper.minimized .conversation-hud-content .active-participant.auto .portrait {
+  max-height: 186px;
+  max-width: 220px;
 }
 /* #endregion */
 
