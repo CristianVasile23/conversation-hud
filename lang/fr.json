@@ -257,6 +257,10 @@
       "name": "Activer Minimiser",
       "hint": "Basculer la fonctionnalité Minimiser on ou off. Par défaut, la fonctionnalité est activée car elle permet aux utilisateurs d'interagir avec la carte pendant qu'une conversation est active et visible. Si vous ne souhaitez pas ce comportement, vous pouvez désactiver la fonctionnalité."
     },
+    "keepMinimize": {
+      "name": "Keep Minimize",
+      "hint": "Remember minimization in the current local client session. By default, the feature is off so that every new conversation will start maximized. Set this to on to have new conversations pick up the previous state."
+    },
     "enableSceneConversations": {
       "name": "Activer les Conversations de Scène",
       "hint": "Basculer la fonctionnalité Conversation de Scène on ou off. Par défaut, la fonctionnalité est activée et elle permet aux utilisateurs de lier une conversation à une scène et lorsque la scène est activée, la conversation s'ouvrira automatiquement. Le sélecteur de conversation se trouve sur l'onglet Ambiance de la Feuille de Configuration de Scène. Si vous ne souhaitez pas ce comportement, vous pouvez désactiver la fonctionnalité."
