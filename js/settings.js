@@ -29,6 +29,7 @@ export function registerSettings() {
       vertical: game.i18n.localize(`CHUD.settings.portraitStyle.choices.vertical`),
       horizontal: game.i18n.localize(`CHUD.settings.portraitStyle.choices.horizontal`),
       square: game.i18n.localize(`CHUD.settings.portraitStyle.choices.square`),
+      auto: game.i18n.localize(`CHUD.settings.portraitStyle.choices.auto`)
     },
   });
 
