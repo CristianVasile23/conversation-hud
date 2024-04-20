@@ -31,6 +31,8 @@
       }
     },
 
+    "name": "Name",
+
     "linkedJournal": "Linked Journal",
     "linkedJournalHint": "Journal entry that will be linked to the conversation participant.",
     "noLinkedJournal": "No linked journal",
@@ -259,8 +261,8 @@
       "hint": "Toggle the Minimize feature on or off. By default, the feature is on as it allows users to interact with the map while a conversation is active and visible. If you do not want this behavior, you can toggle the feature off."
     },
     "keepMinimize": {
-      "name": "Keep Minimize",
-      "hint": "Remember minimization in the current local client session. By default, the feature is off so that every new conversation will start maximized. Set this to on to have new conversations pick up the previous state."
+      "name": "Remember Minimization",
+      "hint": "Remember minimization status between different conversations. By default, the feature is off so that every new conversation will start maximized. Enable this feature to have new conversations pick up the previous minimization state. Minimization state resets on page reload."
     },
     "enableSceneConversations": {
       "name": "Enable Scene Conversations",

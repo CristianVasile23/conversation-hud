@@ -31,6 +31,8 @@
       }
     },
 
+    "name": "Nom",
+
     "linkedJournal": "Journal Lié",
     "linkedJournalHint": "Entrée de journal qui sera liée au participant de la conversation.",
     "noLinkedJournal": "Aucun journal lié",
@@ -259,8 +261,8 @@
       "hint": "Basculer la fonctionnalité Minimiser on ou off. Par défaut, la fonctionnalité est activée car elle permet aux utilisateurs d'interagir avec la carte pendant qu'une conversation est active et visible. Si vous ne souhaitez pas ce comportement, vous pouvez désactiver la fonctionnalité."
     },
     "keepMinimize": {
-      "name": "Keep Minimize",
-      "hint": "Remember minimization in the current local client session. By default, the feature is off so that every new conversation will start maximized. Set this to on to have new conversations pick up the previous state."
+      "name": "Remember Minimization",
+      "hint": "Remember minimization status between different conversations. By default, the feature is off so that every new conversation will start maximized. Enable this feature to have new conversations pick up the previous minimization state. Minimization state resets on page reload."
     },
     "enableSceneConversations": {
       "name": "Activer les Conversations de Scène",
