@@ -50,21 +50,15 @@ Hooks.on("chatMessage", (chatLog, message, chatData) => {
 // Hook that injects scene conversation HTML into the scene config screen
 Hooks.on("renderSceneConfig", async (app, html, data) => {
   if (game.settings.get(MODULE_NAME, ModuleSettings.enableSceneConversations)) {
-    const conversations = game.journal.filter(
-      (item) => item.flags.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet"
-    );
+    const conversations = game.journal.filter((item) => item.flags.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet");
     const linkedConversation = data.data["flags"]["conversation-hud"]?.sceneConversation || undefined;
-    const sceneConversationVisibilityOff =
-      data.data["flags"]["conversation-hud"]?.sceneConversationVisibilityOff || undefined;
+    const sceneConversationVisibilityOff = data.data["flags"]["conversation-hud"]?.sceneConversationVisibilityOff || undefined;
 
-    const renderedHtml = await renderTemplate(
-      "modules/conversation-hud/templates/fragments/scene_conversation_selector.hbs",
-      {
-        conversations: conversations,
-        linkedConversation: linkedConversation,
-        sceneConversationVisibilityOff: sceneConversationVisibilityOff,
-      }
-    );
+    const renderedHtml = await renderTemplate("modules/conversation-hud/templates/fragments/scene_conversation_selector.hbs", {
+      conversations: conversations,
+      linkedConversation: linkedConversation,
+      sceneConversationVisibilityOff: sceneConversationVisibilityOff,
+    });
 
     html.find('div[data-tab="ambience"] > .form-group').last().after(renderedHtml);
     app.setPosition({ height: "auto" });
@@ -95,17 +89,22 @@ Hooks.on("renderSettingsConfig", (app, html, data) => {
     if (!module) return;
     if (module.id !== MODULE_NAME) return;
 
-    const displayAllParticipantsToPlayers = el.querySelector(
-      'div[data-setting-id="conversation-hud.displayAllParticipantsToPlayers"]'
-    );
-    el.insertBefore(document.createElement("hr"), displayAllParticipantsToPlayers);
+    const portraitStyle = el.querySelector('div[data-setting-id="conversation-hud.portraitStyle"]');
+    const portraitSectionHeader = document.createElement("h3");
+    portraitSectionHeader.textContent = game.i18n.localize("CHUD.settings.settingsSheetHeaders.portrait");
+    el.insertBefore(portraitSectionHeader, portraitStyle);
 
-    const activeParticipantFontSize = el.querySelector(
-      'div[data-setting-id="conversation-hud.activeParticipantFontSize"]'
-    );
+    const displayAllParticipantsToPlayers = el.querySelector('div[data-setting-id="conversation-hud.displayAllParticipantsToPlayers"]');
+    const featuresSectionHeader = document.createElement("h3");
+    featuresSectionHeader.textContent = game.i18n.localize("CHUD.settings.settingsSheetHeaders.feature");
+    el.insertBefore(featuresSectionHeader, displayAllParticipantsToPlayers);
+
+    const activeParticipantFontSize = el.querySelector('div[data-setting-id="conversation-hud.activeParticipantFontSize"]');
     el.insertBefore(document.createElement("hr"), activeParticipantFontSize);
 
     const rpgUiFix = el.querySelector('div[data-setting-id="conversation-hud.rpgUiFix"]');
-    el.insertBefore(document.createElement("hr"), rpgUiFix);
+    const compatibilitySectionHeader = document.createElement("h3");
+    compatibilitySectionHeader.textContent = game.i18n.localize("CHUD.settings.settingsSheetHeaders.compatibility");
+    el.insertBefore(compatibilitySectionHeader, rpgUiFix);
   });
 });

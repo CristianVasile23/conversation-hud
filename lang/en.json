@@ -220,6 +220,11 @@
   },
 
   "CHUD.settings": {
+    "settingsSheetHeaders": {
+      "portrait": "Portrait Settings",
+      "feature": "Feature Settings",
+      "compatibility": "Compatibility Settings"
+    },
     "portraitStyle": {
       "name": "Portrait Style",
       "hint": "This option determines the orientation and style in which the portraits of the active participants will be displayed.",
