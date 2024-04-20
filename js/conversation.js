@@ -364,7 +364,7 @@ export class ConversationHud {
       game.ConversationHud.changeActiveImage(conversationData.activeParticipant);
     }
 
-    if (visibility !== undefined) {
+    if (visibility !== undefined && game.user.isGM) {
       game.ConversationHud.setActiveConversationVisibility(visibility);
     }
   }
@@ -606,9 +606,9 @@ export class ConversationHud {
       }
 
       if (this.activeConversation) {
-        this.#handleConversationUpdateData(conversationData, visibility);
+        this.#handleConversationUpdateData(conversationData, parsedVisibility);
       } else {
-        this.#handleConversationCreationData(conversationData, visibility);
+        this.#handleConversationCreationData(conversationData, parsedVisibility);
       }
     }
   }
