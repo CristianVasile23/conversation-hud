@@ -1,3 +1,10 @@
+## 5.5.0
+
+- Added _Auto_ portrait style which will scale the portrait display according to the size of the image provided (credit goes to Mystler).
+- Added option to keep minimization state between conversations (credit goes to Mystler).
+- Improved the module settings sheet by adding headers and separators so that parsing the setting list is easier and more intuitive.
+- Fixed an issue which caused the visibility setter code to be ran on all clients which caused an error message to appear on non-GM clients.
+
 ## 5.4.0
 
 - Added the option to hide participant names.
