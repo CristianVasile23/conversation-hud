@@ -125,6 +125,9 @@ export class ConversationHud {
     if (conversationVisible) {
       element.classList.add("visible");
     }
+    if (game.ConversationHud.conversationIsMinimized) {
+      element.classList.add("minimized");
+    }
     element.innerHTML = renderedHtml;
 
     game.ConversationHud.addDragDropListeners(element);
@@ -140,7 +143,7 @@ export class ConversationHud {
     const blurAmount = game.settings.get(MODULE_NAME, ModuleSettings.blurAmount);
     conversationBackground.style = `backdrop-filter: blur(${blurAmount}px);`;
 
-    if (conversationVisible) {
+    if (conversationVisible && !game.ConversationHud.conversationIsMinimized) {
       conversationBackground.classList.add("visible");
     }
 
@@ -268,7 +271,9 @@ export class ConversationHud {
   async removeConversation() {
     game.ConversationHud.conversationIsActive = false;
     game.ConversationHud.conversationIsVisible = false;
-    game.ConversationHud.conversationIsMinimized = false;
+    if (!game.settings.get(MODULE_NAME, ModuleSettings.keepMinimize)) {
+      game.ConversationHud.conversationIsMinimized = false;
+    }
     game.ConversationHud.conversationIsSpeakingAs = false;
     game.ConversationHud.conversationIsBlurred = true;
     game.ConversationHud.activeConversation = null;
@@ -359,7 +364,7 @@ export class ConversationHud {
       game.ConversationHud.changeActiveImage(conversationData.activeParticipant);
     }
 
-    if (visibility !== undefined) {
+    if (visibility !== undefined && game.user.isGM) {
       game.ConversationHud.setActiveConversationVisibility(visibility);
     }
   }
@@ -601,9 +606,9 @@ export class ConversationHud {
       }
 
       if (this.activeConversation) {
-        this.#handleConversationUpdateData(conversationData, visibility);
+        this.#handleConversationUpdateData(conversationData, parsedVisibility);
       } else {
-        this.#handleConversationCreationData(conversationData, visibility);
+        this.#handleConversationCreationData(conversationData, parsedVisibility);
       }
     }
   }

@@ -6,6 +6,7 @@ export const ModuleSettings = {
   portraitAnchorHorizontal: "portraitAnchorHorizontal",
   displayAllParticipantsToPlayers: "displayAllParticipantsToPlayers",
   enableMinimize: "enableMinimize",
+  keepMinimize: "keepMinimize",
   enableSpeakAs: "enableSpeakAs",
   enableSceneConversations: "enableSceneConversations",
   enableBlurToggle: "enableBlurToggle",
@@ -90,6 +91,16 @@ export function registerSettings() {
     requiresReload: true,
     type: Boolean,
     default: true,
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.keepMinimize, {
+    name: game.i18n.localize(`CHUD.settings.keepMinimize.name`),
+    hint: game.i18n.localize(`CHUD.settings.keepMinimize.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: false,
+    type: Boolean,
+    default: false,
   });
 
   game.settings.register(MODULE_NAME, ModuleSettings.enableSceneConversations, {

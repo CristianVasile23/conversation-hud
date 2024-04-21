@@ -31,6 +31,8 @@
       }
     },
 
+    "name": "Nom",
+
     "linkedJournal": "Journal Lié",
     "linkedJournalHint": "Entrée de journal qui sera liée au participant de la conversation.",
     "noLinkedJournal": "Aucun journal lié",
@@ -218,6 +220,11 @@
   },
 
   "CHUD.settings": {
+    "settingsSheetHeaders": {
+      "portrait": "Portrait Settings",
+      "feature": "Feature Settings",
+      "compatibility": "Compatibility Settings"
+    },
     "portraitStyle": {
       "name": "Style de Portrait",
       "hint": "Cette option détermine l'orientation et le style dans lesquels les portraits des participants actifs seront affichés.",
@@ -257,6 +264,10 @@
     "enableMinimize": {
       "name": "Activer Minimiser",
       "hint": "Basculer la fonctionnalité Minimiser on ou off. Par défaut, la fonctionnalité est activée car elle permet aux utilisateurs d'interagir avec la carte pendant qu'une conversation est active et visible. Si vous ne souhaitez pas ce comportement, vous pouvez désactiver la fonctionnalité."
+    },
+    "keepMinimize": {
+      "name": "Remember Minimization",
+      "hint": "Remember minimization status between different conversations. By default, the feature is off so that every new conversation will start maximized. Enable this feature to have new conversations pick up the previous minimization state. Minimization state resets on page reload."
     },
     "enableSceneConversations": {
       "name": "Activer les Conversations de Scène",
