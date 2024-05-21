@@ -39,6 +39,12 @@
 
     "conversationName": "Nom de la Conversation",
     "conversationParticipants": "Participants à la Conversation",
+    "conversationSettings": "Conversation Settings",
+
+    "conversationBackground": {
+      "name": "Conversation Background",
+      "hint": "TODO"
+    },
 
     "newParticipant": "Nouveau Participant",
 
@@ -117,7 +123,7 @@
 
     "toggleSpeakAs": "Basculer Parler Comme",
     "toggleVisibility": "Basculer la Visibilité",
-    "toggleBackgroundBlur": "Toggle Background Blur",
+    "toggleBackgroundBlur": "Toggle Background",
     "maximizeConversation": "Maximiser la conversation",
     "minimizeConversation": "Minimiser la conversation",
 

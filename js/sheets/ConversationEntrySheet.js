@@ -1,5 +1,5 @@
 import { ANCHOR_OPTIONS } from "../constants.js";
-import { FileInputForm } from "../formAddParticipant.js";
+import { ParticipantInputForm } from "../formAddParticipant.js";
 import { PullParticipantsForm } from "../formPullParticipants.js";
 import {
   getActorDataFromDragEvent,
@@ -18,6 +18,8 @@ export class ConversationEntrySheet extends JournalSheet {
     super(data, options);
     this.dirty = false;
 
+    this.conversationBackground = "";
+
     this.dropzoneVisible = false;
     this.draggingParticipant = false;
 
@@ -31,6 +33,11 @@ export class ConversationEntrySheet extends JournalSheet {
         if (data instanceof Array) {
           this.participants = data;
         } else {
+          const conversationBackground = data.conversationBackground;
+          if (conversationBackground) {
+            this.conversationBackground = conversationBackground;
+          }
+
           const participants = data.participants;
           const defaultActiveParticipant = data.defaultActiveParticipant;
           if (participants) {
@@ -59,7 +66,7 @@ export class ConversationEntrySheet extends JournalSheet {
       id: "conversation-entry-sheet",
       template: `modules/conversation-hud/templates/conversation_sheet.hbs`,
       width: 635,
-      height: 500,
+      height: 660,
       resizable: false,
     });
   }
@@ -86,9 +93,13 @@ export class ConversationEntrySheet extends JournalSheet {
     });
 
     html.find("#add-participant").click(async (e) => {
-      const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));
-      return fileInputForm.render(true);
+      const participantInputForm = new ParticipantInputForm(false, (data) => this.#handleAddParticipant(data));
+      return participantInputForm.render(true);
     });
+
+    // Bind event handler for conversation background image field
+    const conversationBackgroundInput = html.find("[name=conversationBackground]")[0];
+    conversationBackgroundInput.onchange = (event) => this.#handleChangeConversationBackground(event);
 
     // Drag and drop functionality
     const dragDropWrapper = html.find("#conversation-sheet-content-wrapper")[0];
@@ -209,7 +220,7 @@ export class ConversationEntrySheet extends JournalSheet {
         controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
         controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {
-          const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
+          const participantInputForm = new ParticipantInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             displayName: this.participants[i].displayName,
             img: this.participants[i].img,
@@ -219,7 +230,7 @@ export class ConversationEntrySheet extends JournalSheet {
             anchorOptions: ANCHOR_OPTIONS,
             portraitAnchor: getPortraitAnchorObjectFromParticipant(this.participants[i]),
           });
-          fileInputForm.render(true);
+          participantInputForm.render(true);
         };
       }
     }
@@ -242,6 +253,7 @@ export class ConversationEntrySheet extends JournalSheet {
     const data = {
       isGM: game.user.isGM,
       dirty: this.dirty,
+      conversationBackground: this.conversationBackground,
       defaultActiveParticipant: this.defaultActiveParticipant,
       participants: this.participants,
       name: baseData.data.name,
@@ -327,6 +339,7 @@ export class ConversationEntrySheet extends JournalSheet {
     // Get document pages
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
     const dataToSave = {
+      conversationBackground: this.conversationBackground,
       defaultActiveParticipant: this.defaultActiveParticipant,
       participants: this.participants,
     };
@@ -360,6 +373,15 @@ export class ConversationEntrySheet extends JournalSheet {
     }
 
     this.dirty = false;
+    this.render(false);
+  }
+
+  #handleChangeConversationBackground(event) {
+    if (!event.target) return;
+
+    this.conversationBackground = event.target.value;
+
+    this.dirty = true;
     this.render(false);
   }
 

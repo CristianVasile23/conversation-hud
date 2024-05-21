@@ -2,7 +2,7 @@ import { ANCHOR_OPTIONS } from "./constants.js";
 import { getConversationDataFromJournalId, getPortraitAnchorObjectFromParticipant } from "./helpers.js";
 import { ConversationFactionSheet } from "./sheets/ConversationFactionSheet.js";
 
-export class FileInputForm extends FormApplication {
+export class ParticipantInputForm extends FormApplication {
   constructor(isEditing, callbackFunction, participantData) {
     super();
     this.isEditing = isEditing;

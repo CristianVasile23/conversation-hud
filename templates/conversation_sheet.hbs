@@ -9,16 +9,53 @@
         id="show-conversation"
         title="{{localize 'CHUD.actions.activateConversation'}}"
         class="header-action-button"
+        style="margin-left: 5px;"
       >
         <i class="fas fa-eye"></i>
       </button>
+    {{/if}}
+  </div>
 
+  <div class="flexrow sub-header">
+    <p> {{localize 'CHUD.strings.conversationSettings'}} </p>
+  </div>
+
+  <div class="conversation-sheet-settings">
+    <div class="form-group">
+      <label>{{localize "CHUD.strings.conversationBackground.name"}}</label>
+      <div class="form-fields">
+        <button
+          type="button"
+          class="file-picker"
+          data-type="imagevideo"
+          data-target="conversationBackground"
+          title="{{localize 'CHUD.strings.browseFiles'}}"
+        >
+          <i class="fas fa-file-import fa-fw"></i>
+        </button>
+
+        <input
+          class="image"
+          type="text"
+          name="conversationBackground"
+          placeholder="{{localize 'CHUD.strings.filePath'}}"
+          value="{{conversationBackground}}"
+        />
+      </div>
+      <p class="notes">{{localize "CHUD.strings.conversationBackground.hint"}}</p>
+    </div>
+  </div>
+
+  <div class="flexrow sub-header">
+    <p> {{localize 'CHUD.strings.conversationParticipants'}} </p>
+
+    {{#if isGM}}
       <button
         type="button"
         name="pull-participants-from-scene"
         id="pull-participants-from-scene"
         title="{{localize 'CHUD.actions.pullParticipants'}}"
-        class="header-action-button"
+        class="sub-header-action-button"
       >
         <i class="fas fa-up-from-bracket"></i>
       </button>
@@ -28,7 +65,7 @@
         name="add-participant"
         id="add-participant"
         title="{{localize 'CHUD.actions.participant.add'}}"
-        class="header-action-button"
+        class="sub-header-action-button"
       >
         <i class="fas fa-user-plus"></i>
       </button>
