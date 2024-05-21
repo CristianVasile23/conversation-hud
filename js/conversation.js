@@ -1,6 +1,7 @@
 import { ConversationInputForm } from "./formConversationInput.js";
 import { ParticipantInputForm } from "./formAddParticipant.js";
 import { PullParticipantsForm } from "./formPullParticipants.js";
+import { ConversationBackgroundForm } from "./forms/ConversationBackgroundForm.js";
 import { ConversationEntrySheet } from "./sheets/ConversationEntrySheet.js";
 import { ConversationFactionSheet } from "./sheets/ConversationFactionSheet.js";
 import {
@@ -710,6 +711,21 @@ export class ConversationHud {
       }
     } else {
       ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+    }
+  }
+
+  // Function to change the conversation background
+  changeConversationBackground() {
+    if (checkIfUserGM()) {
+      const conversationBackgroundForm = new ConversationBackgroundForm((data) => {
+        const conversationData = {
+          ...game.ConversationHud.activeConversation,
+          conversationBackground: data.conversationBackground,
+        };
+        const visibility = game.ConversationHud.conversationIsVisible;
+        game.ConversationHud.updateActiveConversation(conversationData, visibility);
+      }, game.ConversationHud.activeConversation.conversationBackground);
+      return conversationBackgroundForm.render(true);
     }
   }
 

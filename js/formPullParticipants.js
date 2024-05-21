@@ -29,7 +29,7 @@ export class PullParticipantsForm extends FormApplication {
       template: `modules/conversation-hud/templates/pull_participants.hbs`,
       id: "conversation-pull-participants",
       title: game.i18n.localize("CHUD.actions.pullParticipants"),
-      width: 435,
+      width: 450,
       height: 650,
       resizable: false,
     });
@@ -74,8 +74,7 @@ export class PullParticipantsForm extends FormApplication {
     if (actorsObject) {
       const pulledActors = actorsObject.children;
       for (let i = 0; i < pulledActors.length; i++) {
-        pulledActors[i].querySelector("#pull-participant-checkbox").onchange = (event) =>
-          this.#handleSetIncludeActorCheckbox(event, i);
+        pulledActors[i].querySelector("#pull-participant-checkbox").onchange = (event) => this.#handleSetIncludeActorCheckbox(event, i);
       }
     }
   }

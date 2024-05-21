@@ -142,6 +142,7 @@
       "deselectAll": "Deselect All"
     },
 
+    "changeConversationBackground": "Change Conversation Background",
     "pullParticipants": "Pull Participants from Scene",
     "addActors": "Add Actors"
   },
