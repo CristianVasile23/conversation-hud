@@ -405,11 +405,12 @@ export function getConversationDataFromJournalId(journalId) {
 
 export function convertActorToParticipant(actor) {
   const participant = {
-    faction: EMPTY_FACTION,
-    img: actor.img,
-    linkedJournal: "",
     name: actor.name,
     displayName: true,
+    img: actor.img,
+    linkedJournal: "",
+    linkedActor: "",
+    faction: EMPTY_FACTION,
   };
 
   return participant;
@@ -448,6 +449,7 @@ export function normalizeParticipantDataStructure(participant) {
   normalizedParticipant.faction = participant.faction || EMPTY_FACTION;
 
   normalizedParticipant.linkedJournal = participant.linkedJournal || "";
+  normalizedParticipant.linkedActor = participant.linkedActor || "";
 
   return normalizedParticipant;
 }

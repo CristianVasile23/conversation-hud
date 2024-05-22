@@ -226,6 +226,7 @@ export class ConversationEntrySheet extends JournalSheet {
             img: this.participants[i].img,
             imgScale: this.participants[i].imgScale,
             linkedJournal: this.participants[i].linkedJournal,
+            linkedActor: this.participants[i].linkedActor,
             faction: this.participants[i].faction,
             anchorOptions: ANCHOR_OPTIONS,
             portraitAnchor: getPortraitAnchorObjectFromParticipant(this.participants[i]),

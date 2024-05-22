@@ -46,10 +46,11 @@ export class PullParticipantsForm extends FormApplication {
     for (const participant of this.participants) {
       if (participant.checked) {
         const parsedParticipant = {
-          faction: EMPTY_FACTION,
+          name: participant.name,
           img: participant.img,
           linkedJournal: "",
-          name: participant.name,
+          linkedActor: "",
+          faction: EMPTY_FACTION,
         };
         selectedParticipants.push(parsedParticipant);
       }

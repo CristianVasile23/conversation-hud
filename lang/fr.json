@@ -33,9 +33,17 @@
 
     "name": "Nom",
 
-    "linkedJournal": "Journal Lié",
-    "linkedJournalHint": "Entrée de journal qui sera liée au participant de la conversation.",
-    "noLinkedJournal": "Aucun journal lié",
+    "noLinkedDocuments": "Aucun document lié",
+
+    "linkedJournal": {
+      "name": "Journal Lié",
+      "hint": "Entrée de journal qui sera liée au participant de la conversation."
+    },
+
+    "linkedActor": {
+      "name": "Linked Actor",
+      "hint": "Actor that will be linked to the conversation participant."
+    },
 
     "conversationName": "Nom de la Conversation",
     "conversationParticipants": "Participants à la Conversation",

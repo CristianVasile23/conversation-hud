@@ -551,6 +551,7 @@ export class ConversationHud {
         img: game.ConversationHud.activeConversation.participants[index].img,
         imgScale: game.ConversationHud.activeConversation.participants[index].imgScale,
         linkedJournal: game.ConversationHud.activeConversation.participants[index].linkedJournal,
+        linkedActor: game.ConversationHud.activeConversation.participants[index].linkedActor,
         faction: game.ConversationHud.activeConversation.participants[index].faction,
         anchorOptions: ANCHOR_OPTIONS,
         portraitAnchor: getPortraitAnchorObjectFromParticipant(game.ConversationHud.activeConversation.participants[index]),
@@ -763,7 +764,7 @@ export class ConversationHud {
   async displayLinkedParticipantNotes(index) {
     if (checkIfUserGM() && checkIfConversationActive()) {
       if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
-        console.error("ConversationHUD | Tried to update a participant with an invalid index");
+        console.error("ConversationHUD | Tried to access a participant with an invalid index");
         return;
       }
 
@@ -774,7 +775,7 @@ export class ConversationHud {
     }
   }
 
-  // Function that received a journal id and renders the referenced document in a separate sheet
+  // Function that receives a journal id and renders the referenced journal sheet in a separate tab
   async renderJournalSheet(journalId) {
     let journal = game.journal.get(journalId);
 
@@ -792,6 +793,32 @@ export class ConversationHud {
       }
 
       journal.sheet.render(true);
+    }
+  }
+
+  // Function that displays the linked notes of the participant at the given index
+  async displayLinkedParticipantActor(index) {
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
+        console.error("ConversationHUD | Tried to access a participant with an invalid index");
+        return;
+      }
+
+      const linkedActor = game.ConversationHud.activeConversation.participants[index].linkedActor;
+      if (linkedActor) {
+        game.ConversationHud.renderActorSheet(linkedActor);
+      }
+    }
+  }
+
+  // Function that receives am actor id and renders the referenced actor sheet in a separate tab
+  async renderActorSheet(actorId) {
+    let actor = game.actors.get(actorId);
+
+    if (!actor) {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActorEntry"));
+    } else {
+      actor.sheet.render(true);
     }
   }
 

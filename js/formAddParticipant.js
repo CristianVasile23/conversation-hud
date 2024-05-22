@@ -17,8 +17,9 @@ export class ParticipantInputForm extends FormApplication {
 
     this.portraitAnchor = getPortraitAnchorObjectFromParticipant(participantData);
 
-    // Linked journal
+    // Linked objects
     this.linkedJournal = participantData?.linkedJournal || "";
+    this.linkedActor = participantData?.linkedActor || "";
 
     // Faction data
     this.selectedFaction = participantData?.faction?.selectedFaction || "";
@@ -102,10 +103,16 @@ export class ParticipantInputForm extends FormApplication {
   }
 
   getData(options) {
-    const journals = game.journal.map((doc) => {
-      return { id: doc.id, name: doc.name };
+    // TODO: Remove journals that have the ConversationHUD tag
+    const journals = game.journal.map((journal) => {
+      return { id: journal.id, name: journal.name };
     });
     journals.sort((a, b) => a.name.localeCompare(b.name));
+
+    const actors = game.actors.map((actor) => {
+      return { id: actor.id, name: actor.name };
+    });
+    actors.sort((a, b) => a.name.localeCompare(b.name));
 
     // Get a list of all the saved factions
     const savedFactions = game.journal.filter(
@@ -149,8 +156,11 @@ export class ParticipantInputForm extends FormApplication {
       factionBannerTint: selectedFactionData.factionBannerTint,
 
       linkedJournal: this.linkedJournal,
+      linkedActor: this.linkedActor,
 
       savedFactions: savedFactions,
+
+      actors: actors,
       journals: journals,
     };
   }
@@ -163,6 +173,7 @@ export class ParticipantInputForm extends FormApplication {
       imgScale: formData.participantImgScale,
       portraitAnchor: this.portraitAnchor,
       linkedJournal: formData.linkedJournal,
+      linkedActor: formData.linkedActor,
       faction: {
         selectedFaction: formData.selectedFaction,
         displayFaction: formData.displayFaction,

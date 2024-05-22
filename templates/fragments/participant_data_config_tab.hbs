@@ -67,9 +67,17 @@
 <hr>
 
 <div class="form-group">
-  <label>{{localize "CHUD.strings.linkedJournal"}}</label>
+  <label>{{localize "CHUD.strings.linkedJournal.name"}}</label>
   <select name="linkedJournal">
     {{ selectOptions journals selected=linkedJournal blank="" nameAttr="id" labelAttr="name"}}
   </select>
-  <p class="notes">{{localize "CHUD.strings.linkedJournalHint"}}</p>
+  <p class="notes">{{localize "CHUD.strings.linkedJournal.hint"}}</p>
+</div>
+
+<div class="form-group">
+  <label>{{localize "CHUD.strings.linkedActor.name"}}</label>
+  <select name="linkedActor">
+    {{ selectOptions actors selected=linkedActor blank="" nameAttr="id" labelAttr="name"}}
+  </select>
+  <p class="notes">{{localize "CHUD.strings.linkedActor.hint"}}</p>
 </div>

@@ -47,7 +47,7 @@
                 <p class="faction">{{localize 'CHUD.faction.unaffiliated'}}</p>
               {{/if}}
 
-              {{{renderParticipantLinkedJournal participant.linkedJournal}}}
+              {{{renderParticipantLinkedObjects participant.linkedJournal participant.linkedActor}}}
             </div>
             
             {{#if ../isGM}}
