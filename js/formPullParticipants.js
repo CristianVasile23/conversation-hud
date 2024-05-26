@@ -1,4 +1,11 @@
-import { EMPTY_FACTION } from "./constants.js";
+import { ANCHOR_OPTIONS } from "./constants.js";
+import { ParticipantInputForm } from "./formAddParticipant.js";
+import {
+  convertActorToParticipant,
+  getConversationDataFromJournalId,
+  getPortraitAnchorObjectFromParticipant,
+  setDefaultDataForParticipant,
+} from "./helpers.js";
 
 export class PullParticipantsForm extends FormApplication {
   constructor(callbackFunction) {
@@ -7,16 +14,45 @@ export class PullParticipantsForm extends FormApplication {
 
     // Get all NPCs from current scene
     const tokens = game.scenes.current.tokens;
-    const participants = tokens.map((token) => {
+
+    // Filter through the tokens and keep only the ones that are not set to be excluded
+    const filteredTokens = tokens.filter((token) => {
+      const excludeFromBeingPulled = token["flags"]["conversation-hud"]?.excludeFromBeingPulled;
+      if (excludeFromBeingPulled) {
+        return false;
+      }
+      return true;
+    });
+
+    let participants = [];
+
+    filteredTokens.forEach((token) => {
       const actor = token.actor;
+      const linkedConversation = token["flags"]["conversation-hud"]?.linkedConversation;
+
+      // Create a participant object that is used to display data inside the form
       const participant = {
         name: token.name,
         img: actor.img,
         id: token.id,
+        actorId: token.actorId,
         checked: token.hidden ? false : true,
         hidden: token.hidden,
+        type: undefined,
+        data: undefined,
       };
-      return participant;
+
+      // Determine if the actor has a conversation linked or not
+      // If not, create a conversation participant object which can be edited
+      if (linkedConversation) {
+        participant.type = "conversation";
+        participant.data = linkedConversation;
+      } else {
+        participant.type = "participant";
+        participant.data = convertActorToParticipant(actor);
+      }
+
+      participants.push(participant);
     });
 
     this.participants = participants;
@@ -45,20 +81,40 @@ export class PullParticipantsForm extends FormApplication {
     const selectedParticipants = [];
     for (const participant of this.participants) {
       if (participant.checked) {
-        const parsedParticipant = {
-          name: participant.name,
-          img: participant.img,
-          linkedJournal: "",
-          linkedActor: "",
-          faction: EMPTY_FACTION,
-        };
-        selectedParticipants.push(parsedParticipant);
+        switch (participant.type) {
+          case "conversation":
+            const data = getConversationDataFromJournalId(participant.data);
+            let linkedParticipants = [];
+
+            // Determine if the data parsed respects the old data format or the new data format
+            if (data instanceof Array) {
+              linkedParticipants = data;
+            } else {
+              linkedParticipants = data.participants;
+            }
+
+            linkedParticipants.forEach((item) => {
+              if (!item.linkedActor) {
+                item.linkedActor = participant.actorId;
+              }
+            });
+            selectedParticipants.push(...linkedParticipants);
+            break;
+          case "participant":
+            selectedParticipants.push(participant.data);
+            break;
+          default:
+            // TODO: Add console error
+            break;
+        }
       }
     }
     this.callbackFunction(selectedParticipants);
   }
 
   activateListeners(html) {
+    super.activateListeners(html);
+
     html.find("#deselect-all").click(() => {
       this.#setCheckedStatusForAllActors(false);
     });
@@ -76,6 +132,16 @@ export class PullParticipantsForm extends FormApplication {
       const pulledActors = actorsObject.children;
       for (let i = 0; i < pulledActors.length; i++) {
         pulledActors[i].querySelector("#pull-participant-checkbox").onchange = (event) => this.#handleSetIncludeActorCheckbox(event, i);
+
+        const participantEditButton = pulledActors[i].querySelector("#participant-edit-button");
+        if (participantEditButton) {
+          participantEditButton.onclick = () => this.#handleEditParticipant(i);
+        }
+
+        const showLinkedConversationButton = pulledActors[i].querySelector("#show-linked-conversation-button");
+        if (showLinkedConversationButton) {
+          showLinkedConversationButton.onclick = () => this.#handleShowLinkedConversation(i);
+        }
       }
     }
   }
@@ -100,5 +166,25 @@ export class PullParticipantsForm extends FormApplication {
 
   #handleSetIncludeActorCheckbox(event, index) {
     this.participants[index].checked = event.target.checked;
+  }
+
+  #handleEditParticipant(index) {
+    const participantInputForm = new ParticipantInputForm(true, (data) => this.#handleEditParticipantHelper(data, index), {
+      ...this.participants[index].data,
+      anchorOptions: ANCHOR_OPTIONS,
+      portraitAnchor: getPortraitAnchorObjectFromParticipant(this.participants[index].data),
+    });
+    participantInputForm.render(true);
+  }
+
+  #handleEditParticipantHelper(data, index) {
+    setDefaultDataForParticipant(data);
+    this.participants[index].data = data;
+    this.render(false);
+  }
+
+  #handleShowLinkedConversation(index) {
+    const journalId = this.participants[index].data;
+    game.ConversationHud.renderJournalSheet(journalId);
   }
 }

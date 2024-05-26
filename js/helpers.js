@@ -152,7 +152,6 @@ export async function updateConversationControls() {
     features: {
       minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
       speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
-      toggleBlurEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableBlurToggle),
     },
   });
 

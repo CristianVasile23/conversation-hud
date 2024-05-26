@@ -80,6 +80,8 @@
     "details": "Details",
     "actions": "Actions",
 
+    "tokenIsHidden": "Token is hidden",
+
     "invalidDocumentRef": "Invalid document reference",
 
     "sceneConversation": {
@@ -92,7 +94,17 @@
       "hint": "Set whether or not to start the conversation with the visibility off. When unchecked, the conversation will start as visible."
     },
 
-    "sceneActors": "Actors in scene"
+    "sceneActors": "Actors in scene",
+
+    "excludeFromBeingPulled": {
+      "name": "Exclude From Being Pulled",
+      "hint": "Toggle whether not not token will be displayed on the list of actors being pulled into an active conversation."
+    },
+
+    "linkedConversation": {
+      "name": "Linked Conversation",
+      "hint": "A linked conversation that will be used whenever the token is being pulled into an active conversation."
+    }
   },
 
   "CHUD.dialogue": {
@@ -136,6 +148,8 @@
     "minimizeConversation": "Minimize Conversation",
 
     "discardChanges": "Discard Changes",
+
+    "showLinkedConversation": "Show Linked Conversation",
 
     "participant": {
       "add": "Add Participant",
@@ -287,10 +301,6 @@
     "enableSceneConversations": {
       "name": "Enable Scene Conversations",
       "hint": "Toggle the Scene Conversation feature on or off. By default, the feature is on and it allows users to link a conversation to a scene and when the scene is activated the conversation will open automatically. The conversation selector can be found on the Ambience tab of the Scene Config Sheet. If you do not want this behavior, you can toggle the feature off."
-    },
-    "enableBlurToggle": {
-      "name": "Enable Background Blur Toggle",
-      "hint": "Toggle to Background Blur Toggle feature on or off. By default, the feature is on as it allows the DM to showcase the background image without minimizing the conversation. If you do not want this behavior, you can toggle the feature off."
     },
     "blurAmount": {
       "name": "Blur Amount",

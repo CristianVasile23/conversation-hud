@@ -47,7 +47,7 @@ Hooks.on("chatMessage", (chatLog, message, chatData) => {
   return false;
 });
 
-// Hook that injects scene conversation HTML into the scene config screen
+// Hook that injects CHUD fields into the scene configuration sheet
 Hooks.on("renderSceneConfig", async (app, html, data) => {
   if (game.settings.get(MODULE_NAME, ModuleSettings.enableSceneConversations)) {
     const conversations = game.journal.filter((item) => item.flags.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet");
@@ -79,7 +79,7 @@ Hooks.on("updateScene", (scene, data, options) => {
   }
 });
 
-// Hook that adds some separators to the ConverastionHud settings page
+// Hook that adds some separators to the ConversationHud settings page
 Hooks.on("renderSettingsConfig", (app, html, data) => {
   if (!game.user.isGM) return;
   html[0].querySelectorAll(".tab.category").forEach((el) => {
@@ -107,4 +107,21 @@ Hooks.on("renderSettingsConfig", (app, html, data) => {
     compatibilitySectionHeader.textContent = game.i18n.localize("CHUD.settings.settingsSheetHeaders.compatibility");
     el.insertBefore(compatibilitySectionHeader, rpgUiFix);
   });
+});
+
+// Hook that injects CHUD fields into the token configuration sheet
+Hooks.on("renderTokenConfig", async (app, html, data) => {
+  const conversations = game.journal.filter((item) => item.flags.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet");
+
+  const excludeFromBeingPulled = data.object["flags"]["conversation-hud"]?.excludeFromBeingPulled || undefined;
+  const linkedConversation = data.object["flags"]["conversation-hud"]?.linkedConversation || undefined;
+
+  const renderedHtml = await renderTemplate("modules/conversation-hud/templates/fragments/actor_linked_conversation.hbs", {
+    excludeFromBeingPulled: excludeFromBeingPulled,
+    conversations: conversations,
+    linkedConversation: linkedConversation,
+  });
+
+  html.find('div[data-tab="character"] > .form-group').last().after(renderedHtml);
+  app.setPosition({ height: "auto" });
 });

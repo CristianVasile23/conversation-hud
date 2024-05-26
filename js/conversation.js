@@ -697,21 +697,17 @@ export class ConversationHud {
 
   // Function that toggles the conversation background blur
   async toggleBackgroundBlur() {
-    if (game.settings.get(MODULE_NAME, ModuleSettings.enableBlurToggle)) {
-      if (checkIfUserGM() && checkIfConversationActive()) {
-        game.ConversationHud.conversationIsBlurred = !game.ConversationHud.conversationIsBlurred;
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      game.ConversationHud.conversationIsBlurred = !game.ConversationHud.conversationIsBlurred;
 
-        const conversationBackground = document.getElementById("conversation-hud-background");
-        if (game.ConversationHud.conversationIsBlurred) {
-          conversationBackground.style.display = "";
-        } else {
-          conversationBackground.style.display = "none";
-        }
-
-        updateConversationControls();
+      const conversationBackground = document.getElementById("conversation-hud-background");
+      if (game.ConversationHud.conversationIsBlurred) {
+        conversationBackground.style.display = "";
+      } else {
+        conversationBackground.style.display = "none";
       }
-    } else {
-      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+
+      updateConversationControls();
     }
   }
 

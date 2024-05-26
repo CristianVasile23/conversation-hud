@@ -47,22 +47,12 @@
     </div>
   {{/if}}
 
-  {{#if features.toggleBlurEnabled}}
-    <div
-      class="control-button toggle {{#if isBlurred}}active{{/if}}"
-      onclick="game.ConversationHud.toggleBackgroundBlur()"
-      data-tooltip="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
-    >
-      <i class="fas fa-smoke"></i>
-    </div>
-  {{/if}}
-
   <div
-    class="control-button"
-    onclick="game.ConversationHud.pullActorsFromScene()"
-    data-tooltip="{{localize 'CHUD.actions.pullParticipants'}}"
+    class="control-button toggle {{#if isBlurred}}active{{/if}}"
+    onclick="game.ConversationHud.toggleBackgroundBlur()"
+    data-tooltip="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
   >
-    <i class="fas fa-up-from-bracket"></i>
+    <i class="fas fa-smoke"></i>
   </div>
 
   <div
@@ -71,6 +61,14 @@
     data-tooltip="{{localize 'CHUD.actions.changeConversationBackground'}}"
   >
     <i class="fas fa-image"></i>
+  </div>
+
+  <div
+    class="control-button"
+    onclick="game.ConversationHud.pullActorsFromScene()"
+    data-tooltip="{{localize 'CHUD.actions.pullParticipants'}}"
+  >
+    <i class="fas fa-up-from-bracket"></i>
   </div>
 
   <div

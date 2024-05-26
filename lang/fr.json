@@ -80,6 +80,8 @@
     "details": "Détails",
     "actions": "Actions",
 
+    "tokenIsHidden": "Token is hidden",
+
     "invalidDocumentRef": "Référence de document invalide",
 
     "sceneConversation": {
@@ -92,7 +94,17 @@
       "hint": "Set whether or not to start the conversation with the visibility off. When unchecked, the conversation will start as visible."
     },
 
-    "sceneActors": "Acteurs dans la scène"
+    "sceneActors": "Acteurs dans la scène",
+
+    "excludeFromBeingPulled": {
+      "name": "Exclude From Being Pulled",
+      "hint": "Toggle whether not not token will be displayed on the list of actors being pulled into an active conversation."
+    },
+
+    "linkedConversation": {
+      "name": "Linked Conversation",
+      "hint": "A linked conversation that will be used whenever the token is being pulled into an active conversation."
+    }
   },
 
   "CHUD.dialogue": {
@@ -136,6 +148,8 @@
     "minimizeConversation": "Minimiser la conversation",
 
     "discardChanges": "Ignorer les Modifications",
+
+    "showLinkedConversation": "Show Linked Conversation",
 
     "participant": {
       "add": "Ajouter un Participant",
@@ -287,10 +301,6 @@
     "enableSceneConversations": {
       "name": "Activer les Conversations de Scène",
       "hint": "Basculer la fonctionnalité Conversation de Scène on ou off. Par défaut, la fonctionnalité est activée et elle permet aux utilisateurs de lier une conversation à une scène et lorsque la scène est activée, la conversation s'ouvrira automatiquement. Le sélecteur de conversation se trouve sur l'onglet Ambiance de la Feuille de Configuration de Scène. Si vous ne souhaitez pas ce comportement, vous pouvez désactiver la fonctionnalité."
-    },
-    "enableBlurToggle": {
-      "name": "Enable Background Blur Toggle",
-      "hint": "Toggle to Background Blur Toggle feature on or off. By default, the feature is on as it allows the DM to showcase the background image without minimizing the conversation. If you do not want this behavior, you can toggle the feature off."
     },
     "blurAmount": {
       "name": "Blur Amount",

@@ -38,16 +38,55 @@
     <div id="participants-pulled-from-scene">
       {{#each participants as |participant index|}}
         <div class="pulled-participant">
+          <div>
+            {{#if (eq participant.type 'conversation')}}
+              <a
+                id="show-linked-conversation-button"
+                class="show-linked-conversation"
+                title="{{localize 'CHUD.actions.showLinkedConversation'}}"
+              >
+                <i class="fas fa-book"></i>
+              </a>
+            {{else}}
+              {{#if (eq participant.type 'participant')}}
+                <a
+                  id="participant-edit-button"
+                  class="edit"
+                  title="{{localize 'CHUD.actions.participant.edit'}}"
+                >
+                  <i class="fas fa-pencil"></i>
+                </a>
+              {{else}}
+                <p>ERROR</p>
+              {{/if}}
+            {{/if}}
+          </div>
+
           <div class="portrait-wrapper">
-            <img src="{{participant.img}}"/>
+            {{#if (eq participant.type 'participant')}}
+              <img src="{{participant.data.img}}"/>
+            {{else}}
+              <img src="{{participant.img}}"/>
+            {{/if}}
           </div>
 
           <div class="text-wrapper">
-            <p class="name">{{participant.name}}</p>
+            <p class="name">
+              {{#if (eq participant.type 'participant')}}
+                {{#if (eq participant.data.displayName false)}}
+                  {{localize 'CHUD.strings.unknown'}}
+                {{else}}
+                  {{participant.data.name}}
+                {{/if}}
+              {{else}}
+                {{participant.name}}
+              {{/if}}
+            </p>
+
             {{#if participant.hidden}}
               <div class="is-hidden">
                 <i class="fa-regular fa-eye-slash"></i>
-                <p>Token is hidden</p>
+                <p>{{localize 'CHUD.strings.tokenIsHidden'}}</p>
               </div>
             {{/if}}
           </div>
