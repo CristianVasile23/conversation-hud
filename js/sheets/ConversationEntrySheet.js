@@ -324,7 +324,8 @@ export class ConversationEntrySheet extends JournalSheet {
       if (pages.length > 0) {
         try {
           const conversationData = JSON.parse(pages[0].text.content);
-          game.ConversationHud.startConversationFromData(conversationData);
+          const visibility = game.ConversationHud.conversationIsActive ? game.ConversationHud.conversationIsVisible : true;
+          game.ConversationHud.startConversationFromData(conversationData, visibility);
         } catch (error) {
           if (error instanceof SyntaxError) {
             ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
