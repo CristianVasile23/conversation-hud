@@ -5,6 +5,7 @@ export const ModuleSettings = {
   portraitAnchorVertical: "portraitAnchorVertical",
   portraitAnchorHorizontal: "portraitAnchorHorizontal",
   displayAllParticipantsToPlayers: "displayAllParticipantsToPlayers",
+  displayNoParticipantBox: "displayNoParticipantBox",
   enableMinimize: "enableMinimize",
   keepMinimize: "keepMinimize",
   enableSpeakAs: "enableSpeakAs",
@@ -65,6 +66,16 @@ export function registerSettings() {
   game.settings.register(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers, {
     name: game.i18n.localize(`CHUD.settings.displayAllParticipantsToPlayers.name`),
     hint: game.i18n.localize(`CHUD.settings.displayAllParticipantsToPlayers.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: Boolean,
+    default: true,
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.displayNoParticipantBox, {
+    name: game.i18n.localize(`CHUD.settings.displayNoParticipantBox.name`),
+    hint: game.i18n.localize(`CHUD.settings.displayNoParticipantBox.hint`),
     scope: "world",
     config: true,
     requiresReload: true,

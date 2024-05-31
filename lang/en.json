@@ -70,7 +70,8 @@
     "browseFiles": "Browse Files",
     "filePath": "File Path",
 
-    "dropActor": "Drop actor here to add them to the conversation",
+    "dropItem": "Drop item here to add it to the conversation",
+    "holdControl": "Hold CTRL to replace current participants",
 
     "anonymous": "Anonymous",
     "unknown": "Unknown",
@@ -285,6 +286,10 @@
     "displayAllParticipantsToPlayers": {
       "name": "Display Participants List",
       "hint": "Toggle whether or not to display the list of all the conversation participants to the players. The GM will still be able to see this list."
+    },
+    "displayNoParticipantBox": {
+      "name": "Show No Active Participant UI",
+      "hint": "Toggle whether or not to display the container informing the users that there is currently no actively speaking participant. If off, nothing will be shown instead."
     },
     "enableSpeakAs": {
       "name": "Enable Speak As",

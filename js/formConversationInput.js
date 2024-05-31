@@ -7,9 +7,9 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
-  setDefaultDataForParticipant,
   updateParticipantFactionBasedOnSelectedFaction,
   getPortraitAnchorObjectFromParticipant,
+  processParticipantData,
 } from "./helpers.js";
 
 export class ConversationInputForm extends FormApplication {
@@ -99,9 +99,13 @@ export class ConversationInputForm extends FormApplication {
 
           const data = await getActorDataFromDragEvent(event);
           if (data && data.length > 0) {
-            data.forEach((participant) => {
-              this.#handleAddParticipant(participant);
-            });
+            if (event.ctrlKey) {
+              this.#handleReplaceAllParticipants(data);
+            } else {
+              data.forEach((participant) => {
+                this.#handleAddParticipant(participant);
+              });
+            }
           }
 
           this.dropzoneVisible = false;
@@ -226,25 +230,28 @@ export class ConversationInputForm extends FormApplication {
     this.callbackFunction(parsedData);
   }
 
+  #handleAddParticipant(data) {
+    processParticipantData(data);
+
+    this.participants.push(data);
+    this.render(false);
+  }
+
   #handleEditParticipant(data, index) {
-    setDefaultDataForParticipant(data);
+    processParticipantData(data);
+
     this.participants[index] = data;
     this.render(false);
   }
 
-  #handleAddParticipant(data) {
-    setDefaultDataForParticipant(data);
+  #handleReplaceAllParticipants(data) {
+    const processedData = data.map((participant) => {
+      processParticipantData(participant);
+      return participant;
+    });
 
-    if (data.faction?.selectedFaction) {
-      updateParticipantFactionBasedOnSelectedFaction(data);
-    }
-
-    // Add anchor object if missing
-    if (!data.portraitAnchor) {
-      data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
-    }
-
-    this.participants.push(data);
+    this.defaultActiveParticipant = undefined;
+    this.participants = processedData;
     this.render(false);
   }
 

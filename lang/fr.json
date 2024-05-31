@@ -70,7 +70,7 @@
     "browseFiles": "Parcourir les Fichiers",
     "filePath": "Chemin du Fichier",
 
-    "dropActor": "Déposez un acteur ici pour l'ajouter à la conversation",
+    "dropItem": "Déposez un acteur ici pour l'ajouter à la conversation",
 
     "anonymous": "Anonyme",
     "unknown": "Unknown",
@@ -285,6 +285,10 @@
     "displayAllParticipantsToPlayers": {
       "name": "Afficher la Liste des Participants",
       "hint": "Basculer l'affichage ou non de la liste de tous les participants à la conversation aux joueurs. Le MJ pourra toujours voir cette liste."
+    },
+    "displayNoParticipantBox": {
+      "name": "Show No Active Participant UI",
+      "hint": "Toggle whether or not to display the container informing the users that there is currently no actively speaking participant. If off, nothing will be shown instead."
     },
     "enableSpeakAs": {
       "name": "Activer Parler Comme",

@@ -2,6 +2,7 @@ export function registerHandlebarHelpers() {
   registerLinkedObjectsHelper();
   registerPortraitParamsObjectHelper();
   registerParticipantPortraitHelper();
+  notEq();
 }
 
 function registerLinkedObjectsHelper() {
@@ -92,5 +93,15 @@ function registerParticipantPortraitHelper() {
     }
 
     return html;
+  });
+}
+
+function notEq() {
+  Handlebars.registerHelper("notEq", (value, test) => {
+    if (value !== test) {
+      return true;
+    }
+
+    return false;
   });
 }

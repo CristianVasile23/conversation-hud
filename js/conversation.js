@@ -14,7 +14,6 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
-  setDefaultDataForParticipant,
   getConfirmationFromUser,
   checkIfCameraDockOnBottomOrTop,
   getConversationDataFromJournalId,
@@ -22,6 +21,7 @@ import {
   updateParticipantFactionBasedOnSelectedFaction,
   getPortraitAnchorObjectFromParticipant,
   normalizeParticipantDataStructure,
+  processParticipantData,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { ANCHOR_OPTIONS, MODULE_NAME } from "./constants.js";
@@ -434,6 +434,7 @@ export class ConversationHud {
   async changeActiveImage(index) {
     const activeParticipantTemplate = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
       displayParticipant: index === -1 ? false : true,
+      displayNoParticipantBox: game.settings.get(MODULE_NAME, ModuleSettings.displayNoParticipantBox),
       participant: game.ConversationHud.activeConversation.participants[index],
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
@@ -497,9 +498,13 @@ export class ConversationHud {
       event.preventDefault();
       const data = await getActorDataFromDragEvent(event);
       if (data && data.length > 0) {
-        data.forEach((participant) => {
-          this.#handleAddParticipant(participant);
-        });
+        if (event.ctrlKey) {
+          this.#handleReplaceAllParticipants(data);
+        } else {
+          data.forEach((participant) => {
+            this.#handleAddParticipant(participant);
+          });
+        }
       }
     }
   }
@@ -885,16 +890,7 @@ export class ConversationHud {
 
   // Function that adds a single participant to the active conversation
   #handleAddParticipant(data) {
-    setDefaultDataForParticipant(data);
-
-    if (data.faction?.selectedFaction) {
-      updateParticipantFactionBasedOnSelectedFaction(data);
-    }
-
-    // Add anchor object if missing
-    if (!data.portraitAnchor) {
-      data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
-    }
+    processParticipantData(data);
 
     // Push participant to the active conversation then update all the others
     game.ConversationHud.activeConversation.participants.push(data);
@@ -902,10 +898,22 @@ export class ConversationHud {
   }
 
   #handleUpdateParticipant(data, index) {
-    setDefaultDataForParticipant(data);
+    processParticipantData(data);
 
     // Update participant with the given index
     game.ConversationHud.activeConversation.participants[index] = data;
+    socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
+  }
+
+  #handleReplaceAllParticipants(data) {
+    const processedData = data.map((participant) => {
+      processParticipantData(participant);
+      return participant;
+    });
+
+    // Replace all participants and update the UI
+    game.ConversationHud.activeConversation.activeParticipant = -1;
+    game.ConversationHud.activeConversation.participants = processedData;
     socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
   }
 

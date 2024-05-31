@@ -327,6 +327,20 @@ export function setDefaultDataForParticipant(data) {
   }
 }
 
+export function processParticipantData(data) {
+  setDefaultDataForParticipant(data);
+  normalizeParticipantDataStructure(data);
+
+  if (data.faction?.selectedFaction) {
+    updateParticipantFactionBasedOnSelectedFaction(data);
+  }
+
+  // Add anchor object if missing
+  if (!data.portraitAnchor) {
+    data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
+  }
+}
+
 export function getConfirmationFromUser(
   localizationString,
   onConfirm,

@@ -26,9 +26,13 @@
 
 .conversation-hud-content .conversation-hud-dropzone > p {
   margin-top: 15px;
-  max-width: 200px;
+  max-width: 280px;
   text-align: center;
   color: var(--color-border-light-secondary);
+}
+.conversation-hud-content .conversation-hud-dropzone > p.hold-control {
+  margin-top: 2px;
+  font-size: var(--font-size-12);
 }
 
 .conversation-hud-content .conversation-hud-dropzone * {

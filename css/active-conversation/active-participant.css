@@ -106,6 +106,9 @@
 
   overflow: hidden;
 }
+.conversation-hud-content .active-participant.hidden {
+  visibility: hidden;
+}
 /* #endregion */
 
 /* ----- Active participant portrait ----- */
