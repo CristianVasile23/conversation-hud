@@ -51,7 +51,7 @@
 
     "conversationBackground": {
       "name": "Conversation Background",
-      "hint": "TODO"
+      "hint": "An image that will be displayed as the background of this conversation. If no image is selected, a dark semi-transparent background will be shown instead."
     },
 
     "newParticipant": "Nouveau Participant",
@@ -71,6 +71,8 @@
     "filePath": "Chemin du Fichier",
 
     "dropItem": "Déposez un acteur ici pour l'ajouter à la conversation",
+    "dropFaction": "Drop faction here to add it to the participant",
+    "holdControl": "Hold CTRL to replace current participants",
 
     "anonymous": "Anonyme",
     "unknown": "Unknown",
@@ -241,7 +243,8 @@
   },
 
   "CHUD.warnings": {
-    "noParticipantDataFound": "Aucune donnée de participant viable n'a été trouvée dans cette entrée de journal."
+    "noParticipantDataFound": "Aucune donnée de participant viable n'a été trouvée dans cette entrée de journal.",
+    "noFactionDataFound": "No viable faction data was found in this journal entry."
   },
 
   "CHUD.info": {

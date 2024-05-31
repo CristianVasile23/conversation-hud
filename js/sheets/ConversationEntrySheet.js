@@ -355,7 +355,10 @@ export class ConversationEntrySheet extends JournalSheet {
       await this.object.createEmbeddedDocuments("JournalEntryPage", [
         {
           text: { content: JSON.stringify(dataToSave) },
-          name: game.i18n.localize("CHUD.strings.conversationParticipants"),
+          name: "Conversation Participants",
+          flags: {
+            "conversation-hud": { type: "conversation" },
+          },
         },
       ]);
     } else {

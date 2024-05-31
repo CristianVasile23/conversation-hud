@@ -104,7 +104,7 @@ export class PullParticipantsForm extends FormApplication {
             selectedParticipants.push(participant.data);
             break;
           default:
-            // TODO: Add console error
+            console.error("ConversationHUD | Tried to pull participant from scene with unknown type of " + participant.type);
             break;
         }
       }

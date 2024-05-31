@@ -71,6 +71,7 @@
     "filePath": "File Path",
 
     "dropItem": "Drop item here to add it to the conversation",
+    "dropFaction": "Drop faction here to add it to the participant",
     "holdControl": "Hold CTRL to replace current participants",
 
     "anonymous": "Anonymous",
@@ -242,7 +243,8 @@
   },
 
   "CHUD.warnings": {
-    "noParticipantDataFound": "No viable participant data was found in this journal entry."
+    "noParticipantDataFound": "No viable participant data was found in this journal entry.",
+    "noFactionDataFound": "No viable faction data was found in this journal entry."
   },
 
   "CHUD.info": {
