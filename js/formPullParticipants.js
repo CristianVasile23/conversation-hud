@@ -50,6 +50,9 @@ export class PullParticipantsForm extends FormApplication {
       } else {
         participant.type = "participant";
         participant.data = convertActorToParticipant(actor);
+        if (participant.hidden) {
+          participant.data.displayName = false;
+        }
       }
 
       participants.push(participant);

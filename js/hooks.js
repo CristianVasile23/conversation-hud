@@ -39,7 +39,8 @@ Hooks.on("chatMessage", (chatLog, message, chatData) => {
     ...chatData,
     type: CONST.CHAT_MESSAGE_TYPES.IC,
   };
-  newChatData.speaker.alias = participant.name;
+
+  newChatData.speaker.alias = participant.displayName ? participant.name : game.i18n.localize("CHUD.strings.unknown");
   newChatData.speaker.actor = null;
   newChatData.speaker.token = null;
 
