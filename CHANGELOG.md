@@ -1,3 +1,16 @@
+## 5.6.0
+
+- Added the option to link actors to conversation participants. You can then view the linked actor sheet by clicking on a button similar to the one used for linked notes.
+- Added the option to link conversations to tokens. Whenever the token will be pulled from the scene, the linked conversation will be used.
+- Added the option to exclude tokens from being pulled into a conversation.
+- Reworked the _Pull Participants from Scene_ functionality. Now, you can edit the data that was pulled from the participants before adding them to the conversation. For tokens that have a linked conversation, you can instead view the linked conversation.
+- Added the option to add background images to conversations. When a background image is set, it will be rendered instead of the dark blur.
+- Added the option to replace conversation data when dragging and dropping by holding CTRL.
+- Added drag and drop support for factions onto the participant faction config tab.
+- Added the option to disable the _No active participant_ UI that is shown when no participant is selected. The option can be toggled on or off in the settings.
+- Bumped FoundryVTT support up to version 12.
+- Fixed several bugs and issues.
+
 ## 5.5.0
 
 - Added _Auto_ portrait style which will scale the portrait display according to the size of the image provided (credit goes to Mystler).

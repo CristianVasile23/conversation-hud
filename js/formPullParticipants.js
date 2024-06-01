@@ -104,6 +104,7 @@ export class PullParticipantsForm extends FormApplication {
             selectedParticipants.push(...linkedParticipants);
             break;
           case "participant":
+            participant.data.linkedActor = participant.actorId;
             selectedParticipants.push(participant.data);
             break;
           default:
