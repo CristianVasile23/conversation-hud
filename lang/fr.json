@@ -33,12 +33,26 @@
 
     "name": "Nom",
 
-    "linkedJournal": "Journal Lié",
-    "linkedJournalHint": "Entrée de journal qui sera liée au participant de la conversation.",
-    "noLinkedJournal": "Aucun journal lié",
+    "noLinkedDocuments": "Aucun document lié",
+
+    "linkedJournal": {
+      "name": "Journal Lié",
+      "hint": "Entrée de journal qui sera liée au participant de la conversation."
+    },
+
+    "linkedActor": {
+      "name": "Linked Actor",
+      "hint": "Actor that will be linked to the conversation participant."
+    },
 
     "conversationName": "Nom de la Conversation",
     "conversationParticipants": "Participants à la Conversation",
+    "conversationSettings": "Conversation Settings",
+
+    "conversationBackground": {
+      "name": "Conversation Background",
+      "hint": "An image that will be displayed as the background of this conversation. If no image is selected, a dark semi-transparent background will be shown instead."
+    },
 
     "newParticipant": "Nouveau Participant",
 
@@ -56,7 +70,9 @@
     "browseFiles": "Parcourir les Fichiers",
     "filePath": "Chemin du Fichier",
 
-    "dropActor": "Déposez un acteur ici pour l'ajouter à la conversation",
+    "dropItem": "Déposez un acteur ici pour l'ajouter à la conversation",
+    "dropFaction": "Drop faction here to add it to the participant",
+    "holdControl": "Hold CTRL to replace current participants",
 
     "anonymous": "Anonyme",
     "unknown": "Unknown",
@@ -65,6 +81,8 @@
     "banner": "Bannière",
     "details": "Détails",
     "actions": "Actions",
+
+    "tokenIsHidden": "Token is hidden",
 
     "invalidDocumentRef": "Référence de document invalide",
 
@@ -78,7 +96,17 @@
       "hint": "Set whether or not to start the conversation with the visibility off. When unchecked, the conversation will start as visible."
     },
 
-    "sceneActors": "Acteurs dans la scène"
+    "sceneActors": "Acteurs dans la scène",
+
+    "excludeFromBeingPulled": {
+      "name": "Exclude From Being Pulled",
+      "hint": "Toggle whether not not token will be displayed on the list of actors being pulled into an active conversation."
+    },
+
+    "linkedConversation": {
+      "name": "Linked Conversation",
+      "hint": "A linked conversation that will be used whenever the token is being pulled into an active conversation."
+    }
   },
 
   "CHUD.dialogue": {
@@ -117,11 +145,13 @@
 
     "toggleSpeakAs": "Basculer Parler Comme",
     "toggleVisibility": "Basculer la Visibilité",
-    "toggleBackgroundBlur": "Toggle Background Blur",
+    "toggleBackgroundBlur": "Toggle Background",
     "maximizeConversation": "Maximiser la conversation",
     "minimizeConversation": "Minimiser la conversation",
 
     "discardChanges": "Ignorer les Modifications",
+
+    "showLinkedConversation": "Show Linked Conversation",
 
     "participant": {
       "add": "Ajouter un Participant",
@@ -136,6 +166,7 @@
       "deselectAll": "Tout Désélectionner"
     },
 
+    "changeConversationBackground": "Change Conversation Background",
     "pullParticipants": "Extraire les Participants de la Scène",
     "addActors": "Ajouter des Acteurs"
   },
@@ -212,7 +243,8 @@
   },
 
   "CHUD.warnings": {
-    "noParticipantDataFound": "Aucune donnée de participant viable n'a été trouvée dans cette entrée de journal."
+    "noParticipantDataFound": "Aucune donnée de participant viable n'a été trouvée dans cette entrée de journal.",
+    "noFactionDataFound": "No viable faction data was found in this journal entry."
   },
 
   "CHUD.info": {
@@ -257,6 +289,10 @@
       "name": "Afficher la Liste des Participants",
       "hint": "Basculer l'affichage ou non de la liste de tous les participants à la conversation aux joueurs. Le MJ pourra toujours voir cette liste."
     },
+    "displayNoParticipantBox": {
+      "name": "Show No Active Participant UI",
+      "hint": "Toggle whether or not to display the container informing the users that there is currently no actively speaking participant. If off, nothing will be shown instead."
+    },
     "enableSpeakAs": {
       "name": "Activer Parler Comme",
       "hint": "Basculer la fonctionnalité Parler Comme on ou off. Par défaut, la fonctionnalité est activée, mais si vous ne l'utilisez pas et ne voulez pas qu'un bouton supplémentaire apparaisse, vous pouvez la désactiver."
@@ -272,10 +308,6 @@
     "enableSceneConversations": {
       "name": "Activer les Conversations de Scène",
       "hint": "Basculer la fonctionnalité Conversation de Scène on ou off. Par défaut, la fonctionnalité est activée et elle permet aux utilisateurs de lier une conversation à une scène et lorsque la scène est activée, la conversation s'ouvrira automatiquement. Le sélecteur de conversation se trouve sur l'onglet Ambiance de la Feuille de Configuration de Scène. Si vous ne souhaitez pas ce comportement, vous pouvez désactiver la fonctionnalité."
-    },
-    "enableBlurToggle": {
-      "name": "Enable Background Blur Toggle",
-      "hint": "Toggle to Background Blur Toggle feature on or off. By default, the feature is on as it allows the DM to showcase the background image without minimizing the conversation. If you do not want this behavior, you can toggle the feature off."
     },
     "blurAmount": {
       "name": "Blur Amount",

@@ -5,6 +5,7 @@
   flex-flow: row;
   align-items: center;
   padding: 5px;
+  height: 62px;
 }
 /* #endregion */
 
@@ -104,6 +105,7 @@
 
 .conversation-entry-sheet .text-wrapper .linked-journal a {
   color: var(--color-text-hyperlink);
+  margin-right: 5px;
 }
 /* #endregion */
 

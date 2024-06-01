@@ -7,8 +7,8 @@
   "library": "false",
   "compatibility": {
     "minimum": 10,
-    "verified": 11,
-    "maximum": 11
+    "verified": 12,
+    "maximum": 12
   },
   "authors": [
     {
@@ -24,7 +24,7 @@
         "type": "module",
         "compatibility": {
           "minimum": "1.12.4.0",
-          "verified": "1.12.12.0"
+          "verified": "1.12.13.1"
         }
       },
       {
@@ -32,7 +32,7 @@
         "type": "module",
         "compatibility": {
           "minimum": "1.0.10",
-          "verified": "1.0.12"
+          "verified": "1.0.13"
         }
       }
     ]

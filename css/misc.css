@@ -11,3 +11,8 @@
   flex: 1;
   min-height: 0;
 }
+
+/* CSS fix for file-picker being stretched out by the D&D 5e CSS when inside a sheet */
+.dnd5e .conversation-entry-sheet .form-group .form-fields .file-picker {
+  flex: 0;
+}

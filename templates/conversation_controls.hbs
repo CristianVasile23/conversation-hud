@@ -47,15 +47,21 @@
     </div>
   {{/if}}
 
-  {{#if features.toggleBlurEnabled}}
-    <div
-      class="control-button toggle {{#if isBlurred}}active{{/if}}"
-      onclick="game.ConversationHud.toggleBackgroundBlur()"
-      data-tooltip="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
-    >
-      <i class="fas fa-smoke"></i>
-    </div>
-  {{/if}}
+  <div
+    class="control-button toggle {{#if isBlurred}}active{{/if}}"
+    onclick="game.ConversationHud.toggleBackgroundBlur()"
+    data-tooltip="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
+  >
+    <i class="fas fa-smoke"></i>
+  </div>
+
+  <div
+    class="control-button"
+    onclick="game.ConversationHud.changeConversationBackground()"
+    data-tooltip="{{localize 'CHUD.actions.changeConversationBackground'}}"
+  >
+    <i class="fas fa-image"></i>
+  </div>
 
   <div
     class="control-button"

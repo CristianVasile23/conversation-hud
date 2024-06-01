@@ -192,7 +192,10 @@ export class ConversationFactionSheet extends JournalSheet {
       await this.object.createEmbeddedDocuments("JournalEntryPage", [
         {
           text: { content: JSON.stringify(dataToSave) },
-          name: game.i18n.localize("CHUD.strings.factionData"),
+          name: "Faction Sheet",
+          flags: {
+            "conversation-hud": { type: "faction" },
+          },
         },
       ]);
     } else {

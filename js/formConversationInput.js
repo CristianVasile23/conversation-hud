@@ -1,5 +1,5 @@
 import { ANCHOR_OPTIONS } from "./constants.js";
-import { FileInputForm } from "./formAddParticipant.js";
+import { ParticipantInputForm } from "./formAddParticipant.js";
 import { PullParticipantsForm } from "./formPullParticipants.js";
 import {
   getActorDataFromDragEvent,
@@ -7,15 +7,16 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
-  setDefaultDataForParticipant,
   updateParticipantFactionBasedOnSelectedFaction,
   getPortraitAnchorObjectFromParticipant,
+  processParticipantData,
 } from "./helpers.js";
 
 export class ConversationInputForm extends FormApplication {
   constructor(callbackFunction) {
     super();
     this.callbackFunction = callbackFunction;
+    this.conversationBackground = "";
     this.participants = [];
     this.defaultActiveParticipant = undefined;
 
@@ -31,8 +32,7 @@ export class ConversationInputForm extends FormApplication {
       id: "conversation-start-form",
       title: game.i18n.localize("CHUD.actions.createConversation"),
       width: 635,
-      height: 500,
-      resizable: false,
+      height: 640,
     });
   }
 
@@ -50,12 +50,15 @@ export class ConversationInputForm extends FormApplication {
 
     return {
       isGM: game.user.isGM,
+      conversationBackground: this.conversationBackground,
       participants: this.participants,
       defaultActiveParticipant: this.defaultActiveParticipant,
     };
   }
 
   activateListeners(html) {
+    super.activateListeners(html);
+
     // Add event listener on the pull participants from scene button
     html.find("#pull-participants-from-scene").click(async (e) => {
       const pullParticipantsForm = new PullParticipantsForm((data) => {
@@ -68,8 +71,8 @@ export class ConversationInputForm extends FormApplication {
 
     // Add event listener on the add participant button
     html.find("#add-participant").click(async (e) => {
-      const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));
-      return fileInputForm.render(true);
+      const participantInputForm = new ParticipantInputForm(false, (data) => this.#handleAddParticipant(data));
+      return participantInputForm.render(true);
     });
 
     // Drag and drop functionality
@@ -96,9 +99,13 @@ export class ConversationInputForm extends FormApplication {
 
           const data = await getActorDataFromDragEvent(event);
           if (data && data.length > 0) {
-            data.forEach((participant) => {
-              this.#handleAddParticipant(participant);
-            });
+            if (event.ctrlKey) {
+              this.#handleReplaceAllParticipants(data);
+            } else {
+              data.forEach((participant) => {
+                this.#handleAddParticipant(participant);
+              });
+            }
           }
 
           this.dropzoneVisible = false;
@@ -192,17 +199,18 @@ export class ConversationInputForm extends FormApplication {
         controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
         controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {
-          const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
+          const participantInputForm = new ParticipantInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             displayName: this.participants[i].displayName,
             img: this.participants[i].img,
             imgScale: this.participants[i].imgScale,
             linkedJournal: this.participants[i].linkedJournal,
+            linkedActor: this.participants[i].linkedActor,
             faction: this.participants[i].faction,
             anchorOptions: ANCHOR_OPTIONS,
             portraitAnchor: getPortraitAnchorObjectFromParticipant(this.participants[i]),
           });
-          fileInputForm.render(true);
+          participantInputForm.render(true);
         };
       }
     }
@@ -214,6 +222,7 @@ export class ConversationInputForm extends FormApplication {
 
     // Data type is added as a way of future-proofing the code
     parsedData.type = 0;
+    parsedData.conversationBackground = formData.conversationBackground;
     parsedData.participants = this.participants;
     parsedData.defaultActiveParticipant = this.defaultActiveParticipant;
 
@@ -221,25 +230,28 @@ export class ConversationInputForm extends FormApplication {
     this.callbackFunction(parsedData);
   }
 
+  #handleAddParticipant(data) {
+    processParticipantData(data);
+
+    this.participants.push(data);
+    this.render(false);
+  }
+
   #handleEditParticipant(data, index) {
-    setDefaultDataForParticipant(data);
+    processParticipantData(data);
+
     this.participants[index] = data;
     this.render(false);
   }
 
-  #handleAddParticipant(data) {
-    setDefaultDataForParticipant(data);
+  #handleReplaceAllParticipants(data) {
+    const processedData = data.map((participant) => {
+      processParticipantData(participant);
+      return participant;
+    });
 
-    if (data.faction?.selectedFaction) {
-      updateParticipantFactionBasedOnSelectedFaction(data);
-    }
-
-    // Add anchor object if missing
-    if (!data.portraitAnchor) {
-      data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
-    }
-
-    this.participants.push(data);
+    this.defaultActiveParticipant = undefined;
+    this.participants = processedData;
     this.render(false);
   }
 

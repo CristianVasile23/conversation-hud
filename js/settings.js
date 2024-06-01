@@ -5,11 +5,11 @@ export const ModuleSettings = {
   portraitAnchorVertical: "portraitAnchorVertical",
   portraitAnchorHorizontal: "portraitAnchorHorizontal",
   displayAllParticipantsToPlayers: "displayAllParticipantsToPlayers",
+  displayNoParticipantBox: "displayNoParticipantBox",
   enableMinimize: "enableMinimize",
   keepMinimize: "keepMinimize",
   enableSpeakAs: "enableSpeakAs",
   enableSceneConversations: "enableSceneConversations",
-  enableBlurToggle: "enableBlurToggle",
   blurAmount: "blurAmount",
   activeParticipantFontSize: "activeParticipantFontSize",
   activeParticipantFactionFontSize: "activeParticipantFactionFontSize",
@@ -29,7 +29,7 @@ export function registerSettings() {
       vertical: game.i18n.localize(`CHUD.settings.portraitStyle.choices.vertical`),
       horizontal: game.i18n.localize(`CHUD.settings.portraitStyle.choices.horizontal`),
       square: game.i18n.localize(`CHUD.settings.portraitStyle.choices.square`),
-      auto: game.i18n.localize(`CHUD.settings.portraitStyle.choices.auto`)
+      auto: game.i18n.localize(`CHUD.settings.portraitStyle.choices.auto`),
     },
   });
 
@@ -73,6 +73,16 @@ export function registerSettings() {
     default: true,
   });
 
+  game.settings.register(MODULE_NAME, ModuleSettings.displayNoParticipantBox, {
+    name: game.i18n.localize(`CHUD.settings.displayNoParticipantBox.name`),
+    hint: game.i18n.localize(`CHUD.settings.displayNoParticipantBox.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
+    type: Boolean,
+    default: true,
+  });
+
   game.settings.register(MODULE_NAME, ModuleSettings.enableSpeakAs, {
     name: game.i18n.localize(`CHUD.settings.enableSpeakAs.name`),
     hint: game.i18n.localize(`CHUD.settings.enableSpeakAs.hint`),
@@ -106,16 +116,6 @@ export function registerSettings() {
   game.settings.register(MODULE_NAME, ModuleSettings.enableSceneConversations, {
     name: game.i18n.localize(`CHUD.settings.enableSceneConversations.name`),
     hint: game.i18n.localize(`CHUD.settings.enableSceneConversations.hint`),
-    scope: "world",
-    config: true,
-    requiresReload: true,
-    type: Boolean,
-    default: true,
-  });
-
-  game.settings.register(MODULE_NAME, ModuleSettings.enableBlurToggle, {
-    name: game.i18n.localize(`CHUD.settings.enableBlurToggle.name`),
-    hint: game.i18n.localize(`CHUD.settings.enableBlurToggle.hint`),
     scope: "world",
     config: true,
     requiresReload: true,

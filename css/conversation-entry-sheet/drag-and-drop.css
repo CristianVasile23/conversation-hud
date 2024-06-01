@@ -46,8 +46,14 @@
   color: var(--color-text-dark-secondary);
 
   margin-top: 15px;
-  max-width: 200px;
+  max-width: 280px;
   text-align: center;
+}
+
+.conversation-entry-sheet .drag-and-drop-wrapper .dropzone > p.hold-control,
+.conversation-faction-sheet .drag-and-drop-wrapper .dropzone > p.hold-control {
+  margin-top: 2px;
+  font-size: var(--font-size-12);
 }
 
 .conversation-entry-sheet .drag-and-drop-wrapper .dropzone *,

@@ -1,5 +1,5 @@
 import { ANCHOR_OPTIONS } from "../constants.js";
-import { FileInputForm } from "../formAddParticipant.js";
+import { ParticipantInputForm } from "../formAddParticipant.js";
 import { PullParticipantsForm } from "../formPullParticipants.js";
 import {
   getActorDataFromDragEvent,
@@ -7,16 +7,18 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
-  setDefaultDataForParticipant,
   getConfirmationFromUser,
   updateParticipantFactionBasedOnSelectedFaction,
   getPortraitAnchorObjectFromParticipant,
+  processParticipantData,
 } from "../helpers.js";
 
 export class ConversationEntrySheet extends JournalSheet {
   constructor(data, options) {
     super(data, options);
     this.dirty = false;
+
+    this.conversationBackground = "";
 
     this.dropzoneVisible = false;
     this.draggingParticipant = false;
@@ -31,6 +33,11 @@ export class ConversationEntrySheet extends JournalSheet {
         if (data instanceof Array) {
           this.participants = data;
         } else {
+          const conversationBackground = data.conversationBackground;
+          if (conversationBackground) {
+            this.conversationBackground = conversationBackground;
+          }
+
           const participants = data.participants;
           const defaultActiveParticipant = data.defaultActiveParticipant;
           if (participants) {
@@ -59,7 +66,7 @@ export class ConversationEntrySheet extends JournalSheet {
       id: "conversation-entry-sheet",
       template: `modules/conversation-hud/templates/conversation_sheet.hbs`,
       width: 635,
-      height: 500,
+      height: 660,
       resizable: false,
     });
   }
@@ -86,9 +93,13 @@ export class ConversationEntrySheet extends JournalSheet {
     });
 
     html.find("#add-participant").click(async (e) => {
-      const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));
-      return fileInputForm.render(true);
+      const participantInputForm = new ParticipantInputForm(false, (data) => this.#handleAddParticipant(data));
+      return participantInputForm.render(true);
     });
+
+    // Bind event handler for conversation background image field
+    const conversationBackgroundInput = html.find("[name=conversationBackground]")[0];
+    conversationBackgroundInput.onchange = (event) => this.#handleChangeConversationBackground(event);
 
     // Drag and drop functionality
     const dragDropWrapper = html.find("#conversation-sheet-content-wrapper")[0];
@@ -114,9 +125,13 @@ export class ConversationEntrySheet extends JournalSheet {
 
           const data = await getActorDataFromDragEvent(event);
           if (data && data.length > 0) {
-            data.forEach((participant) => {
-              this.#handleAddParticipant(participant);
-            });
+            if (event.ctrlKey) {
+              this.#handleReplaceAllParticipants(data);
+            } else {
+              data.forEach((participant) => {
+                this.#handleAddParticipant(participant);
+              });
+            }
           }
 
           this.dropzoneVisible = false;
@@ -209,17 +224,18 @@ export class ConversationEntrySheet extends JournalSheet {
         controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
         controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {
-          const fileInputForm = new FileInputForm(true, (data) => this.#handleEditParticipant(data, i), {
+          const participantInputForm = new ParticipantInputForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             displayName: this.participants[i].displayName,
             img: this.participants[i].img,
             imgScale: this.participants[i].imgScale,
             linkedJournal: this.participants[i].linkedJournal,
+            linkedActor: this.participants[i].linkedActor,
             faction: this.participants[i].faction,
             anchorOptions: ANCHOR_OPTIONS,
             portraitAnchor: getPortraitAnchorObjectFromParticipant(this.participants[i]),
           });
-          fileInputForm.render(true);
+          participantInputForm.render(true);
         };
       }
     }
@@ -242,6 +258,7 @@ export class ConversationEntrySheet extends JournalSheet {
     const data = {
       isGM: game.user.isGM,
       dirty: this.dirty,
+      conversationBackground: this.conversationBackground,
       defaultActiveParticipant: this.defaultActiveParticipant,
       participants: this.participants,
       name: baseData.data.name,
@@ -307,7 +324,8 @@ export class ConversationEntrySheet extends JournalSheet {
       if (pages.length > 0) {
         try {
           const conversationData = JSON.parse(pages[0].text.content);
-          game.ConversationHud.startConversationFromData(conversationData);
+          const visibility = game.ConversationHud.conversationIsActive ? game.ConversationHud.conversationIsVisible : true;
+          game.ConversationHud.startConversationFromData(conversationData, visibility);
         } catch (error) {
           if (error instanceof SyntaxError) {
             ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
@@ -327,6 +345,7 @@ export class ConversationEntrySheet extends JournalSheet {
     // Get document pages
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
     const dataToSave = {
+      conversationBackground: this.conversationBackground,
       defaultActiveParticipant: this.defaultActiveParticipant,
       participants: this.participants,
     };
@@ -336,7 +355,10 @@ export class ConversationEntrySheet extends JournalSheet {
       await this.object.createEmbeddedDocuments("JournalEntryPage", [
         {
           text: { content: JSON.stringify(dataToSave) },
-          name: game.i18n.localize("CHUD.strings.conversationParticipants"),
+          name: "Conversation Participants",
+          flags: {
+            "conversation-hud": { type: "conversation" },
+          },
         },
       ]);
     } else {
@@ -363,27 +385,39 @@ export class ConversationEntrySheet extends JournalSheet {
     this.render(false);
   }
 
+  #handleChangeConversationBackground(event) {
+    if (!event.target) return;
+
+    this.conversationBackground = event.target.value;
+
+    this.dirty = true;
+    this.render(false);
+  }
+
+  #handleAddParticipant(data) {
+    processParticipantData(data);
+
+    this.participants.push(data);
+    this.dirty = true;
+    this.render(false);
+  }
+
   #handleEditParticipant(data, index) {
-    setDefaultDataForParticipant(data);
+    processParticipantData(data);
 
     this.participants[index] = data;
     this.dirty = true;
     this.render(false);
   }
 
-  #handleAddParticipant(data) {
-    setDefaultDataForParticipant(data);
+  #handleReplaceAllParticipants(data) {
+    const processedData = data.map((participant) => {
+      processParticipantData(participant);
+      return participant;
+    });
 
-    if (data.faction?.selectedFaction) {
-      updateParticipantFactionBasedOnSelectedFaction(data);
-    }
-
-    // Add anchor object if missing
-    if (!data.portraitAnchor) {
-      data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
-    }
-
-    this.participants.push(data);
+    this.defaultActiveParticipant = undefined;
+    this.participants = processedData;
     this.dirty = true;
     this.render(false);
   }

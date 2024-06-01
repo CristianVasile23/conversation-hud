@@ -152,7 +152,6 @@ export async function updateConversationControls() {
     features: {
       minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
       speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
-      toggleBlurEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableBlurToggle),
     },
   });
 
@@ -210,7 +209,8 @@ export function handleOnClickContentLink(event, wrapped) {
           if (pages.length > 0) {
             try {
               const conversationData = JSON.parse(pages[0].text.content);
-              game.ConversationHud.startConversationFromData(conversationData);
+              const visibility = game.ConversationHud.conversationIsActive ? game.ConversationHud.conversationIsVisible : true;
+              game.ConversationHud.startConversationFromData(conversationData, visibility);
             } catch (error) {
               if (error instanceof SyntaxError) {
                 ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
@@ -328,6 +328,20 @@ export function setDefaultDataForParticipant(data) {
   }
 }
 
+export function processParticipantData(data) {
+  setDefaultDataForParticipant(data);
+  normalizeParticipantDataStructure(data);
+
+  if (data.faction?.selectedFaction) {
+    updateParticipantFactionBasedOnSelectedFaction(data);
+  }
+
+  // Add anchor object if missing
+  if (!data.portraitAnchor) {
+    data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
+  }
+}
+
 export function getConfirmationFromUser(
   localizationString,
   onConfirm,
@@ -405,11 +419,12 @@ export function getConversationDataFromJournalId(journalId) {
 
 export function convertActorToParticipant(actor) {
   const participant = {
-    faction: EMPTY_FACTION,
-    img: actor.img,
-    linkedJournal: "",
     name: actor.name,
     displayName: true,
+    img: actor.img,
+    linkedJournal: "",
+    linkedActor: "",
+    faction: EMPTY_FACTION,
   };
 
   return participant;
@@ -448,6 +463,7 @@ export function normalizeParticipantDataStructure(participant) {
   normalizedParticipant.faction = participant.faction || EMPTY_FACTION;
 
   normalizedParticipant.linkedJournal = participant.linkedJournal || "";
+  normalizedParticipant.linkedActor = participant.linkedActor || "";
 
   return normalizedParticipant;
 }

@@ -1,6 +1,7 @@
 import { ConversationInputForm } from "./formConversationInput.js";
-import { FileInputForm } from "./formAddParticipant.js";
+import { ParticipantInputForm } from "./formAddParticipant.js";
 import { PullParticipantsForm } from "./formPullParticipants.js";
+import { ConversationBackgroundForm } from "./forms/ConversationBackgroundForm.js";
 import { ConversationEntrySheet } from "./sheets/ConversationEntrySheet.js";
 import { ConversationFactionSheet } from "./sheets/ConversationFactionSheet.js";
 import {
@@ -13,7 +14,6 @@ import {
   hideDragAndDropIndicator,
   displayDragAndDropIndicator,
   getDragAndDropIndex,
-  setDefaultDataForParticipant,
   getConfirmationFromUser,
   checkIfCameraDockOnBottomOrTop,
   getConversationDataFromJournalId,
@@ -21,6 +21,7 @@ import {
   updateParticipantFactionBasedOnSelectedFaction,
   getPortraitAnchorObjectFromParticipant,
   normalizeParticipantDataStructure,
+  processParticipantData,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { ANCHOR_OPTIONS, MODULE_NAME } from "./constants.js";
@@ -141,7 +142,12 @@ export class ConversationHud {
     conversationBackground.className = "conversation-hud-background";
 
     const blurAmount = game.settings.get(MODULE_NAME, ModuleSettings.blurAmount);
-    conversationBackground.style = `backdrop-filter: blur(${blurAmount}px);`;
+    conversationBackground.style.backdropFilter = `blur(${blurAmount}px)`;
+
+    if (conversationData.conversationBackground) {
+      conversationBackground.classList.add("conversation-hud-background-image");
+      conversationBackground.style.backgroundImage = `url(${conversationData.conversationBackground})`;
+    }
 
     if (conversationVisible && !game.ConversationHud.conversationIsMinimized) {
       conversationBackground.classList.add("visible");
@@ -364,6 +370,17 @@ export class ConversationHud {
       game.ConversationHud.changeActiveImage(conversationData.activeParticipant);
     }
 
+    const conversationBackground = document.getElementById("conversation-hud-background");
+    if (conversationData.conversationBackground) {
+      if (!conversationBackground.classList.contains("conversation-hud-background-image")) {
+        conversationBackground.classList.add("conversation-hud-background-image");
+      }
+      conversationBackground.style.backgroundImage = `url(${conversationData.conversationBackground})`;
+    } else {
+      conversationBackground.classList.remove("conversation-hud-background-image");
+      conversationBackground.style.backgroundImage = ``;
+    }
+
     if (visibility !== undefined && game.user.isGM) {
       game.ConversationHud.setActiveConversationVisibility(visibility);
     }
@@ -417,6 +434,7 @@ export class ConversationHud {
   async changeActiveImage(index) {
     const activeParticipantTemplate = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
       displayParticipant: index === -1 ? false : true,
+      displayNoParticipantBox: game.settings.get(MODULE_NAME, ModuleSettings.displayNoParticipantBox),
       participant: game.ConversationHud.activeConversation.participants[index],
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
@@ -442,8 +460,8 @@ export class ConversationHud {
   // Function that adds a participant to the active conversation
   addParticipantToActiveConversation() {
     if (checkIfUserGM()) {
-      const fileInputForm = new FileInputForm(false, (data) => this.#handleAddParticipant(data));
-      fileInputForm.render(true);
+      const participantInputForm = new ParticipantInputForm(false, (data) => this.#handleAddParticipant(data));
+      participantInputForm.render(true);
     }
   }
 
@@ -480,9 +498,13 @@ export class ConversationHud {
       event.preventDefault();
       const data = await getActorDataFromDragEvent(event);
       if (data && data.length > 0) {
-        data.forEach((participant) => {
-          this.#handleAddParticipant(participant);
-        });
+        if (event.ctrlKey) {
+          this.#handleReplaceAllParticipants(data);
+        } else {
+          data.forEach((participant) => {
+            this.#handleAddParticipant(participant);
+          });
+        }
       }
     }
   }
@@ -528,17 +550,18 @@ export class ConversationHud {
         return;
       }
 
-      const fileInputForm = new FileInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
+      const participantInputForm = new ParticipantInputForm(true, (data) => this.#handleUpdateParticipant(data, index), {
         name: game.ConversationHud.activeConversation.participants[index].name,
         displayName: game.ConversationHud.activeConversation.participants[index].displayName,
         img: game.ConversationHud.activeConversation.participants[index].img,
         imgScale: game.ConversationHud.activeConversation.participants[index].imgScale,
         linkedJournal: game.ConversationHud.activeConversation.participants[index].linkedJournal,
+        linkedActor: game.ConversationHud.activeConversation.participants[index].linkedActor,
         faction: game.ConversationHud.activeConversation.participants[index].faction,
         anchorOptions: ANCHOR_OPTIONS,
         portraitAnchor: getPortraitAnchorObjectFromParticipant(game.ConversationHud.activeConversation.participants[index]),
       });
-      fileInputForm.render(true);
+      participantInputForm.render(true);
     }
   }
 
@@ -581,12 +604,18 @@ export class ConversationHud {
     if (checkIfUserGM()) {
       let conversationData = {};
 
+      conversationData.conversationBackground = "";
       conversationData.activeParticipant = -1;
       conversationData.defaultActiveParticipant = undefined;
 
       if (data instanceof Array) {
         conversationData.participants = data;
       } else {
+        const conversationBackground = data.conversationBackground;
+        if (conversationBackground) {
+          conversationData.conversationBackground = conversationBackground;
+        }
+
         const participants = data.participants;
         const defaultActiveParticipant = data.defaultActiveParticipant;
         if (participants) {
@@ -673,21 +702,32 @@ export class ConversationHud {
 
   // Function that toggles the conversation background blur
   async toggleBackgroundBlur() {
-    if (game.settings.get(MODULE_NAME, ModuleSettings.enableBlurToggle)) {
-      if (checkIfUserGM() && checkIfConversationActive()) {
-        game.ConversationHud.conversationIsBlurred = !game.ConversationHud.conversationIsBlurred;
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      game.ConversationHud.conversationIsBlurred = !game.ConversationHud.conversationIsBlurred;
 
-        const conversationBackground = document.getElementById("conversation-hud-background");
-        if (game.ConversationHud.conversationIsBlurred) {
-          conversationBackground.style.display = "";
-        } else {
-          conversationBackground.style.display = "none";
-        }
-
-        updateConversationControls();
+      const conversationBackground = document.getElementById("conversation-hud-background");
+      if (game.ConversationHud.conversationIsBlurred) {
+        conversationBackground.style.display = "";
+      } else {
+        conversationBackground.style.display = "none";
       }
-    } else {
-      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+
+      updateConversationControls();
+    }
+  }
+
+  // Function to change the conversation background
+  changeConversationBackground() {
+    if (checkIfUserGM()) {
+      const conversationBackgroundForm = new ConversationBackgroundForm((data) => {
+        const conversationData = {
+          ...game.ConversationHud.activeConversation,
+          conversationBackground: data.conversationBackground,
+        };
+        const visibility = game.ConversationHud.conversationIsVisible;
+        game.ConversationHud.updateActiveConversation(conversationData, visibility);
+      }, game.ConversationHud.activeConversation.conversationBackground);
+      return conversationBackgroundForm.render(true);
     }
   }
 
@@ -725,7 +765,7 @@ export class ConversationHud {
   async displayLinkedParticipantNotes(index) {
     if (checkIfUserGM() && checkIfConversationActive()) {
       if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
-        console.error("ConversationHUD | Tried to update a participant with an invalid index");
+        console.error("ConversationHUD | Tried to access a participant with an invalid index");
         return;
       }
 
@@ -736,7 +776,7 @@ export class ConversationHud {
     }
   }
 
-  // Function that received a journal id and renders the referenced document in a separate sheet
+  // Function that receives a journal id and renders the referenced journal sheet in a separate tab
   async renderJournalSheet(journalId) {
     let journal = game.journal.get(journalId);
 
@@ -754,6 +794,32 @@ export class ConversationHud {
       }
 
       journal.sheet.render(true);
+    }
+  }
+
+  // Function that displays the linked notes of the participant at the given index
+  async displayLinkedParticipantActor(index) {
+    if (checkIfUserGM() && checkIfConversationActive()) {
+      if (index < 0 || game.ConversationHud.activeConversation.participants.length < index) {
+        console.error("ConversationHUD | Tried to access a participant with an invalid index");
+        return;
+      }
+
+      const linkedActor = game.ConversationHud.activeConversation.participants[index].linkedActor;
+      if (linkedActor) {
+        game.ConversationHud.renderActorSheet(linkedActor);
+      }
+    }
+  }
+
+  // Function that receives am actor id and renders the referenced actor sheet in a separate tab
+  async renderActorSheet(actorId) {
+    let actor = game.actors.get(actorId);
+
+    if (!actor) {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActorEntry"));
+    } else {
+      actor.sheet.render(true);
     }
   }
 
@@ -803,6 +869,7 @@ export class ConversationHud {
 
     if (newConversationSheet) {
       const dataToSave = {
+        conversationBackground: game.ConversationHud.activeConversation.conversationBackground,
         defaultActiveParticipant: game.ConversationHud.activeConversation.defaultActiveParticipant,
         participants: game.ConversationHud.activeConversation.participants,
       };
@@ -823,16 +890,7 @@ export class ConversationHud {
 
   // Function that adds a single participant to the active conversation
   #handleAddParticipant(data) {
-    setDefaultDataForParticipant(data);
-
-    if (data.faction?.selectedFaction) {
-      updateParticipantFactionBasedOnSelectedFaction(data);
-    }
-
-    // Add anchor object if missing
-    if (!data.portraitAnchor) {
-      data.portraitAnchor = getPortraitAnchorObjectFromParticipant(data);
-    }
+    processParticipantData(data);
 
     // Push participant to the active conversation then update all the others
     game.ConversationHud.activeConversation.participants.push(data);
@@ -840,10 +898,22 @@ export class ConversationHud {
   }
 
   #handleUpdateParticipant(data, index) {
-    setDefaultDataForParticipant(data);
+    processParticipantData(data);
 
     // Update participant with the given index
     game.ConversationHud.activeConversation.participants[index] = data;
+    socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
+  }
+
+  #handleReplaceAllParticipants(data) {
+    const processedData = data.map((participant) => {
+      processParticipantData(participant);
+      return participant;
+    });
+
+    // Replace all participants and update the UI
+    game.ConversationHud.activeConversation.activeParticipant = -1;
+    game.ConversationHud.activeConversation.participants = processedData;
     socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
   }
 
@@ -855,6 +925,7 @@ export class ConversationHud {
     }
 
     let parsedData = {};
+    parsedData.conversationBackground = formData.conversationBackground;
     parsedData.activeParticipant = -1;
     if (typeof formData.defaultActiveParticipant !== "undefined") {
       parsedData.activeParticipant = formData.defaultActiveParticipant;
@@ -871,6 +942,7 @@ export class ConversationHud {
   // Function that parses conversation input form data and then updates the conversation hud
   #handleConversationUpdateData(formData, visibility) {
     let parsedData = {};
+    parsedData.conversationBackground = formData.conversationBackground;
     parsedData.activeParticipant = -1;
     if (typeof formData.defaultActiveParticipant !== "undefined") {
       parsedData.activeParticipant = formData.defaultActiveParticipant;

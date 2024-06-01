@@ -2,7 +2,8 @@
   {{!-- Drag and drop area --}}
   <div id="conversation-hud-dropzone" class="conversation-hud-dropzone" >
     <i class="far fa-square-plus"></i>
-    <p> {{localize 'CHUD.strings.dropActor'}} </p>
+    <p> {{localize 'CHUD.strings.dropItem'}} </p>
+    <p class="hold-control"> ({{localize 'CHUD.strings.holdControl'}}) </p>
   </div>
 
   {{!-- Active participant --}}
@@ -38,10 +39,20 @@
               {{#if participant.linkedJournal}}
                 <a
                   class="notes"
-                  title="{{localize 'CHUD.strings.linkedJournal'}}"
+                  title="{{localize 'CHUD.strings.linkedJournal.name'}}"
                   onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})"
                 >
                   <i class="fas fa-book"></i>
+                </a>
+              {{/if}}
+
+              {{#if participant.linkedActor}}
+                <a
+                  class="notes"
+                  title="{{localize 'CHUD.strings.linkedActor.name'}}"
+                  onclick="game.ConversationHud.displayLinkedParticipantActor({{index}})"
+                >
+                  <i class="fas fa-user"></i>
                 </a>
               {{/if}}
             </div>

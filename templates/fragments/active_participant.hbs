@@ -10,7 +10,7 @@
 
   {{!-- Participant display --}}
   <div
-    class="active-participant {{portraitStyle}}"
+    class="active-participant {{portraitStyle}} {{#unless (or displayParticipant displayNoParticipantBox)}}hidden{{/unless}}"
     {{#if (and displayParticipant participant.displayName)}} data-tooltip="{{participant.name}}"{{/if}}
   >
     {{#if displayParticipant}}

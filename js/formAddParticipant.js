@@ -2,7 +2,7 @@ import { ANCHOR_OPTIONS } from "./constants.js";
 import { getConversationDataFromJournalId, getPortraitAnchorObjectFromParticipant } from "./helpers.js";
 import { ConversationFactionSheet } from "./sheets/ConversationFactionSheet.js";
 
-export class FileInputForm extends FormApplication {
+export class ParticipantInputForm extends FormApplication {
   constructor(isEditing, callbackFunction, participantData) {
     super();
     this.isEditing = isEditing;
@@ -17,8 +17,9 @@ export class FileInputForm extends FormApplication {
 
     this.portraitAnchor = getPortraitAnchorObjectFromParticipant(participantData);
 
-    // Linked journal
+    // Linked objects
     this.linkedJournal = participantData?.linkedJournal || "";
+    this.linkedActor = participantData?.linkedActor || "";
 
     // Faction data
     this.selectedFaction = participantData?.faction?.selectedFaction || "";
@@ -87,6 +88,51 @@ export class FileInputForm extends FormApplication {
     const factionBannerTintPicker = html.find("[name=factionTintPicker]")[0];
     factionBannerTintPicker.addEventListener("change", (event) => this.onUpdateBannerTint(event));
 
+    // Faction dropzone
+    const dragDropWrapper = html.find("#participant-add-edit-form-drag-and-drop-wrapper")[0];
+    const dragDropZone = html.find("#participant-add-edit-form-dropzone")[0];
+    if (dragDropWrapper && dragDropZone) {
+      dragDropWrapper.ondragenter = () => {
+        if (!this.draggingParticipant) {
+          this.dropzoneVisible = true;
+          dragDropWrapper.classList.add("active-dropzone");
+        }
+      };
+
+      dragDropZone.ondragleave = () => {
+        if (this.dropzoneVisible) {
+          this.dropzoneVisible = false;
+          dragDropWrapper.classList.remove("active-dropzone");
+        }
+      };
+
+      dragDropWrapper.ondrop = async (event) => {
+        if (this.dropzoneVisible) {
+          event.preventDefault();
+
+          const data = TextEditor.getDragEventData(event);
+          if (data.type === "JournalEntry") {
+            const entry = await JournalEntry.implementation.fromDropData(data);
+            const page = entry.getEmbeddedCollection("JournalEntryPage").contents[0];
+
+            if (page.type === "text") {
+              const data = JSON.parse(page.text.content);
+              const faction = data.faction;
+              if (faction) {
+                this.selectedFaction = entry.id;
+                this.render(false);
+              } else {
+                ui.notifications.warn(game.i18n.localize("CHUD.warnings.noFactionDataFound"));
+              }
+            }
+          }
+
+          this.dropzoneVisible = false;
+          dragDropWrapper.classList.remove("active-dropzone");
+        }
+      };
+    }
+
     // Activate banner shape buttons
     const bannerShapeButtons = html.find(".banner-shape-button");
     for (const button of bannerShapeButtons) {
@@ -102,10 +148,20 @@ export class FileInputForm extends FormApplication {
   }
 
   getData(options) {
-    const journals = game.journal.map((doc) => {
-      return { id: doc.id, name: doc.name };
+    let journals = game.journal.map((journal) => {
+      return { id: journal.id, name: journal.name, sheetClass: journal.flags?.core?.sheetClass };
     });
+    journals = journals.filter(
+      (journal) =>
+        journal.sheetClass !== "conversation-entry-sheet.ConversationEntrySheet" &&
+        journal.sheetClass !== "conversation-faction-sheet.ConversationFactionSheet"
+    );
     journals.sort((a, b) => a.name.localeCompare(b.name));
+
+    const actors = game.actors.map((actor) => {
+      return { id: actor.id, name: actor.name };
+    });
+    actors.sort((a, b) => a.name.localeCompare(b.name));
 
     // Get a list of all the saved factions
     const savedFactions = game.journal.filter(
@@ -149,8 +205,11 @@ export class FileInputForm extends FormApplication {
       factionBannerTint: selectedFactionData.factionBannerTint,
 
       linkedJournal: this.linkedJournal,
+      linkedActor: this.linkedActor,
 
       savedFactions: savedFactions,
+
+      actors: actors,
       journals: journals,
     };
   }
@@ -163,6 +222,7 @@ export class FileInputForm extends FormApplication {
       imgScale: formData.participantImgScale,
       portraitAnchor: this.portraitAnchor,
       linkedJournal: formData.linkedJournal,
+      linkedActor: formData.linkedActor,
       faction: {
         selectedFaction: formData.selectedFaction,
         displayFaction: formData.displayFaction,

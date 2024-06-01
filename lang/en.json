@@ -33,12 +33,26 @@
 
     "name": "Name",
 
-    "linkedJournal": "Linked Journal",
-    "linkedJournalHint": "Journal entry that will be linked to the conversation participant.",
-    "noLinkedJournal": "No linked journal",
+    "noLinkedDocuments": "No linked documents",
+
+    "linkedJournal": {
+      "name": "Linked Journal",
+      "hint": "Journal entry that will be linked to the conversation participant."
+    },
+
+    "linkedActor": {
+      "name": "Linked Actor",
+      "hint": "Actor that will be linked to the conversation participant."
+    },
 
     "conversationName": "Conversation Name",
     "conversationParticipants": "Conversation Participants",
+    "conversationSettings": "Conversation Settings",
+
+    "conversationBackground": {
+      "name": "Conversation Background",
+      "hint": "An image that will be displayed as the background of this conversation. If no image is selected, a dark semi-transparent background will be shown instead."
+    },
 
     "newParticipant": "New Participant",
 
@@ -56,7 +70,9 @@
     "browseFiles": "Browse Files",
     "filePath": "File Path",
 
-    "dropActor": "Drop actor here to add them to the conversation",
+    "dropItem": "Drop item here to add it to the conversation",
+    "dropFaction": "Drop faction here to add it to the participant",
+    "holdControl": "Hold CTRL to replace current participants",
 
     "anonymous": "Anonymous",
     "unknown": "Unknown",
@@ -65,6 +81,8 @@
     "banner": "Banner",
     "details": "Details",
     "actions": "Actions",
+
+    "tokenIsHidden": "Token is hidden",
 
     "invalidDocumentRef": "Invalid document reference",
 
@@ -78,7 +96,17 @@
       "hint": "Set whether or not to start the conversation with the visibility off. When unchecked, the conversation will start as visible."
     },
 
-    "sceneActors": "Actors in scene"
+    "sceneActors": "Actors in scene",
+
+    "excludeFromBeingPulled": {
+      "name": "Exclude From Being Pulled",
+      "hint": "Toggle whether not not token will be displayed on the list of actors being pulled into an active conversation."
+    },
+
+    "linkedConversation": {
+      "name": "Linked Conversation",
+      "hint": "A linked conversation that will be used whenever the token is being pulled into an active conversation."
+    }
   },
 
   "CHUD.dialogue": {
@@ -117,11 +145,13 @@
 
     "toggleSpeakAs": "Toggle Speak As",
     "toggleVisibility": "Toggle Visibility",
-    "toggleBackgroundBlur": "Toggle Background Blur",
+    "toggleBackgroundBlur": "Toggle Background",
     "maximizeConversation": "Maximize Conversation",
     "minimizeConversation": "Minimize Conversation",
 
     "discardChanges": "Discard Changes",
+
+    "showLinkedConversation": "Show Linked Conversation",
 
     "participant": {
       "add": "Add Participant",
@@ -136,6 +166,7 @@
       "deselectAll": "Deselect All"
     },
 
+    "changeConversationBackground": "Change Conversation Background",
     "pullParticipants": "Pull Participants from Scene",
     "addActors": "Add Actors"
   },
@@ -212,7 +243,8 @@
   },
 
   "CHUD.warnings": {
-    "noParticipantDataFound": "No viable participant data was found in this journal entry."
+    "noParticipantDataFound": "No viable participant data was found in this journal entry.",
+    "noFactionDataFound": "No viable faction data was found in this journal entry."
   },
 
   "CHUD.info": {
@@ -257,6 +289,10 @@
       "name": "Display Participants List",
       "hint": "Toggle whether or not to display the list of all the conversation participants to the players. The GM will still be able to see this list."
     },
+    "displayNoParticipantBox": {
+      "name": "Show No Active Participant UI",
+      "hint": "Toggle whether or not to display the container informing the users that there is currently no actively speaking participant. If off, nothing will be shown instead."
+    },
     "enableSpeakAs": {
       "name": "Enable Speak As",
       "hint": "Toggle the Speak As feature on or off. By default, the feature is on, but if you do not use it and do not want an extra button to appear, you can toggle it off."
@@ -272,10 +308,6 @@
     "enableSceneConversations": {
       "name": "Enable Scene Conversations",
       "hint": "Toggle the Scene Conversation feature on or off. By default, the feature is on and it allows users to link a conversation to a scene and when the scene is activated the conversation will open automatically. The conversation selector can be found on the Ambience tab of the Scene Config Sheet. If you do not want this behavior, you can toggle the feature off."
-    },
-    "enableBlurToggle": {
-      "name": "Enable Background Blur Toggle",
-      "hint": "Toggle to Background Blur Toggle feature on or off. By default, the feature is on as it allows the DM to showcase the background image without minimizing the conversation. If you do not want this behavior, you can toggle the feature off."
     },
     "blurAmount": {
       "name": "Blur Amount",
