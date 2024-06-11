@@ -60,6 +60,8 @@ export class ConversationHud {
 
       socket.register("setActiveParticipant", this.setActiveParticipant);
 
+      socket.register("toggleConversationBackground", this.toggleConversationBackground);
+
       socket.register("setConversationHudVisibility", this.setConversationHudVisibility);
 
       socket.register("getActiveConversationVisibility", this.getActiveConversationVisibility);
@@ -700,18 +702,25 @@ export class ConversationHud {
     }
   }
 
-  // Function that toggles the conversation background blur
+  // Helper function that toggles the conversation background blur
   async toggleBackgroundBlur() {
     if (checkIfUserGM() && checkIfConversationActive()) {
-      game.ConversationHud.conversationIsBlurred = !game.ConversationHud.conversationIsBlurred;
+      socket.executeForEveryone("toggleConversationBackground", !game.ConversationHud.conversationIsBlurred);
+    }
+  }
 
-      const conversationBackground = document.getElementById("conversation-hud-background");
-      if (game.ConversationHud.conversationIsBlurred) {
-        conversationBackground.style.display = "";
-      } else {
-        conversationBackground.style.display = "none";
-      }
+  // Actual function that toggles the conversation background blur and is executed on all connected clients
+  toggleConversationBackground(enabled) {
+    game.ConversationHud.conversationIsBlurred = enabled;
 
+    const conversationBackground = document.getElementById("conversation-hud-background");
+    if (enabled) {
+      conversationBackground.style.display = "";
+    } else {
+      conversationBackground.style.display = "none";
+    }
+
+    if (game.user.isGM) {
       updateConversationControls();
     }
   }
@@ -720,12 +729,8 @@ export class ConversationHud {
   changeConversationBackground() {
     if (checkIfUserGM()) {
       const conversationBackgroundForm = new ConversationBackgroundForm((data) => {
-        const conversationData = {
-          ...game.ConversationHud.activeConversation,
-          conversationBackground: data.conversationBackground,
-        };
-        const visibility = game.ConversationHud.conversationIsVisible;
-        game.ConversationHud.updateActiveConversation(conversationData, visibility);
+        game.ConversationHud.activeConversation.conversationBackground = data.conversationBackground;
+        socket.executeForEveryone("updateActiveConversation", game.ConversationHud.activeConversation);
       }, game.ConversationHud.activeConversation.conversationBackground);
       return conversationBackgroundForm.render(true);
     }
