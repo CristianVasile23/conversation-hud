@@ -305,6 +305,10 @@
       "name": "Remember Minimization",
       "hint": "Remember minimization status between different conversations. By default, the feature is off so that every new conversation will start maximized. Enable this feature to have new conversations pick up the previous minimization state. Minimization state resets on page reload."
     },
+    "clearActiveParticipantOnVisibilityChange": {
+      "name": "Clear Active Participant on Visibility Change",
+      "hint": "Toggle whether or not to clear the currently active participant whenever the conversation visibility is toggled off."
+    },
     "enableSceneConversations": {
       "name": "Activer les Conversations de Scène",
       "hint": "Basculer la fonctionnalité Conversation de Scène on ou off. Par défaut, la fonctionnalité est activée et elle permet aux utilisateurs de lier une conversation à une scène et lorsque la scène est activée, la conversation s'ouvrira automatiquement. Le sélecteur de conversation se trouve sur l'onglet Ambiance de la Feuille de Configuration de Scène. Si vous ne souhaitez pas ce comportement, vous pouvez désactiver la fonctionnalité."
