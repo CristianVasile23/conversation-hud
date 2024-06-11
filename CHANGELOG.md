@@ -1,3 +1,8 @@
+## 5.6.1
+
+- Added setting for clearing the currently active participant whenever the conversation visibility is toggled off.
+- Fixed an issue that caused the conversation background change and background toggle to be reflected only on the client that trigger these changes.
+
 ## 5.6.0
 
 - Added the option to link actors to conversation participants. You can then view the linked actor sheet by clicking on a button similar to the one used for linked notes.
