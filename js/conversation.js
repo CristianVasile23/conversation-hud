@@ -324,6 +324,10 @@ export class ConversationHud {
     if (checkIfUserGM() && checkIfConversationActive()) {
       game.ConversationHud.conversationIsVisible = !game.ConversationHud.conversationIsVisible;
       socket.executeForEveryone("setConversationHudVisibility", game.ConversationHud.conversationIsVisible);
+
+      if (game.settings.get(MODULE_NAME, ModuleSettings.clearActiveParticipantOnVisibilityChange)) {
+        game.ConversationHud.changeActiveParticipant(-1);
+      }
     }
   }
 

@@ -9,6 +9,7 @@ export const ModuleSettings = {
   enableMinimize: "enableMinimize",
   keepMinimize: "keepMinimize",
   enableSpeakAs: "enableSpeakAs",
+  clearActiveParticipantOnVisibilityChange: "clearActiveParticipantOnVisibilityChange",
   enableSceneConversations: "enableSceneConversations",
   blurAmount: "blurAmount",
   activeParticipantFontSize: "activeParticipantFontSize",
@@ -109,6 +110,16 @@ export function registerSettings() {
     scope: "world",
     config: true,
     requiresReload: false,
+    type: Boolean,
+    default: false,
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.clearActiveParticipantOnVisibilityChange, {
+    name: game.i18n.localize(`CHUD.settings.clearActiveParticipantOnVisibilityChange.name`),
+    hint: game.i18n.localize(`CHUD.settings.clearActiveParticipantOnVisibilityChange.hint`),
+    scope: "world",
+    config: true,
+    requiresReload: true,
     type: Boolean,
     default: false,
   });
