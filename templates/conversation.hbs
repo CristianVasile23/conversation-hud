@@ -95,7 +95,16 @@
         {{#each participants as |participant index|}}
           <div class="conversation-participant-wrapper">
             {{!-- Participant --}}
-            <div class="conversation-participant" data-tooltip="{{participant.name}}">
+            <div
+              class="conversation-participant"
+              data-tooltip="
+                {{#if (eq participant.displayName false)}}
+                  {{localize 'CHUD.strings.unknown'}}
+                {{else}}
+                  {{participant.name}}
+                {{/if}}
+              "
+            >
               {{{renderParticipantPortrait
                 participant.img
                 (portraitParamsObject
