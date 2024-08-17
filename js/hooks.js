@@ -61,7 +61,13 @@ Hooks.on("renderSceneConfig", async (app, html, data) => {
       sceneConversationVisibilityOff: sceneConversationVisibilityOff,
     });
 
-    html.find('div[data-tab="ambience"] > .form-group').last().after(renderedHtml);
+    const appVersion = game.version.split(".")[0];
+    if (appVersion && Number(appVersion) >= 12) {
+      html.find('div[data-tab="ambience"] > div[data-tab="basic"] > .form-group').last().after(renderedHtml);
+    } else {
+      html.find('div[data-tab="ambience"] > .form-group').last().after(renderedHtml);
+    }
+
     app.setPosition({ height: "auto" });
   }
 });

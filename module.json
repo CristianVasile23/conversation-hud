@@ -1,20 +1,19 @@
 {
   "id": "conversation-hud",
   "title": "ConversationHUD",
-  "name": "conversation-hud",
   "description": "A simple module that adds a nice HUD that display the portraits of all the characters present in a conversation.",
   "version": "#{VERSION}#",
-  "library": "false",
   "compatibility": {
-    "minimum": 10,
-    "verified": 12,
-    "maximum": 12
+    "minimum": "10",
+    "verified": "12",
+    "maximum": "12"
   },
   "authors": [
     {
       "name": "Saervicus (Cristian Vasile)",
       "discord": "Saervicus#7305",
-      "url": "https://github.com/CristianVasile23"
+      "url": "https://github.com/CristianVasile23",
+      "flags": {}
     }
   ],
   "relationships": {
@@ -41,22 +40,28 @@
   "styles": ["css/main.css"],
   "packs": [
     {
-      "name": "conversation-hud-macros",
+      "name": "conversation-hud-macro-pack",
       "label": "ConversationHUD Macros",
-      "path": "packs/macros.db",
-      "type": "Macro"
+      "path": "packs/conversation-hud-macro-pack",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
     }
   ],
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     },
     {
       "lang": "fr",
       "name": "Français",
-      "path": "lang/fr.json"
+      "path": "lang/fr.json",
+      "flags": {}
     }
   ],
   "socket": true,
