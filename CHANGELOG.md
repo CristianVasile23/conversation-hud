@@ -1,3 +1,9 @@
+## 5.6.2
+
+- Fixed an issue that caused the toolip to display the actual name of participants with hidden names.
+- Fixed an issue that caused the scene conversation feature to not appear on FoundryVTT v12.
+- Fixed an issue that caused the macros compendium to be empty.
+
 ## 5.6.1
 
 - Added setting for clearing the currently active participant whenever the conversation visibility is toggled off.
