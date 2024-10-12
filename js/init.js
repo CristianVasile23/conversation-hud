@@ -1,8 +1,9 @@
-import { MODULE_NAME } from "./constants.js";
+import { MODULE_NAME } from "./constants/index.js";
 import { ConversationHud } from "./conversation.js";
-import { registerHandlebarHelpers } from "./handlebar-helpers.js";
-import { checkConversationDataAvailability, fixRpgUiIncompatibility, handleOnClickContentLink } from "./helpers.js";
-import { preloadTemplates } from "./preloadTemplates.js";
+// import { registerHandlebarHelpers } from "./handlebar-helpers.js";
+import { checkConversationDataAvailability, fixRpgUiIncompatibility, handleOnClickContentLink } from "./helpers/index.js";
+import { registerHooks } from "./hooks/index.js";
+// import { preloadTemplates } from "./preloadTemplates.js";
 import { ModuleSettings, registerSettings } from "./settings.js";
 
 // Warning hook in case libWrapper is not installed
@@ -20,6 +21,8 @@ Hooks.once("socketlib.ready", () => {
 
 Hooks.on("init", async () => {
   // Register the module within libWrapper
+  // This will enable users to CTRL + Click conversation links within journals to activate the conversation
+  // instead of just rendering the conversation sheet
   if (libWrapper) {
     libWrapper.register(
       MODULE_NAME,
@@ -31,14 +34,17 @@ Hooks.on("init", async () => {
     );
   }
 
+  // Register all other hooks
+  registerHooks();
+
   // Register settings
   registerSettings();
 
   // Register handlebar helpers
-  registerHandlebarHelpers();
+  //registerHandlebarHelpers();
 
-  // Load templates
-  preloadTemplates();
+  // Load handlebar templates
+  //preloadTemplates();
 
   // Initialize the ConversationHUD object
   game.ConversationHud = new ConversationHud();
@@ -75,7 +81,7 @@ Hooks.on("ready", async () => {
     }
   } else {
     try {
-      // Get conversation data from a GM
+      // Try to get conversation data from a connected GM
       const result = await socket.executeAsGM("getActiveConversation");
 
       // If there is an active conversation, render it

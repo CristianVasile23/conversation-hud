@@ -37,7 +37,7 @@
       }
     ]
   },
-  "esmodules": ["js/init.js", "js/controls.js", "js/hooks.js"],
+  "esmodules": ["js/init.js"],
   "styles": ["css/main.css"],
   "packs": [
     {

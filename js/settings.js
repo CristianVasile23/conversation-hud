@@ -1,4 +1,4 @@
-import { MODULE_NAME } from "./constants.js";
+import { MODULE_NAME } from "./constants/index.js";
 
 export const ModuleSettings = {
   portraitStyle: "portraitStyle",
