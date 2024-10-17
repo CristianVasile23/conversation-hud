@@ -1,6 +1,6 @@
 /**
-  [TODO: Add JSDoc]
-**/
+ * [TODO: Add JSDoc]
+ */
 export function fixRpgUiIncompatibility() {
   let cssFix = document.createElement("link");
   cssFix.rel = "stylesheet";

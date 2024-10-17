@@ -1,3 +1,7 @@
+/// <reference path="./types/ConversationData.js" />
+/// <reference path="./types/ParticipantData.js" />
+/// <reference path="./types/PortraitAnchor.js" />
+
 import { MODULE_NAME } from "./constants/index.js";
 import { ConversationHud } from "./conversation.js";
 // import { registerHandlebarHelpers } from "./handlebar-helpers.js";

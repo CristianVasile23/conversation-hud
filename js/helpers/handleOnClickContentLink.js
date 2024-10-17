@@ -1,6 +1,8 @@
 /**
-  [TODO: Add JSDoc]
-**/
+ * [TODO: Add JSDoc]
+ */
+
+// TODO: Add comments that explain what happens in the function
 export function handleOnClickContentLink(event, wrapped) {
   event.preventDefault();
   const currentTarget = event.currentTarget;
