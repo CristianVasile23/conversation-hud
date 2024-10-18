@@ -1,11 +1,12 @@
-/// <reference path="./types/ConversationData.js" />
-/// <reference path="./types/ParticipantData.js" />
-/// <reference path="./types/PortraitAnchor.js" />
-
 import { MODULE_NAME } from "./constants/index.js";
 import { ConversationHud } from "./conversation.js";
-// import { registerHandlebarHelpers } from "./handlebar-helpers.js";
-import { checkConversationDataAvailability, fixRpgUiIncompatibility, handleOnClickContentLink } from "./helpers/index.js";
+import {
+  registerHandlebarsHelpers,
+  preloadHandlebarsTemplates,
+  checkConversationDataAvailability,
+  fixRpgUiIncompatibility,
+  handleOnClickContentLink,
+} from "./helpers/index.js";
 import { registerHooks } from "./hooks/index.js";
 // import { preloadTemplates } from "./preloadTemplates.js";
 import { ModuleSettings, registerSettings } from "./settings.js";
@@ -44,11 +45,11 @@ Hooks.on("init", async () => {
   // Register settings
   registerSettings();
 
-  // Register handlebar helpers
-  //registerHandlebarHelpers();
+  // Register the Handlebars helpers
+  registerHandlebarsHelpers();
 
-  // Load handlebar templates
-  //preloadTemplates();
+  // Load the Handlebars templates
+  preloadHandlebarsTemplates();
 
   // Initialize the ConversationHUD object
   game.ConversationHud = new ConversationHud();

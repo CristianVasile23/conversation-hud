@@ -4,22 +4,24 @@ import { PullParticipantsForm } from "./formPullParticipants.js";
 import {
   getActorDataFromDragEvent,
   moveInArray,
-  hideDragAndDropIndicator,
-  displayDragAndDropIndicator,
   getDragAndDropIndex,
-  updateParticipantFactionBasedOnSelectedFaction,
+  hideDragAndDropIndicator,
+  showDragAndDropIndicator,
   getPortraitAnchorObjectFromParticipant,
   processParticipantData,
-} from "./helpers.js";
+} from "../helpers/index.js";
 
 export class ConversationCreationForm extends FormApplication {
   constructor(callbackFunction) {
     super();
+
+    // State variables
     this.callbackFunction = callbackFunction;
     this.conversationBackground = "";
     this.participants = [];
     this.defaultActiveParticipant = undefined;
 
+    // Drag and drop variables
     this.dropzoneVisible = false;
     this.draggingParticipant = false;
   }
@@ -28,7 +30,7 @@ export class ConversationCreationForm extends FormApplication {
     return mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
-      template: "modules/conversation-hud/templates/conversation_input.hbs",
+      template: "modules/conversation-hud/templates/conversation_creation_form.hbs",
       id: "conversation-start-form",
       title: game.i18n.localize("CHUD.actions.createConversation"),
       width: 635,
@@ -38,14 +40,7 @@ export class ConversationCreationForm extends FormApplication {
 
   getData() {
     for (const participant of this.participants) {
-      if (participant.faction?.selectedFaction) {
-        updateParticipantFactionBasedOnSelectedFaction(participant);
-      }
-
-      // Add anchor object if missing
-      if (!participant.portraitAnchor) {
-        participant.portraitAnchor = getPortraitAnchorObjectFromParticipant(participant);
-      }
+      processParticipantData(participant);
     }
 
     return {
@@ -142,7 +137,7 @@ export class ConversationCreationForm extends FormApplication {
         };
 
         conversationParticipants[i].ondragover = (event) => {
-          displayDragAndDropIndicator(conversationParticipants[i], event);
+          showDragAndDropIndicator(conversationParticipants[i], event);
         };
 
         conversationParticipants[i].ondragleave = (event) => {

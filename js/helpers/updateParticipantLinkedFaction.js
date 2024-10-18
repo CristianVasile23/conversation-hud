@@ -1,3 +1,5 @@
+/// <reference path="../types/ParticipantData.js" />
+
 /**
  * [TODO: Complete JSDoc documentation]
  *

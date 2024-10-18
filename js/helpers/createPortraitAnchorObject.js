@@ -1,3 +1,5 @@
+/// <reference path="../types/PortraitAnchor.js" />
+
 /**
  * Function that creates an PortraitAnchor object based on the default options defined in the module settings
  *

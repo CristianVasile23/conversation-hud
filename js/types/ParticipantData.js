@@ -1,3 +1,5 @@
+/// <reference path="../types/PortraitAnchor.js" />
+
 /**
  * [TODO: Complete JSDoc documentation of type]
  *
@@ -8,8 +10,7 @@
  * @property {string} img The path to the participant's image
  * @property {number} imgScale The scale of the image
  *
- * [TODO] Change Object type to PortraitAnchor type when it exists
- * @property {Object} portraitAnchor The position used as an anchor when rendering the portrait image
+ * @property {PortraitAnchor} portraitAnchor The position used as an anchor when rendering the portrait image
  *
  * @property {Object} faction The faction associated with the participant
  *

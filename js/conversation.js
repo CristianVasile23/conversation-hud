@@ -1,3 +1,5 @@
+/// <reference path="./types/ConversationData.js" />
+
 export class ConversationHud {
   // Function that initializes the class data
   init() {
