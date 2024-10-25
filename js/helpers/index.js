@@ -2,9 +2,13 @@
 import { getDragAndDropIndex, hideDragAndDropIndicator, showDragAndDropIndicator } from "./drag-and-drop/index.js";
 import { registerHandlebarsHelpers, preloadHandlebarsTemplates } from "./handlebars-helpers/index.js";
 import { checkConversationDataAvailability } from "./checkConversationDataAvailability.js";
+import { checkIfUserIsGM } from "./checkIfUserIsGM.js";
+import { convertActorToParticipant } from "./convertActorToParticipant.js";
 import { createPortraitAnchorObject } from "./createPortraitAnchorObject.js";
 import { fixRpgUiIncompatibility } from "./fixRpgUiIncompatibility.js";
 import { getActorDataFromDragEvent } from "./getActorDataFromDragEvent.js";
+import { getConfirmationFromUser } from "./getConfirmationFromUser.js";
+import { getConversationDataFromJournalId } from "./getConversationDataFromJournalId.js";
 import { handleOnClickContentLink } from "./handleOnClickContentLink.js";
 import { moveInArray } from "./moveInArray.js";
 import { normalizeParticipantDataStructure } from "./normalizeParticipantDataStructure.js";
@@ -24,9 +28,13 @@ export {
 
   // Rest
   checkConversationDataAvailability,
+  checkIfUserIsGM,
+  convertActorToParticipant,
   createPortraitAnchorObject,
   fixRpgUiIncompatibility,
   getActorDataFromDragEvent,
+  getConfirmationFromUser,
+  getConversationDataFromJournalId,
   handleOnClickContentLink,
   moveInArray,
   normalizeParticipantDataStructure,

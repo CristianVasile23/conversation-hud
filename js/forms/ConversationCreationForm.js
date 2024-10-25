@@ -1,29 +1,29 @@
-import { ANCHOR_OPTIONS } from "./constants.js";
-import { ParticipantInputForm } from "./formAddParticipant.js";
-import { PullParticipantsForm } from "./formPullParticipants.js";
+import { ANCHOR_OPTIONS } from "../constants/index.js";
+import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
+import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
 import {
   getActorDataFromDragEvent,
   moveInArray,
   getDragAndDropIndex,
   hideDragAndDropIndicator,
   showDragAndDropIndicator,
-  getPortraitAnchorObjectFromParticipant,
   processParticipantData,
 } from "../helpers/index.js";
 
 export class ConversationCreationForm extends FormApplication {
+  // State variables
+  callbackFunction = undefined;
+  conversationBackground = "";
+  participants = [];
+  defaultActiveParticipant = undefined;
+
+  // Drag and drop variables
+  dropzoneVisible = false;
+  draggingParticipant = false;
+
   constructor(callbackFunction) {
     super();
-
-    // State variables
     this.callbackFunction = callbackFunction;
-    this.conversationBackground = "";
-    this.participants = [];
-    this.defaultActiveParticipant = undefined;
-
-    // Drag and drop variables
-    this.dropzoneVisible = false;
-    this.draggingParticipant = false;
   }
 
   static get defaultOptions() {
@@ -56,18 +56,18 @@ export class ConversationCreationForm extends FormApplication {
 
     // Add event listener on the pull participants from scene button
     html.find("#pull-participants-from-scene").click(async (e) => {
-      const pullParticipantsForm = new PullParticipantsForm((data) => {
+      const pullParticipantsFromSceneForm = new PullParticipantsFromSceneForm((data) => {
         for (const participant of data) {
           this.#handleAddParticipant(participant);
         }
       });
-      return pullParticipantsForm.render(true);
+      return pullParticipantsFromSceneForm.render(true);
     });
 
     // Add event listener on the add participant button
     html.find("#add-participant").click(async (e) => {
-      const participantInputForm = new ParticipantInputForm(false, (data) => this.#handleAddParticipant(data));
-      return participantInputForm.render(true);
+      const participantCreationForm = new CreateOrEditParticipantForm(false, (data) => this.#handleAddParticipant(data));
+      return participantCreationForm.render(true);
     });
 
     // Drag and drop functionality
@@ -194,7 +194,7 @@ export class ConversationCreationForm extends FormApplication {
         controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
         controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {
-          const participantInputForm = new ParticipantInputForm(true, (data) => this.#handleEditParticipant(data, i), {
+          const participantEditForm = new CreateOrEditParticipantForm(true, (data) => this.#handleEditParticipant(data, i), {
             name: this.participants[i].name,
             displayName: this.participants[i].displayName,
             img: this.participants[i].img,
@@ -203,9 +203,9 @@ export class ConversationCreationForm extends FormApplication {
             linkedActor: this.participants[i].linkedActor,
             faction: this.participants[i].faction,
             anchorOptions: ANCHOR_OPTIONS,
-            portraitAnchor: getPortraitAnchorObjectFromParticipant(this.participants[i]),
+            portraitAnchor: this.participants[i].portraitAnchor,
           });
-          participantInputForm.render(true);
+          participantEditForm.render(true);
         };
       }
     }

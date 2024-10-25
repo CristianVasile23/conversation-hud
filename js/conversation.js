@@ -1,26 +1,31 @@
 /// <reference path="./types/ConversationData.js" />
 
+import { socket } from "./init.js";
+import { ConversationCreationForm } from "./forms/index.js";
+import { checkIfUserIsGM } from "./helpers/index.js";
+import { ConversationFactionSheet } from "./sheets/index.js";
+import { MODULE_NAME } from "./constants/index.js";
+import { ModuleSettings } from "./settings.js";
+
 export class ConversationHud {
-  // Function that initializes the class data
-  init() {
-    // Initialize variables
-    this.conversationIsActive = false;
-    this.conversationIsVisible = false;
-    this.conversationIsMinimized = false;
-    this.conversationIsSpeakingAs = false;
-    this.conversationIsBlurred = true;
+  conversationIsActive = false;
+  conversationIsVisible = false;
+  conversationIsMinimized = false;
+  conversationIsSpeakingAs = false;
+  conversationIsBlurred = true;
 
-    /** @type {ConversationData} */
-    this.conversationData = undefined;
+  /** @type {ConversationData} */
+  conversationData = undefined;
 
-    this.dropzoneVisible = false;
-    this.draggingParticipant = false;
+  dropzoneVisible = false;
+  draggingParticipant = false;
 
+  constructor() {
     // Register socket hooks
     this.registerSocketFunctions();
 
     // Register conversation sheet
-    //this.registerConversationSheet();
+    this.registerConversationSheet();
   }
 
   /**
@@ -49,11 +54,29 @@ export class ConversationHud {
     }
   }
 
+  // TODO: Move this function in the init.js file
+  /**
+   * Function that register all sheet entities used by the module
+   */
+  registerConversationSheet() {
+    // DocumentSheetConfig.registerSheet(JournalEntry, "conversation-entry-sheet", ConversationEntrySheet, {
+    //   types: ["base"],
+    //   makeDefault: false,
+    //   label: game.i18n.localize("CHUD.sheets.entrySheet"),
+    // });
+
+    DocumentSheetConfig.registerSheet(JournalEntry, "conversation-faction-sheet", ConversationFactionSheet, {
+      types: ["base"],
+      makeDefault: false,
+      label: game.i18n.localize("CHUD.sheets.factionSheet"),
+    });
+  }
+
   /**
    * Function that renders the conversation hud
    * @param {ConversationData} conversationData TODO
    * @param {boolean} conversationVisible TODO
-   **/
+   */
   async renderConversation(conversationData, conversationVisible) {
     // Set conversation data
     game.ConversationHud.conversationIsActive = true;
@@ -129,5 +152,34 @@ export class ConversationHud {
 
     // Set image
     game.ConversationHud.changeActiveImage(conversationData.activeParticipant);
+  }
+
+  /**
+   * Function that either triggers the conversation creation form, or removes the active conversation
+   */
+  async onToggleConversation(shouldCreateConversation) {
+    if (checkIfUserIsGM()) {
+      if (shouldCreateConversation) {
+        if (!game.ConversationHud.conversationIsActive) {
+          // Set button active status to false until a successful form has been completed
+          ui.controls.controls
+            .find((controls) => controls.name === "notes")
+            .tools.find((tools) => tools.name === "activateHud").active = false;
+
+          // Create form
+          // new ConversationInputForm((data) => this.#handleConversationCreationData(data)).render(true);
+          new ConversationCreationForm((data) => console.log(data)).render(true);
+        } else {
+          ui.notifications.error(game.i18n.localize("CHUD.errors.conversationAlreadyActive"));
+        }
+      } else {
+        if (game.ConversationHud.conversationIsActive) {
+          //socket.executeForEveryone("removeConversation");
+          //socket.executeForAllGMs("updateActivateHudButton", false);
+        } else {
+          ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
+        }
+      }
+    }
   }
 }

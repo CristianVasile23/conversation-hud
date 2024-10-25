@@ -1,5 +1,7 @@
 /// <reference path="../types/ParticipantData.js" />
 
+import { EMPTY_FACTION } from "../constants/index.js";
+
 /**
  * Function that takes a participant and normalizes its data structure. This is useful to ensure that no matter how
  * the participant is created, it will always have the same structure.
