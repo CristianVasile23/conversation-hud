@@ -12,6 +12,7 @@ export class GmControllerConversation {
   #currentActiveParticipant = -1;
 
   /**
+   * TODO: Finish JSDoc
    *
    * @param {ConversationData} conversationData
    */
@@ -20,7 +21,7 @@ export class GmControllerConversation {
   }
 
   /**
-   *
+   * TODO: Finish JSDoc
    */
   async createConversation() {
     const conversationIsVisible = game.ConversationHud.conversationIsVisible;
@@ -56,7 +57,7 @@ export class GmControllerConversation {
   }
 
   /**
-   *
+   * TODO: Finish JSDoc
    */
   async removeConversation() {
     const body = document.body;
@@ -80,6 +81,7 @@ export class GmControllerConversation {
   }
 
   /**
+   * TODO: Finish JSDoc
    *
    * @param {*} data
    */
@@ -91,6 +93,7 @@ export class GmControllerConversation {
 
     this.#currentActiveParticipant = index;
     this.#updateActiveParticipantImage(index);
+    this.#updateParticipantsList(index);
   }
 
   // ------------- PRIVATE FUNCTIONS -------------
@@ -153,17 +156,17 @@ export class GmControllerConversation {
     activeParticipantAnchorPoint.innerHTML = template;
   }
 
-  // #updateParticipantsList(index) {
-  //   // Change active class of all other elements
-  //   const conversationParticipants = document.getElementById("conversationParticipantList").children;
-  //   if (conversationParticipants) {
-  //     for (let i = 0; i < conversationParticipants.length; i++) {
-  //       if (index === i) {
-  //         conversationParticipants[i].classList.add("active");
-  //       } else {
-  //         conversationParticipants[i].classList.remove("active");
-  //       }
-  //     }
-  //   }
-  // }
+  #updateParticipantsList(index) {
+    // Change active class of all other elements
+    const conversationParticipants = document.getElementById("conversationParticipantList").children;
+    if (conversationParticipants) {
+      for (let i = 0; i < conversationParticipants.length; i++) {
+        if (index === i) {
+          conversationParticipants[i].classList.add("active");
+        } else {
+          conversationParticipants[i].classList.remove("active");
+        }
+      }
+    }
+  }
 }
