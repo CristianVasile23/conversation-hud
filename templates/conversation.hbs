@@ -61,7 +61,7 @@
             <div
               class="conversation-participant has-control"
               draggable="true"
-              onclick="game.ConversationHud.changeActiveParticipant({{index}})"
+              onclick='game.ConversationHud.changeActiveParticipant({{{json (object index=index)}}})'
             >
               {{{renderParticipantPortrait
                 participant.img

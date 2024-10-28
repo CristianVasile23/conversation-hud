@@ -1,7 +1,9 @@
 // TODO: Import and export all helper functions
+import { createConversationBackgroundContainer } from "./conversation/index.js";
 import { getDragAndDropIndex, hideDragAndDropIndicator, showDragAndDropIndicator } from "./drag-and-drop/index.js";
 import { registerHandlebarsHelpers, preloadHandlebarsTemplates } from "./handlebars-helpers/index.js";
 import { checkConversationDataAvailability } from "./checkConversationDataAvailability.js";
+import { checkIfCameraDockIsOnBottomOrTop } from "./checkIfCameraDockIsOnBottomOrTop.js";
 import { checkIfUserIsGM } from "./checkIfUserIsGM.js";
 import { convertActorToParticipant } from "./convertActorToParticipant.js";
 import { createPortraitAnchorObject } from "./createPortraitAnchorObject.js";
@@ -17,6 +19,9 @@ import { setDefaultParticipantData } from "./setDefaultParticipantData.js";
 import { updateParticipantLinkedFaction } from "./updateParticipantLinkedFaction.js";
 
 export {
+  // Conversation
+  createConversationBackgroundContainer,
+
   // Drag and drop
   getDragAndDropIndex,
   hideDragAndDropIndicator,
@@ -28,6 +33,7 @@ export {
 
   // Rest
   checkConversationDataAvailability,
+  checkIfCameraDockIsOnBottomOrTop,
   checkIfUserIsGM,
   convertActorToParticipant,
   createPortraitAnchorObject,

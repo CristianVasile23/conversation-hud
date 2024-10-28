@@ -5,6 +5,18 @@
 
   <div class="conversation-sheet-settings">
     <div class="form-group">
+      <label>{{localize "CHUD.strings.conversationType.name"}}</label>
+      <div class="form-fields">
+        {{!-- TODO: Add proper types when implementing the second type of conversation --}}
+        <select name="conversationType" disabled>
+          <option value="GM_CONTROLLED">GM Controlled</option>
+          <option value="COLLECTIVE">Collective</option>
+        </select>
+      </div>
+      <p class="notes">{{localize "CHUD.strings.conversationType.hint"}}</p>
+    </div>
+
+    <div class="form-group">
       <label>{{localize "CHUD.strings.conversationBackground.name"}}</label>
       <div class="form-fields">
         <button

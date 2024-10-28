@@ -9,6 +9,7 @@ import {
 } from "./helpers/index.js";
 import { registerHooks } from "./hooks/index.js";
 import { ModuleSettings, registerSettings } from "./settings.js";
+import { registerSheets } from "./sheets/index.js";
 
 // Warning hook in case libWrapper is not installed
 Hooks.once("ready", () => {
@@ -49,6 +50,9 @@ Hooks.on("init", async () => {
 
   // Load the Handlebars templates
   preloadHandlebarsTemplates();
+
+  // Register
+  registerSheets();
 
   // Initialize the ConversationHUD object
   game.ConversationHud = new ConversationHud();

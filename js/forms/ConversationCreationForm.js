@@ -1,4 +1,5 @@
-import { ANCHOR_OPTIONS } from "../constants/index.js";
+// TODO: Rename this entire class to GmControlledConversationCreationForm
+import { ANCHOR_OPTIONS, CONVERSATION_TYPES } from "../constants/index.js";
 import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
 import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
 import {
@@ -21,6 +22,11 @@ export class ConversationCreationForm extends FormApplication {
   dropzoneVisible = false;
   draggingParticipant = false;
 
+  /**
+   * TODO: Add JSDoc
+   *
+   * @param {(formData: TODO) => void} callbackFunction
+   */
   constructor(callbackFunction) {
     super();
     this.callbackFunction = callbackFunction;
@@ -211,18 +217,21 @@ export class ConversationCreationForm extends FormApplication {
     }
   }
 
+  /**
+   *
+   * @param {*} event
+   * @param {*} formData
+   */
   async _updateObject(event, formData) {
-    // Parse the form data
-    let parsedData = {};
-
-    // Data type is added as a way of future-proofing the code
-    parsedData.type = 0;
-    parsedData.conversationBackground = formData.conversationBackground;
-    parsedData.participants = this.participants;
-    parsedData.defaultActiveParticipant = this.defaultActiveParticipant;
-
     // Pass data to conversation class
-    this.callbackFunction(parsedData);
+    this.callbackFunction({
+      type: CONVERSATION_TYPES.GM_CONTROLLED,
+      background: formData.conversationBackground,
+      data: {
+        participants: this.participants,
+        defaultActiveParticipant: this.defaultActiveParticipant,
+      },
+    });
   }
 
   #handleAddParticipant(data) {
