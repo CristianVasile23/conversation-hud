@@ -10,8 +10,11 @@
 /* CSS for the active conversation */
 @import url("./active-conversation/index.css");
 
-/* CSS fopr the pull participants feature */
+/* CSS for the pull participants feature */
 @import url("./pull-participants/index.css");
+
+/* CSS for the forms */
+@import url("./forms/index.css");
 
 /* Misc CSS used for various aspects of the module */
 @import url("./misc.css");

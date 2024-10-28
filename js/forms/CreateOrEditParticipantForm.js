@@ -75,7 +75,7 @@ export class CreateOrEditParticipantForm extends FormApplication {
   }
 
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["form", "scene-sheet"],
       popOut: true,
       template: `modules/conversation-hud/templates/add_edit_participant.hbs`,

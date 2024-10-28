@@ -27,7 +27,7 @@ export class ConversationFactionSheet extends JournalSheet {
   }
 
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["sheet", "journal-sheet"],
       title: game.i18n.localize("CHUD.strings.conversationFactionEntry"),
       id: "conversation-entry-sheet",

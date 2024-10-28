@@ -61,7 +61,7 @@ export class PullParticipantsFromSceneForm extends FormApplication {
   }
 
   static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
+    return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
       template: `modules/conversation-hud/templates/pull_participants.hbs`,
