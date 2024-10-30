@@ -56,7 +56,7 @@ export class GmControllerConversation {
     this.#updateConversationControls();
 
     // After elements are rendered, render the active participant
-    this.changeActiveParticipant({ index: -1 });
+    this.#changeActiveParticipant({ index: -1 });
   }
 
   /**
@@ -84,11 +84,32 @@ export class GmControllerConversation {
   }
 
   /**
+   *
+   * @param {*} functionData
+   */
+  executeFunction(functionData) {
+    const type = functionData.type;
+    switch (type) {
+      case "add-participant":
+      case "edit-participant":
+      case "remove-participant":
+        break;
+      case "change-active-participant":
+        this.#changeActiveParticipant(functionData.data);
+        break;
+      default:
+        // TODO: Log error
+        break;
+    }
+  }
+
+  // ------------- PRIVATE FUNCTIONS -------------
+  /**
    * TODO: Finish JSDoc
    *
    * @param {*} data
    */
-  changeActiveParticipant(data) {
+  #changeActiveParticipant(data) {
     let index = data.index;
     if (this.#currentActiveParticipant === index) {
       index = -1;
@@ -99,7 +120,6 @@ export class GmControllerConversation {
     this.#updateParticipantsList(index);
   }
 
-  // ------------- PRIVATE FUNCTIONS -------------
   /**
    * TODO: Finish JSDoc
    *

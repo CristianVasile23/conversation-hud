@@ -26,4 +26,6 @@ export class ConversationCreationForm extends FormApplication {
       new GmControlledConversationCreationForm((data) => game.ConversationHud.createConversationFromFormData(data)).render(true);
     };
   }
+
+  _updateObject() {}
 }

@@ -41,7 +41,7 @@ export class ConversationHud {
       // socket.register("getActiveConversation", this.getActiveConversation);
       // socket.register("updateActiveConversation", this.updateActiveConversation);
 
-      socket.register("changeActiveParticipant", this.changeActiveParticipant);
+      socket.register("executeFunction", this.#executeFunctionHelper);
 
       // socket.register("toggleConversationBackground", this.toggleConversationBackground);
 
@@ -140,19 +140,36 @@ export class ConversationHud {
 
   /**
    *
-   * @param {*} data
-   */
-  changeActiveParticipant(data) {
-    // TODO: Check if there is an active conversation
-    game.ConversationHud.activeConversation.changeActiveParticipant(data);
-  }
-
-  /**
-   *
    * @param {*} formData
    */
   createConversationFromFormData(formData) {
     this.#handleConversationCreationData(formData);
+  }
+
+  /**
+   *
+   * @param {*} functionData
+   */
+  executeFunction(functionData) {
+    // TODO: Check if there is an active conversation
+
+    switch (functionData.scope) {
+      case "local":
+        this.#executeFunctionHelper(functionData);
+        break;
+      case "everyone":
+        socket.executeForEveryone("executeFunction", functionData);
+        break;
+      case "all-gms":
+        socket.executeForAllGMs("executeFunction", functionData);
+      default:
+        // TODO: Log error
+        break;
+    }
+  }
+
+  #executeFunctionHelper(functionData) {
+    game.ConversationHud.activeConversation.executeFunction(functionData);
   }
 
   /**
