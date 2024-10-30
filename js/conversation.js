@@ -104,8 +104,7 @@ export class ConversationHud {
             .tools.find((tools) => tools.name === "activateHud").active = false;
 
           // Create form
-          // TODO: Create different form here, which should allow the selection of a conversation type
-          new ConversationCreationForm((data) => this.#handleConversationCreationData(data)).render(true);
+          new ConversationCreationForm().render(true);
         } else {
           ui.notifications.error(game.i18n.localize("CHUD.errors.conversationAlreadyActive"));
         }
@@ -133,7 +132,7 @@ export class ConversationHud {
   /**
    * Function that handles conversation being closed
    */
-  handleCloseActiveConversation() {
+  closeActiveConversation() {
     getConfirmationFromUser("CHUD.dialogue.onCloseActiveConversation", () => {
       game.ConversationHud.onToggleConversation(false);
     });
@@ -146,6 +145,14 @@ export class ConversationHud {
   changeActiveParticipant(data) {
     // TODO: Check if there is an active conversation
     game.ConversationHud.activeConversation.changeActiveParticipant(data);
+  }
+
+  /**
+   *
+   * @param {*} formData
+   */
+  createConversationFromFormData(formData) {
+    this.#handleConversationCreationData(formData);
   }
 
   /**

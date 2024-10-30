@@ -23,7 +23,7 @@ export const registerHook = () => {
                 .tools.find((tools) => tools.name === "activateHud").active = true;
 
               // Display conversation closing confirmation dialog
-              game.ConversationHud.handleCloseActiveConversation();
+              game.ConversationHud.closeActiveConversation();
             }
           },
           button: true,

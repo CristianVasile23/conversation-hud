@@ -8,8 +8,11 @@ import { createConversationBackgroundContainer, checkIfCameraDockIsOnBottomOrTop
 export class GmControllerConversation {
   /** @type {ConversationData | undefined} */
   #conversationData = undefined;
-  #conversationIsMinimized = false;
   #currentActiveParticipant = -1;
+
+  #conversationIsMinimized = false;
+  #isSpeakingAs = false;
+  #isBlurred = false;
 
   /**
    * TODO: Finish JSDoc
@@ -50,9 +53,9 @@ export class GmControllerConversation {
     uiBottom.before(uiContainer);
 
     // Render conversation controls
-    //updateConversationControls();
+    this.#updateConversationControls();
 
-    // After elements are rendered,
+    // After elements are rendered, render the active participant
     this.changeActiveParticipant({ index: -1 });
   }
 
@@ -140,6 +143,39 @@ export class GmControllerConversation {
     // game.ConversationHud.addDragDropListeners(element);
 
     return element;
+  }
+
+  async #updateConversationControls() {
+    // Get the HTML elements
+    const uiInterface = document.getElementById("interface");
+    const controls = document.getElementById("ui-conversation-controls");
+
+    // Remove the old controls if they exist
+    if (controls) {
+      uiInterface.removeChild(controls);
+    }
+
+    const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
+      isGM: game.user.isGM,
+      isVisible: game.ConversationHud.conversationIsVisible,
+
+      isMinimized: this.#conversationIsMinimized,
+      isSpeakingAs: this.#isSpeakingAs,
+      isBlurred: this.#isBlurred,
+
+      features: {
+        minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
+        speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
+      },
+    });
+
+    const updatedControls = document.createElement("section");
+    updatedControls.id = "ui-conversation-controls";
+    updatedControls.setAttribute("data-tooltip-direction", "LEFT");
+    updatedControls.innerHTML = conversationControls;
+
+    const uiRight = document.getElementById("ui-right");
+    uiRight.before(updatedControls);
   }
 
   async #updateActiveParticipantImage(index) {
