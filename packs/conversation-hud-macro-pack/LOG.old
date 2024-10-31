@@ -1,5 +1,5 @@
-2024/08/17-11:02:55.248 1a88 Delete type=3 #1
-2024/08/17-11:07:12.271 2524 Level-0 table #5: started
-2024/08/17-11:07:12.271 2524 Level-0 table #5: 0 bytes OK
-2024/08/17-11:07:12.271 2524 Delete type=0 #3
-2024/08/17-11:07:12.275 2524 Manual compaction at level-0 from 'undefined' @ 72057594037927935 : 1 .. 'undefined' @ 0 : 0; will stop at (end)
+2024/10/31-21:16:10.202 6b08 Log #7: 16 ops saved to Table #8 OK
+2024/10/31-21:16:10.203 6b08 Archiving D:\Tabletop\FoundryVTT-Data\Data\modules\conversation-hud\packs\conversation-hud-macro-pack/000007.log: OK
+2024/10/31-21:16:10.203 6b08 Table #8: 16 entries OK
+2024/10/31-21:16:10.246 6b08 Archiving D:\Tabletop\FoundryVTT-Data\Data\modules\conversation-hud\packs\conversation-hud-macro-pack/MANIFEST-000006: OK
+2024/10/31-21:16:10.279 6b08 **** Repaired leveldb D:\Tabletop\FoundryVTT-Data\Data\modules\conversation-hud\packs\conversation-hud-macro-pack; recovered 1 files; 2786 bytes. Some data may have been lost. ****

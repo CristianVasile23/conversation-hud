@@ -1,6 +1,11 @@
+## 5.6.3
+
+- Fixed an issue that displayed the Insufficient Rights error message to players.
+- Fixed the omission of not linking actors to participants when using the drag and drop functionality.
+
 ## 5.6.2
 
-- Fixed an issue that caused the toolip to display the actual name of participants with hidden names.
+- Fixed an issue that caused the tooltip to display the actual name of participants with hidden names.
 - Fixed an issue that caused the scene conversation feature to not appear on FoundryVTT v12.
 - Fixed an issue that caused the macros compendium to be empty.
 
