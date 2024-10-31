@@ -14,7 +14,7 @@ export function getConfirmationFromUser(
     const confirmText = game.i18n.localize(`${localizationString}.confirm`);
     const rejectText = game.i18n.localize(`${localizationString}.reject`);
 
-    const dialog = new Dialog({
+    new Dialog({
       title: titleText,
       content: `<div style="margin-bottom: 8px;">${game.i18n.localize(contentText)}</div>`,
       buttons: {
@@ -36,9 +36,7 @@ export function getConfirmationFromUser(
         },
       },
       default: "confirm",
-    });
-
-    dialog.render(true);
+    }).render(true);
   });
 
   return dialogPromise;

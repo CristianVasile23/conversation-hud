@@ -10,16 +10,16 @@ import {
   checkIfUserIsGM,
   getConfirmationFromUser,
 } from "../helpers/index.js";
-import { CreateOrEditParticipantForm } from "../forms/index.js";
+import { ChangeConversationBackgroundForm, CreateOrEditParticipantForm } from "../forms/index.js";
 
 export class GmControllerConversation {
   /** @type {ConversationData | undefined} */
   #conversationData = undefined;
   #currentActiveParticipant = -1;
 
-  #conversationIsMinimized = false;
+  #isMinimized = false;
   #isSpeakingAs = false;
-  #isBlurred = false;
+  #isBackgroundVisible = true;
 
   /**
    * TODO: Finish JSDoc
@@ -100,8 +100,7 @@ export class GmControllerConversation {
    * @param {*} functionData
    */
   executeFunction(functionData) {
-    const type = functionData.type;
-    switch (type) {
+    switch (functionData.type) {
       case "update-conversation":
         this.#updateConversation(functionData.data);
         break;
@@ -116,6 +115,18 @@ export class GmControllerConversation {
         break;
       case "change-active-participant":
         this.#changeActiveParticipant(functionData.data);
+        break;
+      case "update-background":
+        this.#updateBackground(functionData.data);
+        break;
+      case "change-background":
+        this.#changeBackground();
+        break;
+      case "toggle-background":
+        this.#toggleBackground();
+        break;
+      case "set-background-visibility":
+        this.#setBackgroundVisibility(functionData.data);
         break;
       default:
         // TODO: Log error
@@ -296,6 +307,88 @@ export class GmControllerConversation {
 
   /**
    * TODO: Finish JSDoc
+   */
+  async #updateBackground(data) {
+    const background = data.background;
+    const backgroundContainer = document.getElementById("conversation-hud-background");
+    if (backgroundContainer) {
+      if (background) {
+        backgroundContainer.classList.add("conversation-hud-background-image");
+        backgroundContainer.style.backgroundImage = `url(${background})`;
+      } else {
+        backgroundContainer.classList.remove("conversation-hud-background-image");
+        backgroundContainer.style.backgroundImage = ``;
+      }
+    }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  #changeBackground() {
+    if (!checkIfUserIsGM()) {
+      // TODO: Log error in console
+      return;
+    }
+
+    new ChangeConversationBackgroundForm((data) => this.#changeBackgroundHelper(data), this.#conversationData.background).render(true);
+  }
+
+  /**
+   *
+   * @param {*} data
+   */
+  #changeBackgroundHelper(data) {
+    this.#conversationData.background = data.conversationBackground;
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "update-background",
+      data: {
+        background: this.#conversationData.background,
+      },
+    });
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  #toggleBackground() {
+    this.#isBackgroundVisible = !this.#isBackgroundVisible;
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "set-background-visibility",
+      data: {
+        isBackgroundVisible: this.#isBackgroundVisible,
+      },
+    });
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} data
+   */
+  #setBackgroundVisibility(data) {
+    const isBackgroundVisible = data.isBackgroundVisible;
+
+    const conversationBackground = document.getElementById("conversation-hud-background");
+    if (isBackgroundVisible) {
+      conversationBackground.style.display = "";
+    } else {
+      conversationBackground.style.display = "none";
+    }
+
+    if (game.user.isGM) {
+      this.#updateConversationControls();
+    }
+  }
+
+  /**
+   * TODO: Finish JSDoc
    *
    * @param {GmControlledConversationData} conversationData
    * @returns {Promise<string>}
@@ -327,7 +420,7 @@ export class GmControllerConversation {
       element.classList.add("visible");
     }
 
-    if (this.#conversationIsMinimized) {
+    if (this.#isMinimized) {
       element.classList.add("minimized");
     }
 
@@ -353,9 +446,9 @@ export class GmControllerConversation {
       isGM: game.user.isGM,
       isVisible: game.ConversationHud.conversationIsVisible,
 
-      isMinimized: this.#conversationIsMinimized,
+      isMinimized: this.#isMinimized,
       isSpeakingAs: this.#isSpeakingAs,
-      isBlurred: this.#isBlurred,
+      isBackgroundVisible: this.#isBackgroundVisible,
 
       features: {
         minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),

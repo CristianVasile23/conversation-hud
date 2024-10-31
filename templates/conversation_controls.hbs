@@ -48,8 +48,8 @@
   {{/if}}
 
   <div
-    class="control-button toggle {{#if isBlurred}}active{{/if}}"
-    onclick="game.ConversationHud.toggleBackgroundBlur()"
+    class="control-button toggle {{#if isBackgroundVisible}}active{{/if}}"
+    onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-background" data=(object))}}})'
     data-tooltip="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
   >
     <i class="fas fa-smoke"></i>
@@ -57,7 +57,7 @@
 
   <div
     class="control-button"
-    onclick="game.ConversationHud.changeConversationBackground()"
+    onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="change-background" data=(object))}}})'
     data-tooltip="{{localize 'CHUD.actions.changeConversationBackground'}}"
   >
     <i class="fas fa-image"></i>
