@@ -15,6 +15,7 @@ export async function getActorDataFromDragEvent(event) {
           const data = {
             name: actor.name || "",
             img: actor.img || "",
+            linkedActor: actor.id || undefined,
           };
           return [data];
         } else {
@@ -234,7 +235,9 @@ export function handleOnClickContentLink(event, wrapped) {
 
 export function checkIfUserGM() {
   if (!game.user.isGM) {
-    ui.notifications.error(game.i18n.localize("CHUD.errors.insufficientRights"));
+    if (game.user.isGM) {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.insufficientRights"));
+    }
     return false;
   }
   return true;
