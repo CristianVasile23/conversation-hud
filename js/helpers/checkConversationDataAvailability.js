@@ -1,5 +1,7 @@
 /// <reference path="../types/ConversationData.js" />
 
+import { socket } from "../init.js";
+
 /**
   Function that parses through the list of provided users and checks to see if there is a user which
   is in an active conversation.

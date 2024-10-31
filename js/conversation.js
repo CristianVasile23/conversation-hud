@@ -37,8 +37,8 @@ export class ConversationHud {
     if (socket) {
       socket.register("createConversation", this.createConversation);
       socket.register("removeConversation", this.removeConversation);
-
       // socket.register("getActiveConversation", this.getActiveConversation);
+
       // socket.register("updateActiveConversation", this.updateActiveConversation);
 
       socket.register("executeFunction", this.#executeFunctionHelper);
@@ -148,7 +148,7 @@ export class ConversationHud {
 
   /**
    *
-   * @param {*} functionData
+   * @param {{scope: string, type: string, data: any}} functionData
    */
   executeFunction(functionData) {
     // TODO: Check if there is an active conversation

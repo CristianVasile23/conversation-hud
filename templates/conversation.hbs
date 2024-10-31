@@ -23,7 +23,7 @@
               <a
                 class="edit"
                 title="{{localize 'CHUD.actions.participant.edit'}}"
-                onclick="game.ConversationHud.updateParticipantFromActiveConversation({{index}})"
+                onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="edit-participant" data=(object index=index))}}})'
               >
                 <i class="fas fa-edit"></i>
               </a>
@@ -31,7 +31,7 @@
               <a
                 class="remove"
                 title="{{localize 'CHUD.actions.participant.delete'}}"
-                onclick="game.ConversationHud.removeParticipantFromActiveConversation({{index}})"
+                onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="remove-participant" data=(object index=index))}}})'
               >
                 <i class="fas fa-trash"></i>
               </a>
@@ -138,7 +138,7 @@
         <a
           id="conversation-add-button"
           class="conversation-participant add-participant-button has-control"
-          onclick="game.ConversationHud.addParticipantToActiveConversation()"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-participant" data=(object))}}})'
         >
           <i class="fas fa-plus"></i>
         </a>

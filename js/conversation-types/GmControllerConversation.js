@@ -1,9 +1,16 @@
 /// <reference path="../types/ConversationData.js" />
 /// <reference path="../types/GmControlledConversationData.js" />
 
-import { MODULE_NAME } from "../constants/index.js";
+import { ANCHOR_OPTIONS, MODULE_NAME } from "../constants/index.js";
 import { ModuleSettings } from "../settings.js";
-import { createConversationBackgroundContainer, checkIfCameraDockIsOnBottomOrTop, processParticipantData } from "../helpers/index.js";
+import {
+  createConversationBackgroundContainer,
+  checkIfCameraDockIsOnBottomOrTop,
+  processParticipantData,
+  checkIfUserIsGM,
+  getConfirmationFromUser,
+} from "../helpers/index.js";
+import { CreateOrEditParticipantForm } from "../forms/index.js";
 
 export class GmControllerConversation {
   /** @type {ConversationData | undefined} */
@@ -33,8 +40,6 @@ export class GmControllerConversation {
     for (let i = 0; i < this.#conversationData.data.participants.length; i++) {
       processParticipantData(this.#conversationData.data.participants[i]);
     }
-
-    console.log(this.#conversationData);
 
     // Create background
     const conversationBackground = createConversationBackgroundContainer(this.#conversationData, conversationIsVisible);
@@ -90,9 +95,17 @@ export class GmControllerConversation {
   executeFunction(functionData) {
     const type = functionData.type;
     switch (type) {
+      case "update-conversation":
+        this.#updateConversation(functionData.data);
+        break;
       case "add-participant":
+        this.#addParticipant();
+        break;
       case "edit-participant":
+        this.#editParticipant(functionData.data);
+        break;
       case "remove-participant":
+        this.#removeParticipant(functionData.data);
         break;
       case "change-active-participant":
         this.#changeActiveParticipant(functionData.data);
@@ -104,6 +117,160 @@ export class GmControllerConversation {
   }
 
   // ------------- PRIVATE FUNCTIONS -------------
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} conversationData
+   */
+  async #updateConversation(conversationData) {
+    this.#conversationData = conversationData;
+
+    // Parse all participants and update their data
+    for (let i = 0; i < this.#conversationData.data.participants.length; i++) {
+      processParticipantData(this.#conversationData.data.participants[i]);
+    }
+
+    // Create the template for the ConversationHUD UI elements
+    const template = await this.#getConversationTemplate(this.#conversationData.data);
+
+    // Add rendered template to the conversation hud
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    if (conversationHud) {
+      conversationHud.innerHTML = template;
+      // game.ConversationHud.addDragDropListeners(conversationHud);
+      this.#changeActiveParticipant({ index: this.#currentActiveParticipant });
+    }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} data
+   */
+  #addParticipant() {
+    if (!checkIfUserIsGM()) {
+      // TODO: Log error in console
+      return;
+    }
+
+    new CreateOrEditParticipantForm(false, (data) => this.#addParticipantHelper(data)).render(true);
+  }
+
+  /**
+   *
+   * @param {ParticipantData} participantData
+   * @param {number} index
+   */
+  #addParticipantHelper(participantData) {
+    processParticipantData(participantData);
+
+    // Add the newly created participant to the list of participants
+    this.#conversationData.data.participants.push(participantData);
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "update-conversation",
+      data: {
+        ...this.#conversationData,
+      },
+    });
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} data
+   */
+  #editParticipant(data) {
+    if (!checkIfUserIsGM()) {
+      // TODO: Log error in console
+      return;
+    }
+
+    let index = data.index;
+    if (index < 0 || this.#conversationData.data.participants.length < index) {
+      console.error("ConversationHUD | Tried to update a participant with an invalid index");
+      return;
+    }
+
+    const participant = this.#conversationData.data.participants[index];
+    new CreateOrEditParticipantForm(true, (data) => this.#editParticipantHelper(data, index), {
+      ...participant,
+      anchorOptions: ANCHOR_OPTIONS,
+    }).render(true);
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {ParticipantData} participantData
+   * @param {number} index
+   */
+  #editParticipantHelper(participantData, index) {
+    processParticipantData(participantData);
+
+    // Update participant with the given index
+    this.#conversationData.data.participants[index] = participantData;
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "update-conversation",
+      data: {
+        ...this.#conversationData,
+      },
+    });
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} data
+   */
+  #removeParticipant(data) {
+    if (!checkIfUserIsGM()) {
+      // TODO: Log error in console
+      return;
+    }
+
+    let index = data.index;
+    if (index < 0 || this.#conversationData.data.participants.length < index) {
+      console.error("ConversationHUD | Tried to update a participant with an invalid index");
+      return;
+    }
+
+    getConfirmationFromUser("CHUD.dialogue.onRemoveParticipant", () => this.#removeParticipantHelper(index));
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} index
+   */
+  #removeParticipantHelper(index) {
+    // Check to see if the removed participant is the active one
+    // Otherwise, check to see if the removed participant is before the active one, in which case
+    // we need to update the active participant index by lowering it by one
+    if (this.#currentActiveParticipant === index) {
+      this.#currentActiveParticipant = -1;
+    } else if (index < this.#currentActiveParticipant) {
+      this.#currentActiveParticipant = -1;
+    }
+
+    // Remove participant with the given index
+    this.#conversationData.data.participants.splice(index, 1);
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "update-conversation",
+      data: {
+        ...this.#conversationData,
+      },
+    });
+  }
+
   /**
    * TODO: Finish JSDoc
    *
