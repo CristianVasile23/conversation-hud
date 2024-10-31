@@ -3,26 +3,13 @@
 import { socket } from "./init.js";
 import { ConversationCreationForm } from "./forms/index.js";
 import { checkIfUserIsGM, getConfirmationFromUser } from "./helpers/index.js";
-import { ConversationFactionSheet } from "./sheets/index.js";
-import { CONVERSATION_TYPES, MODULE_NAME } from "./constants/index.js";
-import { ModuleSettings } from "./settings.js";
+import { CONVERSATION_TYPES } from "./constants/index.js";
 import { GmControllerConversation } from "./conversation-types/GmControllerConversation.js";
 
 export class ConversationHud {
   conversationIsActive = false;
   conversationIsVisible = false;
   activeConversation = undefined;
-
-  // conversationIsMinimized = false;
-
-  // conversationIsSpeakingAs = false;
-  // conversationIsBlurred = true;
-
-  // /** @type {ConversationData} */
-  // conversationData = undefined;
-
-  // dropzoneVisible = false;
-  // draggingParticipant = false;
 
   constructor() {
     // Register socket hooks
@@ -36,18 +23,14 @@ export class ConversationHud {
     // Wait for the socket to be initialized (if it hasn't been already)
     if (socket) {
       socket.register("createConversation", this.createConversation);
+      socket.register("getConversation", this.getConversation);
       socket.register("removeConversation", this.removeConversation);
-      // socket.register("getActiveConversation", this.getActiveConversation);
-
-      // socket.register("updateActiveConversation", this.updateActiveConversation);
 
       socket.register("executeFunction", this.#executeFunctionHelper);
 
       // socket.register("toggleConversationBackground", this.toggleConversationBackground);
 
       // socket.register("setConversationHudVisibility", this.setConversationHudVisibility);
-
-      // socket.register("getActiveConversationVisibility", this.getActiveConversationVisibility);
 
       socket.register("setActivateConversationHudButtonState", this.setActivateConversationHudButtonState);
     } else {
@@ -56,7 +39,7 @@ export class ConversationHud {
   }
 
   /**
-   * Function that displays the ConversationHUD UI
+   * Function that creates and displays the ConversationHUD UI
    *
    * @param {ConversationData} conversationData TODO
    * @param {boolean} conversationIsVisible TODO
@@ -80,7 +63,24 @@ export class ConversationHud {
   }
 
   /**
-   * Function the ConversationHUD UI
+   * Function that gets the data of the currently active conversation
+   *
+   * @returns {{
+   *  conversationIsActive: boolean;
+   *  conversationIsVisible: boolean;
+   *  activeConversation: ConversationData | undefined;
+   * }}
+   */
+  getConversation() {
+    return {
+      conversationIsActive: game.ConversationHud.conversationIsActive,
+      conversationIsVisible: game.ConversationHud.conversationIsVisible,
+      activeConversation: game.ConversationHud.conversationIsActive ? game.ConversationHud.activeConversation.getConversation() : undefined,
+    };
+  }
+
+  /**
+   * TODO: Add JSDoc
    */
   async removeConversation() {
     game.ConversationHud.conversationIsActive = false;

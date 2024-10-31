@@ -67,6 +67,13 @@ export class GmControllerConversation {
   /**
    * TODO: Finish JSDoc
    */
+  getConversation() {
+    return this.#conversationData;
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
   async removeConversation() {
     const body = document.body;
     const conversationBackground = document.getElementById("conversation-hud-background");

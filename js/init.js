@@ -56,8 +56,6 @@ Hooks.on("init", async () => {
 
   // Initialize the ConversationHUD object
   game.ConversationHud = new ConversationHud();
-  console.log(game.ConversationHud);
-  // game.ConversationHud.init();
 
   // If RPG UI fix setting is enabled, add the fixed CSS class to the sidebar
   if (game.settings.get(MODULE_NAME, ModuleSettings.rpgUiFix)) {
@@ -85,18 +83,17 @@ Hooks.on("ready", async () => {
     }
 
     if (conversationData) {
-      const visibility = await socket.executeAsUser("getActiveConversationVisibility", conversationData.userId);
-      game.ConversationHud.renderConversation(conversationData.result.activeConversation, visibility);
+      game.ConversationHud.createConversation(conversationData.result.activeConversation, conversationData.result.conversationIsVisible);
     }
   } else {
     try {
       // Try to get conversation data from a connected GM
-      const result = await socket.executeAsGM("getActiveConversation");
+      /** @type {{ conversationIsActive: boolean; conversationIsVisible: boolean; activeConversation: ConversationData;}} */
+      const result = await socket.executeAsGM("getConversation");
 
       // If there is an active conversation, render it
       if (result.conversationIsActive) {
-        const visibility = await socket.executeAsGM("getActiveConversationVisibility");
-        game.ConversationHud.renderConversation(result.activeConversation, visibility);
+        game.ConversationHud.createConversation(result.activeConversation, result.conversationIsVisible);
       }
     } catch (error) {
       if (error.name === "SocketlibNoGMConnectedError") {
@@ -104,11 +101,10 @@ Hooks.on("ready", async () => {
         const users = game.users.filter((item) => item.active && item.id !== game.user.id);
 
         if (users.length > 0) {
-          const { result, userId } = await checkConversationDataAvailability(users);
+          const { result } = await checkConversationDataAvailability(users);
 
           if (result) {
-            const visibility = await socket.executeAsUser("getActiveConversationVisibility", userId);
-            game.ConversationHud.renderConversation(result.activeConversation, visibility);
+            game.ConversationHud.createConversation(result.activeConversation, result.conversationIsVisible);
           }
         }
       } else {
