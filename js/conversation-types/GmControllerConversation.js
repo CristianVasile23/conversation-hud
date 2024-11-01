@@ -10,7 +10,7 @@ import {
   checkIfUserIsGM,
   getConfirmationFromUser,
 } from "../helpers/index.js";
-import { ChangeConversationBackgroundForm, CreateOrEditParticipantForm } from "../forms/index.js";
+import { ChangeConversationBackgroundForm, CreateOrEditParticipantForm, PullParticipantsFromSceneForm } from "../forms/index.js";
 
 export class GmControllerConversation {
   /** @type {ConversationData | undefined} */
@@ -116,6 +116,9 @@ export class GmControllerConversation {
       case "change-active-participant":
         this.#changeActiveParticipant(functionData.data);
         break;
+      case "toggle-speaking-as":
+        this.#toggleSpeakingAs();
+        break;
       case "update-background":
         this.#updateBackground(functionData.data);
         break;
@@ -128,6 +131,8 @@ export class GmControllerConversation {
       case "set-background-visibility":
         this.#setBackgroundVisibility(functionData.data);
         break;
+      case "pull-participants-from-scene":
+        this.#pullParticipantsFromScene();
       default:
         // TODO: Log error
         break;
@@ -162,8 +167,6 @@ export class GmControllerConversation {
 
   /**
    * TODO: Finish JSDoc
-   *
-   * @param {*} data
    */
   #addParticipant() {
     if (!checkIfUserIsGM()) {
@@ -177,13 +180,34 @@ export class GmControllerConversation {
   /**
    *
    * @param {ParticipantData} participantData
-   * @param {number} index
    */
   #addParticipantHelper(participantData) {
     processParticipantData(participantData);
 
     // Add the newly created participant to the list of participants
     this.#conversationData.data.participants.push(participantData);
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "update-conversation",
+      data: {
+        ...this.#conversationData,
+      },
+    });
+  }
+
+  /**
+   *
+   * @param {ParticipantData[]} participants
+   */
+  #addParticipantsHelper(participants) {
+    for (const participant of participants) {
+      processParticipantData(participant);
+
+      // Add the newly created participant to the list of participants
+      this.#conversationData.data.participants.push(participant);
+    }
 
     // Update the conversation for all connected players
     game.ConversationHud.executeFunction({
@@ -308,6 +332,20 @@ export class GmControllerConversation {
   /**
    * TODO: Finish JSDoc
    */
+  #toggleSpeakingAs() {
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs)) {
+      if (checkIfUserIsGM() && game.ConversationHud.conversationIsActive) {
+        this.#isSpeakingAs = !this.#isSpeakingAs;
+        this.#updateConversationControls();
+      }
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+    }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
   async #updateBackground(data) {
     const background = data.background;
     const backgroundContainer = document.getElementById("conversation-hud-background");
@@ -385,6 +423,13 @@ export class GmControllerConversation {
     if (game.user.isGM) {
       this.#updateConversationControls();
     }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  #pullParticipantsFromScene() {
+    new PullParticipantsFromSceneForm((data) => this.#addParticipantsHelper(data)).render(true);
   }
 
   /**

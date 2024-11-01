@@ -40,7 +40,7 @@
   {{#if features.speakAsEnabled}}
     <div
       class="control-button toggle {{#if isSpeakingAs}}active{{/if}}"
-      onclick="game.ConversationHud.toggleSpeakingAsMode()"
+      onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-speaking-as" data=(object))}}})'
       data-tooltip="{{localize 'CHUD.actions.toggleSpeakAs'}}"
     >
       <i class="fas fa-comment-quote"></i>
@@ -65,7 +65,7 @@
 
   <div
     class="control-button"
-    onclick="game.ConversationHud.pullActorsFromScene()"
+    onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="pull-participants-from-scene" data=(object))}}})'
     data-tooltip="{{localize 'CHUD.actions.pullParticipants'}}"
   >
     <i class="fas fa-up-from-bracket"></i>
