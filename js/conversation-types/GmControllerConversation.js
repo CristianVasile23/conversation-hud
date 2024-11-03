@@ -10,7 +10,11 @@ import {
   checkIfUserIsGM,
   getConfirmationFromUser,
 } from "../helpers/index.js";
-import { ChangeConversationBackgroundForm, CreateOrEditParticipantForm, PullParticipantsFromSceneForm } from "../forms/index.js";
+import {
+  ChangeConversationBackgroundForm,
+  CreateOrEditParticipantForm,
+  PullParticipantsFromSceneForm,
+} from "../forms/index.js";
 
 export class GmControllerConversation {
   /** @type {ConversationData | undefined} */
@@ -66,6 +70,35 @@ export class GmControllerConversation {
 
   /**
    * TODO: Finish JSDoc
+   *
+   * @param {boolean} isVisible
+   */
+  updateConversationVisibility(isVisible) {
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    if (conversationHud) {
+      if (isVisible) {
+        conversationHud.classList.add("visible");
+      } else {
+        conversationHud.classList.remove("visible");
+      }
+    }
+
+    const conversationBackground = document.getElementById("conversation-hud-background");
+    if (conversationBackground) {
+      if (isVisible) {
+        if (!this.#isMinimized) {
+          conversationBackground.classList.add("visible");
+        }
+      } else {
+        conversationBackground.classList.remove("visible");
+      }
+    }
+
+    this.#updateConversationControls();
+  }
+
+  /**
+   * TODO: Finish JSDoc
    */
   getConversation() {
     return this.#conversationData;
@@ -83,6 +116,7 @@ export class GmControllerConversation {
 
     const uiMiddle = document.getElementById("ui-middle");
     const conversation = document.getElementById("ui-conversation-hud");
+    // TODO: Add check that uiMiddle exists
     if (conversation) {
       uiMiddle.removeChild(conversation);
     }
@@ -369,7 +403,10 @@ export class GmControllerConversation {
       return;
     }
 
-    new ChangeConversationBackgroundForm((data) => this.#changeBackgroundHelper(data), this.#conversationData.background).render(true);
+    new ChangeConversationBackgroundForm(
+      (data) => this.#changeBackgroundHelper(data),
+      this.#conversationData.background
+    ).render(true);
   }
 
   /**

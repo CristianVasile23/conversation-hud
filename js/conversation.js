@@ -26,11 +26,9 @@ export class ConversationHud {
       socket.register("getConversation", this.getConversation);
       socket.register("removeConversation", this.removeConversation);
 
+      socket.register("setConversationVisibility", this.setConversationVisibility);
+
       socket.register("executeFunction", this.#executeFunctionHelper);
-
-      // socket.register("toggleConversationBackground", this.toggleConversationBackground);
-
-      // socket.register("setConversationHudVisibility", this.setConversationHudVisibility);
 
       socket.register("setActivateConversationHudButtonState", this.setActivateConversationHudButtonState);
     } else {
@@ -75,7 +73,9 @@ export class ConversationHud {
     return {
       conversationIsActive: game.ConversationHud.conversationIsActive,
       conversationIsVisible: game.ConversationHud.conversationIsVisible,
-      activeConversation: game.ConversationHud.conversationIsActive ? game.ConversationHud.activeConversation.getConversation() : undefined,
+      activeConversation: game.ConversationHud.conversationIsActive
+        ? game.ConversationHud.activeConversation.getConversation()
+        : undefined,
     };
   }
 
@@ -125,7 +125,9 @@ export class ConversationHud {
    * @param {boolean} state
    */
   setActivateConversationHudButtonState(state) {
-    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = state;
+    ui.controls.controls
+      .find((controls) => controls.name === "notes")
+      .tools.find((tools) => tools.name === "activateHud").active = state;
     ui.controls.render();
   }
 
@@ -144,6 +146,23 @@ export class ConversationHud {
    */
   createConversationFromFormData(formData) {
     this.#handleConversationCreationData(formData);
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  toggleConversationVisibility() {
+    socket.executeForAllGMs("setConversationVisibility", !this.conversationIsVisible);
+  }
+
+  /**
+   *
+   * @param {boolean} isVisible
+   */
+  setConversationVisibility(isVisible) {
+    // TODO: Check for an active conversation
+    game.ConversationHud.conversationIsVisible = isVisible;
+    game.ConversationHud.activeConversation.updateConversationVisibility(isVisible);
   }
 
   /**
