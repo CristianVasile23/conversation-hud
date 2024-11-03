@@ -152,7 +152,7 @@ export class ConversationHud {
    * TODO: Finish JSDoc
    */
   toggleConversationVisibility() {
-    socket.executeForAllGMs("setConversationVisibility", !this.conversationIsVisible);
+    socket.executeForEveryone("setConversationVisibility", !this.conversationIsVisible);
   }
 
   /**
