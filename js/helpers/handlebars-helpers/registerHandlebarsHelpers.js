@@ -4,6 +4,7 @@ import { registerNotEqHelper } from "./registerNotEqHelper.js";
 import { registerObjectHelper } from "./registerObjectHelper.js";
 import { registerParticipantPortraitHelper } from "./registerParticipantPortraitHelper.js";
 import { registerPortraitParamsObjectHelper } from "./registerPortraitParamsObjectHelper.js";
+import { registerRenderMinimizeButtonHelper } from "./registerRenderMinimizeButtonHelper.js";
 
 /**
  * Function that registers all the custom Handlebars helpers which are used inside the templates
@@ -15,4 +16,5 @@ export function registerHandlebarsHelpers() {
   registerObjectHelper();
   registerParticipantPortraitHelper();
   registerPortraitParamsObjectHelper();
+  registerRenderMinimizeButtonHelper();
 }

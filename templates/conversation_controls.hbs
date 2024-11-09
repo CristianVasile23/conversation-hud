@@ -1,6 +1,6 @@
 {{#if isGM}}
   <div
-    class="control-button"
+    class="control-button margin-bottom"
     onclick="game.ConversationHud.closeActiveConversation()"
     data-tooltip="{{localize 'CHUD.actions.closeConversation'}}"
   >
@@ -10,20 +10,16 @@
 
 {{#if features.minimizeEnabled}}
   {{#if (or isVisible isGM)}}
+    {{{renderMinimizeButton isGM isMinimized isMinimizationLocked}}}
+  {{/if}}
+
+  {{#if isGM}}
     <div
-      class="control-button {{#if isGM}}margin-bottom{{/if}} {{#unless isVisible}}disabled{{/unless}}"
-      onclick="game.ConversationHud.toggleActiveConversationMode()"
-      {{#if isMinimized}}
-        data-tooltip="{{localize 'CHUD.actions.maximizeConversation'}}"
-      {{else}}
-        data-tooltip="{{localize 'CHUD.actions.minimizeConversation'}}"
-      {{/if}}
+      class="control-button toggle {{#if isMinimizationLocked}}active{{/if}} margin-bottom {{#unless isVisible}}disabled{{/unless}}"
+      onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-lock-minimization" data=(object))}}})'
+      data-tooltip="{{localize 'CHUD.actions.lockMinimization'}}"
     >
-      {{#if isMinimized}}
-        <i class="fas fa-chevron-left"></i>
-      {{else}}
-        <i class="fas fa-chevron-right"></i>
-      {{/if}}
+      <i class="fas fa-lock"></i>
     </div>
   {{/if}}
 {{/if}}

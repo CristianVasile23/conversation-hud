@@ -22,6 +22,7 @@ export class GmControllerConversation {
   #currentActiveParticipant = -1;
 
   #isMinimized = false;
+  #isMinimizationLocked = false;
   #isSpeakingAs = false;
   #isBackgroundVisible = true;
 
@@ -149,6 +150,18 @@ export class GmControllerConversation {
         break;
       case "change-active-participant":
         this.#changeActiveParticipant(functionData.data);
+        break;
+      case "toggle-minimize":
+        this.#toggleMinimze();
+        break;
+      case "set-minimization":
+        this.#setMinimization(functionData.data);
+        break;
+      case "toggle-lock-minimization":
+        this.#toggleLockMinimization();
+        break;
+      case "set-lock-minimization":
+        this.#setLockMinimization(functionData.data);
         break;
       case "toggle-speaking-as":
         this.#toggleSpeakingAs();
@@ -366,6 +379,80 @@ export class GmControllerConversation {
   /**
    * TODO: Finish JSDoc
    */
+  #toggleMinimze() {
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
+      if (game.ConversationHud.conversationIsActive) {
+        if (this.#isMinimizationLocked) {
+          game.ConversationHud.executeFunction({
+            scope: "everyone",
+            type: "set-minimization",
+            data: {
+              isMinimized: !this.#isMinimized,
+            },
+          });
+        } else {
+          this.#isMinimized = !this.#isMinimized;
+          this.#updateLayout();
+        }
+      }
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+    }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} data
+   */
+  #setMinimization(data) {
+    const isMinimized = data.isMinimized;
+
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
+      if (game.ConversationHud.conversationIsActive) {
+        this.#isMinimized = isMinimized;
+        this.#updateLayout();
+      }
+    }
+  }
+
+  #toggleLockMinimization() {
+    // TODO: Add check to see if GM
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
+      if (game.ConversationHud.conversationIsActive) {
+        this.#isMinimizationLocked = !this.#isMinimizationLocked;
+
+        // Update minimization state for all other players
+        game.ConversationHud.executeFunction({
+          scope: "everyone",
+          type: "set-lock-minimization",
+          data: {
+            isMinimized: this.#isMinimized,
+            isMinimizationLocked: this.#isMinimizationLocked,
+          },
+        });
+      }
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+    }
+  }
+
+  #setLockMinimization(data) {
+    const isMinimized = data.isMinimized;
+    const isMinimizationLocked = data.isMinimizationLocked;
+
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
+      if (game.ConversationHud.conversationIsActive) {
+        this.#isMinimized = isMinimized;
+        this.#isMinimizationLocked = isMinimizationLocked;
+        this.#updateLayout();
+      }
+    }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
   #toggleSpeakingAs() {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs)) {
       if (checkIfUserIsGM() && game.ConversationHud.conversationIsActive) {
@@ -529,6 +616,7 @@ export class GmControllerConversation {
       isVisible: game.ConversationHud.conversationIsVisible,
 
       isMinimized: this.#isMinimized,
+      isMinimizationLocked: this.#isMinimizationLocked,
       isSpeakingAs: this.#isSpeakingAs,
       isBackgroundVisible: this.#isBackgroundVisible,
 
@@ -573,5 +661,26 @@ export class GmControllerConversation {
         }
       }
     }
+  }
+
+  #updateLayout() {
+    // Update the layout
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    if (this.#isMinimized) {
+      conversationHud.classList.add("minimized");
+    } else {
+      conversationHud.classList.remove("minimized");
+    }
+
+    if (game.ConversationHud.conversationIsVisible) {
+      const conversationBackground = document.getElementById("conversation-hud-background");
+      if (this.#isMinimized) {
+        conversationBackground.classList.remove("visible");
+      } else {
+        conversationBackground.classList.add("visible");
+      }
+    }
+
+    this.#updateConversationControls();
   }
 }
