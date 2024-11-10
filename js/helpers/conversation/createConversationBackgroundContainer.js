@@ -23,7 +23,7 @@ export function createConversationBackgroundContainer(conversationData, conversa
     conversationBackground.style.backgroundImage = `url(${conversationData.background})`;
   }
 
-  if (conversationVisible && !game.ConversationHud.conversationIsMinimized) {
+  if (conversationVisible) {
     conversationBackground.classList.add("visible");
   }
 

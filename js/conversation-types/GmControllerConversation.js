@@ -1,5 +1,5 @@
 /// <reference path="../types/ConversationData.js" />
-/// <reference path="../types/GmControlledConversationData.js" />
+/// <reference path="../types/GmControlledConversation/GmControlledConversationData.js" />
 
 import { ANCHOR_OPTIONS, MODULE_NAME } from "../constants/index.js";
 import { ModuleSettings } from "../settings.js";
@@ -19,12 +19,8 @@ import {
 export class GmControllerConversation {
   /** @type {ConversationData | undefined} */
   #conversationData = undefined;
-  #currentActiveParticipant = -1;
 
-  #isMinimized = false;
-  #isMinimizationLocked = false;
-  #isSpeakingAs = false;
-  #isBackgroundVisible = true;
+  #currentActiveParticipant = -1;
 
   /**
    * TODO: Finish JSDoc
@@ -42,15 +38,20 @@ export class GmControllerConversation {
     const conversationIsVisible = game.ConversationHud.conversationIsVisible;
 
     // Parse all participants and update their data
-    for (let i = 0; i < this.#conversationData.data.participants.length; i++) {
-      processParticipantData(this.#conversationData.data.participants[i]);
+    for (let i = 0; i < this.#conversationData.conversation.data.participants.length; i++) {
+      processParticipantData(this.#conversationData.conversation.data.participants[i]);
     }
 
     // Create background
     const conversationBackground = createConversationBackgroundContainer(this.#conversationData, conversationIsVisible);
 
+    // Disable the background if the conversation is minimized
+    if (this.#conversationData.conversation.features.isMinimized) {
+      conversationBackground.classList.remove("visible");
+    }
+
     // Create the template for the ConversationHUD UI elements
-    const template = await this.#getConversationTemplate(this.#conversationData.data);
+    const template = await this.#getConversationTemplate(this.#conversationData.conversation.data);
 
     // Create the conversation container
     const uiContainer = this.#createConversationContainer(template, conversationIsVisible);
@@ -87,7 +88,7 @@ export class GmControllerConversation {
     const conversationBackground = document.getElementById("conversation-hud-background");
     if (conversationBackground) {
       if (isVisible) {
-        if (!this.#isMinimized) {
+        if (!this.#conversationData.conversation.features.isMinimized) {
           conversationBackground.classList.add("visible");
         }
       } else {
@@ -102,7 +103,26 @@ export class GmControllerConversation {
    * TODO: Finish JSDoc
    */
   getConversation() {
-    return this.#conversationData;
+    const data = this.#conversationData.conversation.data;
+    const features = this.#conversationData.conversation.features;
+
+    /** @type {ConversationData} */
+    const conversationData = {
+      type: this.#conversationData.type,
+      background: this.#conversationData.background,
+      conversation: {
+        data: data,
+        features: {
+          ...features,
+
+          // Since minimization is something that is also client-sided, we only get the minimization state
+          // if the minimization is locked (and that means all clients should have the same minimization state)
+          isMinimized: features.isMinimizationLocked ? features.isMinimized : false,
+        },
+      },
+    };
+
+    return conversationData;
   }
 
   /**
@@ -196,12 +216,12 @@ export class GmControllerConversation {
     this.#conversationData = conversationData;
 
     // Parse all participants and update their data
-    for (let i = 0; i < this.#conversationData.data.participants.length; i++) {
-      processParticipantData(this.#conversationData.data.participants[i]);
+    for (let i = 0; i < this.#conversationData.conversation.data.participants.length; i++) {
+      processParticipantData(this.#conversationData.conversation.data.participants[i]);
     }
 
     // Create the template for the ConversationHUD UI elements
-    const template = await this.#getConversationTemplate(this.#conversationData.data);
+    const template = await this.#getConversationTemplate(this.#conversationData.conversation.data);
 
     // Add rendered template to the conversation hud
     const conversationHud = document.getElementById("ui-conversation-hud");
@@ -232,7 +252,7 @@ export class GmControllerConversation {
     processParticipantData(participantData);
 
     // Add the newly created participant to the list of participants
-    this.#conversationData.data.participants.push(participantData);
+    this.#conversationData.conversation.data.participants.push(participantData);
 
     // Update the conversation for all connected players
     game.ConversationHud.executeFunction({
@@ -253,7 +273,7 @@ export class GmControllerConversation {
       processParticipantData(participant);
 
       // Add the newly created participant to the list of participants
-      this.#conversationData.data.participants.push(participant);
+      this.#conversationData.conversation.data.participants.push(participant);
     }
 
     // Update the conversation for all connected players
@@ -278,12 +298,12 @@ export class GmControllerConversation {
     }
 
     let index = data.index;
-    if (index < 0 || this.#conversationData.data.participants.length < index) {
+    if (index < 0 || this.#conversationData.conversation.data.participants.length < index) {
       console.error("ConversationHUD | Tried to update a participant with an invalid index");
       return;
     }
 
-    const participant = this.#conversationData.data.participants[index];
+    const participant = this.#conversationData.conversation.data.participants[index];
     new CreateOrEditParticipantForm(true, (data) => this.#editParticipantHelper(data, index), {
       ...participant,
       anchorOptions: ANCHOR_OPTIONS,
@@ -300,7 +320,7 @@ export class GmControllerConversation {
     processParticipantData(participantData);
 
     // Update participant with the given index
-    this.#conversationData.data.participants[index] = participantData;
+    this.#conversationData.conversation.data.participants[index] = participantData;
 
     // Update the conversation for all connected players
     game.ConversationHud.executeFunction({
@@ -324,7 +344,7 @@ export class GmControllerConversation {
     }
 
     let index = data.index;
-    if (index < 0 || this.#conversationData.data.participants.length < index) {
+    if (index < 0 || this.#conversationData.conversation.data.participants.length < index) {
       console.error("ConversationHUD | Tried to update a participant with an invalid index");
       return;
     }
@@ -348,7 +368,7 @@ export class GmControllerConversation {
     }
 
     // Remove participant with the given index
-    this.#conversationData.data.participants.splice(index, 1);
+    this.#conversationData.conversation.data.participants.splice(index, 1);
 
     // Update the conversation for all connected players
     game.ConversationHud.executeFunction({
@@ -382,16 +402,17 @@ export class GmControllerConversation {
   #toggleMinimze() {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
       if (game.ConversationHud.conversationIsActive) {
-        if (this.#isMinimizationLocked) {
+        if (this.#conversationData.conversation.features.isMinimizationLocked) {
           game.ConversationHud.executeFunction({
             scope: "everyone",
             type: "set-minimization",
             data: {
-              isMinimized: !this.#isMinimized,
+              isMinimized: !this.#conversationData.conversation.features.isMinimized,
             },
           });
         } else {
-          this.#isMinimized = !this.#isMinimized;
+          this.#conversationData.conversation.features.isMinimized =
+            !this.#conversationData.conversation.features.isMinimized;
           this.#updateLayout();
         }
       }
@@ -410,7 +431,7 @@ export class GmControllerConversation {
 
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
       if (game.ConversationHud.conversationIsActive) {
-        this.#isMinimized = isMinimized;
+        this.#conversationData.conversation.features.isMinimized = isMinimized;
         this.#updateLayout();
       }
     }
@@ -420,15 +441,16 @@ export class GmControllerConversation {
     // TODO: Add check to see if GM
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
       if (game.ConversationHud.conversationIsActive) {
-        this.#isMinimizationLocked = !this.#isMinimizationLocked;
+        this.#conversationData.conversation.features.isMinimizationLocked =
+          !this.#conversationData.conversation.features.isMinimizationLocked;
 
         // Update minimization state for all other players
         game.ConversationHud.executeFunction({
           scope: "everyone",
           type: "set-lock-minimization",
           data: {
-            isMinimized: this.#isMinimized,
-            isMinimizationLocked: this.#isMinimizationLocked,
+            isMinimized: this.#conversationData.conversation.features.isMinimized,
+            isMinimizationLocked: this.#conversationData.conversation.features.isMinimizationLocked,
           },
         });
       }
@@ -443,8 +465,8 @@ export class GmControllerConversation {
 
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
       if (game.ConversationHud.conversationIsActive) {
-        this.#isMinimized = isMinimized;
-        this.#isMinimizationLocked = isMinimizationLocked;
+        this.#conversationData.conversation.features.isMinimized = isMinimized;
+        this.#conversationData.conversation.features.isMinimizationLocked = isMinimizationLocked;
         this.#updateLayout();
       }
     }
@@ -456,7 +478,8 @@ export class GmControllerConversation {
   #toggleSpeakingAs() {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs)) {
       if (checkIfUserIsGM() && game.ConversationHud.conversationIsActive) {
-        this.#isSpeakingAs = !this.#isSpeakingAs;
+        this.#conversationData.conversation.features.isSpeakingAs =
+          !this.#conversationData.conversation.features.isSpeakingAs;
         this.#updateConversationControls();
       }
     } else {
@@ -517,14 +540,15 @@ export class GmControllerConversation {
    * TODO: Finish JSDoc
    */
   #toggleBackground() {
-    this.#isBackgroundVisible = !this.#isBackgroundVisible;
+    this.#conversationData.conversation.features.isBackgroundVisible =
+      !this.#conversationData.conversation.features.isBackgroundVisible;
 
     // Update the conversation for all connected players
     game.ConversationHud.executeFunction({
       scope: "everyone",
       type: "set-background-visibility",
       data: {
-        isBackgroundVisible: this.#isBackgroundVisible,
+        isBackgroundVisible: this.#conversationData.conversation.features.isBackgroundVisible,
       },
     });
   }
@@ -589,7 +613,7 @@ export class GmControllerConversation {
       element.classList.add("visible");
     }
 
-    if (this.#isMinimized) {
+    if (this.#conversationData.conversation.features.isMinimized) {
       element.classList.add("minimized");
     }
 
@@ -615,10 +639,10 @@ export class GmControllerConversation {
       isGM: game.user.isGM,
       isVisible: game.ConversationHud.conversationIsVisible,
 
-      isMinimized: this.#isMinimized,
-      isMinimizationLocked: this.#isMinimizationLocked,
-      isSpeakingAs: this.#isSpeakingAs,
-      isBackgroundVisible: this.#isBackgroundVisible,
+      isMinimized: this.#conversationData.conversation.features.isMinimized,
+      isMinimizationLocked: this.#conversationData.conversation.features.isMinimizationLocked,
+      isSpeakingAs: this.#conversationData.conversation.features.isSpeakingAs,
+      isBackgroundVisible: this.#conversationData.conversation.features.isBackgroundVisible,
 
       features: {
         minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
@@ -639,7 +663,7 @@ export class GmControllerConversation {
     const template = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
       displayParticipant: index === -1 ? false : true,
       displayNoParticipantBox: game.settings.get(MODULE_NAME, ModuleSettings.displayNoParticipantBox),
-      participant: index === -1 ? null : this.#conversationData.data.participants[index],
+      participant: index === -1 ? null : this.#conversationData.conversation.data.participants[index],
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
       activeParticipantFactionFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFactionFontSize),
@@ -666,7 +690,7 @@ export class GmControllerConversation {
   #updateLayout() {
     // Update the layout
     const conversationHud = document.getElementById("ui-conversation-hud");
-    if (this.#isMinimized) {
+    if (this.#conversationData.conversation.features.isMinimized) {
       conversationHud.classList.add("minimized");
     } else {
       conversationHud.classList.remove("minimized");
@@ -674,7 +698,7 @@ export class GmControllerConversation {
 
     if (game.ConversationHud.conversationIsVisible) {
       const conversationBackground = document.getElementById("conversation-hud-background");
-      if (this.#isMinimized) {
+      if (this.#conversationData.conversation.features.isMinimized) {
         conversationBackground.classList.remove("visible");
       } else {
         conversationBackground.classList.add("visible");

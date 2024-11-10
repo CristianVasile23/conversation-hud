@@ -1,4 +1,6 @@
-// TODO: Rename this entire class to GmControlledConversationCreationForm
+/// <reference path="../types/GmControlledConversation/GmControlledConversation.js" />
+/// <reference path="../types/ConversationData.js" />
+
 import { ANCHOR_OPTIONS, CONVERSATION_TYPES } from "../constants/index.js";
 import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
 import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
@@ -13,6 +15,7 @@ import {
 
 export class GmControlledConversationCreationForm extends FormApplication {
   // State variables
+  /** @type {(conversationData: ConversationData) => void | undefined} } */
   callbackFunction = undefined;
   conversationBackground = "";
   participants = [];
@@ -25,7 +28,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
   /**
    * TODO: Add JSDoc
    *
-   * @param {(formData: TODO) => void} callbackFunction
+   * @param {(conversationData: ConversationData) => void} callbackFunction
    */
   constructor(callbackFunction) {
     super();
@@ -72,7 +75,9 @@ export class GmControlledConversationCreationForm extends FormApplication {
 
     // Add event listener on the add participant button
     html.find("#add-participant").click(async (e) => {
-      const participantCreationForm = new CreateOrEditParticipantForm(false, (data) => this.#handleAddParticipant(data));
+      const participantCreationForm = new CreateOrEditParticipantForm(false, (data) =>
+        this.#handleAddParticipant(data)
+      );
       return participantCreationForm.render(true);
     });
 
@@ -200,17 +205,21 @@ export class GmControlledConversationCreationForm extends FormApplication {
         controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
         controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {
-          const participantEditForm = new CreateOrEditParticipantForm(true, (data) => this.#handleEditParticipant(data, i), {
-            name: this.participants[i].name,
-            displayName: this.participants[i].displayName,
-            img: this.participants[i].img,
-            imgScale: this.participants[i].imgScale,
-            linkedJournal: this.participants[i].linkedJournal,
-            linkedActor: this.participants[i].linkedActor,
-            faction: this.participants[i].faction,
-            anchorOptions: ANCHOR_OPTIONS,
-            portraitAnchor: this.participants[i].portraitAnchor,
-          });
+          const participantEditForm = new CreateOrEditParticipantForm(
+            true,
+            (data) => this.#handleEditParticipant(data, i),
+            {
+              name: this.participants[i].name,
+              displayName: this.participants[i].displayName,
+              img: this.participants[i].img,
+              imgScale: this.participants[i].imgScale,
+              linkedJournal: this.participants[i].linkedJournal,
+              linkedActor: this.participants[i].linkedActor,
+              faction: this.participants[i].faction,
+              anchorOptions: ANCHOR_OPTIONS,
+              portraitAnchor: this.participants[i].portraitAnchor,
+            }
+          );
           participantEditForm.render(true);
         };
       }
@@ -223,15 +232,29 @@ export class GmControlledConversationCreationForm extends FormApplication {
    * @param {*} formData
    */
   async _updateObject(event, formData) {
-    // Pass data to conversation class
-    this.callbackFunction({
-      type: CONVERSATION_TYPES.GM_CONTROLLED,
-      background: formData.conversationBackground,
+    /** @type {GmControlledConversation} */
+    const gmControlledConversation = {
       data: {
         participants: this.participants,
         defaultActiveParticipant: this.defaultActiveParticipant,
       },
-    });
+      features: {
+        isMinimized: false,
+        isMinimizationLocked: false,
+        isSpeakingAs: false,
+        isBackgroundVisible: false,
+      },
+    };
+
+    /** @type {ConversationData} */
+    const conversationData = {
+      type: CONVERSATION_TYPES.GM_CONTROLLED,
+      background: formData.conversationBackground,
+      conversation: gmControlledConversation,
+    };
+
+    // Pass data to conversation class
+    this.callbackFunction(conversationData);
   }
 
   #handleAddParticipant(data) {

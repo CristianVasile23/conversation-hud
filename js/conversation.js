@@ -144,8 +144,8 @@ export class ConversationHud {
    *
    * @param {*} formData
    */
-  createConversationFromFormData(formData) {
-    this.#handleConversationCreationData(formData);
+  createConversationFromData(formData) {
+    this.#handleCreateConversationFromData(formData);
   }
 
   /**
@@ -194,10 +194,10 @@ export class ConversationHud {
   /**
    * Function that parses conversation input form data and then activates the conversation hud
    *
-   * @param {ConversationData} formData
+   * @param {ConversationData} conversationData
    * @param {boolean} visibility
    */
-  #handleConversationCreationData(formData, visibility = true) {
+  #handleCreateConversationFromData(conversationData, visibility = true) {
     // This function should only be called when there is no other conversation active
     // TODO: Maybe rework this feature so that if there is a conversation active, a dialogue prompt appears
     if (game.ConversationHud.conversationIsActive) {
@@ -210,7 +210,7 @@ export class ConversationHud {
       return;
     }
 
-    socket.executeForEveryone("createConversation", formData, visibility);
+    socket.executeForEveryone("createConversation", conversationData, visibility);
 
     // Finally, set the button status to active now that a conversation is active
     socket.executeForAllGMs("setActivateConversationHudButtonState", true);

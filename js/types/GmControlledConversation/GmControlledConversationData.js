@@ -1,4 +1,4 @@
-/// <reference path="./ParticipantData.js" />
+/// <reference path="../ParticipantData.js" />
 
 /**
  * [TODO: Complete JSDoc documentation of type]

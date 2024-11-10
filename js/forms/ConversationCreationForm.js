@@ -23,7 +23,9 @@ export class ConversationCreationForm extends FormApplication {
     const gmControlledConversationButton = html[0].querySelector("#gm-controlled-conversation-button");
     gmControlledConversationButton.onclick = async () => {
       await this.close({});
-      new GmControlledConversationCreationForm((data) => game.ConversationHud.createConversationFromFormData(data)).render(true);
+      new GmControlledConversationCreationForm((data) => game.ConversationHud.createConversationFromData(data)).render(
+        true
+      );
     };
   }
 
