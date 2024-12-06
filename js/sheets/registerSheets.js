@@ -1,15 +1,19 @@
 import { ConversationFactionSheet } from "./ConversationFactionSheet.js";
+import { ConversationSheet } from "./ConversationSheet.js";
 
+/**
+ * TODO: Finish JSDoc
+ */
 export function registerSheets() {
-  // DocumentSheetConfig.registerSheet(JournalEntry, "conversation-entry-sheet", ConversationEntrySheet, {
-  //   types: ["base"],
-  //   makeDefault: false,
-  //   label: game.i18n.localize("CHUD.sheets.entrySheet"),
-  // });
-
   DocumentSheetConfig.registerSheet(JournalEntry, "conversation-faction-sheet", ConversationFactionSheet, {
     types: ["base"],
     makeDefault: false,
     label: game.i18n.localize("CHUD.sheets.factionSheet"),
+  });
+
+  DocumentSheetConfig.registerSheet(JournalEntry, "conversation-entry-sheet", ConversationSheet, {
+    types: ["base"],
+    makeDefault: false,
+    label: game.i18n.localize("CHUD.sheets.entrySheet"),
   });
 }

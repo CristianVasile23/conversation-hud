@@ -89,6 +89,79 @@ export class ConversationHud {
     game.ConversationHud.activeConversation = undefined;
   }
 
+  // Function that saves the active conversation to a journal entry
+
+  /**
+   *
+   * @returns {Promise<void>}
+   */
+  async saveActiveConversation() {
+    if (checkIfUserIsGM()) {
+      if (game.ConversationHud.activeConversation) {
+        // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
+        const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
+        const dialogContent = await renderTemplate("modules/conversation-hud/templates/conversation_save.hbs", {
+          folders,
+          name: game.i18n.format("DOCUMENT.New", { type: "Conversation Sheet" }),
+        });
+
+        // TODO: Localize strings
+        return Dialog.prompt({
+          title: "Save Conversation",
+          content: dialogContent,
+          label: "Save Conversation",
+          callback: (html) => {
+            const formElement = html[0].querySelector("form");
+            const formData = new FormDataExtended(formElement);
+            const formDataObject = formData.object;
+
+            console.log(formDataObject);
+            // this.#handleSaveConversation(formDataObject);
+          },
+          rejectClose: false,
+        });
+      } else {
+        ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
+      }
+    }
+  }
+
+  async #handleSaveConversation(data) {
+    const permissions = {};
+    game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
+
+    const newConversationSheet = await JournalEntry.create({
+      name: data.name || "New Conversation",
+      folder: data.folder || "",
+      flags: {
+        core: {
+          sheetClass: `conversation-entry-sheet.${ConversationEntrySheet.name}`,
+        },
+      },
+      ownership: permissions,
+    });
+
+    if (newConversationSheet) {
+      const dataToSave = {
+        conversationBackground: game.ConversationHud.activeConversation.conversationBackground,
+        defaultActiveParticipant: game.ConversationHud.activeConversation.defaultActiveParticipant,
+        participants: game.ConversationHud.activeConversation.participants,
+      };
+      await newConversationSheet.createEmbeddedDocuments("JournalEntryPage", [
+        {
+          text: { content: JSON.stringify(dataToSave) },
+          name: "Conversation Participants",
+          flags: {
+            "conversation-hud": { type: "conversation" },
+          },
+        },
+      ]);
+      ui.notifications.info(game.i18n.localize("CHUD.info.saveSuccessful"));
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.saveUnsuccessful"));
+    }
+  }
+
   /**
    * Function that either triggers the conversation creation form, or removes the active conversation
    *
