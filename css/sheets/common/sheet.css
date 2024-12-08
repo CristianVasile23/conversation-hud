@@ -1,0 +1,10 @@
+.conversation-sheet .sheet-content {
+  height: 100%;
+  /* padding: 3px; */
+}
+
+.conversation-sheet .sheet-content .sheet-section {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  flex: 0;
+}

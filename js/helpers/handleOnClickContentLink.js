@@ -19,7 +19,8 @@ export function handleOnClickContentLink(event, wrapped) {
   const collection = game.collections.get(currentTarget.dataset.type);
   document = collection.get(currentTarget.dataset.id);
 
-  if (document?.flags?.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet") {
+  // TODO: Use proper sheet class from constants
+  if (document?.flags?.core?.sheetClass === "conversation-hud.ConversationSheet") {
     if (!document.testUserPermission(game.user, "LIMITED")) {
       ui.notifications.warn(game.i18n.localize("CHUD.errors.activateNoPerms"));
     } else {

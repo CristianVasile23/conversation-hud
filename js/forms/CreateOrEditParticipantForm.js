@@ -1,9 +1,8 @@
 /// <reference path="../types/ParticipantData.js" />
 /// <reference path="../types/PortraitAnchor.js" />
 
-import { ANCHOR_OPTIONS } from "../constants/index.js";
+import { ANCHOR_OPTIONS, SHEET_CLASSES } from "../constants/index.js";
 import { createPortraitAnchorObject, getConversationDataFromJournalId } from "../helpers/index.js";
-import { ConversationFactionSheet } from "../sheets/index.js";
 
 export class CreateOrEditParticipantForm extends FormApplication {
   isEditing = false;
@@ -196,7 +195,8 @@ export class CreateOrEditParticipantForm extends FormApplication {
     });
     journals = journals.filter(
       (journal) =>
-        journal.sheetClass !== "conversation-entry-sheet.ConversationEntrySheet" &&
+        // TODO: Use proper sheet class from constants
+        journal.sheetClass !== "conversation-sheet.ConversationSheet" &&
         journal.sheetClass !== "conversation-faction-sheet.ConversationFactionSheet"
     );
     journals.sort((a, b) => a.name.localeCompare(b.name));
@@ -208,6 +208,7 @@ export class CreateOrEditParticipantForm extends FormApplication {
 
     // Get a list of all the saved factions
     const savedFactions = game.journal.filter(
+      // TODO: Use proper sheet class from constants
       (item) => item.flags.core?.sheetClass === "conversation-faction-sheet.ConversationFactionSheet"
     );
 
@@ -398,7 +399,7 @@ export class CreateOrEditParticipantForm extends FormApplication {
       folder: data.folder || "",
       flags: {
         core: {
-          sheetClass: `conversation-faction-sheet.${ConversationFactionSheet.name}`,
+          sheetClass: SHEET_CLASSES.factionSheetClass,
         },
       },
       ownership: permissions,

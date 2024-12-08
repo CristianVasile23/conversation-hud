@@ -11,7 +11,7 @@ export function registerSheets() {
     label: game.i18n.localize("CHUD.sheets.factionSheet"),
   });
 
-  DocumentSheetConfig.registerSheet(JournalEntry, "conversation-entry-sheet", ConversationSheet, {
+  DocumentSheetConfig.registerSheet(JournalEntry, "conversation-sheet", ConversationSheet, {
     types: ["base"],
     makeDefault: false,
     label: game.i18n.localize("CHUD.sheets.entrySheet"),

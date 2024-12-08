@@ -1,0 +1,74 @@
+<form class="sheet sheet-content">
+  <div class="flexrow conversation-hud-form-header">
+    <input name="name" type="text" value="{{name}}" placeholder="{{localize 'CHUD.strings.conversationName'}}"/>
+
+    {{#if isGM}}
+      <button
+        type="button"
+        name="show-conversation"
+        id="show-conversation"
+        title="{{localize 'CHUD.actions.activateConversation'}}"
+        style="margin-left: 5px;"
+      >
+        <i class="fas fa-eye"></i>
+      </button>
+    {{/if}}
+  </div>
+
+  <div class="flexrow conversation-hud-form-sub-header">
+    <p> {{localize 'CHUD.strings.conversationSettings'}} </p>
+  </div>
+
+  <div class="sheet-section">
+    <div class="form-group">
+      <label>{{localize "CHUD.strings.conversationBackground.name"}}</label>
+      <div class="form-fields">
+        <button
+          type="button"
+          class="file-picker"
+          data-type="imagevideo"
+          data-target="conversationBackground"
+          title="{{localize 'CHUD.strings.browseFiles'}}"
+        >
+          <i class="fas fa-file-import fa-fw"></i>
+        </button>
+
+        <input
+          class="image"
+          type="text"
+          name="conversationBackground"
+          placeholder="{{localize 'CHUD.strings.filePath'}}"
+          value="{{conversationBackground}}"
+        />
+      </div>
+      <p class="notes">{{localize "CHUD.strings.conversationBackground.hint"}}</p>
+    </div>
+  </div>
+
+  <div class="sheet-section">
+    {{#switch conversationData.type}} 
+      {{#case 'gm-controlled'}}
+        {{> "modules/conversation-hud/templates/sheets/content/gm-controlled-sheet-content.hbs" data=conversationData.conversation.data isGM=isGM}}
+      {{/case}} 
+      {{#case 'default'}}
+        {{!-- TODO: Add message type that is also localized --}}
+        <p>Type not supported</p>
+      {{/case}}
+    {{/switch}}
+  </div>
+
+  <div class="footer">
+    <footer class="sheet-footer flexrow">
+      <button
+        type="button"
+        name="save-conversation"
+        id="save-conversation"
+        title="{{localize 'CHUD.actions.saveConversation'}}"
+        {{#unless dirty}} disabled {{/unless}}
+      >
+        <i class="fas fa-save"></i>
+        {{localize 'CHUD.actions.saveConversation'}}
+      </button>
+    </footer>
+  </div>
+</form>

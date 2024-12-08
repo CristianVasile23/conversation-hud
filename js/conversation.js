@@ -1,9 +1,10 @@
+/// <reference path="./../types.d.ts" />
 /// <reference path="./types/ConversationData.js" />
 
 import { socket } from "./init.js";
 import { ConversationCreationForm } from "./forms/index.js";
 import { checkIfUserIsGM, getConfirmationFromUser } from "./helpers/index.js";
-import { CONVERSATION_TYPES } from "./constants/index.js";
+import { CONVERSATION_TYPES, SHEET_CLASSES } from "./constants/index.js";
 import { GmControllerConversation } from "./conversation-types/GmControllerConversation.js";
 
 export class ConversationHud {
@@ -73,9 +74,7 @@ export class ConversationHud {
     return {
       conversationIsActive: game.ConversationHud.conversationIsActive,
       conversationIsVisible: game.ConversationHud.conversationIsVisible,
-      activeConversation: game.ConversationHud.conversationIsActive
-        ? game.ConversationHud.activeConversation.getConversation()
-        : undefined,
+      activeConversation: game.ConversationHud.conversationIsActive ? game.ConversationHud.activeConversation.getConversation() : undefined,
     };
   }
 
@@ -115,8 +114,7 @@ export class ConversationHud {
             const formData = new FormDataExtended(formElement);
             const formDataObject = formData.object;
 
-            console.log(formDataObject);
-            // this.#handleSaveConversation(formDataObject);
+            this.#handleSaveConversation(formDataObject);
           },
           rejectClose: false,
         });
@@ -130,32 +128,30 @@ export class ConversationHud {
     const permissions = {};
     game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
 
+    const dataToSave = game.ConversationHud.getConversation().activeConversation;
+
     const newConversationSheet = await JournalEntry.create({
       name: data.name || "New Conversation",
       folder: data.folder || "",
       flags: {
         core: {
-          sheetClass: `conversation-entry-sheet.${ConversationEntrySheet.name}`,
+          sheetClass: SHEET_CLASSES.conversationSheetClass,
         },
       },
       ownership: permissions,
     });
 
-    if (newConversationSheet) {
-      const dataToSave = {
-        conversationBackground: game.ConversationHud.activeConversation.conversationBackground,
-        defaultActiveParticipant: game.ConversationHud.activeConversation.defaultActiveParticipant,
-        participants: game.ConversationHud.activeConversation.participants,
-      };
+    if (dataToSave && newConversationSheet) {
       await newConversationSheet.createEmbeddedDocuments("JournalEntryPage", [
         {
           text: { content: JSON.stringify(dataToSave) },
-          name: "Conversation Participants",
+          name: "Conversation Sheet Data",
           flags: {
-            "conversation-hud": { type: "conversation" },
+            "conversation-hud": { type: "conversation-sheet-data" },
           },
         },
       ]);
+
       ui.notifications.info(game.i18n.localize("CHUD.info.saveSuccessful"));
     } else {
       ui.notifications.error(game.i18n.localize("CHUD.errors.saveUnsuccessful"));
@@ -198,9 +194,7 @@ export class ConversationHud {
    * @param {boolean} state
    */
   setActivateConversationHudButtonState(state) {
-    ui.controls.controls
-      .find((controls) => controls.name === "notes")
-      .tools.find((tools) => tools.name === "activateHud").active = state;
+    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = state;
     ui.controls.render();
   }
 

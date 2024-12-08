@@ -18,3 +18,8 @@
 
 /* Misc CSS used for various aspects of the module */
 @import url("./misc.css");
+
+/* REWORK IMPORTS */
+
+/* Styling for the ConversationHUD sheets */
+@import url("./sheets/index.css");

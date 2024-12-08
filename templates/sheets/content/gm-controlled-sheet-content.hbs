@@ -1,0 +1,39 @@
+<div class="flexrow sub-header">
+  <p>{{localize 'CHUD.strings.conversationParticipants'}}</p>
+
+  {{#if isGM}}
+  <button
+    type="button"
+    name="pull-participants-from-scene"
+    id="pull-participants-from-scene"
+    title="{{localize 'CHUD.actions.pullParticipants'}}"
+    class="sub-header-action-button"
+  >
+    <i class="fas fa-up-from-bracket"></i>
+  </button>
+
+  <button
+    type="button"
+    name="add-participant"
+    id="add-participant"
+    title="{{localize 'CHUD.actions.participant.add'}}"
+    class="sub-header-action-button"
+  >
+    <i class="fas fa-user-plus"></i>
+  </button>
+  {{/if}}
+</div>
+
+<div id="conversation-sheet-content-wrapper" class="drag-and-drop-wrapper">
+  <div id="conversation-sheet-dropzone" class="dropzone">
+    <i class="far fa-square-plus"></i>
+    <p>{{localize 'CHUD.strings.dropItem'}}</p>
+    <p class="hold-control">({{localize 'CHUD.strings.holdControl'}})</p>
+  </div>
+
+  {{> "modules/conversation-hud/templates/fragments/conversation_participants_list.hbs"
+    participants=data.participants
+    defaultActiveParticipant=data.defaultActiveParticipant
+    isGM=isGM
+  }}
+</div>

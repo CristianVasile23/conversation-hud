@@ -10,14 +10,12 @@ import {
   // showDragAndDropIndicator,
   // getDragAndDropIndex,
   getConfirmationFromUser,
-  processParticipantData,
+  // processParticipantData,
 } from "../helpers/index.js";
 import { GmControlledConversationSheetHandler } from "../sheet-handlers/GmControlledConversationSheetHandler.js";
 
 export class ConversationSheet extends JournalSheet {
   #dirty = false;
-
-  conversationBackground = "";
 
   /** @type {ConversationData | undefined} */
   #conversationData = undefined;
@@ -25,71 +23,49 @@ export class ConversationSheet extends JournalSheet {
   /** @type {GmControlledConversationSheetHandler | undefined} */
   #sheetHandler = undefined;
 
-  // participants = [];
-  // defaultActiveParticipant = undefined;
-
-  dropzoneVisible = false;
-  draggingParticipant = false;
-
   constructor(data, options) {
     super(data, options);
 
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
     if (pages.length > 0) {
       try {
-        console.log(pages[0].text);
-
         /** @type {ConversationData} */
         const data = JSON.parse(pages[0].text.content);
+
+        // TODO: Check if valid data
+
+        this.#conversationData = data;
 
         switch (data.type) {
           case CONVERSATION_TYPES.GM_CONTROLLED:
             this.#sheetHandler = new GmControlledConversationSheetHandler(
               this.#conversationData.conversation,
-              handleChange
+              (conversation) => this.handleChange(conversation)
             );
             break;
           default:
             // TODO: Log error
             console.error("INVALID TYPE");
             super.close({ submit: false });
+            break;
         }
-
-        // if (data instanceof Array) {
-        //   this.participants = data;
-        // } else {
-        //   const conversationBackground = data.conversationBackground;
-        //   if (conversationBackground) {
-        //     this.conversationBackground = conversationBackground;
-        //   }
-
-        //   const participants = data.participants;
-        //   const defaultActiveParticipant = data.defaultActiveParticipant;
-        //   if (participants) {
-        //     this.participants = participants;
-        //     if (typeof defaultActiveParticipant !== "undefined") {
-        //       this.defaultActiveParticipant = defaultActiveParticipant;
-        //     }
-        //   } else {
-        //     throw new SyntaxError();
-        //   }
-        // }
       } catch (error) {
-        if (error instanceof SyntaxError) {
-          ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
-        } else {
-          ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
-        }
+        throw error;
+        // if (error instanceof SyntaxError) {
+        //   ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
+        // } else {
+        //   ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
+        // }
       }
     }
   }
 
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["sheet", "journal-sheet"],
+      id: "conversation-sheet",
+      classes: ["sheet", "journal-sheet", "conversation-sheet"],
       title: game.i18n.localize("CHUD.strings.conversationEntry"),
-      id: "conversation-entry-sheet",
-      template: `modules/conversation-hud/templates/conversation_sheet.hbs`,
+      template: "modules/conversation-hud/templates/sheets/conversation-sheet.hbs",
       width: 635,
       height: 660,
       resizable: false,
@@ -104,194 +80,35 @@ export class ConversationSheet extends JournalSheet {
       return;
     }
 
-    html.find("#save-conversation").click(async (e) => this.#handleSaveConversation());
+    // Event handler for saving conversation sheet
+    html.find("#save-conversation").click(() => this.#handleSaveConversation());
 
-    html.find("#show-conversation").click(async (e) => this.#handleShowConversation());
-
-    // console.log(this.#sheetHandler);
-
-    // this.#sheetHandler.activateListeners(html);
-
-    // html.find("#pull-participants-from-scene").click(async (e) => {
-    //   const pullParticipantsForm = new PullParticipantsFromSceneForm((data) => {
-    //     for (const participant of data) {
-    //       this.#handleAddParticipant(participant);
-    //     }
-    //   });
-    //   return pullParticipantsForm.render(true);
-    // });
-
-    // html.find("#add-participant").click(async (e) => {
-    //   const participantInputForm = new CreateOrEditParticipantForm(false, (data) => this.#handleAddParticipant(data));
-    //   return participantInputForm.render(true);
-    // });
+    // Event handler for activating conversation sheet
+    html.find("#show-conversation").click(() => this.#handleShowConversation());
 
     // Bind event handler for conversation background image field
     const conversationBackgroundInput = html.find("[name=conversationBackground]")[0];
     conversationBackgroundInput.onchange = (event) => this.#handleChangeConversationBackground(event);
 
-    // // Drag and drop functionality
-    // const dragDropWrapper = html.find("#conversation-sheet-content-wrapper")[0];
-    // const dragDropZone = html.find("#conversation-sheet-dropzone")[0];
-    // if (dragDropWrapper && dragDropZone) {
-    //   dragDropWrapper.ondragenter = () => {
-    //     if (!this.draggingParticipant) {
-    //       this.dropzoneVisible = true;
-    //       dragDropWrapper.classList.add("active-dropzone");
-    //     }
-    //   };
-
-    //   dragDropZone.ondragleave = () => {
-    //     if (this.dropzoneVisible) {
-    //       this.dropzoneVisible = false;
-    //       dragDropWrapper.classList.remove("active-dropzone");
-    //     }
-    //   };
-
-    //   dragDropWrapper.ondrop = async (event) => {
-    //     if (this.dropzoneVisible) {
-    //       event.preventDefault();
-
-    //       const data = await getActorDataFromDragEvent(event);
-    //       if (data && data.length > 0) {
-    //         if (event.ctrlKey) {
-    //           this.#handleReplaceAllParticipants(data);
-    //         } else {
-    //           data.forEach((participant) => {
-    //             this.#handleAddParticipant(participant);
-    //           });
-    //         }
-    //       }
-
-    //       this.dropzoneVisible = false;
-    //       dragDropWrapper.classList.remove("active-dropzone");
-    //     }
-    //   };
-    // }
-
-    // const participantsObject = html.find("#conversation-participants-list")[0];
-    // if (participantsObject) {
-    //   const conversationParticipants = participantsObject.children;
-    //   for (let i = 0; i < conversationParticipants.length; i++) {
-    //     // Add drag and drop functionality
-    //     const dragDropHandler = conversationParticipants[i].querySelector("#conversation-sheet-drag-drop-handler");
-
-    //     dragDropHandler.ondragstart = (event) => {
-    //       this.draggingParticipant = true;
-    //       event.dataTransfer.setDragImage(conversationParticipants[i], 0, 0);
-
-    //       // Save the index of the dragged participant in the data transfer object
-    //       event.dataTransfer.setData(
-    //         "text/plain",
-    //         JSON.stringify({
-    //           index: i,
-    //           type: "ConversationParticipant",
-    //           participant: this.participants[i],
-    //         })
-    //       );
-    //     };
-
-    //     dragDropHandler.ondragend = (event) => {
-    //       this.draggingParticipant = false;
-    //     };
-
-    //     conversationParticipants[i].ondragover = (event) => {
-    //       showDragAndDropIndicator(conversationParticipants[i], event);
-    //     };
-
-    //     conversationParticipants[i].ondragleave = (event) => {
-    //       hideDragAndDropIndicator(conversationParticipants[i]);
-    //     };
-
-    //     conversationParticipants[i].ondrop = (event) => {
-    //       const data = JSON.parse(event.dataTransfer.getData("text/plain"));
-
-    //       if (data) {
-    //         hideDragAndDropIndicator(conversationParticipants[i]);
-
-    //         const oldIndex = data.index;
-
-    //         // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
-    //         if (oldIndex === i) {
-    //           return;
-    //         }
-
-    //         // Get the new index of the dropped element
-    //         let newIndex = getDragAndDropIndex(event, i, oldIndex);
-
-    //         // Reorder the array
-    //         moveInArray(this.participants, oldIndex, newIndex);
-
-    //         // Update active participant index
-    //         const defaultActiveParticipantIndex = this.defaultActiveParticipant;
-    //         if (defaultActiveParticipantIndex === oldIndex) {
-    //           this.defaultActiveParticipant = newIndex;
-    //         } else {
-    //           if (defaultActiveParticipantIndex > oldIndex && defaultActiveParticipantIndex <= newIndex) {
-    //             this.defaultActiveParticipant -= 1;
-    //           }
-    //           if (defaultActiveParticipantIndex < oldIndex && defaultActiveParticipantIndex >= newIndex) {
-    //             this.defaultActiveParticipant += 1;
-    //           }
-    //         }
-
-    //         this.#dirty = true;
-    //         this.render(false);
-    //       } else {
-    //         console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
-    //       }
-
-    //       this.draggingParticipant = false;
-    //     };
-
-    //     // Bind function to the set active by default checkbox
-    //     conversationParticipants[i].querySelector("#participant-active-by-default").onchange = (event) =>
-    //       this.#handleSetDefaultActiveParticipant(event, i);
-
-    //     // Bind functions to the edit and remove buttons
-    //     const controls = conversationParticipants[i].querySelector(".controls-wrapper");
-    //     controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
-    //     controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
-    //     controls.querySelector("#participant-edit-button").onclick = () => {
-    //       const participantInputForm = new ParticipantInputForm(true, (data) => this.#handleEditParticipant(data, i), {
-    //         name: this.participants[i].name,
-    //         displayName: this.participants[i].displayName,
-    //         img: this.participants[i].img,
-    //         imgScale: this.participants[i].imgScale,
-    //         linkedJournal: this.participants[i].linkedJournal,
-    //         linkedActor: this.participants[i].linkedActor,
-    //         faction: this.participants[i].faction,
-    //         anchorOptions: ANCHOR_OPTIONS,
-    //         portraitAnchor: this.participants[i].portraitAnchor,
-    //       });
-    //       participantInputForm.render(true);
-    //     };
-    //   }
-    // }
+    // Activate sheet handler listeners
+    this.#sheetHandler.activateListeners(html);
   }
 
   getData(options) {
     const baseData = super.getData(options);
 
-    // for (const participant of this.participants) {
-    //   processParticipantData(participant);
-    // }
-
     const data = {
-      isGM: game.user.isGM,
-      dirty: this.#dirty,
-      conversationBackground: this.conversationBackground,
-      conversationData: this.#conversationData,
-      // defaultActiveParticipant: this.defaultActiveParticipant,
-      // participants: this.participants,
       name: baseData.data.name,
       data: baseData.data,
+      isGM: game.user.isGM,
+      conversationData: this.#conversationData,
+      dirty: this.#dirty,
     };
 
     return data;
   }
 
-  async close(options) {
+  async close() {
     if (this.#dirty) {
       await getConfirmationFromUser(
         "CHUD.dialogue.unsavedChanges",
@@ -408,7 +225,11 @@ export class ConversationSheet extends JournalSheet {
             _id: pages[0]._id,
             name: pages[0].name,
             type: pages[0].type,
-            text: { content: pages[0].text?.content || "", format: 1, markdown: undefined },
+            text: {
+              content: pages[0].text?.content || "",
+              format: 1,
+              markdown: undefined,
+            },
             src: pages[0].src || "",
             image: { caption: pages[0].image?.caption || "" },
             video: pages[0].video,
@@ -430,58 +251,4 @@ export class ConversationSheet extends JournalSheet {
     this.#dirty = true;
     this.render(false);
   }
-
-  // #handleAddParticipant(data) {
-  //   processParticipantData(data);
-
-  //   this.participants.push(data);
-  //   this.#dirty = true;
-  //   this.render(false);
-  // }
-
-  // #handleEditParticipant(data, index) {
-  //   processParticipantData(data);
-
-  //   this.participants[index] = data;
-  //   this.#dirty = true;
-  //   this.render(false);
-  // }
-
-  // #handleReplaceAllParticipants(data) {
-  //   const processedData = data.map((participant) => {
-  //     processParticipantData(participant);
-  //     return participant;
-  //   });
-
-  //   this.defaultActiveParticipant = undefined;
-  //   this.participants = processedData;
-  //   this.#dirty = true;
-  //   this.render(false);
-  // }
-
-  // #handleRemoveParticipant(index) {
-  //   this.participants.splice(index, 1);
-  //   this.#dirty = true;
-  //   this.render(false);
-  // }
-
-  // #handleCloneParticipant(index) {
-  //   const clonedParticipant = this.participants[index];
-  //   this.participants.push(clonedParticipant);
-  //   this.#dirty = true;
-  //   this.render(false);
-  // }
-
-  // #handleSetDefaultActiveParticipant(event, index) {
-  //   if (!event.target) return;
-
-  //   if (event.target.checked) {
-  //     this.defaultActiveParticipant = index;
-  //   } else {
-  //     this.defaultActiveParticipant = undefined;
-  //   }
-
-  //   this.#dirty = true;
-  //   this.render(false);
-  // }
 }

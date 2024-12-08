@@ -8,9 +8,8 @@ export const registerHook = () => {
   // Hook that injects CHUD fields into the scene configuration sheet
   Hooks.on("renderSceneConfig", async (app, html, data) => {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableSceneConversations)) {
-      const conversations = game.journal.filter(
-        (item) => item.flags.core?.sheetClass === "conversation-entry-sheet.ConversationEntrySheet"
-      );
+      // TODO: Use proper sheet class from constants
+      const conversations = game.journal.filter((item) => item.flags.core?.sheetClass === "conversation-sheet.ConversationEntrySheet");
       const linkedConversation = data.data["flags"]["conversation-hud"]?.sceneConversation || undefined;
       const sceneConversationVisibilityOff = data.data["flags"]["conversation-hud"]?.sceneConversationVisibilityOff || undefined;
 
