@@ -82,8 +82,8 @@ export class GmControlledConversationCreationForm extends FormApplication {
     });
 
     // Drag and drop functionality
-    const dragDropWrapper = html.find("#conversation-sheet-content-wrapper")[0];
-    const dragDropZone = html.find("#conversation-sheet-dropzone")[0];
+    const dragDropWrapper = html.find("#gm-controlled-conversation-sheet-content")[0];
+    const dragDropZone = html.find("#gm-controlled-conversation-sheet-dropzone")[0];
     if (dragDropWrapper && dragDropZone) {
       dragDropWrapper.ondragenter = () => {
         if (!this.draggingParticipant) {
@@ -197,7 +197,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
         };
 
         // Bind function to the set active by default checkbox
-        conversationParticipants[i].querySelector("#participant-active-by-default").onchange = (event) =>
+        conversationParticipants[i].querySelector("#participant-active-by-default-checkbox").onchange = (event) =>
           this.#handleSetDefaultActiveParticipant(event, i);
 
         // Bind functions to the edit and remove buttons

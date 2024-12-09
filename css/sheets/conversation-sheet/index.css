@@ -1,4 +1,5 @@
-.conversation-sheet .sheet-content {
-  height: 100%;
-  padding: 3px;
+@import url("./drag-and-drop.css");
+
+#gm-controlled-conversation-sheet-content {
+  overflow: auto;
 }

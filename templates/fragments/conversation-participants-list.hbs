@@ -1,27 +1,28 @@
-<div class="participants-list">
+<div class="chud-conversation-participants-list">
   {{#if participants}}
-    <div class="participants-list-header">
-      <p class="active-by-default">{{localize 'CHUD.strings.active'}}</p>
-      <p class="faction">{{localize 'CHUD.strings.banner'}}</p>
-      <p class="details">{{localize 'CHUD.strings.details'}}</p>
-      <p class="controls">{{localize 'CHUD.strings.actions'}}</p>
+    <div class="chud-header">
+      <p class="chud-active-by-default">{{localize 'CHUD.strings.active'}}</p>
+      <p class="chud-faction">{{localize 'CHUD.strings.banner'}}</p>
+      <p class="chud-details">{{localize 'CHUD.strings.details'}}</p>
+      <p class="chud-controls">{{localize 'CHUD.strings.actions'}}</p>
     </div>
 
-    <div id="conversation-participants-list">
+    <div id="conversation-participants-list" class="chud-content">
       {{#each participants as |participant index|}}
         <div class="participant-drag-drop-container">
           <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
 
-          <div class="conversation-participant">
+          <div class="chud-participant">
             {{#if ../isGM}}
               <i
                 id="conversation-sheet-drag-drop-handler"
-                class="drag-drop-handler fa-solid fa-arrows-up-down-left-right"
+                class="chud-drag-drop-handler fa-solid fa-arrows-up-down-left-right"
                 draggable="true"
               ></i>
 
               <input
                 id="participant-active-by-default-checkbox"
+                class="chud-checkbox"
                 type="checkbox"
                 {{#if (eq index ../defaultActiveParticipant)}}checked="checked"{{/if}}
               />
@@ -29,15 +30,15 @@
 
             {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
 
-            <div class="portrait-wrapper">
+            <div class="chud-portrait-wrapper">
               {{{renderParticipantPortrait
                 participant.img
                 null
               }}}
             </div>
 
-            <div class="text-wrapper">
-              <p class="name">
+            <div class="chud-text-wrapper">
+              <p class="chud-name">
                 {{#if (eq participant.displayName false)}}
                   {{localize 'CHUD.strings.unknown'}}
                 {{else}}
@@ -46,23 +47,23 @@
               </p>
 
               {{#if participant.faction.displayFaction}}
-                <p class="faction">{{participant.faction.factionName}}</p>
+                <p class="chud-faction">{{participant.faction.factionName}}</p>
               {{else}}
-                <p class="faction">{{localize 'CHUD.faction.unaffiliated'}}</p>
+                <p class="chud-faction">{{localize 'CHUD.faction.unaffiliated'}}</p>
               {{/if}}
 
               {{{renderParticipantLinkedObjects participant.linkedJournal participant.linkedActor}}}
             </div>
             
             {{#if ../isGM}}
-              <div class="controls-wrapper">
-                <a id="participant-clone-button" class="clone" title="{{localize 'CHUD.actions.participant.clone'}}">
+              <div class="chud-controls-wrapper">
+                <a id="participant-clone-button" class="chud-clone" title="{{localize 'CHUD.actions.participant.clone'}}">
                   <i class="fas fa-clone"></i>
                 </a>
-                <a id="participant-edit-button" class="edit" title="{{localize 'CHUD.actions.participant.edit'}}">
+                <a id="participant-edit-button" class="chud-edit" title="{{localize 'CHUD.actions.participant.edit'}}">
                   <i class="fas fa-pencil"></i>
                 </a>
-                <a id="participant-delete-button" class="delete" title="{{localize 'CHUD.actions.participant.delete'}}">
+                <a id="participant-delete-button" class="chud-delete" title="{{localize 'CHUD.actions.participant.delete'}}">
                   <i class="fas fa-trash"></i>
                 </a>
               </div>
@@ -74,7 +75,7 @@
       {{/each}}
     </div>
   {{else}}
-    <p class="no-participants-message">
+    <p class="chud-no-participants-message">
       {{localize 'CHUD.strings.noParticipantsInList'}}
     </p> 
   {{/if}}

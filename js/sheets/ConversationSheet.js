@@ -44,10 +44,9 @@ export class ConversationSheet extends JournalSheet {
             );
             break;
           default:
-            // TODO: Log error
-            console.error("INVALID TYPE");
-            super.close({ submit: false });
-            break;
+            // console.error("INVALID TYPE");
+            // return this.close({});
+            throw new Error("Invalid sheet type");
         }
       } catch (error) {
         throw error;
@@ -63,7 +62,7 @@ export class ConversationSheet extends JournalSheet {
   static get defaultOptions() {
     return foundry.utils.mergeObject(super.defaultOptions, {
       id: "conversation-sheet",
-      classes: ["sheet", "journal-sheet", "conversation-sheet"],
+      classes: ["sheet", "journal-sheet", "conversation-hud-sheet"],
       title: game.i18n.localize("CHUD.strings.conversationEntry"),
       template: "modules/conversation-hud/templates/sheets/conversation-sheet.hbs",
       width: 635,
@@ -81,7 +80,7 @@ export class ConversationSheet extends JournalSheet {
     }
 
     // Event handler for saving conversation sheet
-    html.find("#save-conversation").click(() => this.#handleSaveConversation());
+    html.find("#save-conversation").click(() => this.#handleSaveChanges());
 
     // Event handler for activating conversation sheet
     html.find("#show-conversation").click(() => this.#handleShowConversation());
@@ -91,11 +90,23 @@ export class ConversationSheet extends JournalSheet {
     conversationBackgroundInput.onchange = (event) => this.#handleChangeConversationBackground(event);
 
     // Activate sheet handler listeners
-    this.#sheetHandler.activateListeners(html);
+    // this.#sheetHandler.activateListeners(html);
   }
 
   getData(options) {
     const baseData = super.getData(options);
+
+    // Data processing needs to be done before rendering to ensure that all data rendered is updated
+    // One example where data can be outdated is for factions that are selected via saved faction sheets
+    // If the faction sheet is updated, the participant data needs to be updated as well
+    switch (this.#conversationData.type) {
+      case CONVERSATION_TYPES.GM_CONTROLLED:
+        GmControlledConversationSheetHandler.processData(this.#conversationData.conversation);
+        break;
+      default:
+        // TODO: Handle error
+        console.error("INVALID TYPE");
+    }
 
     const data = {
       name: baseData.data.name,
@@ -112,8 +123,8 @@ export class ConversationSheet extends JournalSheet {
     if (this.#dirty) {
       await getConfirmationFromUser(
         "CHUD.dialogue.unsavedChanges",
-        this.#handleConfirmationClose.bind(this, true),
-        this.#handleConfirmationClose.bind(this, false),
+        () => this.#handleSaveChanges(),
+        () => this.#handleDiscardChanges(),
         '<i class="fas fa-save"></i>',
         '<i class="fas fa-trash"></i>'
       );
@@ -137,37 +148,6 @@ export class ConversationSheet extends JournalSheet {
 
     this.#dirty = true;
     this.render(false);
-  }
-
-  async #handleConfirmationClose(save) {
-    if (save) {
-      await this.#handleSaveConversation();
-    } else {
-      // const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
-
-      // if (pages.length === 0) {
-      //   this.participants = [];
-      //   this.defaultActiveParticipant = undefined;
-      // } else {
-      //   this.defaultActiveParticipant = undefined;
-
-      //   const data = JSON.parse(pages[0].text.content);
-      //   if (data instanceof Array) {
-      //     this.participants = data;
-      //   } else {
-      //     const participants = data.participants;
-      //     const defaultActiveParticipant = data.defaultActiveParticipant;
-      //     if (participants) {
-      //       this.participants = participants;
-      //       if (typeof defaultActiveParticipant !== "undefined") {
-      //         this.defaultActiveParticipant = defaultActiveParticipant;
-      //       }
-      //     }
-      //   }
-      // }
-
-      this.#dirty = false;
-    }
   }
 
   #handleShowConversation() {
@@ -195,29 +175,24 @@ export class ConversationSheet extends JournalSheet {
     }
   }
 
-  async #handleSaveConversation() {
+  async #handleSaveChanges() {
     // Get document pages
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
-    const dataToSave = {
-      conversationBackground: this.conversationBackground,
-      defaultActiveParticipant: this.defaultActiveParticipant,
-      participants: this.participants,
-    };
 
     if (pages.length === 0) {
       // Create a document entry page if none are present
       await this.object.createEmbeddedDocuments("JournalEntryPage", [
         {
-          text: { content: JSON.stringify(dataToSave) },
-          name: "Conversation Participants",
+          text: { content: JSON.stringify(this.#conversationData) },
+          name: "Conversation Sheet Data",
           flags: {
-            "conversation-hud": { type: "conversation" },
+            "conversation-hud": { type: "conversation-sheet-data" },
           },
         },
       ]);
     } else {
       // Otherwise, update the first (and realistically the only) entry page
-      pages[0].text.content = JSON.stringify(dataToSave);
+      pages[0].text.content = JSON.stringify(this.#conversationData);
       await this.object.updateEmbeddedDocuments(
         "JournalEntryPage",
         [
@@ -241,6 +216,19 @@ export class ConversationSheet extends JournalSheet {
 
     this.#dirty = false;
     this.render(false);
+  }
+
+  async #handleDiscardChanges() {
+    const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
+
+    if (pages.length === 0) {
+      this.#conversationData = undefined;
+    } else {
+      const data = JSON.parse(pages[0].text.content);
+      this.#conversationData = data;
+    }
+
+    this.#dirty = false;
   }
 
   #handleChangeConversationBackground(event) {

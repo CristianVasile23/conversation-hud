@@ -21,5 +21,7 @@
 
 /* REWORK IMPORTS */
 
+@import url("./common/index.css");
+
 /* Styling for the ConversationHUD sheets */
 @import url("./sheets/index.css");

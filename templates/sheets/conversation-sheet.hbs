@@ -45,19 +45,17 @@
     </div>
   </div>
 
-  <div class="sheet-section">
-    {{#switch conversationData.type}} 
-      {{#case 'gm-controlled'}}
-        {{> "modules/conversation-hud/templates/sheets/content/gm-controlled-sheet-content.hbs" data=conversationData.conversation.data isGM=isGM}}
-      {{/case}} 
-      {{#case 'default'}}
-        {{!-- TODO: Add message type that is also localized --}}
-        <p>Type not supported</p>
-      {{/case}}
-    {{/switch}}
-  </div>
+  {{#switch conversationData.type}} 
+    {{#case 'gm-controlled'}}
+      {{> "modules/conversation-hud/templates/sheets/content/gm-controlled-sheet-content.hbs" data=conversationData.conversation.data isGM=isGM}}
+    {{/case}} 
+    {{#case 'default'}}
+      {{!-- TODO: Add message type that is also localized --}}
+      <p>Type not supported</p>
+    {{/case}}
+  {{/switch}}
 
-  <div class="footer">
+  <div class="chud-form-footer">
     <footer class="sheet-footer flexrow">
       <button
         type="button"

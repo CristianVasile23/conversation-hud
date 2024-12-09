@@ -3,7 +3,7 @@
  */
 export function registerLinkedObjectsHelper() {
   Handlebars.registerHelper("renderParticipantLinkedObjects", (journalId, actorId) => {
-    let html = `<p class="linked-journal">`;
+    let html = `<p class="chud-linked-objects">`;
 
     if (!journalId && !actorId) {
       html += `${game.i18n.localize("CHUD.strings.noLinkedDocuments")}`;

@@ -1,5 +1,7 @@
 /// <reference path="../types/ParticipantData.js" />
 
+import { getConversationDataFromJournalId } from "./getConversationDataFromJournalId.js";
+
 /**
  * [TODO: Complete JSDoc documentation]
  *

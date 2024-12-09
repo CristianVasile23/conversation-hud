@@ -2,6 +2,7 @@
 
 import { processParticipantData } from "../helpers/index.js";
 import { CreateOrEditParticipantForm, PullParticipantsFromSceneForm } from "../forms/index.js";
+import { ANCHOR_OPTIONS } from "../constants/settings.js";
 
 export class GmControlledConversationSheetHandler {
   /** @type {GmControlledConversation | undefined} */
@@ -19,6 +20,20 @@ export class GmControlledConversationSheetHandler {
   constructor(conversation, onChangeHandler) {
     this.#conversation = conversation;
     this.#onChangeHandler = onChangeHandler;
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {GmControlledConversation | undefined} conversation
+   */
+  static processData(conversation) {
+    if (conversation) {
+      // Parse all participants and update their data
+      for (let i = 0; i < conversation.data.participants.length; i++) {
+        processParticipantData(conversation.data.participants[i]);
+      }
+    }
   }
 
   activateListeners(html) {
@@ -112,11 +127,11 @@ export class GmControlledConversationSheetHandler {
         // };
 
         // Bind function to the set active by default checkbox
-        conversationParticipants[i].querySelector("#participant-active-by-default").onchange = (event) =>
+        conversationParticipants[i].querySelector("#participant-active-by-default-checkbox").onchange = (event) =>
           this.#handleSetDefaultActiveParticipant(event, i);
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".controls-wrapper");
+        const controls = conversationParticipants[i].querySelector(".chud-controls-wrapper");
         controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
         controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {
@@ -126,15 +141,15 @@ export class GmControlledConversationSheetHandler {
             true,
             (data) => this.#handleEditParticipant(data, i),
             {
-              name: this.participants[i].name,
-              displayName: this.participants[i].displayName,
-              img: this.participants[i].img,
-              imgScale: this.participants[i].imgScale,
-              linkedJournal: this.participants[i].linkedJournal,
-              linkedActor: this.participants[i].linkedActor,
-              faction: this.participants[i].faction,
+              name: this.#conversation.data.participants[i].name,
+              displayName: this.#conversation.data.participants[i].displayName,
+              img: this.#conversation.data.participants[i].img,
+              imgScale: this.#conversation.data.participants[i].imgScale,
+              linkedJournal: this.#conversation.data.participants[i].linkedJournal,
+              linkedActor: this.#conversation.data.participants[i].linkedActor,
+              faction: this.#conversation.data.participants[i].faction,
               anchorOptions: ANCHOR_OPTIONS,
-              portraitAnchor: this.participants[i].portraitAnchor,
+              portraitAnchor: this.#conversation.data.participants[i].portraitAnchor,
             }
           );
           participantInputForm.render(true);
@@ -152,7 +167,7 @@ export class GmControlledConversationSheetHandler {
   }
 
   #handleEditParticipant(participant, index) {
-    processParticipantData(data);
+    processParticipantData(participant);
 
     this.#conversation.data.participants[index] = participant;
 

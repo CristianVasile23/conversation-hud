@@ -7,7 +7,9 @@ export function preloadHandlebarsTemplates() {
 
     "modules/conversation-hud/templates/sheets/content/gm-controlled-sheet-content.hbs",
 
-    "modules/conversation-hud/templates/fragments/conversation_participants_list.hbs",
+    "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs",
+
+    // "modules/conversation-hud/templates/fragments/conversation_participants_list.hbs",
     "modules/conversation-hud/templates/fragments/participant_data_config_tab.hbs",
     "modules/conversation-hud/templates/fragments/faction_data_config_tab.hbs",
     "modules/conversation-hud/templates/fragments/faction_wrapper.hbs",

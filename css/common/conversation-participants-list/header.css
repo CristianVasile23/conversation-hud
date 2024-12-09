@@ -1,0 +1,33 @@
+.chud-conversation-participants-list .chud-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.chud-conversation-participants-list .chud-header p {
+  margin: 0;
+  font-size: 12px;
+  text-align: center;
+  font-weight: bold;
+  color: var(--color-text-dark-secondary);
+}
+
+.chud-conversation-participants-list .chud-header .chud-active-by-default {
+  margin-left: 28px;
+}
+
+.chud-conversation-participants-list .chud-header .chud-faction {
+  margin-left: 14px;
+}
+
+.chud-conversation-participants-list .chud-header .chud-details {
+  margin-left: 14px;
+}
+
+.chud-conversation-participants-list .chud-header .chud-controls {
+  margin-left: auto;
+  margin-right: 24px;
+}

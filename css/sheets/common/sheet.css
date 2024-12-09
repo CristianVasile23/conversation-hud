@@ -1,10 +1,14 @@
-.conversation-sheet .sheet-content {
+.conversation-hud-sheet .sheet-content {
   height: 100%;
   /* padding: 3px; */
 }
 
-.conversation-sheet .sheet-content .sheet-section {
+.conversation-hud-sheet .sheet-content .sheet-section {
   margin-top: 5px;
   margin-bottom: 5px;
   flex: 0;
+}
+
+.conversation-hud-sheet .chud-form-footer {
+  flex: unset;
 }
