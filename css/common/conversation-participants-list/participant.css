@@ -111,25 +111,25 @@
 
 /* ----- Controls ----- */
 /* #region */
-.chud-conversation-participants-list .chud-controls-wrapper {
+.chud-conversation-participants-list .chud-participant-action-buttons {
   display: flex;
   flex-direction: row;
   margin-left: auto;
 }
 
-.chud-conversation-participants-list .chud-controls-wrapper .chud-clone {
+.chud-conversation-participants-list .chud-participant-action-buttons .chud-clone {
   display: flex;
   align-items: center;
   margin-right: 10px;
 }
 
-.chud-conversation-participants-list .chud-controls-wrapper .chud-edit {
+.chud-conversation-participants-list .chud-participant-action-buttons .chud-edit {
   display: flex;
   align-items: center;
   margin-right: 10px;
 }
 
-.chud-conversation-participants-list .chud-controls-wrapper .chud-delete {
+.chud-conversation-participants-list .chud-participant-action-buttons .chud-delete {
   display: flex;
   align-items: center;
 }

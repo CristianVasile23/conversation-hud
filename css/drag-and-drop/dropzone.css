@@ -1,0 +1,40 @@
+/* ----- Dropzone ----- */
+/* #region */
+.chud-drag-and-drop-container .chud-dropzone {
+  display: none;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  position: sticky;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  height: 100%;
+
+  border: 5px dashed var(--color-border-light-secondary);
+}
+
+.chud-drag-and-drop-container .chud-dropzone > i {
+  font-size: 60px;
+}
+
+.chud-drag-and-drop-container .chud-dropzone > p {
+  color: var(--color-text-dark-secondary);
+
+  margin-top: 15px;
+  max-width: 280px;
+  text-align: center;
+}
+
+.chud-drag-and-drop-container .chud-dropzone > p.hold-control {
+  margin-top: 2px;
+  font-size: var(--font-size-12);
+}
+
+.chud-drag-and-drop-container .chud-dropzone * {
+  pointer-events: none;
+}
+/* #endregion */

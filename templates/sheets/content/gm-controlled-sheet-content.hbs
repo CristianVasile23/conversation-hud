@@ -1,4 +1,4 @@
-<div class="flexrow conversation-hud-form-sub-header">
+<div class="flexrow chud-form-sub-header">
   <p>{{localize 'CHUD.strings.conversationParticipants'}}</p>
 
   {{#if isGM}}
@@ -11,7 +11,12 @@
       <i class="fas fa-up-from-bracket"></i>
     </button>
 
-    <button type="button" name="add-participant" id="add-participant" title="{{localize 'CHUD.actions.participant.add'}}">
+    <button
+      type="button"
+      name="add-participant"
+      id="add-participant"
+      title="{{localize 'CHUD.actions.participant.add'}}"
+    >
       <i class="fas fa-user-plus"></i>
     </button>
   {{/if}}

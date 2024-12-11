@@ -1,11 +1,10 @@
-<form class="flexcol conversation-faction-sheet" style="height: 100%">
-  <div class="flexrow header">
+<form class="sheet chud-form-content">
+  <div class="flexrow chud-form-header">
     <input name="name" type="text" value="{{name}}" placeholder="{{localize 'CHUD.strings.documentName'}}"/>
   </div>
 
-
-  <div id="conversation-sheet-content-wrapper" class="drag-and-drop-wrapper">
-    {{> "modules/conversation-hud/templates/fragments/faction_data_config_tab.hbs"
+  <div id="chud-faction-sheet-content" class="drag-and-drop-wrapper">
+    {{> "modules/conversation-hud/templates/fragments/faction-data.hbs"
       displayFaction=faction.displayFaction
       factionName=faction.factionName
       factionLogo=faction.factionLogo
@@ -15,7 +14,7 @@
     }}
   </div>
 
-  <div class="footer">
+  <div class="chud-form-footer">
     <footer class="sheet-footer flexrow">
       <button
         type="button"

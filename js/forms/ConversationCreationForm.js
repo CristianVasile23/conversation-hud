@@ -9,7 +9,7 @@ export class ConversationCreationForm extends FormApplication {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
-      template: "modules/conversation-hud/templates/forms/conversation_creation_form.hbs",
+      template: "modules/conversation-hud/templates/forms/conversation-creation-type-selection-form.hbs",
       // TODO: Localize
       title: game.i18n.localize("CHUD.actions.createConversation") + " - " + "Choose Type", // TODO: Localize
       width: "auto",

@@ -131,7 +131,7 @@ export class GmControlledConversationSheetHandler {
           this.#handleSetDefaultActiveParticipant(event, i);
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".chud-controls-wrapper");
+        const controls = conversationParticipants[i].querySelector(".chud-participant-action-buttons");
         controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
         controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {

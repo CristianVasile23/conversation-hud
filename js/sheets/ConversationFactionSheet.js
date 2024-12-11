@@ -31,7 +31,7 @@ export class ConversationFactionSheet extends JournalSheet {
       classes: ["sheet", "journal-sheet"],
       title: game.i18n.localize("CHUD.strings.conversationFactionEntry"),
       id: "conversation-entry-sheet",
-      template: `modules/conversation-hud/templates/conversation_faction_sheet.hbs`,
+      template: `modules/conversation-hud/templates/sheets/faction-sheet.hbs`,
       width: 635,
       height: "auto",
       resizable: false,

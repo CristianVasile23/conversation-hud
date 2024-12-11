@@ -1,6 +1,6 @@
 /* ----- Header & Sub-header ----- */
 /* #region */
-.conversation-hud-form-header {
+.chud-form-header {
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -8,12 +8,12 @@
   flex: 0 0 34px;
 }
 
-.conversation-hud-form-header > input {
+.chud-form-header > input {
   height: 30px;
   font-size: var(--font-size-20);
 }
 
-.conversation-hud-form-header > p {
+.chud-form-header > p {
   display: flex;
   align-items: center;
   flex: 3;
@@ -23,7 +23,7 @@
   font-size: var(--font-size-24);
 }
 
-.conversation-hud-form-sub-header {
+.chud-form-sub-header {
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -32,7 +32,7 @@
   flex: 0 0 30px;
 }
 
-.conversation-hud-form-sub-header > p {
+.chud-form-sub-header > p {
   display: flex;
   align-items: center;
   flex: 3;
@@ -45,27 +45,27 @@
 
 /* ----- Header & Sub-header buttons ----- */
 /* #region */
-.conversation-hud-form-header button,
-.conversation-hud-form-sub-header button {
+.chud-form-header button,
+.chud-form-sub-header button {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.conversation-hud-form-header button {
+.chud-form-header button {
   flex: 0 0 32px;
   width: 32px;
   height: 32px;
 }
 
-.conversation-hud-form-sub-header button {
+.chud-form-sub-header button {
   flex: 0 0 28px;
   width: 28px;
   height: 28px;
 }
 
-.conversation-hud-form-header button i,
-.conversation-hud-form-sub-header button i {
+.chud-form-header button i,
+.chud-form-sub-header button i {
   margin: 0;
 }
 /* #endregion */

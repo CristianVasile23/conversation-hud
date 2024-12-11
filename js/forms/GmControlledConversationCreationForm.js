@@ -39,7 +39,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
-      template: "modules/conversation-hud/templates/conversation_creation_form.hbs",
+      template: "modules/conversation-hud/templates/forms/conversation-creation-form.hbs",
       id: "conversation-start-form",
       title: game.i18n.localize("CHUD.actions.createConversation"),
       width: 635,
@@ -54,6 +54,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
 
     return {
       isGM: game.user.isGM,
+      type: CONVERSATION_TYPES.GM_CONTROLLED,
       conversationBackground: this.conversationBackground,
       participants: this.participants,
       defaultActiveParticipant: this.defaultActiveParticipant,
@@ -82,8 +83,8 @@ export class GmControlledConversationCreationForm extends FormApplication {
     });
 
     // Drag and drop functionality
-    const dragDropWrapper = html.find("#gm-controlled-conversation-sheet-content")[0];
-    const dragDropZone = html.find("#gm-controlled-conversation-sheet-dropzone")[0];
+    const dragDropWrapper = html.find(".chud-drag-and-drop-container")[0];
+    const dragDropZone = html.find(".chud-dropzone")[0];
     if (dragDropWrapper && dragDropZone) {
       dragDropWrapper.ondragenter = () => {
         if (!this.draggingParticipant) {
@@ -125,8 +126,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
     if (participantsObject) {
       const conversationParticipants = participantsObject.children;
       for (let i = 0; i < conversationParticipants.length; i++) {
-        // Add drag and drop functionality
-        const dragDropHandler = conversationParticipants[i].querySelector("#conversation-sheet-drag-drop-handler");
+        const dragDropHandler = conversationParticipants[i].querySelector(".chud-drag-drop-handler");
 
         dragDropHandler.ondragstart = (event) => {
           this.draggingParticipant = true;
@@ -201,7 +201,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
           this.#handleSetDefaultActiveParticipant(event, i);
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".controls-wrapper");
+        const controls = conversationParticipants[i].querySelector(".chud-participant-action-buttons");
         controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
         controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
         controls.querySelector("#participant-edit-button").onclick = () => {
