@@ -1,6 +1,5 @@
-.chud-scrollable-form-content {
+.chud-form-content {
   height: 100%;
-  overflow-y: auto;
   position: relative;
   padding-top: 5px;
   padding-bottom: 5px;

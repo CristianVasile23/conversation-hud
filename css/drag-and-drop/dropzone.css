@@ -38,3 +38,10 @@
   pointer-events: none;
 }
 /* #endregion */
+
+.chud-drag-and-drop-container.active-dropzone .chud-dropzone {
+  display: flex;
+}
+.chud-drag-and-drop-container.active-dropzone .chud-non-dropzone-content {
+  display: none;
+}

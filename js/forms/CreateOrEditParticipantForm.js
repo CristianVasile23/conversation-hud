@@ -77,7 +77,7 @@ export class CreateOrEditParticipantForm extends FormApplication {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["form", "scene-sheet"],
       popOut: true,
-      template: `modules/conversation-hud/templates/add_edit_participant.hbs`,
+      template: `modules/conversation-hud/templates/forms/add-or-edit-conversation-participant-form.hbs`,
       id: "conversation-add-participant",
       title: game.i18n.localize("CHUD.strings.participantData"),
       width: 640,
@@ -103,10 +103,14 @@ export class CreateOrEditParticipantForm extends FormApplication {
     participantImgScaleInput.addEventListener("change", (event) => this.onUpdateParticipantImgScale(event));
 
     const participantImgVerticalAnchorInput = html.find("[name=portraitAnchorVertical]")[0];
-    participantImgVerticalAnchorInput.addEventListener("change", (event) => this.onUpdateParticipantImgAnchor(event, "vertical"));
+    participantImgVerticalAnchorInput.addEventListener("change", (event) =>
+      this.onUpdateParticipantImgAnchor(event, "vertical")
+    );
 
     const participantImgHorizontalAnchorInput = html.find("[name=portraitAnchorHorizontal]")[0];
-    participantImgHorizontalAnchorInput.addEventListener("change", (event) => this.onUpdateParticipantImgAnchor(event, "horizontal"));
+    participantImgHorizontalAnchorInput.addEventListener("change", (event) =>
+      this.onUpdateParticipantImgAnchor(event, "horizontal")
+    );
 
     // Listeners in the faction form
     const selectedFaction = html.find("[name=selectedFaction]")[0];
@@ -131,8 +135,8 @@ export class CreateOrEditParticipantForm extends FormApplication {
     factionBannerTintPicker.addEventListener("change", (event) => this.onUpdateBannerTint(event));
 
     // Faction dropzone
-    const dragDropWrapper = html.find("#participant-add-edit-form-drag-and-drop-wrapper")[0];
-    const dragDropZone = html.find("#participant-add-edit-form-dropzone")[0];
+    const dragDropWrapper = html.find(".chud-drag-and-drop-container")[0];
+    const dragDropZone = html.find(".chud-dropzone")[0];
     if (dragDropWrapper && dragDropZone) {
       dragDropWrapper.ondragenter = () => {
         if (!this.draggingParticipant) {
@@ -371,7 +375,7 @@ export class CreateOrEditParticipantForm extends FormApplication {
   async saveFaction() {
     // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
     const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
-    const dialogContent = await renderTemplate("modules/conversation-hud/templates/conversation_save.hbs", {
+    const dialogContent = await renderTemplate("modules/conversation-hud/templates/form/save-form.hbs", {
       folders,
       name: game.i18n.format("DOCUMENT.New", { type: "Faction Sheet" }),
     });

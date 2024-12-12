@@ -20,3 +20,11 @@
 .chud-flex-0 {
   flex: 0;
 }
+
+.chud-h-100 {
+  height: 100%;
+}
+
+.chud-overflow-y-auto {
+  overflow-y: auto;
+}

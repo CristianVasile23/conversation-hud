@@ -1,6 +1,13 @@
 /// <reference path="../types/GmControlledConversation/GmControlledConversation.js" />
 
-import { processParticipantData } from "../helpers/index.js";
+import {
+  getActorDataFromDragEvent,
+  moveInArray,
+  getDragAndDropIndex,
+  hideDragAndDropIndicator,
+  showDragAndDropIndicator,
+  processParticipantData,
+} from "../helpers/index.js";
 import { CreateOrEditParticipantForm, PullParticipantsFromSceneForm } from "../forms/index.js";
 import { ANCHOR_OPTIONS } from "../constants/settings.js";
 
@@ -51,80 +58,118 @@ export class GmControlledConversationSheetHandler {
       return participantInputForm.render(true);
     });
 
+    // Drag and drop functionality
+    const dragDropWrapper = html.find(".chud-drag-and-drop-container")[0];
+    const dragDropZone = html.find(".chud-dropzone")[0];
+    if (dragDropWrapper && dragDropZone) {
+      dragDropWrapper.ondragenter = () => {
+        if (!this.draggingParticipant) {
+          this.dropzoneVisible = true;
+          dragDropWrapper.classList.add("active-dropzone");
+        }
+      };
+
+      dragDropZone.ondragleave = () => {
+        if (this.dropzoneVisible) {
+          this.dropzoneVisible = false;
+          dragDropWrapper.classList.remove("active-dropzone");
+        }
+      };
+
+      dragDropWrapper.ondrop = async (event) => {
+        if (this.dropzoneVisible) {
+          event.preventDefault();
+
+          const data = await getActorDataFromDragEvent(event);
+          if (data && data.length > 0) {
+            if (event.ctrlKey) {
+              this.#handleReplaceAllParticipants(data);
+            } else {
+              data.forEach((participant) => {
+                this.#handleAddParticipant(participant);
+              });
+            }
+          }
+
+          this.dropzoneVisible = false;
+          dragDropWrapper.classList.remove("active-dropzone");
+        }
+      };
+    }
+
     const participantsObject = html.find("#conversation-participants-list")[0];
     if (participantsObject) {
       const conversationParticipants = participantsObject.children;
       for (let i = 0; i < conversationParticipants.length; i++) {
-        // Add drag and drop functionality
-        // const dragDropHandler = conversationParticipants[i].querySelector("#conversation-sheet-drag-drop-handler");
+        const dragDropHandler = conversationParticipants[i].querySelector(".chud-drag-drop-handler");
 
-        // dragDropHandler.ondragstart = (event) => {
-        //   this.draggingParticipant = true;
-        //   event.dataTransfer.setDragImage(conversationParticipants[i], 0, 0);
+        dragDropHandler.ondragstart = (event) => {
+          this.draggingParticipant = true;
+          event.dataTransfer.setDragImage(conversationParticipants[i], 0, 0);
 
-        //   // Save the index of the dragged participant in the data transfer object
-        //   event.dataTransfer.setData(
-        //     "text/plain",
-        //     JSON.stringify({
-        //       index: i,
-        //       type: "ConversationParticipant",
-        //       participant: this.participants[i],
-        //     })
-        //   );
-        // };
+          // Save the index of the dragged participant in the data transfer object
+          event.dataTransfer.setData(
+            "text/plain",
+            JSON.stringify({
+              index: i,
+              type: "ConversationParticipant",
+              participant: this.participants[i],
+            })
+          );
+        };
 
-        // dragDropHandler.ondragend = (event) => {
-        //   this.draggingParticipant = false;
-        // };
+        dragDropHandler.ondragend = (event) => {
+          this.draggingParticipant = false;
+        };
 
-        // conversationParticipants[i].ondragover = (event) => {
-        //   showDragAndDropIndicator(conversationParticipants[i], event);
-        // };
+        conversationParticipants[i].ondragover = (event) => {
+          showDragAndDropIndicator(conversationParticipants[i], event);
+        };
 
-        // conversationParticipants[i].ondragleave = (event) => {
-        //   hideDragAndDropIndicator(conversationParticipants[i]);
-        // };
+        conversationParticipants[i].ondragleave = (event) => {
+          hideDragAndDropIndicator(conversationParticipants[i]);
+        };
 
-        // conversationParticipants[i].ondrop = (event) => {
-        //   const data = JSON.parse(event.dataTransfer.getData("text/plain"));
+        conversationParticipants[i].ondrop = (event) => {
+          const data = JSON.parse(event.dataTransfer.getData("text/plain"));
 
-        //   if (data) {
-        //     hideDragAndDropIndicator(conversationParticipants[i]);
+          if (data) {
+            hideDragAndDropIndicator(conversationParticipants[i]);
 
-        //     const oldIndex = data.index;
+            const oldIndex = data.index;
 
-        //     // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
-        //     if (oldIndex === i) {
-        //       return;
-        //     }
+            // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
+            if (oldIndex === i) {
+              return;
+            }
 
-        //     // Get the new index of the dropped element
-        //     let newIndex = getDragAndDropIndex(event, i, oldIndex);
+            // Get the new index of the dropped element
+            let newIndex = getDragAndDropIndex(event, i, oldIndex);
 
-        //     // Reorder the array
-        //     moveInArray(this.participants, oldIndex, newIndex);
+            // Reorder the array
+            moveInArray(this.participants, oldIndex, newIndex);
 
-        //     // Update active participant index
-        //     const defaultActiveParticipantIndex = this.defaultActiveParticipant;
-        //     if (defaultActiveParticipantIndex === oldIndex) {
-        //       this.defaultActiveParticipant = newIndex;
-        //     } else {
-        //       if (defaultActiveParticipantIndex > oldIndex && defaultActiveParticipantIndex <= newIndex) {
-        //         this.defaultActiveParticipant -= 1;
-        //       }
-        //       if (defaultActiveParticipantIndex < oldIndex && defaultActiveParticipantIndex >= newIndex) {
-        //         this.defaultActiveParticipant += 1;
-        //       }
-        //     }
+            // Update active participant index
+            const defaultActiveParticipantIndex = this.defaultActiveParticipant;
+            if (defaultActiveParticipantIndex === oldIndex) {
+              this.defaultActiveParticipant = newIndex;
+            } else {
+              if (defaultActiveParticipantIndex > oldIndex && defaultActiveParticipantIndex <= newIndex) {
+                this.defaultActiveParticipant -= 1;
+              }
+              if (defaultActiveParticipantIndex < oldIndex && defaultActiveParticipantIndex >= newIndex) {
+                this.defaultActiveParticipant += 1;
+              }
+            }
 
-        //     // this.#dirty = true;
-        //     this.render(false);
-        //   } else {
-        //     console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
-        //   }
+            // this.#dirty = true;
+            this.render(false);
+          } else {
+            console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
+          }
 
-        //   this.draggingParticipant = false;
-        // };
+          this.draggingParticipant = false;
+        };
 
         // Bind function to the set active by default checkbox
         conversationParticipants[i].querySelector("#participant-active-by-default-checkbox").onchange = (event) =>

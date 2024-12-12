@@ -74,7 +74,9 @@ export class ConversationHud {
     return {
       conversationIsActive: game.ConversationHud.conversationIsActive,
       conversationIsVisible: game.ConversationHud.conversationIsVisible,
-      activeConversation: game.ConversationHud.conversationIsActive ? game.ConversationHud.activeConversation.getConversation() : undefined,
+      activeConversation: game.ConversationHud.conversationIsActive
+        ? game.ConversationHud.activeConversation.getConversation()
+        : undefined,
     };
   }
 
@@ -99,7 +101,7 @@ export class ConversationHud {
       if (game.ConversationHud.activeConversation) {
         // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
         const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
-        const dialogContent = await renderTemplate("modules/conversation-hud/templates/conversation_save.hbs", {
+        const dialogContent = await renderTemplate("modules/conversation-hud/templates/forms/save-form.hbs", {
           folders,
           name: game.i18n.format("DOCUMENT.New", { type: "Conversation Sheet" }),
         });
@@ -194,7 +196,9 @@ export class ConversationHud {
    * @param {boolean} state
    */
   setActivateConversationHudButtonState(state) {
-    ui.controls.controls.find((controls) => controls.name === "notes").tools.find((tools) => tools.name === "activateHud").active = state;
+    ui.controls.controls
+      .find((controls) => controls.name === "notes")
+      .tools.find((tools) => tools.name === "activateHud").active = state;
     ui.controls.render();
   }
 

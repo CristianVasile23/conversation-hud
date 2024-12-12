@@ -90,7 +90,7 @@ export class ConversationSheet extends JournalSheet {
     conversationBackgroundInput.onchange = (event) => this.#handleChangeConversationBackground(event);
 
     // Activate sheet handler listeners
-    // this.#sheetHandler.activateListeners(html);
+    this.#sheetHandler.activateListeners(html);
   }
 
   getData(options) {

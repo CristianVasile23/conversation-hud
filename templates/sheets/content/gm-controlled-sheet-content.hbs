@@ -22,16 +22,18 @@
   {{/if}}
 </div>
 
-<div id="gm-controlled-conversation-sheet-content" class="drag-and-drop-wrapper">
-  <div id="gm-controlled-conversation-sheet-dropzone" class="dropzone">
+<div class="chud-form-section chud-form-content chud-drag-and-drop-container chud-overflow-y-auto">
+  <div class="chud-dropzone">
     <i class="far fa-square-plus"></i>
-    <p>{{localize 'CHUD.strings.dropItem'}}</p>
-    <p class="hold-control">({{localize 'CHUD.strings.holdControl'}})</p>
+    <p> {{localize 'CHUD.strings.dropItem'}} </p>
+    <p class="hold-control"> ({{localize 'CHUD.strings.holdControl'}}) </p>
   </div>
 
-  {{> "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs"
-    isGM=isGM
-    participants=data.participants
-    defaultActiveParticipant=data.defaultActiveParticipant
-  }}
+  <div class="chud-non-dropzone-content chud-h-100">
+    {{> "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs"
+      isGM=isGM
+      participants=data.participants
+      defaultActiveParticipant=data.defaultActiveParticipant
+    }}
+  </div>
 </div>
