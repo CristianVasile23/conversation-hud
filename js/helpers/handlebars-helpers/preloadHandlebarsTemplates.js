@@ -12,9 +12,9 @@ export function preloadHandlebarsTemplates() {
     "modules/conversation-hud/templates/fragments/conversation-participant-data.hbs",
     "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs",
     "modules/conversation-hud/templates/fragments/faction-data.hbs",
+    "modules/conversation-hud/templates/fragments/active-participant-content.hbs",
 
     "modules/conversation-hud/templates/fragments/faction_wrapper.hbs",
-    "modules/conversation-hud/templates/fragments/active_participant.hbs",
 
     "modules/conversation-hud/templates/banner-shapes/shape-1.hbs",
     "modules/conversation-hud/templates/banner-shapes/shape-2.hbs",

@@ -660,14 +660,20 @@ export class GmControllerConversation {
   }
 
   async #updateActiveParticipantImage(index) {
-    const template = await renderTemplate("modules/conversation-hud/templates/fragments/active_participant.hbs", {
-      displayParticipant: index === -1 ? false : true,
-      displayNoParticipantBox: game.settings.get(MODULE_NAME, ModuleSettings.displayNoParticipantBox),
-      participant: index === -1 ? null : this.#conversationData.conversation.data.participants[index],
-      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
-      activeParticipantFactionFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFactionFontSize),
-    });
+    const template = await renderTemplate(
+      "modules/conversation-hud/templates/fragments/active-participant-content.hbs",
+      {
+        displayParticipant: index === -1 ? false : true,
+        displayNoParticipantBox: game.settings.get(MODULE_NAME, ModuleSettings.displayNoParticipantBox),
+        participant: index === -1 ? null : this.#conversationData.conversation.data.participants[index],
+        portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+        activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+        activeParticipantFactionFontSize: game.settings.get(
+          MODULE_NAME,
+          ModuleSettings.activeParticipantFactionFontSize
+        ),
+      }
+    );
 
     const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
     activeParticipantAnchorPoint.innerHTML = template;
