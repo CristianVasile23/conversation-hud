@@ -126,6 +126,37 @@ export class ConversationHud {
     }
   }
 
+  /**
+   * TODO: Add JSDoc
+   *
+   * @param {*} conversationData
+   * @param {*} visibility
+   */
+  startConversationFromData(conversationData, visibility) {
+    if (!checkIfUserIsGM()) {
+      return;
+    }
+
+    let parsedVisibility = true;
+    if (game.ConversationHud.conversationIsVisible !== undefined) {
+      parsedVisibility = game.ConversationHud.conversationIsVisible;
+    }
+    if (visibility !== undefined) {
+      parsedVisibility = visibility;
+    }
+
+    if (this.activeConversation) {
+      game.ConversationHud.executeFunction({
+        scope: "everyone",
+        type: "update-conversation",
+        data: conversationData,
+      });
+      socket.executeForEveryone("setConversationVisibility", parsedVisibility);
+    } else {
+      game.ConversationHud.createConversation(conversationData, parsedVisibility);
+    }
+  }
+
   async #handleSaveConversation(data) {
     const permissions = {};
     game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));

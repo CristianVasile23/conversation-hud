@@ -49,6 +49,7 @@ export class ConversationSheet extends JournalSheet {
             throw new Error("Invalid sheet type");
         }
       } catch (error) {
+        // TODO: Uncomment when reverting back to functionality of treating errors
         throw error;
         // if (error instanceof SyntaxError) {
         //   ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
@@ -159,13 +160,16 @@ export class ConversationSheet extends JournalSheet {
           const visibility = game.ConversationHud.conversationIsActive
             ? game.ConversationHud.conversationIsVisible
             : true;
+
           game.ConversationHud.startConversationFromData(conversationData, visibility);
         } catch (error) {
-          if (error instanceof SyntaxError) {
-            ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
-          } else {
-            ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
-          }
+          // TODO: Uncomment when error handling needs to be added back
+          throw error;
+          // if (error instanceof SyntaxError) {
+          //   ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
+          // } else {
+          //   ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
+          // }
         }
       } else {
         ui.notifications.error(game.i18n.localize("CHUD.errors.activateNoPages"));
