@@ -1,3 +1,5 @@
+import { CONVERSATION_TYPES, DRAG_AND_DROP_DATA_TYPES } from "../constants/index.js";
+
 /**
  * [TODO: Add JSDoc]
  */
@@ -6,9 +8,9 @@ export async function getActorDataFromDragEvent(event) {
     const data = TextEditor.getDragEventData(event);
 
     switch (data.type) {
-      case "ConversationParticipant":
+      case DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant:
         return [data.participant];
-      case "Actor":
+      case DRAG_AND_DROP_DATA_TYPES.Actor:
         const actor = await Actor.implementation.fromDropData(data);
         if (actor) {
           const data = {
@@ -20,7 +22,7 @@ export async function getActorDataFromDragEvent(event) {
           ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActor"));
           return null;
         }
-      case "JournalEntry":
+      case DRAG_AND_DROP_DATA_TYPES.JournalEntry:
         const entry = await JournalEntry.implementation.fromDropData(data);
         const pages = entry.getEmbeddedCollection("JournalEntryPage").contents;
 
@@ -32,18 +34,13 @@ export async function getActorDataFromDragEvent(event) {
               if (page.flags["conversation-hud"]) {
                 // Handle text pages with the the CHUD flag
                 const pageType = page.flags["conversation-hud"].type;
-                if (pageType && pageType === "conversation") {
-                  const data = JSON.parse(page.text.content);
-                  let participants = [];
+                if (pageType && pageType === "conversation-sheet-data") {
+                  const conversationData = JSON.parse(page.text.content);
 
-                  // Determine if the data parsed respects the old data format or the new data format
-                  if (data instanceof Array) {
-                    participants = data;
-                  } else {
-                    participants = data.participants;
+                  // TODO: Add actual handling of conversation types
+                  if (conversationData.type === CONVERSATION_TYPES.GM_CONTROLLED) {
+                    conversationParticipants.push(...conversationData.conversation.data.participants);
                   }
-
-                  conversationParticipants.push(...participants);
                 }
               } else if (page.flags["monks-enhanced-journal"]) {
                 // Handle text pages with the the MEJ flag
@@ -64,17 +61,6 @@ export async function getActorDataFromDragEvent(event) {
                     default:
                       break;
                   }
-                }
-              } else {
-                // Fallback for older saved conversations that have no flag attached
-                // This is a hacky workaround
-                if (page.name === "Conversation Participants") {
-                  // Add the new flag to the old conversation page
-                  if (!page.flags["conversation-hud"]) {
-                    page.flags["conversation-hud"] = { type: "conversation" };
-                  }
-                  const participants = JSON.parse(page.text.content);
-                  conversationParticipants.push(...participants);
                 }
               }
               break;

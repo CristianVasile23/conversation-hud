@@ -143,7 +143,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
           );
         };
 
-        dragDropHandler.ondragend = (event) => {
+        dragDropHandler.ondragend = () => {
           this.draggingParticipant = false;
         };
 
@@ -151,7 +151,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
           showDragAndDropIndicator(conversationParticipants[i], event);
         };
 
-        conversationParticipants[i].ondragleave = (event) => {
+        conversationParticipants[i].ondragleave = () => {
           hideDragAndDropIndicator(conversationParticipants[i]);
         };
 

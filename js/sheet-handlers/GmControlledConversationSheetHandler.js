@@ -10,6 +10,7 @@ import {
 } from "../helpers/index.js";
 import { CreateOrEditParticipantForm, PullParticipantsFromSceneForm } from "../forms/index.js";
 import { ANCHOR_OPTIONS } from "../constants/settings.js";
+import { DRAG_AND_DROP_DATA_TYPES } from "../constants/drag-and-drop.js";
 
 export class GmControlledConversationSheetHandler {
   /** @type {GmControlledConversation | undefined} */
@@ -17,6 +18,8 @@ export class GmControlledConversationSheetHandler {
 
   /** @type {(conversation: GmControlledConversation) => void | undefined} */
   #onChangeHandler = undefined;
+
+  #draggingParticipant = false;
 
   /**
    * TODO: Finish JSDoc
@@ -63,7 +66,7 @@ export class GmControlledConversationSheetHandler {
     const dragDropZone = html.find(".chud-dropzone")[0];
     if (dragDropWrapper && dragDropZone) {
       dragDropWrapper.ondragenter = () => {
-        if (!this.draggingParticipant) {
+        if (!this.#draggingParticipant) {
           this.dropzoneVisible = true;
           dragDropWrapper.classList.add("active-dropzone");
         }
@@ -104,7 +107,7 @@ export class GmControlledConversationSheetHandler {
         const dragDropHandler = conversationParticipants[i].querySelector(".chud-drag-drop-handler");
 
         dragDropHandler.ondragstart = (event) => {
-          this.draggingParticipant = true;
+          this.#draggingParticipant = true;
           event.dataTransfer.setDragImage(conversationParticipants[i], 0, 0);
 
           // Save the index of the dragged participant in the data transfer object
@@ -112,14 +115,14 @@ export class GmControlledConversationSheetHandler {
             "text/plain",
             JSON.stringify({
               index: i,
-              type: "ConversationParticipant",
-              participant: this.participants[i],
+              type: DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant,
+              participant: this.#conversation.data.participants[i],
             })
           );
         };
 
         dragDropHandler.ondragend = (event) => {
-          this.draggingParticipant = false;
+          this.#draggingParticipant = false;
         };
 
         conversationParticipants[i].ondragover = (event) => {
@@ -147,28 +150,28 @@ export class GmControlledConversationSheetHandler {
             let newIndex = getDragAndDropIndex(event, i, oldIndex);
 
             // Reorder the array
-            moveInArray(this.participants, oldIndex, newIndex);
+            moveInArray(this.#conversation.data.participants, oldIndex, newIndex);
 
             // Update active participant index
-            const defaultActiveParticipantIndex = this.defaultActiveParticipant;
+            const defaultActiveParticipantIndex = this.#conversation.data.defaultActiveParticipant;
             if (defaultActiveParticipantIndex === oldIndex) {
-              this.defaultActiveParticipant = newIndex;
+              this.#conversation.data.defaultActiveParticipant = newIndex;
             } else {
               if (defaultActiveParticipantIndex > oldIndex && defaultActiveParticipantIndex <= newIndex) {
-                this.defaultActiveParticipant -= 1;
+                this.#conversation.data.defaultActiveParticipant -= 1;
               }
               if (defaultActiveParticipantIndex < oldIndex && defaultActiveParticipantIndex >= newIndex) {
-                this.defaultActiveParticipant += 1;
+                this.#conversation.data.defaultActiveParticipant += 1;
               }
             }
 
-            // this.#dirty = true;
-            this.render(false);
+            this.#onChangeHandler(this.#conversation);
           } else {
+            // TODO: Improve error logging message
             console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
           }
 
-          this.draggingParticipant = false;
+          this.#draggingParticipant = false;
         };
 
         // Bind function to the set active by default checkbox
