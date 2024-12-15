@@ -7,7 +7,7 @@
   }
 
   /* Shift the wrapper to the left by 100 pixels */
-  .conversation-hud-wrapper {
+  .chud-active-conversation-wrapper {
     margin-left: -100px;
   }
 }

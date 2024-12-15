@@ -14,6 +14,8 @@ export function preloadHandlebarsTemplates() {
     "modules/conversation-hud/templates/fragments/faction-data.hbs",
     "modules/conversation-hud/templates/fragments/active-participant-content.hbs",
 
+    "modules/conversation-hud/templates/fragments/gm-controlled-conversation/active-conversation-participant-list-entry.hbs",
+
     "modules/conversation-hud/templates/fragments/faction_wrapper.hbs",
 
     "modules/conversation-hud/templates/banner-shapes/shape-1.hbs",

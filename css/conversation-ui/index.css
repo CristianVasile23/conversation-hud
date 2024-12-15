@@ -5,3 +5,6 @@
 @import url("./drag-and-drop.css");
 @import url("./module-settings.css");
 @import url("./responsiveness.css");
+
+@import url("./gm-controlled-conversation/index.css");
+@import url("./background.css");

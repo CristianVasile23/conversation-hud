@@ -85,7 +85,7 @@ export class GmControllerConversation {
       }
     }
 
-    const conversationBackground = document.getElementById("conversation-hud-background");
+    const conversationBackground = document.getElementById("active-conversation-background");
     if (conversationBackground) {
       if (isVisible) {
         if (!this.#conversationData.conversation.features.isMinimized) {
@@ -130,7 +130,7 @@ export class GmControllerConversation {
    */
   async removeConversation() {
     const body = document.body;
-    const conversationBackground = document.getElementById("conversation-hud-background");
+    const conversationBackground = document.getElementById("active-conversation-background");
     if (conversationBackground) {
       body.removeChild(conversationBackground);
     }
@@ -172,7 +172,7 @@ export class GmControllerConversation {
         this.#changeActiveParticipant(functionData.data);
         break;
       case "toggle-minimize":
-        this.#toggleMinimze();
+        this.#toggleMinimize();
         break;
       case "set-minimization":
         this.#setMinimization(functionData.data);
@@ -399,7 +399,7 @@ export class GmControllerConversation {
   /**
    * TODO: Finish JSDoc
    */
-  #toggleMinimze() {
+  #toggleMinimize() {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
       if (game.ConversationHud.conversationIsActive) {
         if (this.#conversationData.conversation.features.isMinimizationLocked) {
@@ -492,13 +492,13 @@ export class GmControllerConversation {
    */
   async #updateBackground(data) {
     const background = data.background;
-    const backgroundContainer = document.getElementById("conversation-hud-background");
+    const backgroundContainer = document.getElementById("active-conversation-background");
     if (backgroundContainer) {
       if (background) {
-        backgroundContainer.classList.add("conversation-hud-background-image");
+        backgroundContainer.classList.add("chud-active-conversation-background-image");
         backgroundContainer.style.backgroundImage = `url(${background})`;
       } else {
-        backgroundContainer.classList.remove("conversation-hud-background-image");
+        backgroundContainer.classList.remove("chud-active-conversation-background-image");
         backgroundContainer.style.backgroundImage = ``;
       }
     }
@@ -561,7 +561,7 @@ export class GmControllerConversation {
   #setBackgroundVisibility(data) {
     const isBackgroundVisible = data.isBackgroundVisible;
 
-    const conversationBackground = document.getElementById("conversation-hud-background");
+    const conversationBackground = document.getElementById("active-conversation-background");
     if (isBackgroundVisible) {
       conversationBackground.style.display = "";
     } else {
@@ -587,7 +587,7 @@ export class GmControllerConversation {
    * @returns {Promise<string>}
    */
   async #getConversationTemplate(conversationData) {
-    return await renderTemplate("modules/conversation-hud/templates/conversation.hbs", {
+    return await renderTemplate("modules/conversation-hud/templates/conversations/gm-controlled/interface.hbs", {
       isGM: game.user.isGM,
       hasDock: checkIfCameraDockIsOnBottomOrTop(),
       participants: conversationData.participants,
@@ -607,7 +607,7 @@ export class GmControllerConversation {
   #createConversationContainer(htmlContent, conversationIsVisible) {
     const element = document.createElement("div");
     element.id = "ui-conversation-hud";
-    element.className = "conversation-hud-wrapper";
+    element.className = "chud-active-conversation-wrapper";
 
     if (conversationIsVisible) {
       element.classList.add("visible");
@@ -635,20 +635,23 @@ export class GmControllerConversation {
       uiInterface.removeChild(controls);
     }
 
-    const conversationControls = await renderTemplate("modules/conversation-hud/templates/conversation_controls.hbs", {
-      isGM: game.user.isGM,
-      isVisible: game.ConversationHud.conversationIsVisible,
+    const conversationControls = await renderTemplate(
+      "modules/conversation-hud/templates/conversations/gm-controlled/controls.hbs",
+      {
+        isGM: game.user.isGM,
+        isVisible: game.ConversationHud.conversationIsVisible,
 
-      isMinimized: this.#conversationData.conversation.features.isMinimized,
-      isMinimizationLocked: this.#conversationData.conversation.features.isMinimizationLocked,
-      isSpeakingAs: this.#conversationData.conversation.features.isSpeakingAs,
-      isBackgroundVisible: this.#conversationData.conversation.features.isBackgroundVisible,
+        isMinimized: this.#conversationData.conversation.features.isMinimized,
+        isMinimizationLocked: this.#conversationData.conversation.features.isMinimizationLocked,
+        isSpeakingAs: this.#conversationData.conversation.features.isSpeakingAs,
+        isBackgroundVisible: this.#conversationData.conversation.features.isBackgroundVisible,
 
-      features: {
-        minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
-        speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
-      },
-    });
+        features: {
+          minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
+          speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
+        },
+      }
+    );
 
     const updatedControls = document.createElement("section");
     updatedControls.id = "ui-conversation-controls";
@@ -681,13 +684,14 @@ export class GmControllerConversation {
 
   #updateParticipantsList(index) {
     // Change active class of all other elements
-    const conversationParticipants = document.getElementById("conversationParticipantList").children;
+    const conversationParticipants = document.getElementById("gmControlledConversationParticipantsList").children;
     if (conversationParticipants) {
       for (let i = 0; i < conversationParticipants.length; i++) {
+        const entryElement = conversationParticipants[i].getElementsByClassName("chud-content")[0];
         if (index === i) {
-          conversationParticipants[i].classList.add("active");
+          entryElement?.classList.add("chud-active");
         } else {
-          conversationParticipants[i].classList.remove("active");
+          entryElement?.classList.remove("chud-active");
         }
       }
     }
@@ -703,7 +707,7 @@ export class GmControllerConversation {
     }
 
     if (game.ConversationHud.conversationIsVisible) {
-      const conversationBackground = document.getElementById("conversation-hud-background");
+      const conversationBackground = document.getElementById("active-conversation-background");
       if (this.#conversationData.conversation.features.isMinimized) {
         conversationBackground.classList.remove("visible");
       } else {

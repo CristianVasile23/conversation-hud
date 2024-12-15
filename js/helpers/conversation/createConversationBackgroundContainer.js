@@ -12,14 +12,14 @@ import { ModuleSettings } from "../../settings.js";
  */
 export function createConversationBackgroundContainer(conversationData, conversationVisible) {
   const conversationBackground = document.createElement("div");
-  conversationBackground.id = "conversation-hud-background";
-  conversationBackground.className = "conversation-hud-background";
+  conversationBackground.id = "active-conversation-background";
+  conversationBackground.className = "chud-active-conversation-background";
 
   const blurAmount = game.settings.get(MODULE_NAME, ModuleSettings.blurAmount);
   conversationBackground.style.backdropFilter = `blur(${blurAmount}px)`;
 
   if (conversationData.background) {
-    conversationBackground.classList.add("conversation-hud-background-image");
+    conversationBackground.classList.add("chud-active-conversation-background-image");
     conversationBackground.style.backgroundImage = `url(${conversationData.background})`;
   }
 

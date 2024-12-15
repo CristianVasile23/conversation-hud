@@ -1,0 +1,54 @@
+<div id="gmControlledConversation" class="conversation-hud-content chud-active-conversation {{#if hasDock}}has-dock{{/if}}">
+  {{!-- Drag and drop area --}}
+  <div id="conversation-hud-dropzone" class="conversation-hud-dropzone" >
+    <i class="far fa-square-plus"></i>
+    <p> {{localize 'CHUD.strings.dropItem'}} </p>
+    <p class="hold-control"> ({{localize 'CHUD.strings.holdControl'}}) </p>
+  </div>
+
+  {{!-- Active participant --}}
+  <div id="active-participant-anchor-point">
+  </div>
+
+  {{!-- Participants list --}}
+  <div id="gmControlledConversationParticipantsList" class="chud-participants-list">
+    {{#if isGM}}
+      {{#each participants as |participant index|}}
+        <div class="participant-drag-drop-container">
+          <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
+
+          {{> "modules/conversation-hud/templates/fragments/gm-controlled-conversation/active-conversation-participant-list-entry.hbs"
+            isGM=true
+            index=index
+            participant=participant
+          }}
+
+          <div id="drag-drop-indicator-bottom" class="drag-drop-indicator"></div>
+        </div>
+      {{/each}}
+    {{else}}
+      {{#if displayParticipantsToPlayers}}
+        {{#each participants as |participant index|}}
+          {{> "modules/conversation-hud/templates/fragments/gm-controlled-conversation/active-conversation-participant-list-entry.hbs"
+            isGM=false
+            index=index
+            participant=participant
+          }}
+        {{/each}}
+      {{/if}}
+    {{/if}}
+    
+    {{!-- GMs also have an add participant button that needs to be rendered inside the list --}}
+    {{#if isGM}}
+      <div class="chud-list-entry">
+        <div
+          id="conversation-add-button"
+          class="chud-content chud-add-participant-button chud-has-control"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-participant")}}})'
+        >
+          <i class="fas fa-plus"></i>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</div>

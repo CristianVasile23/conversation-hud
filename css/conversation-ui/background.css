@@ -1,0 +1,16 @@
+/* ----- Conversation HUD background ----- */
+/* #region */
+.chud-active-conversation-background.visible {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.25);
+}
+
+.chud-active-conversation-background-image {
+  background-position: center;
+  background-size: cover;
+}
+/* #endregion */

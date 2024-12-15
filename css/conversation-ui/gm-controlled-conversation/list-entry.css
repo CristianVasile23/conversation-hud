@@ -1,0 +1,163 @@
+/* ----- List entry ----- */
+/* #region */
+#gmControlledConversationParticipantsList .chud-list-entry {
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+/* #endregion */
+
+/* ----- Controls ----- */
+/* #region */
+#gmControlledConversationParticipantsList .chud-list-entry .chud-controls {
+  display: flex;
+  flex-direction: column;
+
+  margin-right: 5px;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-controls a {
+  width: 21px;
+  height: 21px;
+
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  color: var(--color-text-light-heading);
+  font-size: 12px;
+
+  background-color: rgba(0, 0, 0, 0.65);
+  border: 1px solid var(--color-border-dark);
+
+  border-radius: 5px;
+
+  margin-bottom: 5px;
+}
+/* #endregion */
+
+/* Conversation Participant */
+/* #region */
+#gmControlledConversationParticipantsList .chud-list-entry .chud-content {
+  display: flex;
+  flex-flow: column;
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+
+  width: 102px;
+  height: 102px;
+
+  border: 1px solid var(--color-border-dark);
+  border-radius: 5px;
+  overflow: hidden;
+
+  box-shadow: 0 0 10px var(--color-shadow-dark);
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-content.chud-has-control {
+  cursor: pointer;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-content.chud-active,
+#gmControlledConversationParticipantsList .chud-list-entry .chud-content.chud-has-control:hover {
+  border: 1px solid var(--color-border-highlight-alt);
+  border-bottom: 1px solid var(--color-border-highlight);
+  box-shadow: 0 0 10px var(--color-shadow-highlight);
+}
+
+/* #gmControlledConversationParticipantsList .chud-list-entry.active .chud-content {
+  border: 1px solid var(--color-border-highlight-alt);
+  border-bottom: 1px solid var(--color-border-highlight);
+  box-shadow: 0 0 10px var(--color-shadow-highlight);
+} */
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-content .chud-portrait {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  object-position: center;
+
+  border: none;
+  border-radius: 0;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-content .chud-name {
+  position: absolute;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: 0;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  overflow: hidden;
+  white-space: nowrap;
+
+  font-size: 12px;
+  text-align: center;
+  color: var(--color-text-light-highlight);
+  text-overflow: ellipsis;
+
+  background-color: rgba(0, 0, 0, 0.65);
+  border-top: 1px solid var(--color-border-dark);
+}
+
+.conversation-hud-content .chud-content * {
+  pointer-events: none;
+}
+/* #endregion */
+
+/* ----- Faction ----- */
+/* #region */
+#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper {
+  margin-left: 5px;
+
+  width: 40px;
+  height: 40px;
+  position: relative;
+
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--color-border-dark);
+  box-shadow: 0 0 10px var(--color-shadow-dark);
+
+  border-radius: 5px;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper.disabled {
+  visibility: hidden;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper .faction-logo {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  max-width: 40px;
+  max-height: 40px;
+
+  margin: auto;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper.has-banner .faction-logo {
+  top: 6px;
+  bottom: unset;
+  max-width: 16px;
+  max-height: 16px;
+
+  border: 0;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper .faction-logo[src=""] {
+  display: none;
+}
+/* #endregion */

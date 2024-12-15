@@ -1,6 +1,6 @@
 /* ----- List Container ----- */
 /* #region */
-#scene-participants-list .chud-list-entry {
+#sceneParticipantsList .chud-list-entry {
   display: flex;
   flex-flow: row;
   align-items: center;
@@ -9,14 +9,14 @@
   border-bottom: 1px solid var(--color-border-light-2);
 }
 
-#scene-participants-list .chud-list-entry:last-child {
+#sceneParticipantsList .chud-list-entry:last-child {
   border-bottom: none;
 }
 /* #endregion */
 
 /* ----- Portrait Display ----- */
 /* #region */
-#scene-participants-list .chud-list-entry .chud-portrait-wrapper {
+#sceneParticipantsList .chud-list-entry .chud-portrait-wrapper {
   height: 44px;
   width: 44px;
   margin-left: 15px;
@@ -25,7 +25,7 @@
   border-radius: 3px;
 }
 
-#scene-participants-list .chud-list-entry .chud-portrait-wrapper img {
+#sceneParticipantsList .chud-list-entry .chud-portrait-wrapper img {
   height: 100%;
   width: 100%;
   object-fit: cover;
@@ -37,7 +37,7 @@
 
 /* ----- Text Display ----- */
 /* #region */
-#scene-participants-list .chud-list-entry .chud-text-wrapper {
+#sceneParticipantsList .chud-list-entry .chud-text-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -45,24 +45,24 @@
   margin-left: 10px;
 }
 
-#scene-participants-list .chud-list-entry .chud-text-wrapper .name {
+#sceneParticipantsList .chud-list-entry .chud-text-wrapper .name {
   margin: 0;
   font-weight: bold;
   color: var(--color-text-dark-secondary);
 }
 
-#scene-participants-list .chud-list-entry .chud-text-wrapper .chud-is-hidden-text {
+#sceneParticipantsList .chud-list-entry .chud-text-wrapper .chud-is-hidden-text {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
 
-#scene-participants-list .chud-list-entry .chud-text-wrapper .chud-is-hidden-text i {
+#sceneParticipantsList .chud-list-entry .chud-text-wrapper .chud-is-hidden-text i {
   margin-right: 3px;
   font-size: 10px;
 }
 
-#scene-participants-list .chud-list-entry .chud-text-wrapper .chud-is-hidden-text p {
+#sceneParticipantsList .chud-list-entry .chud-text-wrapper .chud-is-hidden-text p {
   margin: 0;
   font-style: italic;
   font-size: 11px;
@@ -71,7 +71,7 @@
 
 /* ----- Checkbox ----- */
 /* #region */
-#scene-participants-list .chud-list-entry input[type="checkbox"] {
+#sceneParticipantsList .chud-list-entry input[type="checkbox"] {
   margin-left: auto;
   margin-right: 15px;
 }
