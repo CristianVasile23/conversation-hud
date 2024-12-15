@@ -157,10 +157,7 @@ export class ConversationSheet extends JournalSheet {
       if (pages.length > 0) {
         try {
           const conversationData = JSON.parse(pages[0].text.content);
-          const visibility = game.ConversationHud.conversationIsActive
-            ? game.ConversationHud.conversationIsVisible
-            : true;
-
+          const visibility = game.ConversationHud.conversationIsActive ?? true;
           game.ConversationHud.startConversationFromData(conversationData, visibility);
         } catch (error) {
           // TODO: Uncomment when error handling needs to be added back

@@ -30,14 +30,16 @@ export function handleOnClickContentLink(event, wrapped) {
           if (pages.length > 0) {
             try {
               const conversationData = JSON.parse(pages[0].text.content);
-              const visibility = game.ConversationHud.conversationIsActive ? game.ConversationHud.conversationIsVisible : true;
+              const visibility = game.ConversationHud.conversationIsActive ?? true;
               game.ConversationHud.startConversationFromData(conversationData, visibility);
             } catch (error) {
-              if (error instanceof SyntaxError) {
-                ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
-              } else {
-                ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
-              }
+              // TODO: Uncomment when error handling needs to be added back
+              throw error;
+              // if (error instanceof SyntaxError) {
+              //   ui.notifications.error(game.i18n.localize("CHUD.errors.failedToParse"));
+              // } else {
+              //   ui.notifications.error(game.i18n.localize("CHUD.errors.genericSheetError"));
+              // }
             }
           } else {
             ui.notifications.error(game.i18n.localize("CHUD.errors.activateNoPages"));
