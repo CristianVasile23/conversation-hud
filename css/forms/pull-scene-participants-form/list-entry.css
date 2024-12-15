@@ -1,0 +1,78 @@
+/* ----- List Container ----- */
+/* #region */
+#scene-participants-list .chud-list-entry {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  padding: 5px;
+
+  border-bottom: 1px solid var(--color-border-light-2);
+}
+
+#scene-participants-list .chud-list-entry:last-child {
+  border-bottom: none;
+}
+/* #endregion */
+
+/* ----- Portrait Display ----- */
+/* #region */
+#scene-participants-list .chud-list-entry .chud-portrait-wrapper {
+  height: 44px;
+  width: 44px;
+  margin-left: 15px;
+
+  border: 1px solid var(--color-border-dark);
+  border-radius: 3px;
+}
+
+#scene-participants-list .chud-list-entry .chud-portrait-wrapper img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: top center;
+  border: 0;
+  border-radius: 0;
+}
+/* #endregion */
+
+/* ----- Text Display ----- */
+/* #region */
+#scene-participants-list .chud-list-entry .chud-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin-left: 10px;
+}
+
+#scene-participants-list .chud-list-entry .chud-text-wrapper .name {
+  margin: 0;
+  font-weight: bold;
+  color: var(--color-text-dark-secondary);
+}
+
+#scene-participants-list .chud-list-entry .chud-text-wrapper .chud-is-hidden-text {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+#scene-participants-list .chud-list-entry .chud-text-wrapper .chud-is-hidden-text i {
+  margin-right: 3px;
+  font-size: 10px;
+}
+
+#scene-participants-list .chud-list-entry .chud-text-wrapper .chud-is-hidden-text p {
+  margin: 0;
+  font-style: italic;
+  font-size: 11px;
+}
+/* #endregion */
+
+/* ----- Checkbox ----- */
+/* #region */
+#scene-participants-list .chud-list-entry input[type="checkbox"] {
+  margin-left: auto;
+  margin-right: 15px;
+}
+/* #endregion */

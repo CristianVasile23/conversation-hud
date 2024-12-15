@@ -1,5 +1,5 @@
-<form class="flexcol pull-participants-from-scene-form" style="height: 100%">
-  <div class="flexrow header">
+<form class="sheet chud-h-100">
+  <div class="flexrow chud-form-sub-header">
     <p> {{localize 'CHUD.strings.sceneActors'}} </p>
 
     <button
@@ -7,7 +7,6 @@
       name="deselect-all"
       id="deselect-all"
       title="{{localize 'CHUD.actions.selection.deselectAll'}}"
-      class="header-action-button"
     >
       <i class="fa-regular fa-square"></i>
     </button>
@@ -17,7 +16,6 @@
       name="select-visible"
       id="select-visible"
       title="{{localize 'CHUD.actions.selection.selectVisible'}}"
-      class="header-action-button"
     >
       <i class="fa-regular fa-square-minus"></i>
     </button>
@@ -27,18 +25,17 @@
       name="select-all"
       id="select-all"
       title="{{localize 'CHUD.actions.selection.selectAll'}}"
-      class="header-action-button"
     >
       <i class="fa-regular fa-square-check"></i>
     </button>
   </div>
 
   {{!-- Actors pulled from current scene --}}
-  <div class="list-wrapper">
-    <div id="participants-pulled-from-scene">
+  <div class="chud-form-content chud-overflow-y-auto">
+    <div id="scene-participants-list" class="flexcol chud-h-100">
       {{#each participants as |participant index|}}
-        <div class="pulled-participant">
-          <div>
+        <div class="chud-list-entry">
+          <div class="chud-actions-wrapper">
             {{#if (eq participant.type 'conversation')}}
               <a
                 id="show-linked-conversation-button"
@@ -57,12 +54,13 @@
                   <i class="fas fa-pencil"></i>
                 </a>
               {{else}}
+                {{!-- TODO: Display a better error container --}}
                 <p>ERROR</p>
               {{/if}}
             {{/if}}
           </div>
 
-          <div class="portrait-wrapper">
+          <div class="chud-portrait-wrapper">
             {{#if (eq participant.type 'participant')}}
               <img src="{{participant.data.img}}"/>
             {{else}}
@@ -70,7 +68,7 @@
             {{/if}}
           </div>
 
-          <div class="text-wrapper">
+          <div class="chud-text-wrapper">
             <p class="name">
               {{#if (eq participant.type 'participant')}}
                 {{#if (eq participant.data.displayName false)}}
@@ -84,7 +82,7 @@
             </p>
 
             {{#if participant.hidden}}
-              <div class="is-hidden">
+              <div class="chud-is-hidden-text">
                 <i class="fa-regular fa-eye-slash"></i>
                 <p>{{localize 'CHUD.strings.tokenIsHidden'}}</p>
               </div>
@@ -93,7 +91,6 @@
 
           <input
             id="pull-participant-checkbox"
-            class="pull-participant-checkbox"
             type="checkbox"
             {{#if participant.checked}}checked="checked"{{/if}}
           >
@@ -102,7 +99,7 @@
     </div>
   </div>
 
-  <div class="footer">
+  <div class="chud-form-footer">
     <footer class="sheet-footer flexrow">
       <button
         type="submit"

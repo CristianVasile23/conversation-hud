@@ -9,10 +9,10 @@ export function preloadHandlebarsTemplates() {
 
     "modules/conversation-hud/templates/forms/content/gm-controlled-conversation-creation-form-content.hbs",
 
+    "modules/conversation-hud/templates/fragments/conversation-participant-data.hbs",
     "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs",
     "modules/conversation-hud/templates/fragments/faction-data.hbs",
 
-    "modules/conversation-hud/templates/fragments/participant_data_config_tab.hbs",
     "modules/conversation-hud/templates/fragments/faction_wrapper.hbs",
     "modules/conversation-hud/templates/fragments/active_participant.hbs",
 

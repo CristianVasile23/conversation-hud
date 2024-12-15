@@ -9,15 +9,21 @@ export const registerHook = () => {
   Hooks.on("renderSceneConfig", async (app, html, data) => {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableSceneConversations)) {
       // TODO: Use proper sheet class from constants
-      const conversations = game.journal.filter((item) => item.flags.core?.sheetClass === "conversation-sheet.ConversationEntrySheet");
+      const conversations = game.journal.filter(
+        (item) => item.flags.core?.sheetClass === "conversation-sheet.ConversationEntrySheet"
+      );
       const linkedConversation = data.data["flags"]["conversation-hud"]?.sceneConversation || undefined;
-      const sceneConversationVisibilityOff = data.data["flags"]["conversation-hud"]?.sceneConversationVisibilityOff || undefined;
+      const sceneConversationVisibilityOff =
+        data.data["flags"]["conversation-hud"]?.sceneConversationVisibilityOff || undefined;
 
-      const renderedHtml = await renderTemplate("modules/conversation-hud/templates/fragments/scene_conversation_selector.hbs", {
-        conversations: conversations,
-        linkedConversation: linkedConversation,
-        sceneConversationVisibilityOff: sceneConversationVisibilityOff,
-      });
+      const renderedHtml = await renderTemplate(
+        "modules/conversation-hud/templates/fragments/scene-conversation-data.hbs",
+        {
+          conversations: conversations,
+          linkedConversation: linkedConversation,
+          sceneConversationVisibilityOff: sceneConversationVisibilityOff,
+        }
+      );
 
       const appVersion = game.version.split(".")[0];
       if (appVersion && Number(appVersion) >= 12) {

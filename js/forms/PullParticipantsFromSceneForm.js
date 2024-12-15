@@ -1,5 +1,9 @@
 import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
-import { convertActorToParticipant, getConversationDataFromJournalId, processParticipantData } from "../helpers/index.js";
+import {
+  convertActorToParticipant,
+  getConversationDataFromJournalId,
+  processParticipantData,
+} from "../helpers/index.js";
 
 export class PullParticipantsFromSceneForm extends FormApplication {
   // State variables
@@ -64,7 +68,7 @@ export class PullParticipantsFromSceneForm extends FormApplication {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
-      template: `modules/conversation-hud/templates/pull_participants.hbs`,
+      template: `modules/conversation-hud/templates/forms/pull-scene-participants-forms.hbs`,
       id: "conversation-pull-participants",
       title: game.i18n.localize("CHUD.actions.pullParticipants"),
       width: 450,
@@ -107,7 +111,10 @@ export class PullParticipantsFromSceneForm extends FormApplication {
             selectedParticipants.push(participant.data);
             break;
           default:
-            console.error("ConversationHUD | Tried to pull participant from scene with unknown type of " + participant.type);
+            // TODO: Create a better logging message that uses a non-hardcoded module name
+            console.error(
+              "ConversationHUD | Tried to pull participant from scene with unknown type of " + participant.type
+            );
             break;
         }
       }
@@ -134,7 +141,8 @@ export class PullParticipantsFromSceneForm extends FormApplication {
     if (actorsObject) {
       const pulledActors = actorsObject.children;
       for (let i = 0; i < pulledActors.length; i++) {
-        pulledActors[i].querySelector("#pull-participant-checkbox").onchange = (event) => this.#handleSetIncludeActorCheckbox(event, i);
+        pulledActors[i].querySelector("#pull-participant-checkbox").onchange = (event) =>
+          this.#handleSetIncludeActorCheckbox(event, i);
 
         const participantEditButton = pulledActors[i].querySelector("#participant-edit-button");
         if (participantEditButton) {
