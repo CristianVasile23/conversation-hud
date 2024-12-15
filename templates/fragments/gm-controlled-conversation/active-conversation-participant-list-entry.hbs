@@ -78,6 +78,8 @@
 
   {{!-- Faction --}}
   <div data-tooltip="{{participant.faction.factionName}}" style="align-self: flex-start;">
-    {{> "modules/conversation-hud/templates/fragments/faction_wrapper.hbs" faction=participant.faction}}
+    {{> "modules/conversation-hud/templates/fragments/faction-banner.hbs"
+      faction=participant.faction
+    }}
   </div>
 </div>

@@ -31,17 +31,17 @@
   visibility: hidden;
 }
 
-.conversation-hud-content .active-participant-faction .faction-wrapper {
+.conversation-hud-content .active-participant-faction .chud-faction-banner {
   width: 165px;
   height: 165px;
   position: relative;
 }
 
-.conversation-hud-content .active-participant-faction .faction-wrapper.disabled {
+.conversation-hud-content .active-participant-faction .chud-faction-banner.disabled {
   visibility: hidden;
 }
 
-.conversation-hud-content .active-participant-faction .faction-wrapper .faction-logo {
+.conversation-hud-content .active-participant-faction .chud-faction-banner .chud-faction-logo {
   position: absolute;
 
   top: 0;
@@ -57,7 +57,7 @@
   border: 0;
 }
 
-.conversation-hud-content .active-participant-faction .faction-wrapper.has-banner .faction-logo {
+.conversation-hud-content .active-participant-faction .chud-faction-banner.chud-banner-enabled .chud-faction-logo {
   top: 30px;
   bottom: unset;
 
@@ -65,7 +65,7 @@
   max-height: 70px;
 }
 
-.conversation-hud-content .active-participant-faction .faction-wrapper .faction-logo[src=""] {
+.conversation-hud-content .active-participant-faction .chud-faction-banner .chud-faction-logo[src=""] {
   display: none;
 }
 

@@ -21,17 +21,17 @@
     width: 84px;
   }
 
-  .conversation-hud-content .active-participant-faction .faction-wrapper {
+  .conversation-hud-content .active-participant-faction .chud-faction-banner {
     width: 82px;
     height: 82px;
   }
 
-  .conversation-hud-content .active-participant-faction .faction-wrapper .faction-logo {
+  .conversation-hud-content .active-participant-faction .chud-faction-banner .chud-faction-logo {
     max-width: 82px;
     max-height: 82px;
   }
 
-  .conversation-hud-content .active-participant-faction .faction-wrapper.has-banner .faction-logo {
+  .conversation-hud-content .active-participant-faction .chud-faction-banner.chud-banner-enabled .chud-faction-logo {
     top: 15px;
     max-width: 30px;
     max-height: 30px;

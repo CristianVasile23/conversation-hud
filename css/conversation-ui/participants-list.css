@@ -1,7 +1,7 @@
 /* ----- Support for drag and drop functionality ----- */
 /* #region */
 .conversation-hud-content .conversation-participant-list.drag-active .controls,
-.conversation-hud-content .conversation-participant-list.drag-active .faction-wrapper {
+.conversation-hud-content .conversation-participant-list.drag-active .chud-faction-banner {
   pointer-events: none;
 }
 /* #endregion */

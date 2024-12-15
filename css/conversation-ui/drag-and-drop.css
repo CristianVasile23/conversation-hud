@@ -49,7 +49,7 @@
 
 .conversation-hud-content.active-dropzone > .active-participant,
 .conversation-hud-content.active-dropzone > .conversation-participant-list,
-.conversation-hud-content.active-dropzone .faction-wrapper {
+.conversation-hud-content.active-dropzone .chud-faction-banner {
   pointer-events: none;
 }
 /* #endregion */

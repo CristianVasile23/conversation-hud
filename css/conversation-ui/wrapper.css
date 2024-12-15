@@ -65,7 +65,10 @@
   width: 84px;
 }
 
-.chud-active-conversation-wrapper.minimized .active-participant-wrapper .active-participant-faction .faction-wrapper {
+.chud-active-conversation-wrapper.minimized
+  .active-participant-wrapper
+  .active-participant-faction
+  .chud-faction-banner {
   width: 82px;
   height: 82px;
 }
@@ -73,8 +76,8 @@
 .chud-active-conversation-wrapper.minimized
   .active-participant-wrapper
   .active-participant-faction
-  .faction-wrapper
-  .faction-logo {
+  .chud-faction-banner
+  .chud-faction-logo {
   max-width: 82px;
   max-height: 82px;
 }
@@ -82,8 +85,8 @@
 .chud-active-conversation-wrapper.minimized
   .active-participant-wrapper
   .active-participant-faction
-  .faction-wrapper.has-banner
-  .faction-logo {
+  .chud-faction-banner.chud-banner-enabled
+  .chud-faction-logo {
   top: 14px;
 
   max-width: 36px;

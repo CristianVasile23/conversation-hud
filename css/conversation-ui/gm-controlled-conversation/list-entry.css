@@ -116,7 +116,7 @@
 
 /* ----- Faction ----- */
 /* #region */
-#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper {
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner {
   margin-left: 5px;
 
   width: 40px;
@@ -130,11 +130,11 @@
   border-radius: 5px;
 }
 
-#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper.disabled {
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner.disabled {
   visibility: hidden;
 }
 
-#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper .faction-logo {
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner .chud-faction-logo {
   position: absolute;
 
   top: 0;
@@ -148,7 +148,7 @@
   margin: auto;
 }
 
-#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper.has-banner .faction-logo {
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner.chud-banner-enabled .chud-faction-logo {
   top: 6px;
   bottom: unset;
   max-width: 16px;
@@ -157,7 +157,7 @@
   border: 0;
 }
 
-#gmControlledConversationParticipantsList .chud-list-entry .faction-wrapper .faction-logo[src=""] {
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner .chud-faction-logo[src=""] {
   display: none;
 }
 /* #endregion */

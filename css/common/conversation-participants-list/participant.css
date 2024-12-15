@@ -18,17 +18,17 @@
 
 /* ----- Faction ----- */
 /* #region */
-.chud-conversation-participants-list .faction-wrapper {
+.chud-conversation-participants-list .chud-faction-banner {
   width: 40px;
   height: 40px;
   position: relative;
 }
 
-.chud-conversation-participants-list .faction-wrapper.disabled > * {
+.chud-conversation-participants-list .chud-faction-banner.disabled > * {
   visibility: hidden;
 }
 
-.chud-conversation-participants-list .faction-wrapper .faction-logo {
+.chud-conversation-participants-list .chud-faction-banner .chud-faction-logo {
   position: absolute;
 
   border: 0;
@@ -43,13 +43,13 @@
 
   margin: auto;
 }
-.chud-conversation-participants-list .faction-wrapper.has-banner .faction-logo {
+.chud-conversation-participants-list .chud-faction-banner.chud-banner-enabled .chud-faction-logo {
   top: 6px;
   bottom: unset;
   max-width: 16px;
   max-height: 16px;
 }
-.chud-conversation-participants-list .faction-wrapper .faction-logo[src=""] {
+.chud-conversation-participants-list .chud-faction-banner .chud-faction-logo[src=""] {
   display: none;
 }
 /* #endregion */

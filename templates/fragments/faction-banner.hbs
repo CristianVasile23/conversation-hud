@@ -1,0 +1,10 @@
+<div class="chud-faction-banner {{#if faction.factionBannerEnabled}}chud-banner-enabled{{/if}} {{#unless faction.displayFaction}}disabled{{/unless}}">
+  {{!-- TODO: Localize alt property --}}
+  <img class="chud-faction-logo" src="{{faction.factionLogo}}" alt="Faction Logo">
+
+  {{> "modules/conversation-hud/templates/fragments/faction-banner-shape.hbs"
+    factionBannerEnabled=faction.factionBannerEnabled
+    factionBannerShape=faction.factionBannerShape
+    factionBannerTint=faction.factionBannerTint
+  }}
+</div>

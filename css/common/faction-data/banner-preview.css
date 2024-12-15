@@ -30,7 +30,7 @@
 .chud-faction-data .banner-preview-wrapper .banner-preview-image #banner-preview-flag {
   display: none;
 }
-.chud-faction-data .banner-preview-wrapper .banner-preview-image.has-banner #banner-preview-flag {
+.chud-faction-data .banner-preview-wrapper .banner-preview-image.chud-banner-enabled #banner-preview-flag {
   display: block;
 }
 
@@ -47,7 +47,7 @@
 
   margin: auto;
 }
-.chud-faction-data .banner-preview-image.has-banner #banner-preview-logo {
+.chud-faction-data .banner-preview-image.chud-banner-enabled #banner-preview-logo {
   top: 30px;
   bottom: unset;
 
