@@ -1,0 +1,20 @@
+.chud-participating-users-list {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.chud-participating-users-list > .chud-no-participating-users-message {
+  display: flex;
+  margin: auto;
+  max-width: 310px;
+  text-align: center;
+}
+
+.chud-participating-users-list .chud-content > * {
+  border-bottom: 1px solid var(--color-border-light-2);
+}
+
+.chud-participating-users-list .chud-content > *:last-child {
+  border-bottom: none;
+}

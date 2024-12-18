@@ -1,4 +1,4 @@
-import { CONVERSATION_TYPES, DRAG_AND_DROP_DATA_TYPES } from "../constants/index.js";
+import { ConversationTypes, DRAG_AND_DROP_DATA_TYPES } from "../constants/index.js";
 
 /**
  * [TODO: Add JSDoc]
@@ -38,7 +38,7 @@ export async function getActorDataFromDragEvent(event) {
                   const conversationData = JSON.parse(page.text.content);
 
                   // TODO: Add actual handling of conversation types
-                  if (conversationData.type === CONVERSATION_TYPES.GM_CONTROLLED) {
+                  if (conversationData.type === ConversationTypes.GMControlled) {
                     conversationParticipants.push(...conversationData.conversation.data.participants);
                   }
                 }

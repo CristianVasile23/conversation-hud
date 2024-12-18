@@ -35,6 +35,11 @@
         isGM=isGM
         participants=participants 
       }}
+    {{/case}}
+    {{#case 'collective'}}
+      {{> "modules/conversation-hud/templates/forms/content/collective-conversation-creation-form-content.hbs"
+        isGM=isGM
+      }}
     {{/case}} 
     {{#case 'default'}}
       {{!-- TODO: Add message type that is also localized --}}

@@ -1,3 +1,4 @@
-export const CONVERSATION_TYPES = {
-  GM_CONTROLLED: "gm-controlled",
+export const ConversationTypes = {
+  GMControlled: "gm-controlled",
+  Collective: "collective",
 };

@@ -1,7 +1,7 @@
 /// <reference path="../types/ConversationData.js" />
 
 // import { ANCHOR_OPTIONS } from "../constants/index.js";
-import { CONVERSATION_TYPES } from "../constants/conversation-types.js";
+import { ConversationTypes } from "../constants/conversation-types.js";
 import { PullParticipantsFromSceneForm, CreateOrEditParticipantForm } from "../forms/index.js";
 import {
   // getActorDataFromDragEvent,
@@ -37,7 +37,7 @@ export class ConversationSheet extends JournalSheet {
         this.#conversationData = data;
 
         switch (data.type) {
-          case CONVERSATION_TYPES.GM_CONTROLLED:
+          case ConversationTypes.GMControlled:
             this.#sheetHandler = new GmControlledConversationSheetHandler(
               this.#conversationData.conversation,
               (conversation) => this.handleChange(conversation)
@@ -101,7 +101,7 @@ export class ConversationSheet extends JournalSheet {
     // One example where data can be outdated is for factions that are selected via saved faction sheets
     // If the faction sheet is updated, the participant data needs to be updated as well
     switch (this.#conversationData.type) {
-      case CONVERSATION_TYPES.GM_CONTROLLED:
+      case ConversationTypes.GMControlled:
         GmControlledConversationSheetHandler.processData(this.#conversationData.conversation);
         break;
       default:

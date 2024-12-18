@@ -4,7 +4,7 @@
 import { socket } from "./init.js";
 import { ConversationCreationForm } from "./forms/index.js";
 import { checkIfUserIsGM, getConfirmationFromUser } from "./helpers/index.js";
-import { CONVERSATION_TYPES, SHEET_CLASSES } from "./constants/index.js";
+import { ConversationTypes, SHEET_CLASSES } from "./constants/index.js";
 import { GmControllerConversation } from "./conversation-types/GmControllerConversation.js";
 
 export class ConversationHud {
@@ -49,7 +49,7 @@ export class ConversationHud {
     game.ConversationHud.conversationIsVisible = conversationIsVisible;
 
     switch (conversationData.type) {
-      case CONVERSATION_TYPES.GM_CONTROLLED:
+      case ConversationTypes.GMControlled:
         game.ConversationHud.activeConversation = new GmControllerConversation(conversationData);
         break;
 

@@ -78,7 +78,11 @@
     </div>
   {{else}}
     <p class="chud-no-participants-message">
-      {{localize 'CHUD.strings.noParticipantsInList'}}
+      {{#if customNoDataMessage}}
+        {{customNoDataMessage}}
+      {{else}}
+        {{localize 'CHUD.strings.noParticipantsInList'}}
+      {{/if}}
     </p> 
   {{/if}}
 </div>

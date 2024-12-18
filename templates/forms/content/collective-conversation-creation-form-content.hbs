@@ -1,0 +1,27 @@
+<div class="flexrow chud-form-sub-header">
+  <p>{{localize 'CHUD.strings.participatingUsers'}}</p>
+
+  <button
+    type="button"
+    name="add-participating-users"
+    id="addParticipatingUsers"
+    title="{{localize 'CHUD.actions.participatingUsers.add'}}"
+  >
+    <i class="fas fa-user-plus"></i>
+  </button>
+</div>
+
+<div class="chud-form-section chud-form-content chud-drag-and-drop-container chud-overflow-y-auto">
+  {{!-- <div class="chud-dropzone">
+    <i class="far fa-square-plus"></i>
+    <p> {{localize 'CHUD.strings.dropItem'}} </p>
+    <p class="hold-control"> ({{localize 'CHUD.strings.holdControl'}}) </p>
+  </div> --}}
+
+  <div class="chud-non-dropzone-content chud-h-100">
+    {{> "modules/conversation-hud/templates/fragments/participating-users-list.hbs"
+      isGM=isGM
+      participatingUsers=participatingUsers
+    }}
+  </div>
+</div>

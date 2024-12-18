@@ -1,0 +1,53 @@
+<form class="sheet chud-h-100">
+  <div class="flexrow chud-form-sub-header">
+    <p> {{localize 'CHUD.strings.availableUsers'}} </p>
+
+    <button
+      type="button"
+      name="deselect-all"
+      id="deselect-all"
+      title="{{localize 'CHUD.actions.selection.deselectAll'}}"
+    >
+      <i class="fa-regular fa-square"></i>
+    </button>
+          
+    <button
+      type="button"
+      name="select-all"
+      id="select-all"
+      title="{{localize 'CHUD.actions.selection.selectAll'}}"
+    >
+      <i class="fa-regular fa-square-check"></i>
+    </button>
+  </div>
+
+  <div class="chud-form-content chud-overflow-y-auto">
+    <div id="participatingUsersList" class="flexcol chud-h-100">
+      {{#if users}}
+        {{#each users}}
+          <label class="checkbox">
+            <input type="checkbox" name="users" value="{{id}}" checked />
+            {{name}}
+          </label>
+        {{/each}}
+      {{else}}
+        <p class="chud-no-users-message">
+          {{localize 'CHUD.strings.noUsersInList'}}
+        </p> 
+      {{/if}}
+    </div>
+  </div>
+
+  <div class="chud-form-footer">
+    <footer class="sheet-footer flexrow">
+      <button
+        type="submit"
+        name="submit"
+        title="{{localize 'CHUD.actions.startConversation'}}"
+      >
+        <i class="fa fa-plus"></i>
+        {{localize 'CHUD.actions.addUsers'}}
+      </button>
+    </footer>
+  </div>
+</form>

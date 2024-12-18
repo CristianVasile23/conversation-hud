@@ -1,7 +1,7 @@
 /// <reference path="../types/GmControlledConversation/GmControlledConversation.js" />
 /// <reference path="../types/ConversationData.js" />
 
-import { ANCHOR_OPTIONS, CONVERSATION_TYPES } from "../constants/index.js";
+import { ANCHOR_OPTIONS, ConversationTypes } from "../constants/index.js";
 import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
 import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
 import {
@@ -54,7 +54,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
 
     return {
       isGM: game.user.isGM,
-      type: CONVERSATION_TYPES.GM_CONTROLLED,
+      type: ConversationTypes.GMControlled,
       conversationBackground: this.conversationBackground,
       participants: this.participants,
       defaultActiveParticipant: this.defaultActiveParticipant,
@@ -248,7 +248,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
 
     /** @type {ConversationData} */
     const conversationData = {
-      type: CONVERSATION_TYPES.GM_CONTROLLED,
+      type: ConversationTypes.GMControlled,
       background: formData.conversationBackground,
       conversation: gmControlledConversation,
     };

@@ -1,0 +1,64 @@
+<div class="chud-participating-users-list">
+  {{#if participatingUsers}}
+    <div class="chud-content">
+      {{#each participatingUsers as |participatingUser index|}}
+        <div class="chud-participating-user">
+          <div class="chud-entry-header">
+            <div class="chud-accordion">
+              <i class="fas fa-chevron-up"></i>
+            </div>
+
+            <div class="chud-name">
+              <i class="fas fa-user" style="color: {{participatingUser.color.css}}"></i>
+              <p>{{participatingUser.name}}</p>
+            </div>
+
+            <div class="chud-actions">
+              <p>[Buttons]</p>
+            </div>
+          </div>
+
+          <div class="chud-entry-content">
+            <div class="chud-entry-content-section">
+              <p class="chud-header">Settings</p>
+
+              <div class="chud-user-settings-entry">
+                <input
+                  type="checkbox"
+                  name="participant-{{index}}-add-edit-permission-checkbox"
+                  checked
+                >
+                {{!-- TODO: Localize --}}
+                <p>Allow user to add controlled tokens</p>
+              </div>
+
+              <div class="chud-user-settings-entry">
+                <input
+                  type="checkbox"
+                  name="participant-{{index}}-add-edit-permission-checkbox"
+                >
+                {{!-- TODO: Localize --}}
+                <p>Allow user to add/edit custom participants</p>
+              </div>
+            </div>
+
+            <div class="chud-entry-content-section chud-mt-16 {{#unless participants}}chud-has-no-participants{{/unless}}">
+              <p class="chud-header">Conversation Participants</p>
+              
+              {{!-- TODO Localize string --}}
+              {{> "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs"
+                isGM=isGM
+                customNoDataMessage="Participating user has no participants associated. Try adding some. (Drag and drop supported)"
+              }}
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <p class="chud-no-participating-users-message">
+      {{!-- TODO: Add another localization string --}}
+      {{localize 'CHUD.strings.noParticipantsInList'}}
+    </p> 
+  {{/if}}
+</div>

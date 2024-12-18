@@ -1,3 +1,4 @@
+import { CollectiveConversationCreationForm } from "./CollectiveConversationCreationForm.js";
 import { GmControlledConversationCreationForm } from "./GmControlledConversationCreationForm.js";
 
 export class ConversationCreationForm extends FormApplication {
@@ -20,12 +21,18 @@ export class ConversationCreationForm extends FormApplication {
   activateListeners(html) {
     super.activateListeners(html);
 
-    const gmControlledConversationButton = html[0].querySelector("#gm-controlled-conversation-button");
+    const gmControlledConversationButton = html[0].querySelector("#gmControlledConversationButton");
     gmControlledConversationButton.onclick = async () => {
       await this.close({});
       new GmControlledConversationCreationForm((data) => game.ConversationHud.createConversationFromData(data)).render(
         true
       );
+    };
+
+    const collectiveConversationButton = html[0].querySelector("#collectiveConversationButton");
+    collectiveConversationButton.onclick = async () => {
+      await this.close({});
+      new CollectiveConversationCreationForm((data) => console.log(data)).render(true);
     };
   }
 
