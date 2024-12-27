@@ -1,12 +1,12 @@
 <div class="chud-participating-users-list">
   {{#if participatingUsers}}
-    <div class="chud-content">
+    <div id="conversationParticipatingUsersList" class="chud-content">
       {{#each participatingUsers as |participatingUser index|}}
         <div class="chud-participating-user">
           <div class="chud-entry-header">
-            <div class="chud-accordion">
+            <a id="accordionButton" class="chud-accordion">
               <i class="fas fa-chevron-up"></i>
-            </div>
+            </a>
 
             <div class="chud-name">
               <i class="fas fa-user" style="color: {{participatingUser.color.css}}"></i>
@@ -14,42 +14,57 @@
             </div>
 
             <div class="chud-actions">
-              <p>[Buttons]</p>
+              {{!-- TODO: Add proper button text and localization --}}
+              <a id="pullSceneActorsButton" title="{{localize 'CHUD.actions.participatingUser.clone'}}">
+                <i class="fas fa-up-from-bracket"></i>
+              </a>
+              <a id="addOwnedActorButton" title="{{localize 'CHUD.actions.participatingUser.addOwnedActors'}}">
+                <i class="fas fa-user-lock"></i>
+              </a>
+              <a id="addParticipantButton" title="{{localize 'CHUD.actions.participatingUser.addParticipant'}}">
+                <i class="fas fa-user-plus"></i>
+              </a>
+              <a id="removeParticipatingUserButton" title="{{localize 'CHUD.actions.participatingUser.remove'}}">
+                <i class="fas fa-trash"></i>
+              </a>
             </div>
           </div>
 
-          <div class="chud-entry-content">
-            <div class="chud-entry-content-section">
-              <p class="chud-header">Settings</p>
+          <div class="chud-entry-content chud-collapsible-content-wrapper">
+            <div class="chud-collapsible-content chud-mt-16">
+              <div class="chud-entry-content-section">
+                <p class="chud-header">Settings</p>
 
-              <div class="chud-user-settings-entry">
-                <input
-                  type="checkbox"
-                  name="participant-{{index}}-add-edit-permission-checkbox"
-                  checked
-                >
-                {{!-- TODO: Localize --}}
-                <p>Allow user to add controlled tokens</p>
+                <div class="chud-user-settings-entry">
+                  <input
+                    type="checkbox"
+                    name="participant-{{index}}-add-edit-permission-checkbox"
+                    checked
+                  >
+                  {{!-- TODO: Localize --}}
+                  <p>Allow user to add controlled tokens</p>
+                </div>
+
+                <div class="chud-user-settings-entry">
+                  <input
+                    type="checkbox"
+                    name="participant-{{index}}-add-edit-permission-checkbox"
+                  >
+                  {{!-- TODO: Localize --}}
+                  <p>Allow user to add/edit custom participants</p>
+                </div>
               </div>
 
-              <div class="chud-user-settings-entry">
-                <input
-                  type="checkbox"
-                  name="participant-{{index}}-add-edit-permission-checkbox"
-                >
-                {{!-- TODO: Localize --}}
-                <p>Allow user to add/edit custom participants</p>
+              <div class="chud-entry-content-section chud-mt-16 {{#unless participants}}chud-has-no-participants{{/unless}}">
+                {{!-- TODO: Localize string --}}
+                <p class="chud-header">Conversation Participants</p>
+                
+                {{!-- TODO Localize string --}}
+                {{> "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs"
+                  isGM=../isGM
+                  customNoDataMessage="Participating user has no participants associated. Try adding some. (Drag and drop supported)"
+                }}
               </div>
-            </div>
-
-            <div class="chud-entry-content-section chud-mt-16 {{#unless participants}}chud-has-no-participants{{/unless}}">
-              <p class="chud-header">Conversation Participants</p>
-              
-              {{!-- TODO Localize string --}}
-              {{> "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs"
-                isGM=isGM
-                customNoDataMessage="Participating user has no participants associated. Try adding some. (Drag and drop supported)"
-              }}
             </div>
           </div>
         </div>

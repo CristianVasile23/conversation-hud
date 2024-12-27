@@ -122,7 +122,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
     }
 
     // Add listeners on all the control buttons present on the conversation participants
-    const participantsObject = html.find("#conversation-participants-list")[0];
+    const participantsObject = html.find("#conversationParticipantsList")[0];
     if (participantsObject) {
       const conversationParticipants = participantsObject.children;
       for (let i = 0; i < conversationParticipants.length; i++) {

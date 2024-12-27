@@ -100,7 +100,7 @@ export class GmControlledConversationSheetHandler {
       };
     }
 
-    const participantsObject = html.find("#conversation-participants-list")[0];
+    const participantsObject = html.find("#conversationParticipantsList")[0];
     if (participantsObject) {
       const conversationParticipants = participantsObject.children;
       for (let i = 0; i < conversationParticipants.length; i++) {

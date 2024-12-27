@@ -1,6 +1,7 @@
 // TODO: Import and export all helper functions
 import { createConversationBackgroundContainer } from "./conversation/index.js";
 import { getDragAndDropIndex, hideDragAndDropIndicator, showDragAndDropIndicator } from "./drag-and-drop/index.js";
+import { activateConversationParticipantsListListeners } from "./forms/index.js";
 import { registerHandlebarsHelpers, preloadHandlebarsTemplates } from "./handlebars-helpers/index.js";
 import { checkConversationDataAvailability } from "./checkConversationDataAvailability.js";
 import { checkIfCameraDockIsOnBottomOrTop } from "./checkIfCameraDockIsOnBottomOrTop.js";
@@ -26,6 +27,9 @@ export {
   getDragAndDropIndex,
   hideDragAndDropIndicator,
   showDragAndDropIndicator,
+
+  // Forms
+  activateConversationParticipantsListListeners,
 
   // Handlebars helpers
   registerHandlebarsHelpers,
