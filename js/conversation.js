@@ -746,13 +746,18 @@ export class ConversationHud {
     }
 
     const conversationBackground = document.getElementById("conversation-hud-background");
-    if (conversationBackground) {
+    const videoElement = document.getElementById("chud-background-video")
+    if (conversationBackground && videoElement) {
       if (newVisibility) {
         if (!game.ConversationHud.conversationIsMinimized) {
           conversationBackground.classList.add("visible");
+          if (videoElement.src !== '') {
+            videoElement.classList.remove("hidden");
+          }
         }
       } else {
         conversationBackground.classList.remove("visible");
+        videoElement.classList.add("hidden");
       }
     }
   }

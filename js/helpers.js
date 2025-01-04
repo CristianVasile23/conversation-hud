@@ -168,19 +168,27 @@ export async function updateConversationControls() {
 export async function updateConversationLayout() {
   // Update the layout
   const conversationHud = document.getElementById("ui-conversation-hud");
+  
   if (game.ConversationHud.conversationIsMinimized) {
     conversationHud.classList.add("minimized");
   } else {
     conversationHud.classList.remove("minimized");
   }
 
+  const videoElement = document.getElementById("chud-background-video")
   if (game.ConversationHud.conversationIsVisible) {
-    const conversationBackground = document.getElementById("conversation-hud-background");
+    const conversationBackground = document.getElementById("conversation-hud-background");  
     if (game.ConversationHud.conversationIsMinimized) {
       conversationBackground.classList.remove("visible");
+      videoElement.classList.add("hidden");
     } else {
       conversationBackground.classList.add("visible");
+      if (videoElement.src !== '') {
+        videoElement.classList.remove("hidden");
+      }
     }
+  } else {
+    videoElement.classList.add("hidden");
   }
 }
 
