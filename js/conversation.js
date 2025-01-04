@@ -22,7 +22,6 @@ import {
   getPortraitAnchorObjectFromParticipant,
   normalizeParticipantDataStructure,
   processParticipantData,
-  checkConversationDataAvailability,
 } from "./helpers.js";
 import { socket } from "./init.js";
 import { ANCHOR_OPTIONS, MODULE_NAME } from "./constants.js";
