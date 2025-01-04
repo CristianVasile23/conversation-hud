@@ -38,5 +38,3 @@ export const ANCHOR_OPTIONS = {
     },
   },
 };
-
-export const BACKGROUND_ID;
