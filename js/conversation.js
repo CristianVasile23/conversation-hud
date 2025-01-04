@@ -27,6 +27,97 @@ import { socket } from "./init.js";
 import { ANCHOR_OPTIONS, MODULE_NAME } from "./constants.js";
 import { ModuleSettings } from "./settings.js";
 
+//video helpers, likely should be in main class, or a separate class, to maintain things
+//like callback state
+
+const videoMimeTypes = new Map([
+  ["mp4", "video/mp4"],            // MP4 format
+  ["webm", "video/webm"],          // WebM format
+  //["ogg", "video/ogg"],            // Ogg format - probably not worth supporting?
+  //["mov", "video/quicktime"]       // MOV format - probably not worth supporting?
+]);
+
+function isVideo(conversationBackgroundImage) {
+  const idx = conversationBackgroundImage.lastIndexOf('.');
+  if (idx > - 1) {
+    const extension = conversationBackgroundImage.substring(idx + 1);
+    if (extension) {
+      return videoMimeTypes.has(extension.toLowerCase());
+    }
+  }
+  return false;
+}
+
+function createVideoElement() {
+  const videoElement = document.createElement('video');
+  videoElement.id = 'chud-background-video';
+  //videoElement.autoplay = true; // we want to play/pause manually
+  videoElement.muted = true;
+  videoElement.loop = true;
+  videoElement.playsInline = true; // Required for inline playback on mobile
+  videoElement.className = "background-video hidden";
+
+  // Create the source element, if we are going to support multiple formats simultaneously (unlikely)
+  // const sourceElement = document.createElement("source");
+  // Append the source to the video
+  // videoElement.appendChild(sourceElement)
+  return videoElement;
+}
+
+function playVideo(src) {
+  const videoElement = document.getElementById('chud-background-video');
+  videoElement.src = src;
+  // todo, error handling, but realistically we do not get here unless isVideo is already true
+  // could also streamline it into a single call
+  const extension = src.substring(src.lastIndexOf(".") + 1);
+  videoElement.type = videoMimeTypes.get(extension);
+  videoElement.load();
+  videoElement.oncanplay = () => {
+    videoElement.play();
+    videoElement.classList.remove("hidden");
+  }
+  
+}
+
+function stopAndUnloadVideo() {
+  const videoElement = document.getElementById('chud-background-video');
+  videoElement.classList.add("hidden");    
+  videoElement.pause();
+  videoElement.src = '';
+  videoElement.type = '';
+}
+
+function createConversationBackground(conversationBackground, conversationData) {
+  if (conversationData.conversationBackground) {
+    if (isVideo(conversationData.conversationBackground)) {
+      playVideo(conversationData.conversationBackground);
+    } else {
+      conversationBackground.classList.add("conversation-hud-background-image");
+      conversationBackground.style.backgroundImage = `url(${conversationData.conversationBackground})`;
+    }
+  }
+}
+
+function updateConversationBackground(conversationBackground, conversationData) {
+  if (isVideo(conversationData.conversationBackground)) {
+    playVideo(conversationData.conversationBackground);
+    conversationBackground.classList.remove("conversation-hud-background-image");
+    conversationBackground.style.backgroundImage = ``;
+  } else {
+    stopAndUnloadVideo();
+    if (conversationData.conversationBackground) {
+      if (!conversationBackground.classList.contains("conversation-hud-background-image")) {
+        conversationBackground.classList.add("conversation-hud-background-image");
+      }
+      conversationBackground.style.backgroundImage = `url(${conversationData.conversationBackground})`;
+    } else {
+      conversationBackground.classList.remove("conversation-hud-background-image");
+      conversationBackground.style.backgroundImage = ``;
+    }
+  }
+}
+// end video/background helpers
+
 export class ConversationHud {
   // Function that initializes the class data
   init() {
@@ -142,14 +233,10 @@ export class ConversationHud {
     const conversationBackground = document.createElement("div");
     conversationBackground.id = "conversation-hud-background";
     conversationBackground.className = "conversation-hud-background";
-
+    const videoElement = createVideoElement();
+    conversationBackground.appendChild(videoElement);
     const blurAmount = game.settings.get(MODULE_NAME, ModuleSettings.blurAmount);
     conversationBackground.style.backdropFilter = `blur(${blurAmount}px)`;
-
-    if (conversationData.conversationBackground) {
-      conversationBackground.classList.add("conversation-hud-background-image");
-      conversationBackground.style.backgroundImage = `url(${conversationData.conversationBackground})`;
-    }
 
     if (conversationVisible && !game.ConversationHud.conversationIsMinimized) {
       conversationBackground.classList.add("visible");
@@ -157,6 +244,10 @@ export class ConversationHud {
 
     const body = document.body;
     body.append(conversationBackground);
+
+    if (conversationData.conversationBackground) {
+      createConversationBackground(conversationBackground, conversationData);
+    }
 
     // Render conversation controls
     updateConversationControls();
@@ -377,15 +468,7 @@ export class ConversationHud {
     }
 
     const conversationBackground = document.getElementById("conversation-hud-background");
-    if (conversationData.conversationBackground) {
-      if (!conversationBackground.classList.contains("conversation-hud-background-image")) {
-        conversationBackground.classList.add("conversation-hud-background-image");
-      }
-      conversationBackground.style.backgroundImage = `url(${conversationData.conversationBackground})`;
-    } else {
-      conversationBackground.classList.remove("conversation-hud-background-image");
-      conversationBackground.style.backgroundImage = ``;
-    }
+    updateConversationBackground(conversationBackground, conversationData);
 
     if (visibility !== undefined && game.user.isGM) {
       game.ConversationHud.setActiveConversationVisibility(visibility);
@@ -662,13 +745,18 @@ export class ConversationHud {
     }
 
     const conversationBackground = document.getElementById("conversation-hud-background");
-    if (conversationBackground) {
+    const videoElement = document.getElementById("chud-background-video")
+    if (conversationBackground && videoElement) {
       if (newVisibility) {
         if (!game.ConversationHud.conversationIsMinimized) {
           conversationBackground.classList.add("visible");
+          if (videoElement.src !== '') {
+            videoElement.classList.remove("hidden");
+          }
         }
       } else {
         conversationBackground.classList.remove("visible");
+        videoElement.classList.add("hidden");
       }
     }
   }
