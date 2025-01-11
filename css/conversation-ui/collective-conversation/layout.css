@@ -1,0 +1,13 @@
+#collectiveConversation {
+  width: 100%;
+  overflow-y: auto;
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 10px;
+  /* grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); */
+
+  justify-content: center;
+  align-items: center;
+}

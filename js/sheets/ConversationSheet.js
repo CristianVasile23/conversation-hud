@@ -17,7 +17,7 @@ import { GmControlledConversationSheetHandler } from "../sheet-handlers/GmContro
 export class ConversationSheet extends JournalSheet {
   #dirty = false;
 
-  /** @type {ConversationData | undefined} */
+  /** @type {GMControlledConversationData | undefined} */
   #conversationData = undefined;
 
   /** @type {GmControlledConversationSheetHandler | undefined} */
@@ -29,7 +29,7 @@ export class ConversationSheet extends JournalSheet {
     const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
     if (pages.length > 0) {
       try {
-        /** @type {ConversationData} */
+        /** @type {GMControlledConversationData} */
         const data = JSON.parse(pages[0].text.content);
 
         // TODO: Check if valid data

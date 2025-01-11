@@ -7,7 +7,7 @@ import { ModuleSettings } from "../../settings.js";
  * TODO: Finish JSDoc
  *
  * @param {boolean} conversationVisible
- * @param {ConversationData} conversationData
+ * @param {GMControlledConversationData} conversationData
  * @returns {HTMLDivElement}
  */
 export function createConversationBackgroundContainer(conversationData, conversationVisible) {

@@ -15,7 +15,7 @@ import { SelectParticipatingUsersFrom } from "./SelectParticipatingUsersFrom.js"
 
 export class CollectiveConversationCreationForm extends FormApplication {
   // State variables
-  /** @type {(conversationData: ConversationData) => void | undefined} } */
+  /** @type {(conversationData: GMControlledConversationData) => void | undefined} } */
   #callbackFunction = undefined;
 
   /** @type {ParticipatingUserData[]} */
@@ -29,7 +29,7 @@ export class CollectiveConversationCreationForm extends FormApplication {
   /**
    * TODO: Add JSDoc
    *
-   * @param {(conversationData: ConversationData) => void} callbackFunction
+   * @param {(conversationData: GMControlledConversationData) => void} callbackFunction
    */
   constructor(callbackFunction) {
     super();
@@ -180,11 +180,13 @@ export class CollectiveConversationCreationForm extends FormApplication {
   async _updateObject(event, formData) {
     /** @type {CollectiveConversation} */
     const collectiveConversation = {
-      data: {},
+      data: {
+        participatingUsers: this.#participatingUsers,
+      },
       features: {},
     };
 
-    /** @type {ConversationData} */
+    /** @type {GMControlledConversationData} */
     const conversationData = {
       type: ConversationTypes.Collective,
       background: formData.conversationBackground,

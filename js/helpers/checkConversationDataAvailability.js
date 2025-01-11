@@ -11,7 +11,7 @@ import { socket } from "../init.js";
     result: {
       conversationIsActive: boolean;
       conversationIsVisible: boolean;
-      activeConversation: ConversationData;
+      activeConversation: GMControlledConversationData;
     };
     userId: string;
   }>}

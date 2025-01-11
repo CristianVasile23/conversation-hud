@@ -5,7 +5,7 @@ import { socket } from "./init.js";
 import { ConversationCreationForm } from "./forms/index.js";
 import { checkIfUserIsGM, getConfirmationFromUser } from "./helpers/index.js";
 import { ConversationTypes, SHEET_CLASSES } from "./constants/index.js";
-import { GmControllerConversation } from "./conversation-types/GmControllerConversation.js";
+import { CollectiveConversation, GmControllerConversation } from "./conversation-types/index.js";
 
 export class ConversationHud {
   conversationIsActive = false;
@@ -40,7 +40,7 @@ export class ConversationHud {
   /**
    * Function that creates and displays the ConversationHUD UI
    *
-   * @param {ConversationData} conversationData TODO
+   * @param {GMControlledConversationData} conversationData TODO
    * @param {boolean} conversationIsVisible TODO
    */
   async createConversation(conversationData, conversationIsVisible) {
@@ -48,14 +48,22 @@ export class ConversationHud {
     game.ConversationHud.conversationIsActive = true;
     game.ConversationHud.conversationIsVisible = conversationIsVisible;
 
+    console.log(conversationData);
+
     switch (conversationData.type) {
       case ConversationTypes.GMControlled:
         game.ConversationHud.activeConversation = new GmControllerConversation(conversationData);
         break;
 
-      default:
-        // TODO: Handle error case
+      case ConversationTypes.Collective:
+        game.ConversationHud.activeConversation = new CollectiveConversation(conversationData);
         break;
+
+      default:
+        // TODO: Handle error case in a better way + add improved logging
+        // What needs to be done is set the creation button state to be disabled as there is no active conversation
+        console.error("ConversationHUD | Unknown conversation type");
+        return;
     }
 
     game.ConversationHud.activeConversation.createConversation();
@@ -67,7 +75,7 @@ export class ConversationHud {
    * @returns {{
    *  conversationIsActive: boolean;
    *  conversationIsVisible: boolean;
-   *  activeConversation: ConversationData | undefined;
+   *  activeConversation: GMControlledConversationData | undefined;
    * }}
    */
   getConversation() {
@@ -296,7 +304,7 @@ export class ConversationHud {
   /**
    * Function that parses conversation input form data and then activates the conversation hud
    *
-   * @param {ConversationData} conversationData
+   * @param {GMControlledConversationData} conversationData
    * @param {boolean} visibility
    */
   #handleCreateConversationFromData(conversationData, visibility = true) {

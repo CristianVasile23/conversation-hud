@@ -83,12 +83,15 @@ Hooks.on("ready", async () => {
     }
 
     if (conversationData) {
-      game.ConversationHud.createConversation(conversationData.result.activeConversation, conversationData.result.conversationIsVisible);
+      game.ConversationHud.createConversation(
+        conversationData.result.activeConversation,
+        conversationData.result.conversationIsVisible
+      );
     }
   } else {
     try {
       // Try to get conversation data from a connected GM
-      /** @type {{ conversationIsActive: boolean; conversationIsVisible: boolean; activeConversation: ConversationData;}} */
+      /** @type {{ conversationIsActive: boolean; conversationIsVisible: boolean; activeConversation: GMControlledConversationData;}} */
       const result = await socket.executeAsGM("getConversation");
 
       // If there is an active conversation, render it

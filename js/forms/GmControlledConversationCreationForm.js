@@ -15,7 +15,7 @@ import {
 
 export class GmControlledConversationCreationForm extends FormApplication {
   // State variables
-  /** @type {(conversationData: ConversationData) => void | undefined} } */
+  /** @type {(conversationData: GMControlledConversationData) => void | undefined} } */
   callbackFunction = undefined;
   conversationBackground = "";
   participants = [];
@@ -28,7 +28,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
   /**
    * TODO: Add JSDoc
    *
-   * @param {(conversationData: ConversationData) => void} callbackFunction
+   * @param {(conversationData: GMControlledConversationData) => void} callbackFunction
    */
   constructor(callbackFunction) {
     super();
@@ -246,7 +246,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
       },
     };
 
-    /** @type {ConversationData} */
+    /** @type {GMControlledConversationData} */
     const conversationData = {
       type: ConversationTypes.GMControlled,
       background: formData.conversationBackground,

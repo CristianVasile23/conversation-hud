@@ -1,0 +1,25 @@
+#collectiveConversation .chud-participating-user {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#collectiveConversation .chud-participating-user #active-participant-anchor-point {
+  height: 500px;
+  width: 240px;
+  border: 1px solid red;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+#collectiveConversation .chud-participating-user .chud-user-details {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+#collectiveConversation .chud-participating-user .chud-user-details p {
+  margin: 0;
+  color: var(--color-text-light-highlight);
+}

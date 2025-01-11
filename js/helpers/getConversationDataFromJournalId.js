@@ -4,7 +4,7 @@
  * Function that parses a journal entry searching for conversation data
  *
  * @param {string} journalId The ID of the journal entity which should contain a conversation
- * @returns {ConversationData | null}
+ * @returns {GMControlledConversationData | null}
  */
 export function getConversationDataFromJournalId(journalId) {
   const document = game.journal.get(journalId);

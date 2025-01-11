@@ -32,7 +32,9 @@ export class ConversationCreationForm extends FormApplication {
     const collectiveConversationButton = html[0].querySelector("#collectiveConversationButton");
     collectiveConversationButton.onclick = async () => {
       await this.close({});
-      new CollectiveConversationCreationForm((data) => console.log(data)).render(true);
+      new CollectiveConversationCreationForm((data) => game.ConversationHud.createConversationFromData(data)).render(
+        true
+      );
     };
   }
 

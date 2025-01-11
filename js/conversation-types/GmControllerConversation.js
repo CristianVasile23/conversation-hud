@@ -22,7 +22,7 @@ import {
 } from "../forms/index.js";
 
 export class GmControllerConversation {
-  /** @type {ConversationData | undefined} */
+  /** @type {GMControlledConversationData | undefined} */
   #conversationData = undefined;
 
   #currentActiveParticipant = -1;
@@ -32,7 +32,7 @@ export class GmControllerConversation {
   /**
    * TODO: Finish JSDoc
    *
-   * @param {ConversationData} conversationData
+   * @param {GMControlledConversationData} conversationData
    */
   constructor(conversationData) {
     this.#conversationData = conversationData;
@@ -113,7 +113,7 @@ export class GmControllerConversation {
     const data = this.#conversationData.conversation.data;
     const features = this.#conversationData.conversation.features;
 
-    /** @type {ConversationData} */
+    /** @type {GMControlledConversationData} */
     const conversationData = {
       type: this.#conversationData.type,
       background: this.#conversationData.background,

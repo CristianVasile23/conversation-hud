@@ -1,5 +1,4 @@
 /// <reference path="../types/ConversationData.js" />
-/// <reference path="../types/GmControlledConversation/GmControlledConversationData.js" />
 
 import { ANCHOR_OPTIONS, DRAG_AND_DROP_DATA_TYPES, MODULE_NAME } from "../constants/index.js";
 import { ModuleSettings } from "../settings.js";
@@ -22,45 +21,51 @@ import {
 } from "../forms/index.js";
 
 export class CollectiveConversation {
-  /** @type {ConversationData | undefined} */
+  /** @type {CollectiveConversationObject | undefined} */
   #conversationData = undefined;
+
+  #participatingUsersActiveParticipantMap = new Map();
 
   /**
    * TODO: Finish JSDoc
    *
-   * @param {ConversationData} conversationData
+   * @param {CollectiveConversationObject} conversationData
    */
   constructor(conversationData) {
     this.#conversationData = conversationData;
+    for (const participatingUser of conversationData.conversation.data.participatingUsers) {
+      this.#participatingUsersActiveParticipantMap.set(participatingUser.id, -1);
+    }
   }
 
   /**
    * TODO: Finish JSDoc
    */
   async createConversation() {
-    // const conversationIsVisible = game.ConversationHud.conversationIsVisible;
-    // // Parse all participants and update their data
-    // for (let i = 0; i < this.#conversationData.conversation.data.participants.length; i++) {
-    //   processParticipantData(this.#conversationData.conversation.data.participants[i]);
-    // }
-    // // Create background
-    // const conversationBackground = createConversationBackgroundContainer(this.#conversationData, conversationIsVisible);
-    // // Disable the background if the conversation is minimized
-    // if (this.#conversationData.conversation.features.isMinimized) {
-    //   conversationBackground.classList.remove("visible");
-    // }
-    // // Create the template for the ConversationHUD UI elements
-    // const template = await this.#getConversationTemplate(this.#conversationData.conversation.data);
-    // // Create the conversation container
-    // const uiContainer = this.#createConversationContainer(template, conversationIsVisible);
-    // // Attacher ConversationHUD UI elements to the other FoundryVTT UI elements
-    // const body = document.body;
-    // body.append(conversationBackground);
-    // const uiBottom = document.getElementById("ui-bottom");
-    // uiBottom.before(uiContainer);
-    // // Render conversation controls
+    const conversationIsVisible = game.ConversationHud.conversationIsVisible;
+
+    // TODO: Update the data of the participants
+
+    // Create background
+    const conversationBackground = createConversationBackgroundContainer(this.#conversationData, conversationIsVisible);
+
+    // Create the template for the ConversationHUD UI elements
+    const template = await this.#getConversationTemplate(this.#conversationData.conversation.data);
+
+    // Create the conversation container
+    const uiContainer = this.#createConversationContainer(template, conversationIsVisible);
+
+    // Attacher ConversationHUD UI elements to the other FoundryVTT UI elements
+    const body = document.body;
+    body.append(conversationBackground);
+
+    const uiBottom = document.getElementById("ui-bottom");
+    uiBottom.before(uiContainer);
+
+    // Render conversation controls
     // this.#updateConversationControls();
-    // // After elements are rendered, render the active participant
+
+    // After elements are rendered, render the active participant
     // this.#changeActiveParticipant({ index: -1 });
   }
 
@@ -97,7 +102,7 @@ export class CollectiveConversation {
   getConversation() {
     // const data = this.#conversationData.conversation.data;
     // const features = this.#conversationData.conversation.features;
-    // /** @type {ConversationData} */
+    // /** @type {GMControlledConversationData} */
     // const conversationData = {
     //   type: this.#conversationData.type,
     //   background: this.#conversationData.background,
@@ -118,23 +123,25 @@ export class CollectiveConversation {
    * TODO: Finish JSDoc
    */
   async removeConversation() {
-    // const body = document.body;
-    // const conversationBackground = document.getElementById("active-conversation-background");
-    // if (conversationBackground) {
-    //   body.removeChild(conversationBackground);
-    // }
-    // const uiMiddle = document.getElementById("ui-middle");
-    // const conversation = document.getElementById("ui-conversation-hud");
-    // // TODO: Add check that uiMiddle exists
-    // if (conversation) {
-    //   uiMiddle.removeChild(conversation);
-    // }
-    // // Remove GM conversation controls
-    // const uiInterface = document.getElementById("interface");
-    // const controls = document.getElementById("ui-conversation-controls");
-    // if (controls) {
-    //   uiInterface.removeChild(controls);
-    // }
+    const body = document.body;
+    const conversationBackground = document.getElementById("active-conversation-background");
+    if (conversationBackground) {
+      body.removeChild(conversationBackground);
+    }
+
+    const uiMiddle = document.getElementById("ui-middle");
+    const conversation = document.getElementById("ui-conversation-hud");
+    // TODO: Add check that uiMiddle exists
+    if (conversation) {
+      uiMiddle.removeChild(conversation);
+    }
+
+    // Remove GM conversation controls
+    const uiInterface = document.getElementById("interface");
+    const controls = document.getElementById("ui-conversation-controls");
+    if (controls) {
+      uiInterface.removeChild(controls);
+    }
   }
 
   /**
@@ -143,6 +150,9 @@ export class CollectiveConversation {
    */
   executeFunction(functionData) {
     switch (functionData.type) {
+      case "change-active-participant":
+        this.#changeActiveParticipant(functionData.data);
+        break;
       default:
         // TODO: Log error
         break;
@@ -150,4 +160,92 @@ export class CollectiveConversation {
   }
 
   // ------------- PRIVATE FUNCTIONS -------------
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} data
+   */
+  #changeActiveParticipant(data) {
+    const userIndex = data.userIndex;
+    const userID = this.#conversationData.conversation.data.participatingUsers[userIndex].id;
+
+    let participantIndex = data.participantIndex;
+    if (this.#participatingUsersActiveParticipantMap.get(userID) === participantIndex) {
+      participantIndex = -1;
+    }
+
+    this.#participatingUsersActiveParticipantMap.set(userID, participantIndex);
+    this.#updateActiveParticipantImage(userIndex, participantIndex);
+    // this.#updateParticipantsList(index);
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {CollectiveConversationData} conversationData
+   * @returns {Promise<string>}
+   */
+  async #getConversationTemplate(conversationData) {
+    return await renderTemplate("modules/conversation-hud/templates/conversations/collective/interface.hbs", {
+      isGM: game.user.isGM,
+      hasDock: checkIfCameraDockIsOnBottomOrTop(),
+
+      participatingUsers: conversationData.participatingUsers,
+      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+      // displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
+      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+    });
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {string} htmlContent
+   * @param {boolean} conversationIsVisible
+   * @returns {HTMLDivElement}
+   */
+  #createConversationContainer(htmlContent, conversationIsVisible) {
+    const element = document.createElement("div");
+    element.id = "ui-conversation-hud";
+    element.className = "chud-active-conversation-wrapper";
+
+    if (conversationIsVisible) {
+      element.classList.add("visible");
+    }
+
+    if (this.#conversationData.conversation.features.isMinimized) {
+      element.classList.add("minimized");
+    }
+
+    element.innerHTML = htmlContent;
+
+    // TODO: Activate drag and drop listened
+    // this.#addDragAndDropListeners(element);
+
+    return element;
+  }
+
+  async #updateActiveParticipantImage(userIndex, participantIndex) {
+    const template = await renderTemplate(
+      "modules/conversation-hud/templates/fragments/active-participant-content.hbs",
+      {
+        displayParticipant: participantIndex === -1 ? false : true,
+        displayNoParticipantBox: game.settings.get(MODULE_NAME, ModuleSettings.displayNoParticipantBox),
+        participant:
+          participantIndex === -1
+            ? null
+            : this.#conversationData.conversation.data.participatingUsers[userIndex].participants[participantIndex],
+        portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+        activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+        activeParticipantFactionFontSize: game.settings.get(
+          MODULE_NAME,
+          ModuleSettings.activeParticipantFactionFontSize
+        ),
+      }
+    );
+
+    const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
+    console.log(activeParticipantAnchorPoint);
+    // activeParticipantAnchorPoint.innerHTML = template;
+  }
 }
