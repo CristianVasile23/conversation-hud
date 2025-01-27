@@ -16,6 +16,7 @@ export function preloadHandlebarsTemplates() {
 
     "modules/conversation-hud/templates/fragments/participating-users-list.hbs",
 
+    "modules/conversation-hud/templates/fragments/selectable-participant-entry.hbs",
     "modules/conversation-hud/templates/fragments/gm-controlled-conversation/active-conversation-participant-list-entry.hbs",
 
     "modules/conversation-hud/templates/fragments/faction-banner-shape.hbs",

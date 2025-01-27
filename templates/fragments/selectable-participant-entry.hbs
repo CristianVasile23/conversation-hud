@@ -1,0 +1,85 @@
+<div class="chud-selectable-participant">
+  {{!-- Controls --}}
+  {{#if isGM}}
+    <div class="chud-controls">
+      <a
+        class="edit"
+        title="{{localize 'CHUD.actions.participant.edit'}}"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="edit-participant" data=data)}}})'
+      >
+        <i class="fas fa-edit"></i>
+      </a>
+
+      <a
+        class="remove"
+        title="{{localize 'CHUD.actions.participant.delete'}}"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="remove-participant" data=data)}}})'
+      >
+        <i class="fas fa-trash"></i>
+      </a>
+
+      {{#if participant.linkedJournal}}
+        <a
+          class="notes"
+          title="{{localize 'CHUD.strings.linkedJournal.name'}}"
+          onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})"
+        >
+          <i class="fas fa-book"></i>
+        </a>
+      {{/if}}
+
+      {{#if participant.linkedActor}}
+        <a
+          class="notes"
+          title="{{localize 'CHUD.strings.linkedActor.name'}}"
+          onclick="game.ConversationHud.displayLinkedParticipantActor({{index}})"
+        >
+          <i class="fas fa-user"></i>
+        </a>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{!-- Participant --}}
+  <div
+    class="chud-content {{#if isGM}}chud-has-control{{/if}}"
+    {{#unless isGM}}
+      data-tooltip="
+        {{!-- TODO: Create a hbs helper for this portion of code  --}}
+        {{#if (eq participant.displayName false)}}
+          {{localize 'CHUD.strings.unknown'}}
+        {{else}}
+          {{participant.name}}
+        {{/if}}
+      "
+    {{/unless}}
+    {{#if isGM}}
+      draggable="true"
+      onclick='game.ConversationHud.executeFunction({{{json (object scope="everyone" type="change-active-participant" data=data)}}})'
+    {{/if}}
+  >
+    {{{renderParticipantPortrait
+      participant.img
+      (portraitParamsObject
+        class=(concat "chud-portrait " participant.portraitAnchor.vertical " " participant.portraitAnchor.horizontal)
+        alt="Portrait"
+        style=(concat "scale: " participant.imgScale ";")
+      )
+    }}}
+    
+    <p class="chud-name">
+      {{#if (eq participant.displayName false)}}
+        {{localize 'CHUD.strings.unknown'}}
+      {{else}}
+        {{participant.name}}
+      {{/if}}
+    </p>
+  </div>
+
+  {{!-- Faction --}}
+  <div data-tooltip="{{participant.faction.factionName}}" style="align-self: flex-start;">
+    {{> "modules/conversation-hud/templates/fragments/faction-banner.hbs"
+      faction=participant.faction
+    }}
+  </div>
+</div>

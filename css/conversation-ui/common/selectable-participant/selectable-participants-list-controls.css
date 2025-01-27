@@ -1,0 +1,25 @@
+.chud-selectable-participants-list-controls {
+  display: flex;
+  flex-direction: column;
+}
+
+.chud-selectable-participants-list-controls .chud-control-button {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  width: 52px;
+  height: 52px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+  padding: 4px;
+
+  background: rgba(0, 0, 0, 0.5);
+  box-shadow: 0 0 10px var(--color-shadow-dark);
+  color: var(--color-text-light-heading);
+  text-align: center;
+
+  border: 1px solid var(--color-border-dark);
+  border-radius: 5px;
+}

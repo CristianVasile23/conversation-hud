@@ -19,6 +19,8 @@ import { processParticipantData } from "./processParticipantData.js";
 import { setDefaultParticipantData } from "./setDefaultParticipantData.js";
 import { updateParticipantLinkedFaction } from "./updateParticipantLinkedFaction.js";
 
+export { deserializeActiveParticipantsMap, serializeActiveParticipantsMap } from "./collective-conversation/index.js";
+
 export {
   // Conversation
   createConversationBackgroundContainer,

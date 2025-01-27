@@ -4,12 +4,12 @@
   align-items: center;
 }
 
-#collectiveConversation .chud-participating-user #active-participant-anchor-point {
+/* #collectiveConversation .chud-participating-user #active-participant-anchor-point {
   height: 500px;
   width: 240px;
   border: 1px solid red;
   background: rgba(0, 0, 0, 0.5);
-}
+} */
 
 #collectiveConversation .chud-participating-user .chud-user-details {
   display: flex;

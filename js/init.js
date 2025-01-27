@@ -89,9 +89,10 @@ Hooks.on("ready", async () => {
       );
     }
   } else {
+    // TODO: Check to see if this whole else can be removed
     try {
       // Try to get conversation data from a connected GM
-      /** @type {{ conversationIsActive: boolean; conversationIsVisible: boolean; activeConversation: GMControlledConversationData;}} */
+      /** @type {{ conversationIsActive: boolean; conversationIsVisible: boolean; activeConversation: { conversationData: GMControlledConversationData; conversationCurrentState: any; } | undefined; }} */
       const result = await socket.executeAsGM("getConversation");
 
       // If there is an active conversation, render it

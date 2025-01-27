@@ -127,6 +127,9 @@ export class GmControllerConversation {
           isMinimized: features.isMinimizationLocked ? features.isMinimized : false,
         },
       },
+      currentState: {
+        currentActiveParticipantL: this.#currentActiveParticipant,
+      },
     };
 
     return conversationData;

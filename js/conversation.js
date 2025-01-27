@@ -40,23 +40,27 @@ export class ConversationHud {
   /**
    * Function that creates and displays the ConversationHUD UI
    *
-   * @param {GMControlledConversationData} conversationData TODO
+   * @param {{ conversationData: GMControlledConversationData; conversationCurrentState: any; }} conversation TODO
    * @param {boolean} conversationIsVisible TODO
    */
-  async createConversation(conversationData, conversationIsVisible) {
+  async createConversation(conversation, conversationIsVisible) {
     // Set conversation data
     game.ConversationHud.conversationIsActive = true;
     game.ConversationHud.conversationIsVisible = conversationIsVisible;
 
-    console.log(conversationData);
-
-    switch (conversationData.type) {
+    switch (conversation.conversationData.type) {
       case ConversationTypes.GMControlled:
-        game.ConversationHud.activeConversation = new GmControllerConversation(conversationData);
+        game.ConversationHud.activeConversation = new GmControllerConversation(
+          conversation.conversationData,
+          conversation.conversationCurrentState
+        );
         break;
 
       case ConversationTypes.Collective:
-        game.ConversationHud.activeConversation = new CollectiveConversation(conversationData);
+        game.ConversationHud.activeConversation = new CollectiveConversation(
+          conversation.conversationData,
+          conversation.conversationCurrentState
+        );
         break;
 
       default:
@@ -75,17 +79,29 @@ export class ConversationHud {
    * @returns {{
    *  conversationIsActive: boolean;
    *  conversationIsVisible: boolean;
-   *  activeConversation: GMControlledConversationData | undefined;
+   *  activeConversation: {
+   *    conversationData: GMControlledConversationData | undefined;
+   *    conversationCurrentState: any;
+   *  };
    * }}
    */
   getConversation() {
-    return {
+    const dataToReturn = {
       conversationIsActive: game.ConversationHud.conversationIsActive,
       conversationIsVisible: game.ConversationHud.conversationIsVisible,
-      activeConversation: game.ConversationHud.conversationIsActive
-        ? game.ConversationHud.activeConversation.getConversation()
-        : undefined,
     };
+
+    if (game.ConversationHud.conversationIsActive) {
+      const { conversationData, conversationCurrentState } = game.ConversationHud.activeConversation.getConversation();
+      dataToReturn.activeConversation = {
+        conversationData: conversationData,
+        conversationCurrentState: conversationCurrentState,
+      };
+    } else {
+      dataToReturn.activeConversation = undefined;
+    }
+
+    return dataToReturn;
   }
 
   /**
@@ -320,7 +336,12 @@ export class ConversationHud {
       return;
     }
 
-    socket.executeForEveryone("createConversation", conversationData, visibility);
+    const conversation = {
+      conversationData: conversationData,
+      conversationCurrentState: undefined,
+    };
+
+    socket.executeForEveryone("createConversation", conversation, visibility);
 
     // Finally, set the button status to active now that a conversation is active
     socket.executeForAllGMs("setActivateConversationHudButtonState", true);

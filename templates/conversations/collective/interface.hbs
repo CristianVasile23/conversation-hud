@@ -1,15 +1,52 @@
 <div id="collectiveConversation" class="conversation-hud-content chud-active-conversation {{#if hasDock}}has-dock{{/if}}">
-  {{#each participatingUsers as |participatingUser index|}}
-    <div class="chud-participating-user">
-      {{!-- Player name --}}
-      <div class="chud-user-details">
-        <i class="fas fa-user" style="color: {{participatingUser.color}}"></i>
-        <p>{{participatingUser.name}}</p>
-      </div>
+  <div id="chud-participating-users-list" class="chud-participating-users-list">
+    {{#each participatingUsers as |participatingUser index|}}
+      <div class="chud-participating-user">
+        {{!-- Player name --}}
+        <div class="chud-user-details">
+          <i class="fas fa-user" style="color: {{participatingUser.color}}"></i>
+          <p>{{participatingUser.name}}</p>
+        </div>
 
-      {{!-- Active participant --}}
-      <div id="active-participant-anchor-point">
+        {{!-- Active participant --}}
+        <div id="active-participant-anchor-point-{{index}}">
+        </div>
       </div>
+    {{/each}}
+  </div>
+
+  {{!-- Selectable participants list --}}
+  <div id="selectable-participants-list" class="chud-selectable-participants-list">
+    {{#each currentParticipatingUserData.participants as |participant index|}}
+      <div class="participant-drag-drop-container">
+        <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
+
+        {{> "modules/conversation-hud/templates/fragments/selectable-participant-entry.hbs"
+          isGM=true
+          participant=participant
+          data=(object userID=../currentParticipatingUserData.id participantIndex=index)
+        }}
+
+        <div id="drag-drop-indicator-bottom" class="drag-drop-indicator"></div>
+      </div>
+    {{/each}}
+  </div>
+
+  <div id="selectable-participants-list-controls" class="chud-selectable-participants-list-controls">
+    <div
+      class="chud-control-button"
+      onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-participant" data=(object userID=currentParticipatingUserData.id))}}})'
+      {{!-- data-tooltip="{{localize 'CHUD.actions.toggleVisibility'}}" --}}
+    >
+      <i class="fas fa-plus"></i>
     </div>
-  {{/each}}
+
+    <div
+      class="chud-control-button"
+      {{!-- onclick="game.ConversationHud.toggleConversationVisibility()" --}}
+      {{!-- data-tooltip="{{localize 'CHUD.actions.toggleVisibility'}}" --}}
+    >
+      <i class="fas fa-plus"></i>
+    </div>
+  </div>
 </div>

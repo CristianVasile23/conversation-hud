@@ -11,7 +11,10 @@ import { socket } from "../init.js";
     result: {
       conversationIsActive: boolean;
       conversationIsVisible: boolean;
-      activeConversation: GMControlledConversationData;
+      activeConversation: {
+        conversationData: GMControlledConversationData;
+        conversationCurrentState: any;
+      } | undefined;
     };
     userId: string;
   }>}
