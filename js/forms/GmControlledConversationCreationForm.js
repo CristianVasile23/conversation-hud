@@ -242,7 +242,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
         isMinimized: false,
         isMinimizationLocked: false,
         isSpeakingAs: false,
-        isBackgroundVisible: false,
+        isBackgroundVisible: true,
       },
     };
 

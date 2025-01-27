@@ -1,0 +1,63 @@
+@font-face {
+  font-family: "conversation-hud-font-icons";
+  src: url("./font-assets/conversation-hud-font-icons.eot?96668688");
+  src: url("./font-assets/conversation-hud-font-icons.eot?96668688#iefix") format("embedded-opentype"),
+    url("./font-assets/conversation-hud-font-icons.woff2?96668688") format("woff2"),
+    url("./font-assets/conversation-hud-font-icons.woff?96668688") format("woff"),
+    url("./font-assets/conversation-hud-font-icons.ttf?96668688") format("truetype"),
+    url("./font-assets/conversation-hud-font-icons.svg?96668688#conversation-hud-font-icons") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+/* Chrome hack: SVG is rendered more smooth in Windozze. 100% magic, uncomment if you need it. */
+/* Note, that will break hinting! In other OS-es font will be not as sharp as it could be */
+/*
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: 'conversation-hud-font-icons';
+    src: url('./font-assets/conversation-hud-font-icons.svg?96668688#conversation-hud-font-icons') format('svg');
+  }
+}
+*/
+[class^="chud-icon-"]:before,
+[class*=" chud-icon-"]:before {
+  font-family: "conversation-hud-font-icons";
+  font-style: normal;
+  font-weight: normal;
+  speak: never;
+
+  display: inline-block;
+  text-decoration: inherit;
+  width: 1em;
+  margin-right: 0.2em;
+  text-align: center;
+  /* opacity: .8; */
+
+  /* For safety - reset parent styles, that can break glyph codes*/
+  font-variant: normal;
+  text-transform: none;
+
+  /* fix buttons height, for twitter bootstrap */
+  line-height: 1em;
+
+  /* Animation center compensation - margins should be symmetric */
+  /* remove if not needed */
+  margin-left: 0.2em;
+
+  /* you can be more comfortable with increased icons size */
+  /* font-size: 120%; */
+
+  /* Font smoothing. That was taken from TWBS */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Uncomment for 3D effect */
+  /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
+}
+
+.chud-icon-participant-add:before {
+  content: "\e800";
+} /* '' */
+.chud-icon-participant-lock-add:before {
+  content: "\e801";
+} /* '' */

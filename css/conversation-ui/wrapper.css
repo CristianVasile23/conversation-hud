@@ -14,21 +14,12 @@
 
   margin: auto;
 
-  display: none;
-  flex-flow: row;
   justify-content: center;
   align-items: center;
 
   height: 100%;
 
   pointer-events: all;
-}
-/* #endregion */
-
-/* ----- Conversation visible ----- */
-/* #region */
-.chud-active-conversation-wrapper.visible .conversation-hud-content {
-  display: flex;
 }
 /* #endregion */
 

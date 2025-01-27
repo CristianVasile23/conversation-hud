@@ -183,7 +183,12 @@ export class CollectiveConversationCreationForm extends FormApplication {
       data: {
         participatingUsers: this.#participatingUsers,
       },
-      features: {},
+      features: {
+        isMinimized: false,
+        isMinimizationLocked: false,
+        isSpeakingAs: false,
+        isBackgroundVisible: true,
+      },
     };
 
     /** @type {GMControlledConversationData} */

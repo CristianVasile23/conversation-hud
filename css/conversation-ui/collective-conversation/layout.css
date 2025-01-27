@@ -1,6 +1,13 @@
-#collectiveConversation {
+.chud-active-conversation-wrapper.visible #collectiveConversation {
   display: grid;
-  grid-template-columns: 1fr 200px 100px;
+  grid-template-columns: 1fr auto;
+  gap: 72px;
+  justify-content: center;
+  align-items: center;
+}
+
+.chud-active-conversation-wrapper:not(.visible) #collectiveConversation {
+  display: none;
 }
 
 #collectiveConversation .chud-participating-users-list {
@@ -14,4 +21,11 @@
 
   justify-content: center;
   align-items: center;
+}
+
+#collectiveConversation .chud-controls-content-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding-right: 36px;
 }

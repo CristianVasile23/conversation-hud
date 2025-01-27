@@ -12,7 +12,7 @@ export class ChangeConversationBackgroundForm extends FormApplication {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
-      template: `modules/conversation-hud/templates/templates/conversation-background-form.hbs`,
+      template: `modules/conversation-hud/templates/forms/conversation-background-form.hbs`,
       id: "conversation-background-form",
       title: game.i18n.localize("CHUD.actions.changeConversationBackground"),
       width: 450,

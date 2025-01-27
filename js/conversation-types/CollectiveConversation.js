@@ -106,25 +106,25 @@ export class CollectiveConversation {
    * @param {boolean} isVisible
    */
   updateConversationVisibility(isVisible) {
-    // const conversationHud = document.getElementById("ui-conversation-hud");
-    // if (conversationHud) {
-    //   if (isVisible) {
-    //     conversationHud.classList.add("visible");
-    //   } else {
-    //     conversationHud.classList.remove("visible");
-    //   }
-    // }
-    // const conversationBackground = document.getElementById("active-conversation-background");
-    // if (conversationBackground) {
-    //   if (isVisible) {
-    //     if (!this.#conversationData.conversation.features.isMinimized) {
-    //       conversationBackground.classList.add("visible");
-    //     }
-    //   } else {
-    //     conversationBackground.classList.remove("visible");
-    //   }
-    // }
-    // this.#updateConversationControls();
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    if (conversationHud) {
+      if (isVisible) {
+        conversationHud.classList.add("visible");
+      } else {
+        conversationHud.classList.remove("visible");
+      }
+    }
+    const conversationBackground = document.getElementById("active-conversation-background");
+    if (conversationBackground) {
+      if (isVisible) {
+        if (!this.#conversationData.conversation.features.isMinimized) {
+          conversationBackground.classList.add("visible");
+        }
+      } else {
+        conversationBackground.classList.remove("visible");
+      }
+    }
+    this.#updateConversationControls();
   }
 
   /**
@@ -141,6 +141,7 @@ export class CollectiveConversation {
       conversation: {
         data: data,
         features: {
+          // TODO: On get, here, send default params for other client-sided settings
           ...features,
           // Since minimization is something that is also client-sided, we only get the minimization state
           // if the minimization is locked (and that means all clients should have the same minimization state)
@@ -201,6 +202,21 @@ export class CollectiveConversation {
         break;
       case "change-active-participant":
         this.#changeActiveParticipant(functionData.data);
+        break;
+      case "toggle-speaking-as":
+        this.#toggleSpeakingAs();
+        break;
+      case "update-background":
+        this.#updateBackground(functionData.data);
+        break;
+      case "change-background":
+        this.#changeBackground();
+        break;
+      case "toggle-background":
+        this.#toggleBackground();
+        break;
+      case "set-background-visibility":
+        this.#setBackgroundVisibility(functionData.data);
         break;
       default:
         // TODO: Log error
@@ -267,7 +283,10 @@ export class CollectiveConversation {
 
     this.#participatingUsersActiveParticipantMap.set(userID, participantIndex);
     this.#updateActiveParticipantImage(userID, participantIndex);
-    // this.#updateParticipantsList(index);
+
+    if (game.user.id === userID) {
+      this.#updateParticipantsList(participantIndex);
+    }
   }
 
   /**
@@ -280,6 +299,111 @@ export class CollectiveConversation {
     let participantIndex = data.participantIndex;
     this.#participatingUsersActiveParticipantMap.set(userID, participantIndex);
     this.#updateActiveParticipantImage(userID, participantIndex);
+
+    if (game.user.id === userID) {
+      this.#updateParticipantsList(participantIndex);
+    }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  #toggleSpeakingAs() {
+    if (game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs)) {
+      if (game.ConversationHud.conversationIsActive) {
+        this.#conversationData.conversation.features.isSpeakingAs =
+          !this.#conversationData.conversation.features.isSpeakingAs;
+        this.#updateConversationControls();
+      }
+    } else {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+    }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  async #updateBackground(data) {
+    const background = data.background;
+    const backgroundContainer = document.getElementById("active-conversation-background");
+    if (backgroundContainer) {
+      if (background) {
+        backgroundContainer.classList.add("chud-active-conversation-background-image");
+        backgroundContainer.style.backgroundImage = `url(${background})`;
+      } else {
+        backgroundContainer.classList.remove("chud-active-conversation-background-image");
+        backgroundContainer.style.backgroundImage = ``;
+      }
+    }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  #changeBackground() {
+    if (!checkIfUserIsGM()) {
+      // TODO: Log error in console
+      return;
+    }
+
+    new ChangeConversationBackgroundForm(
+      (data) => this.#changeBackgroundHelper(data),
+      this.#conversationData.background
+    ).render(true);
+  }
+
+  /**
+   *
+   * @param {*} data
+   */
+  #changeBackgroundHelper(data) {
+    this.#conversationData.background = data.conversationBackground;
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "update-background",
+      data: {
+        background: this.#conversationData.background,
+      },
+    });
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  #toggleBackground() {
+    this.#conversationData.conversation.features.isBackgroundVisible =
+      !this.#conversationData.conversation.features.isBackgroundVisible;
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "set-background-visibility",
+      data: {
+        isBackgroundVisible: this.#conversationData.conversation.features.isBackgroundVisible,
+      },
+    });
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} data
+   */
+  #setBackgroundVisibility(data) {
+    const isBackgroundVisible = data.isBackgroundVisible;
+
+    const conversationBackground = document.getElementById("active-conversation-background");
+    if (isBackgroundVisible) {
+      conversationBackground.style.display = "";
+    } else {
+      conversationBackground.style.display = "none";
+    }
+
+    if (game.user.isGM) {
+      this.#updateConversationControls();
+    }
   }
 
   /**
@@ -440,5 +564,25 @@ export class CollectiveConversation {
 
     const activeParticipantAnchorPoint = document.querySelector(`#active-participant-anchor-point-${userIndex}`);
     activeParticipantAnchorPoint.innerHTML = template;
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} activeParticipantIndex
+   */
+  #updateParticipantsList(activeParticipantIndex) {
+    // Change active class of all other elements
+    const conversationParticipants = document.getElementById("selectable-participants-list").children;
+    if (conversationParticipants) {
+      for (let i = 0; i < conversationParticipants.length; i++) {
+        const entryElement = conversationParticipants[i].getElementsByClassName("chud-content")[0];
+        if (activeParticipantIndex === i) {
+          entryElement?.classList.add("chud-active");
+        } else {
+          entryElement?.classList.remove("chud-active");
+        }
+      }
+    }
   }
 }
