@@ -544,15 +544,21 @@ export class CollectiveConversation {
       (user) => user.id === userID
     );
 
+    const participantData =
+      participantIndex === -1
+        ? null
+        : this.#conversationData.conversation.data.participatingUsers[userIndex].participants[participantIndex];
+    const participatingUserData = this.#conversationData.conversation.data.participatingUsers[userIndex];
+
     const template = await renderTemplate(
       "modules/conversation-hud/templates/fragments/active-participant-content.hbs",
       {
         displayParticipant: participantIndex === -1 ? false : true,
+        participant: participantData,
+        participatingUser: participatingUserData,
+
+        // TODO: Rename setting prop names
         displayNoParticipantBox: game.settings.get(MODULE_NAME, ModuleSettings.displayNoParticipantBox),
-        participant:
-          participantIndex === -1
-            ? null
-            : this.#conversationData.conversation.data.participatingUsers[userIndex].participants[participantIndex],
         portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
         activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
         activeParticipantFactionFontSize: game.settings.get(

@@ -17,6 +17,11 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
+
+  margin-bottom: 5px;
+
+  text-shadow: 0 0 10px var(--color-shadow-dark);
+  font-size: var(--font-size-16);
 }
 
 #collectiveConversation .chud-participating-user .chud-user-details p {

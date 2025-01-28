@@ -2,12 +2,6 @@
   <div id="chud-participating-users-list" class="chud-participating-users-list">
     {{#each participatingUsers as |participatingUser index|}}
       <div class="chud-participating-user">
-        {{!-- Player name --}}
-        <div class="chud-user-details">
-          <i class="fas fa-user" style="color: {{participatingUser.color}}"></i>
-          <p>{{participatingUser.name}}</p>
-        </div>
-
         {{!-- Active participant --}}
         <div id="active-participant-anchor-point-{{index}}">
         </div>

@@ -10,32 +10,42 @@
     <p class="faction-name {{activeParticipantFactionFontSize}}">{{participant.faction.factionName}}</p>
   </div>
 
-  {{!-- Participant display --}}
-  <div
-    class="active-participant {{portraitStyle}} {{#unless (or displayParticipant displayNoParticipantBox)}}hidden{{/unless}}"
-    {{#if (and displayParticipant participant.displayName)}} data-tooltip="{{participant.name}}"{{/if}}
-  >
-    {{#if displayParticipant}}
-      {{{renderParticipantPortrait
-        participant.img
-        (portraitParamsObject
-          class=(concat "portrait " participant.portraitAnchor.vertical " " participant.portraitAnchor.horizontal)
-          alt="Portrait"
-          style=(concat "scale: " participant.imgScale ";")
-        )
-      }}}
-
-      <p class="name {{activeParticipantFontSize}}">
-        {{#if (eq participant.displayName false)}}
-          {{localize 'CHUD.strings.unknown'}}
-        {{else}}
-          {{participant.name}}
-        {{/if}}
-      </p>
-    {{else}}
-      <p class="no-participant-text">
-        {{localize 'CHUD.strings.noActiveParticipant'}}
-      </p>
+  <div>
+    {{!-- User name --}}
+    {{#if participatingUser}}
+      <div class="chud-user-details">
+        <i class="fas fa-user" style="color: {{participatingUser.color}}"></i>
+        <p>{{participatingUser.name}}</p>
+      </div>
     {{/if}}
+
+    {{!-- Participant display --}}
+    <div
+      class="active-participant {{portraitStyle}} {{#unless (or displayParticipant displayNoParticipantBox)}}hidden{{/unless}}"
+      {{#if (and displayParticipant participant.displayName)}} data-tooltip="{{participant.name}}"{{/if}}
+    >
+      {{#if displayParticipant}}
+        {{{renderParticipantPortrait
+          participant.img
+          (portraitParamsObject
+            class=(concat "portrait " participant.portraitAnchor.vertical " " participant.portraitAnchor.horizontal)
+            alt="Portrait"
+            style=(concat "scale: " participant.imgScale ";")
+          )
+        }}}
+
+        <p class="name {{activeParticipantFontSize}}">
+          {{#if (eq participant.displayName false)}}
+            {{localize 'CHUD.strings.unknown'}}
+          {{else}}
+            {{participant.name}}
+          {{/if}}
+        </p>
+      {{else}}
+        <p class="no-participant-text">
+          {{localize 'CHUD.strings.noActiveParticipant'}}
+        </p>
+      {{/if}}
+    </div>
   </div>
 </div>
