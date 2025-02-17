@@ -1,17 +1,9 @@
-import { ChangeConversationBackgroundForm } from "./ChangeConversationBackgroundForm.js";
-import { CollectiveConversationCreationForm } from "./CollectiveConversationCreationForm.js";
-import { ConversationCreationForm } from "./ConversationCreationForm.js";
-import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
-import { GmControlledConversationCreationForm } from "./GmControlledConversationCreationForm.js";
-import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
-import { SelectParticipatingUsersFrom } from "./SelectParticipatingUsersFrom.js";
-
-export {
-  ChangeConversationBackgroundForm,
-  CollectiveConversationCreationForm,
-  ConversationCreationForm,
-  CreateOrEditParticipantForm,
-  GmControlledConversationCreationForm,
-  PullParticipantsFromSceneForm,
-  SelectParticipatingUsersFrom,
-};
+export { ChangeConversationBackgroundForm } from "./ChangeConversationBackgroundForm.js";
+export { CollectiveConversationCreationForm } from "./CollectiveConversationCreationForm.js";
+export { CollectiveConversationParticipantsEditForm } from "./CollectiveConversationParticipantsEditForm.js";
+export { ConversationCreationForm } from "./ConversationCreationForm.js";
+export { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
+export { GmControlledConversationCreationForm } from "./GmControlledConversationCreationForm.js";
+export { OwnedActorsSelectionForm } from "./OwnedActorsSelectionForm.js";
+export { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
+export { SelectParticipatingUsersFrom } from "./SelectParticipatingUsersFrom.js";

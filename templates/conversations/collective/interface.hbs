@@ -38,8 +38,8 @@
 
       <div
         class="chud-control-button"
-        {{!-- onclick="game.ConversationHud.toggleConversationVisibility()" --}}
-        data-tooltip="{{localize 'CHUD.actions.addOwnedParticipant'}}"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-owned-actor")}}})'
+        data-tooltip="{{localize 'CHUD.actions.addOwnedActor'}}"
       >
         <i class="chud-icon-participant-lock-add"></i>
       </div>

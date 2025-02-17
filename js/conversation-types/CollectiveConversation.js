@@ -19,7 +19,9 @@ import {
 } from "../helpers/index.js";
 import {
   ChangeConversationBackgroundForm,
+  CollectiveConversationParticipantsEditForm,
   CreateOrEditParticipantForm,
+  OwnedActorsSelectionForm,
   PullParticipantsFromSceneForm,
 } from "../forms/index.js";
 
@@ -194,6 +196,9 @@ export class CollectiveConversation {
       case "update-conversation":
         this.#updateConversation(functionData.data);
         break;
+      case "edit-participating-users":
+        this.#editParticipatingUsers();
+        break;
       case "add-participant":
         this.#addParticipant(functionData.data);
         break;
@@ -203,6 +208,8 @@ export class CollectiveConversation {
       case "change-active-participant":
         this.#changeActiveParticipant(functionData.data);
         break;
+      case "add-owned-actor":
+        this.#addOwnedActor();
       case "toggle-speaking-as":
         this.#toggleSpeakingAs();
         break;
@@ -268,6 +275,31 @@ export class CollectiveConversation {
     }
   }
 
+  #editParticipatingUsers() {
+    new CollectiveConversationParticipantsEditForm(
+      (data) => this.#editParticipatingUsersHelper(data),
+      this.#conversationData.conversation.data.participatingUsers
+    ).render(true);
+  }
+
+  /**
+   *
+   * @param {ParticipatingUserData[]} updatedParticipatingUsers
+   */
+  #editParticipatingUsersHelper(updatedParticipatingUsers) {
+    const updatedConversationData = JSON.parse(JSON.stringify(this.#conversationData));
+    updatedConversationData.conversation.data.participatingUsers = updatedParticipatingUsers;
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "update-conversation",
+      data: {
+        ...updatedConversationData,
+      },
+    });
+  }
+
   /**
    * TODO: Finish JSDoc
    *
@@ -297,12 +329,21 @@ export class CollectiveConversation {
   #setActiveParticipant(data) {
     const userID = data.userID;
     let participantIndex = data.participantIndex;
+
+    if (!participantIndex) {
+      participantIndex = -1;
+    }
+
     this.#participatingUsersActiveParticipantMap.set(userID, participantIndex);
     this.#updateActiveParticipantImage(userID, participantIndex);
 
     if (game.user.id === userID) {
       this.#updateParticipantsList(participantIndex);
     }
+  }
+
+  #addOwnedActor() {
+    new OwnedActorsSelectionForm((data) => console.log(data)).render(true);
   }
 
   /**
