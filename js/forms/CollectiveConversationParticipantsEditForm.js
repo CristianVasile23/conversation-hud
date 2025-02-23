@@ -1,7 +1,7 @@
 /// <reference path="../types/ParticipatingUserData.js" />
 /// <reference path="../types/ConversationData.js" />
 
-import { ANCHOR_OPTIONS, ConversationTypes } from "../constants/index.js";
+import { ANCHOR_OPTIONS } from "../constants/index.js";
 import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
 import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
 import {
@@ -20,10 +20,12 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
 
   /** @type {ParticipatingUserData[]} */
   #participatingUsers = [];
-  #conversationBackground = "";
+
+  /** @type {Map<string, boolean>} */
+  #minimizedSections = new Map();
 
   // Drag and drop variables
-  // dropzoneVisible = false;
+  #dropzoneVisible = false;
   #isDraggingAParticipant = false;
 
   /**
@@ -36,6 +38,10 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
     super();
     this.#callbackFunction = callbackFunction;
     this.#participatingUsers = participatingUsers;
+
+    for (const participatingUser of this.#participatingUsers) {
+      this.#minimizedSections.set(participatingUser.id, false);
+    }
   }
 
   static get defaultOptions() {
@@ -47,6 +53,7 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
       title: game.i18n.localize("CHUD.actions.createConversation"),
       width: 685,
       height: 800,
+      scrollY: [".chud-form-section.chud-form-content.chud-overflow-y-auto"],
     });
   }
 
@@ -55,6 +62,9 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
       for (const participant of participatingUser.participants) {
         processParticipantData(participant);
       }
+
+      // TODO: Dirty hack, make something better
+      participatingUser.sectionIsMinimized = this.#minimizedSections.get(participatingUser.id);
     }
 
     return {
@@ -88,6 +98,10 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
         accordionButton.onclick = () => {
           accordionButton.classList.toggle("chud-collapsed");
           collapsibleWrapper.classList.toggle("chud-collapsed");
+
+          const userID = this.#participatingUsers[index].id;
+          const minimizationState = this.#minimizedSections.get(userID);
+          this.#minimizedSections.set(userID, !minimizationState);
         };
 
         // Pull scene actors button
@@ -111,11 +125,12 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
         };
 
         // Remove participant button
-        participatingUser.querySelector("#removeParticipatingUserButton").onclick = () => {
-          getConfirmationFromUser("CHUD.dialogue.onRemoveParticipatingUser", () =>
-            this.#handleRemoveParticipatingUsers(index)
-          );
-        };
+        // TODO: Remove
+        // participatingUser.querySelector("#removeParticipatingUserButton").onclick = () => {
+        //   getConfirmationFromUser("CHUD.dialogue.onRemoveParticipatingUser", () =>
+        //     this.#handleRemoveParticipatingUsers(index)
+        //   );
+        // };
 
         // Add listeners on all the control buttons present on the conversation participants
         const conversationParticipantsListHTML = participatingUser.querySelector("#conversationParticipantsList");
@@ -193,20 +208,26 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
         name: user.name,
         color: user.color,
         defaultActiveParticipant: undefined,
-        participants: [],
+        participants:
+          this.#participatingUsers.find((existingUsers) => existingUsers.id === user.id)?.participants ?? [],
       };
     });
 
-    this.#participatingUsers.push(...participatingUsers);
+    this.#participatingUsers = participatingUsers;
+
+    for (const participatingUser of this.#participatingUsers) {
+      this.#minimizedSections.set(participatingUser.id, false);
+    }
 
     this.render(false);
   }
 
-  #handleRemoveParticipatingUsers(index) {
-    this.#participatingUsers.splice(index, 1);
+  // TODO: Remove
+  // #handleRemoveParticipatingUsers(index) {
+  //   this.#participatingUsers.splice(index, 1);
 
-    this.render(false);
-  }
+  //   this.render(false);
+  // }
 
   #handleAddParticipantToParticipatingUser(index, data) {
     processParticipantData(data);

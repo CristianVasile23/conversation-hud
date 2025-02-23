@@ -4,6 +4,8 @@
   display: flex;
   flex-direction: column;
   padding: 5px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 /* #endregion */
 

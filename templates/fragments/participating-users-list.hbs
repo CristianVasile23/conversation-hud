@@ -4,7 +4,7 @@
       {{#each participatingUsers as |participatingUser index|}}
         <div class="chud-participating-user">
           <div class="chud-entry-header">
-            <a id="accordionButton" class="chud-accordion">
+            <a id="accordionButton" class="chud-accordion {{#if sectionIsMinimized}}chud-collapsed{{/if}}">
               <i class="fas fa-chevron-up"></i>
             </a>
 
@@ -24,13 +24,10 @@
               <a id="addParticipantButton" title="{{localize 'CHUD.actions.participatingUser.addParticipant'}}">
                 <i class="fas fa-user-plus"></i>
               </a>
-              <a id="removeParticipatingUserButton" title="{{localize 'CHUD.actions.participatingUser.remove'}}">
-                <i class="fas fa-trash"></i>
-              </a>
             </div>
           </div>
 
-          <div class="chud-entry-content chud-collapsible-content-wrapper">
+          <div class="chud-entry-content chud-collapsible-content-wrapper {{#if sectionIsMinimized}}chud-collapsed{{/if}}">
             <div class="chud-collapsible-content chud-mt-16">
               <div class="chud-entry-content-section">
                 <p class="chud-header">Settings</p>

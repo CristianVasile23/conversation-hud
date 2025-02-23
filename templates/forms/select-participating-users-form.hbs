@@ -26,8 +26,13 @@
       {{#if users}}
         {{#each users}}
           <label class="checkbox">
-            <input type="checkbox" name="users" value="{{id}}" checked />
-            {{name}}
+            <input
+              type="checkbox"
+              name="users"
+              value="{{userData.id}}"
+              {{#if isChecked}}checked{{/if}}
+            />
+            {{userData.name}}
           </label>
         {{/each}}
       {{else}}
