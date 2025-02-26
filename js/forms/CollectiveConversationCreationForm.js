@@ -18,10 +18,10 @@ export class CollectiveConversationCreationForm extends FormApplication {
   /** @type {(conversationData: GMControlledConversationData) => void | undefined} } */
   #callbackFunction = undefined;
 
+  #conversationBackground = "";
+
   /** @type {ParticipatingUserData[]} */
   #participatingUsers = [];
-
-  #conversationBackground = "";
 
   /** @type {Map<string, boolean>} */
   #minimizedSections = new Map();
@@ -238,8 +238,9 @@ export class CollectiveConversationCreationForm extends FormApplication {
 
     this.#participatingUsers = [...existingParticipatingUsers, ...newParticipatingUsers];
 
-    for (const participatingUser of this.#participatingUsers) {
-      this.#minimizedSections.set(participatingUser.id, false);
+    // Set minimization state only for new users (or previously removed ones)
+    for (const userID of addedUsers) {
+      this.#minimizedSections.set(userID, false);
     }
 
     this.render(false);

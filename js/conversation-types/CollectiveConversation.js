@@ -461,11 +461,11 @@ export class CollectiveConversation {
       isGM: game.user.isGM,
       hasDock: checkIfCameraDockIsOnBottomOrTop(),
 
+      userIsParticipating: Boolean(currentParticipatingUserData),
       currentParticipatingUserData: currentParticipatingUserData,
       participatingUsers: conversationData.participatingUsers,
 
       portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      // displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
       activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
     });
   }

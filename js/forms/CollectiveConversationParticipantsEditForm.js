@@ -38,10 +38,6 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
     super();
     this.#callbackFunction = callbackFunction;
     this.#participatingUsers = participatingUsers;
-
-    for (const participatingUser of this.#participatingUsers) {
-      this.#minimizedSections.set(participatingUser.id, false);
-    }
   }
 
   static get defaultOptions() {
@@ -197,26 +193,32 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
   }
 
   #handleAddParticipatingUsers(data) {
-    const selectedUsers = data.users;
-    const users = game.users;
-    const filteredUsers = users.filter((element) => selectedUsers.includes(element.id));
+    const unaffectedUsers = data.unaffectedUsers;
+    const addedUsers = data.addedUsers;
 
-    // TODO: Create participating user object through a reusable function
-    const participatingUsers = filteredUsers.map((user) => {
+    const existingParticipatingUsers = unaffectedUsers.map(
+      (userID) => this.#participatingUsers.find((user) => user.id === userID) ?? null
+    );
+
+    const users = game.users;
+    const filteredUsers = users.filter((element) => addedUsers.includes(element.id));
+    const newParticipatingUsers = filteredUsers.map((user) => {
       return {
         id: user.id,
         name: user.name,
         color: user.color,
         defaultActiveParticipant: undefined,
-        participants:
-          this.#participatingUsers.find((existingUsers) => existingUsers.id === user.id)?.participants ?? [],
+        participants: [],
       };
     });
 
-    this.#participatingUsers = participatingUsers;
+    this.#participatingUsers = [...existingParticipatingUsers, ...newParticipatingUsers].sort(
+      (userA, userB) => userA.id - userB.id
+    );
 
-    for (const participatingUser of this.#participatingUsers) {
-      this.#minimizedSections.set(participatingUser.id, false);
+    // Set minimization state only for new users (or previously removed ones)
+    for (const userID of addedUsers) {
+      this.#minimizedSections.set(userID, false);
     }
 
     this.render(false);
