@@ -1,33 +1,16 @@
-<form class="sheet chud-h-100">
-  <div class="flexrow chud-form-sub-header">
-    <p> {{localize 'CHUD.strings.conversationSettings'}} </p>
-  </div>
-
-  <div class="chud-form-section chud-flex-0">
-    <div class="form-group">
-      <label>{{localize "CHUD.strings.conversationBackground.name"}}</label>
-      <div class="form-fields">
-        <button
-          type="button"
-          class="file-picker"
-          data-type="imagevideo"
-          data-target="conversationBackground"
-          title="{{localize 'CHUD.strings.browseFiles'}}"
-        >
-          <i class="fas fa-file-import fa-fw"></i>
-        </button>
-
-        <input
-          class="image"
-          type="text"
-          name="conversationBackground"
-          placeholder="{{localize 'CHUD.strings.filePath'}}"
-          value="{{conversationBackground}}"
-        />
+<div class="standard-form chud-flex-1" data-application-part="body">
+  <fieldset>
+    <legend>{{localize 'CHUD.strings.conversationSettings'}} </legend>
+    <div class="chud-form-section chud-flex-0">
+      <div class="form-group">
+        <label>{{localize "CHUD.strings.conversationBackground.name"}}</label>
+        <div class="form-fields">
+          <file-picker name="conversationBackground" type="imagevideo" value="{{conversationBackground}}"></file-picker>
+        </div>
+        <p class="hint">{{localize "CHUD.strings.conversationBackground.hint"}}</p>
       </div>
-      <p class="notes">{{localize "CHUD.strings.conversationBackground.hint"}}</p>
     </div>
-  </div>
+  </fieldset>
 
   {{#switch type}} 
     {{#case 'gm-controlled'}}
@@ -46,17 +29,4 @@
       <p>Type not supported</p>
     {{/case}}
   {{/switch}}
-    
-  <div class="chud-form-footer">
-    <footer class="sheet-footer flexrow">
-      <button
-        type="submit"
-        name="submit"
-        title="{{localize 'CHUD.actions.startConversation'}}"
-      >
-        <i class="fa fa-check"></i>
-        {{localize 'CHUD.actions.startConversation'}}
-      </button>
-    </footer>
-  </div>
-</form>
+</div>

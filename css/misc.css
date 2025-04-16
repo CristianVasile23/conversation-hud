@@ -17,6 +17,10 @@
   flex: 0;
 }
 
+.chud-flex-1 {
+  flex: 1 1 0;
+}
+
 .chud-flex-0 {
   flex: 0;
 }

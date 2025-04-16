@@ -3,7 +3,7 @@ export { CollectiveConversationCreationForm } from "./CollectiveConversationCrea
 export { CollectiveConversationParticipantsEditForm } from "./CollectiveConversationParticipantsEditForm.js";
 export { ConversationCreationForm } from "./ConversationCreationForm.js";
 export { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
-export { GmControlledConversationCreationForm } from "./GmControlledConversationCreationForm.js";
+export { GmControlledConversationCreationForm } from "./GmControlledConversationCreationForm.mjs";
 export { OwnedActorsSelectionForm } from "./OwnedActorsSelectionForm.js";
 export { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
 export { SelectParticipatingUsersFrom } from "./SelectParticipatingUsersFrom.js";

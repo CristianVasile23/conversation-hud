@@ -3,3 +3,6 @@
 @import url("./drag-and-drop/index.css");
 @import url("./forms/index.css");
 @import url("./misc.css");
+
+/* V2 */
+@import url("./v2/index.css");

@@ -1,36 +1,42 @@
-<div class="flexrow chud-form-sub-header">
-  <p>{{localize 'CHUD.strings.conversationParticipants'}}</p>
+<fieldset class="chud-flex-1">
+  <legend class="chud-fieldset-legend-with-actions">
+    <span class="chud-label">
+      {{localize 'CHUD.strings.conversationParticipants'}}
+    </span>
 
-  <button
-    type="button"
-    name="pull-participants-from-scene"
-    id="pull-participants-from-scene"
-    title="{{localize 'CHUD.actions.pullParticipants'}}"
-  >
-    <i class="fas fa-up-from-bracket"></i>
-  </button>
+    <span class="chud-line"></span>
 
-  <button
-    type="button"
-    name="add-participant"
-    id="add-participant"
-    title="{{localize 'CHUD.actions.participant.add'}}"
-  >
-    <i class="fas fa-user-plus"></i>
-  </button>
-</div>
+    <span class="chud-actions">
+      <button
+        type="button"
+        name="pull-participants-from-scene"
+        id="pull-participants-from-scene"
+        title="{{localize 'CHUD.actions.pullParticipants'}}"
+        class="icon fa-regular fa-up-from-bracket"
+      ></button>
+      <button
+        type="button"
+        name="add-participant"
+        id="add-participant"
+        title="{{localize 'CHUD.actions.participant.add'}}"
+        class="icon fa-regular fa-user-plus"
+      ></button>
+    </span>
+  </legend>
 
-<div class="chud-form-section chud-form-content chud-drag-and-drop-container chud-overflow-y-auto">
-  <div class="chud-dropzone">
-    <i class="far fa-square-plus"></i>
-    <p> {{localize 'CHUD.strings.dropItem'}} </p>
-    <p class="hold-control"> ({{localize 'CHUD.strings.holdControl'}}) </p>
+
+  <div class="flexcol chud-form-content chud-drag-and-drop-container">
+    <div class="chud-dropzone">
+      <i class="far fa-square-plus"></i>
+      <p> {{localize 'CHUD.strings.dropItem'}} </p>
+      <p class="hold-control"> ({{localize 'CHUD.strings.holdControl'}}) </p>
+    </div>
+
+    <div class="flexcol chud-non-dropzone-content chud-flex-1">
+      {{> "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs"
+        isGM=isGM
+        participants=participants 
+      }}
+    </div>
   </div>
-
-  <div class="chud-non-dropzone-content chud-h-100">
-    {{> "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs"
-      isGM=isGM
-      participants=participants 
-    }}
-  </div>
-</div>
+</fieldset>

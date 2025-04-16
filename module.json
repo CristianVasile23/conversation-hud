@@ -6,9 +6,9 @@
   "version": "#{VERSION}#",
   "library": "false",
   "compatibility": {
-    "minimum": 10,
-    "verified": 12,
-    "maximum": 12
+    "minimum": 13,
+    "verified": 13,
+    "maximum": 13
   },
   "authors": [
     {
@@ -39,14 +39,6 @@
   },
   "esmodules": ["js/init.js"],
   "styles": ["css/main.css", "font/font.css"],
-  "packs": [
-    {
-      "name": "conversation-hud-macros",
-      "label": "ConversationHUD Macros",
-      "path": "packs/macros.db",
-      "type": "Macro"
-    }
-  ],
   "languages": [
     {
       "lang": "en",

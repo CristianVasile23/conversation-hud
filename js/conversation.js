@@ -225,9 +225,7 @@ export class ConversationHud {
       if (shouldCreateConversation) {
         if (!game.ConversationHud.conversationIsActive) {
           // Set button active status to false until a successful form has been completed
-          ui.controls.controls
-            .find((controls) => controls.name === "notes")
-            .tools.find((tools) => tools.name === "activateHud").active = false;
+          ui.controls.controls.notes.tools["activateHud"].active = false;
 
           // Create form
           new ConversationCreationForm().render(true);
@@ -251,9 +249,7 @@ export class ConversationHud {
    * @param {boolean} state
    */
   setActivateConversationHudButtonState(state) {
-    ui.controls.controls
-      .find((controls) => controls.name === "notes")
-      .tools.find((tools) => tools.name === "activateHud").active = state;
+    ui.controls.controls.notes.tools["activateHud"].active = state;
     ui.controls.render();
   }
 

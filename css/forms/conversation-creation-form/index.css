@@ -1,3 +1,7 @@
+.conversation-creation-form {
+  display: flex;
+}
+
 .conversation-creation-form > div {
   display: flex;
   flex-direction: row;

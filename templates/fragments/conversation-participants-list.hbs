@@ -1,4 +1,4 @@
-<div class="chud-conversation-participants-list">
+<div class="chud-conversation-participants-list chud-flex-1">
   {{#if participants}}
     <div class="chud-header">
       <p class="chud-active-by-default">{{localize 'CHUD.strings.active'}}</p>
@@ -7,7 +7,7 @@
       <p class="chud-controls">{{localize 'CHUD.strings.actions'}}</p>
     </div>
 
-    <div id="conversationParticipantsList" class="chud-content">
+    <div id="conversationParticipantsList" class="scrollable chud-content chud-flex-1">
       {{#each participants as |participant index|}}
         <div class="participant-drag-drop-container">
           <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>

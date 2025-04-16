@@ -28,16 +28,19 @@ Hooks.on("init", async () => {
   // Register the module within libWrapper
   // This will enable users to CTRL + Click conversation links within journals to activate the conversation
   // instead of just rendering the conversation sheet
-  if (libWrapper) {
-    libWrapper.register(
-      MODULE_NAME,
-      "TextEditor._onClickContentLink",
-      function (wrapped, event) {
-        return handleOnClickContentLink.bind(this)(event, wrapped);
-      },
-      "MIXED"
-    );
-  }
+
+  // TODO: Uncomment
+  // if (libWrapper) {
+  //   libWrapper.register(
+  //     MODULE_NAME,
+  //     // TPODO: Update method
+  //     "TextEditor._onClickContentLink",
+  //     function (wrapped, event) {
+  //       return handleOnClickContentLink.bind(this)(event, wrapped);
+  //     },
+  //     "MIXED"
+  //   );
+  // }
 
   // Register all other hooks
   registerHooks();

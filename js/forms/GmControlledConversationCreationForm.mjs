@@ -13,8 +13,13 @@ import {
   processParticipantData,
 } from "../helpers/index.js";
 
-export class GmControlledConversationCreationForm extends FormApplication {
-  // State variables
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class GmControlledConversationCreationForm extends HandlebarsApplicationMixin(ApplicationV2) {
+  /* -------------------------------------------- */
+  /*  State                                       */
+  /* -------------------------------------------- */
+
   /** @type {(conversationData: GMControlledConversationData) => void | undefined} } */
   callbackFunction = undefined;
   conversationBackground = "";
@@ -24,6 +29,34 @@ export class GmControlledConversationCreationForm extends FormApplication {
   // Drag and drop variables
   dropzoneVisible = false;
   draggingParticipant = false;
+
+  static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
+    // TODO: Change ID
+    id: "conversation-creation-form",
+    classes: ["form"],
+    tag: "form",
+    window: {
+      contentClasses: ["standard-form"],
+      title: "CHUD.actions.createConversation",
+    },
+    form: {
+      handler: this.#handleSubmit,
+      closeOnSubmit: true,
+    },
+    position: {
+      width: 635,
+      height: 840,
+    },
+  });
+
+  static PARTS = {
+    body: {
+      template: "modules/conversation-hud/templates/forms/conversation-creation-form.hbs",
+    },
+    footer: {
+      template: "templates/generic/form-footer.hbs",
+    },
+  };
 
   /**
    * TODO: Add JSDoc
@@ -35,19 +68,11 @@ export class GmControlledConversationCreationForm extends FormApplication {
     this.callbackFunction = callbackFunction;
   }
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["form"],
-      popOut: true,
-      template: "modules/conversation-hud/templates/forms/conversation-creation-form.hbs",
-      id: "conversation-start-form",
-      title: game.i18n.localize("CHUD.actions.createConversation"),
-      width: 635,
-      height: 640,
-    });
-  }
+  /* -------------------------------------------- */
+  /*  Rendering                                   */
+  /* -------------------------------------------- */
 
-  getData() {
+  async _prepareContext(_options = {}) {
     for (const participant of this.participants) {
       processParticipantData(participant);
     }
@@ -58,14 +83,17 @@ export class GmControlledConversationCreationForm extends FormApplication {
       conversationBackground: this.conversationBackground,
       participants: this.participants,
       defaultActiveParticipant: this.defaultActiveParticipant,
+      buttons: [{ type: "submit", icon: "fa-solid fa-check", label: "CHUD.actions.startConversation" }],
     };
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
+  _onRender(context, options) {
+    super._onRender(context, options);
+
+    const html = this.element;
 
     // Add event listener on the pull participants from scene button
-    html.find("#pull-participants-from-scene").click(async (e) => {
+    html.querySelector("#pull-participants-from-scene").addEventListener("click", () => {
       const pullParticipantsFromSceneForm = new PullParticipantsFromSceneForm((data) => {
         for (const participant of data) {
           this.#handleAddParticipant(participant);
@@ -75,7 +103,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
     });
 
     // Add event listener on the add participant button
-    html.find("#add-participant").click(async (e) => {
+    html.querySelector("#add-participant").addEventListener("click", () => {
       const participantCreationForm = new CreateOrEditParticipantForm(false, (data) =>
         this.#handleAddParticipant(data)
       );
@@ -83,8 +111,8 @@ export class GmControlledConversationCreationForm extends FormApplication {
     });
 
     // Drag and drop functionality
-    const dragDropWrapper = html.find(".chud-drag-and-drop-container")[0];
-    const dragDropZone = html.find(".chud-dropzone")[0];
+    const dragDropWrapper = html.querySelector(".chud-drag-and-drop-container");
+    const dragDropZone = html.querySelector(".chud-dropzone");
     if (dragDropWrapper && dragDropZone) {
       dragDropWrapper.ondragenter = () => {
         if (!this.draggingParticipant) {
@@ -122,7 +150,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
     }
 
     // Add listeners on all the control buttons present on the conversation participants
-    const participantsObject = html.find("#conversationParticipantsList")[0];
+    const participantsObject = html.querySelector("#conversationParticipantsList");
     if (participantsObject) {
       const conversationParticipants = participantsObject.children;
       for (let i = 0; i < conversationParticipants.length; i++) {
@@ -197,14 +225,19 @@ export class GmControlledConversationCreationForm extends FormApplication {
         };
 
         // Bind function to the set active by default checkbox
-        conversationParticipants[i].querySelector("#participant-active-by-default-checkbox").onchange = (event) =>
-          this.#handleSetDefaultActiveParticipant(event, i);
+        conversationParticipants[i]
+          .querySelector("#participant-active-by-default-checkbox")
+          .addEventListener("change", (event) => this.#handleSetDefaultActiveParticipant(event, i));
 
         // Bind functions to the edit and remove buttons
         const controls = conversationParticipants[i].querySelector(".chud-participant-action-buttons");
-        controls.querySelector("#participant-clone-button").onclick = () => this.#handleCloneParticipant(i);
-        controls.querySelector("#participant-delete-button").onclick = () => this.#handleRemoveParticipant(i);
-        controls.querySelector("#participant-edit-button").onclick = () => {
+        controls
+          .querySelector("#participant-clone-button")
+          .addEventListener("click", () => this.#handleCloneParticipant(i));
+        controls
+          .querySelector("#participant-delete-button")
+          .addEventListener("click", () => this.#handleRemoveParticipant(i));
+        controls.querySelector("#participant-edit-button").addEventListener("click", () => {
           const participantEditForm = new CreateOrEditParticipantForm(
             true,
             (data) => this.#handleEditParticipant(data, i),
@@ -221,17 +254,24 @@ export class GmControlledConversationCreationForm extends FormApplication {
             }
           );
           participantEditForm.render(true);
-        };
+        });
       }
     }
   }
 
+  /* -------------------------------------------- */
+  /*  Handlers                                    */
+  /* -------------------------------------------- */
+
   /**
    *
    * @param {*} event
+   * @param {*} form
    * @param {*} formData
    */
-  async _updateObject(event, formData) {
+  static async #handleSubmit(event, form, formData) {
+    const data = foundry.utils.expandObject(formData.object);
+
     /** @type {GmControlledConversation} */
     const gmControlledConversation = {
       data: {
@@ -249,7 +289,7 @@ export class GmControlledConversationCreationForm extends FormApplication {
     /** @type {GMControlledConversationData} */
     const conversationData = {
       type: ConversationTypes.GMControlled,
-      background: formData.conversationBackground,
+      background: data.conversationBackground,
       conversation: gmControlledConversation,
     };
 

@@ -1,5 +1,5 @@
 import { CollectiveConversationCreationForm } from "./CollectiveConversationCreationForm.js";
-import { GmControlledConversationCreationForm } from "./GmControlledConversationCreationForm.js";
+import { GmControlledConversationCreationForm } from "./GmControlledConversationCreationForm.mjs";
 
 export class ConversationCreationForm extends FormApplication {
   constructor() {
