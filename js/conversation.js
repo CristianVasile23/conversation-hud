@@ -225,7 +225,7 @@ export class ConversationHud {
       if (shouldCreateConversation) {
         if (!game.ConversationHud.conversationIsActive) {
           // Set button active status to false until a successful form has been completed
-          ui.controls.controls.notes.tools["activateHud"].active = false;
+          this.setActivateConversationHudButtonState(false);
 
           // Create form
           new ConversationCreationForm().render(true);

@@ -1,20 +1,18 @@
-.conversation-creation-form {
-  display: flex;
-}
-
-.conversation-creation-form > div {
+.chud-conversation-creation-form {
   display: flex;
   flex-direction: row;
   gap: 30px;
   padding: 8px;
+  flex: 1;
 }
 
-.conversation-creation-form .conversation-type-selector {
+.chud-conversation-creation-form .chud-type-selector {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 
+  height: 100%;
   width: 270px;
   padding: 25px;
 
@@ -24,13 +22,13 @@
   line-height: initial;
 }
 
-.conversation-creation-form .conversation-type-selector .fa-user,
-.conversation-creation-form .conversation-type-selector .fa-users {
+.chud-conversation-creation-form .chud-type-selector .fa-user,
+.chud-conversation-creation-form .chud-type-selector .fa-users {
   font-size: 42px;
   margin-bottom: 14px;
 }
 
-.conversation-creation-form .conversation-type-selector .conversation-type-description {
+.chud-conversation-creation-form .conversation-type-selector .chud-type-description {
   margin-top: 28px;
   text-align: center;
 

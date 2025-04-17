@@ -13,12 +13,13 @@ export const registerHook = () => {
           toggle: true,
           active: game.ConversationHud.conversationIsActive || false,
           visible: game.user.isGM,
-          onChange: (toggle) => {
+          onChange: (_event, toggle) => {
             if (toggle) {
               game.ConversationHud.onToggleConversation(true);
             } else {
               // Update the controls to be active again as we have yet to receive the user's decision
               ui.controls.controls.notes.tools["activateHud"].active = true;
+              ui.controls.render();
 
               // Display conversation closing confirmation dialog
               game.ConversationHud.closeActiveConversation();
