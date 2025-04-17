@@ -1,0 +1,8 @@
+ <section class="tab scrollable {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+  {{> "modules/conversation-hud/templates/fragments/conversation-participant-data.hbs"
+    participantName=participantName
+    displayParticipantName=displayParticipantName
+    participantImg=participantImg
+    participantImgScale=participantImgScale
+  }}
+</section>

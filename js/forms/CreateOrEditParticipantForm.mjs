@@ -4,7 +4,13 @@
 import { ANCHOR_OPTIONS, SHEET_CLASSES } from "../constants/index.js";
 import { createPortraitAnchorObject, getConversationDataFromJournalId } from "../helpers/index.js";
 
-export class CreateOrEditParticipantForm extends FormApplication {
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(ApplicationV2) {
+  /* -------------------------------------------- */
+  /*  State                                       */
+  /* -------------------------------------------- */
+
   isEditing = false;
   callbackFunction = undefined;
   participantData = undefined;
@@ -30,6 +36,53 @@ export class CreateOrEditParticipantForm extends FormApplication {
   factionBannerEnabled = false;
   factionBannerShape = "shape-1";
   factionBannerTint = "#000000";
+
+  /* -------------------------------------------- */
+  /*  Rendering                                   */
+  /* -------------------------------------------- */
+
+  static DEFAULT_OPTIONS = {
+    // TODO: Change ID
+    id: "conversation-add-participant-{id}",
+    classes: ["form"],
+    tag: "form",
+    window: {
+      contentClasses: ["standard-form"],
+      title: "CHUD.strings.participantData",
+    },
+    form: {
+      handler: this.#handleSubmit,
+      closeOnSubmit: true,
+    },
+    position: {
+      width: 640,
+      height: "auto",
+    },
+  };
+
+  static PARTS = {
+    tabs: { template: "templates/generic/tab-navigation.hbs" },
+    participant: {
+      template: "modules/conversation-hud/templates/forms/add-or-edit-conversation-participant/participant-tab.hbs",
+    },
+    faction: {
+      template: "modules/conversation-hud/templates/forms/add-or-edit-conversation-participant/faction-tab.hbs",
+    },
+    footer: {
+      template: "templates/generic/form-footer.hbs",
+    },
+  };
+
+  static TABS = {
+    sheet: {
+      tabs: [
+        { id: "participant", icon: "fa-solid fa-user" },
+        { id: "faction", icon: "fa-solid fa-bookmark" },
+      ],
+      initial: "participant",
+      labelPrefix: "CHUD.tabs.conversationParticipantAddEdit",
+    },
+  };
 
   /**
    * @param {boolean} isEditing Boolean used to determine if the input form is for creating a participant or editing an existing one
@@ -73,70 +126,152 @@ export class CreateOrEditParticipantForm extends FormApplication {
     }
   }
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["form", "scene-sheet"],
-      popOut: true,
-      template: `modules/conversation-hud/templates/forms/add-or-edit-conversation-participant-form.hbs`,
-      id: "conversation-add-participant",
-      title: game.i18n.localize("CHUD.strings.participantData"),
-      width: 640,
-      height: "auto",
-      tabs: [{ navSelector: ".tabs", contentSelector: "form", initial: "participant-config" }],
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.buttons = [
+      {
+        type: "submit",
+        icon: "fa-solid fa-check",
+        label: "CHUD.actions.participant.add",
+      },
+    ];
+
+    let journals = game.journal.map((journal) => {
+      return { id: journal.id, name: journal.name, sheetClass: journal.flags?.core?.sheetClass };
     });
+    journals = journals.filter(
+      (journal) =>
+        // TODO: Use proper sheet class from constants
+        journal.sheetClass !== "conversation-sheet.ConversationSheet" &&
+        journal.sheetClass !== "conversation-faction-sheet.ConversationFactionSheet"
+    );
+    journals.sort((a, b) => a.name.localeCompare(b.name));
+
+    const actors = game.actors.map((actor) => {
+      return { id: actor.id, name: actor.name };
+    });
+    actors.sort((a, b) => a.name.localeCompare(b.name));
+
+    // Get a list of all the saved factions
+    const savedFactions = game.journal.filter(
+      // TODO: Use proper sheet class from constants
+      (item) => item.flags.core?.sheetClass === "conversation-faction-sheet.ConversationFactionSheet"
+    );
+
+    return {
+      isEditing: this.isEditing,
+      participantData: this.participantData,
+
+      anchorOptions: ANCHOR_OPTIONS,
+
+      savedFactions: savedFactions,
+
+      actors: actors,
+      journals: journals,
+      ...context,
+    };
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
+  async _preparePartContext(partId, context) {
+    const partContext = await super._preparePartContext(partId, context);
+
+    if (partId in partContext.tabs) {
+      partContext.tab = partContext.tabs[partId];
+    }
+
+    switch (partId) {
+      case "participant":
+        partContext.participantName = this.participantName;
+        partContext.displayParticipantName = this.displayParticipantName;
+        partContext.participantImg = this.participantImg;
+        partContext.participantImgScale = this.participantImgScale;
+        partContext.portraitAnchor = this.portraitAnchor;
+        partContext.linkedJournal = this.linkedJournal;
+        partContext.linkedActor = this.linkedJournal;
+
+        break;
+      case "faction":
+        let selectedFactionData = {
+          displayFaction: this.displayFaction,
+          factionName: this.factionName,
+          factionLogo: this.factionLogo,
+          factionBannerEnabled: this.factionBannerEnabled,
+          factionBannerShape: this.factionBannerShape,
+          factionBannerTint: this.factionBannerTint,
+        };
+
+        if (this.selectedFaction) {
+          const factionData = getConversationDataFromJournalId(this.selectedFaction);
+          selectedFactionData = factionData.faction;
+          this.factionBannerShape = factionData.faction.factionBannerShape;
+        }
+
+        partContext.selectedFaction = this.selectedFaction;
+        partContext.displayFaction = this.displayFaction;
+        partContext.factionName = selectedFactionData.factionName;
+        partContext.factionLogo = selectedFactionData.factionLogo;
+        partContext.factionBannerEnabled = selectedFactionData.factionBannerEnabled;
+        partContext.factionBannerShape = selectedFactionData.factionBannerShape;
+        partContext.factionBannerTint = selectedFactionData.factionBannerTint;
+        break;
+    }
+
+    return partContext;
+  }
+
+  _onRender(context, options) {
+    super._onRender(context, options);
+
+    const html = this.element;
 
     // Listeners in the participant form
-    const participantNameInput = html.find("[name=participantName]")[0];
+    const participantNameInput = html.querySelector("[name=participantName]");
     participantNameInput.addEventListener("change", (event) => this.onUpdateParticipantName(event));
 
-    const displayParticipantNameInput = html.find("[name=displayParticipantName]")[0];
+    const displayParticipantNameInput = html.querySelector("[name=displayParticipantName]");
     displayParticipantNameInput.addEventListener("change", (event) => this.onUpdateDisplayParticipantNameInput(event));
 
-    const participantImgInput = html.find("[name=participantImg]")[0];
+    const participantImgInput = html.querySelector("[name=participantImg]");
     participantImgInput.addEventListener("change", (event) => this.onUpdateParticipantImg(event));
 
-    const participantImgScaleInput = html.find("[name=participantImgScale]")[0];
+    const participantImgScaleInput = html.querySelector("[name=participantImgScale]");
     participantImgScaleInput.addEventListener("change", (event) => this.onUpdateParticipantImgScale(event));
 
-    const participantImgVerticalAnchorInput = html.find("[name=portraitAnchorVertical]")[0];
+    const participantImgVerticalAnchorInput = html.querySelector("[name=portraitAnchorVertical]");
     participantImgVerticalAnchorInput.addEventListener("change", (event) =>
       this.onUpdateParticipantImgAnchor(event, "vertical")
     );
 
-    const participantImgHorizontalAnchorInput = html.find("[name=portraitAnchorHorizontal]")[0];
+    const participantImgHorizontalAnchorInput = html.querySelector("[name=portraitAnchorHorizontal]");
     participantImgHorizontalAnchorInput.addEventListener("change", (event) =>
       this.onUpdateParticipantImgAnchor(event, "horizontal")
     );
 
     // Listeners in the faction form
-    const selectedFaction = html.find("[name=selectedFaction]")[0];
+    const selectedFaction = html.querySelector("[name=selectedFaction]");
     selectedFaction.addEventListener("change", (event) => this.onChangeSelectedFaction(event));
 
-    const displayFactionToggle = html.find("[name=displayFaction]")[0];
+    const displayFactionToggle = html.querySelector("[name=displayFaction]");
     displayFactionToggle.addEventListener("change", (event) => this.onToggleFactionDisplay(event));
 
-    const factionNameInput = html.find("[name=factionName]")[0];
+    const factionNameInput = html.querySelector("[name=factionName]");
     factionNameInput.addEventListener("change", (event) => this.onUpdateFactionName(event));
 
-    const factionLogoInput = html.find("[name=factionImg]")[0];
+    const factionLogoInput = html.querySelector("[name=factionImg]");
     factionLogoInput.addEventListener("change", (event) => this.onUpdateFactionLogo(event));
 
-    const factionBannerToggle = html.find("[name=displayFactionBanner]")[0];
+    const factionBannerToggle = html.querySelector("[name=displayFactionBanner]");
     factionBannerToggle.addEventListener("change", (event) => this.onToggleFactionBanner(event));
 
-    const factionBannerTintInput = html.find("[name=factionTint]")[0];
-    factionBannerTintInput.addEventListener("change", (event) => this.onUpdateBannerTint(event));
+    const factionBannerColorPicker = html.querySelector("[name=factionTint]");
+    factionBannerColorPicker.addEventListener("change", (event) => this.onUpdateBannerTint(event));
 
-    const factionBannerTintPicker = html.find("[name=factionTintPicker]")[0];
-    factionBannerTintPicker.addEventListener("change", (event) => this.onUpdateBannerTint(event));
+    // const factionBannerTintPicker = html.querySelector("[name=factionTintPicker]");
+    // factionBannerTintPicker.addEventListener("change", (event) => this.onUpdateBannerTint(event));
 
     // Faction dropzone
-    const dragDropWrapper = html.find(".chud-drag-and-drop-container")[0];
-    const dragDropZone = html.find(".chud-dropzone")[0];
+    const dragDropWrapper = html.querySelector(".chud-drag-and-drop-container");
+    const dragDropZone = html.querySelector(".chud-dropzone");
     if (dragDropWrapper && dragDropZone) {
       dragDropWrapper.ondragenter = () => {
         if (!this.draggingParticipant) {
@@ -180,86 +315,17 @@ export class CreateOrEditParticipantForm extends FormApplication {
     }
 
     // Activate banner shape buttons
-    const bannerShapeButtons = html.find(".banner-shape-button");
+    const bannerShapeButtons = html.querySelectorAll(".banner-shape-button");
     for (const button of bannerShapeButtons) {
       const buttonId = button.getAttribute("id");
       button.addEventListener("click", () => this.onUpdateBannerShape(buttonId));
     }
 
     // Faction save button
-    const exportFaction = html.find("[name=exportFaction]")[0];
+    const exportFaction = html.querySelector("[name=exportFaction]");
     if (exportFaction) {
       exportFaction.addEventListener("click", () => this.saveFaction());
     }
-  }
-
-  getData(options) {
-    let journals = game.journal.map((journal) => {
-      return { id: journal.id, name: journal.name, sheetClass: journal.flags?.core?.sheetClass };
-    });
-    journals = journals.filter(
-      (journal) =>
-        // TODO: Use proper sheet class from constants
-        journal.sheetClass !== "conversation-sheet.ConversationSheet" &&
-        journal.sheetClass !== "conversation-faction-sheet.ConversationFactionSheet"
-    );
-    journals.sort((a, b) => a.name.localeCompare(b.name));
-
-    const actors = game.actors.map((actor) => {
-      return { id: actor.id, name: actor.name };
-    });
-    actors.sort((a, b) => a.name.localeCompare(b.name));
-
-    // Get a list of all the saved factions
-    const savedFactions = game.journal.filter(
-      // TODO: Use proper sheet class from constants
-      (item) => item.flags.core?.sheetClass === "conversation-faction-sheet.ConversationFactionSheet"
-    );
-
-    let selectedFactionData = {
-      displayFaction: this.displayFaction,
-      factionName: this.factionName,
-      factionLogo: this.factionLogo,
-      factionBannerEnabled: this.factionBannerEnabled,
-      factionBannerShape: this.factionBannerShape,
-      factionBannerTint: this.factionBannerTint,
-    };
-
-    if (this.selectedFaction) {
-      const factionData = getConversationDataFromJournalId(this.selectedFaction);
-      selectedFactionData = factionData.faction;
-      this.factionBannerShape = factionData.faction.factionBannerShape;
-    }
-
-    return {
-      isEditing: this.isEditing,
-      participantData: this.participantData,
-
-      participantName: this.participantName,
-      displayParticipantName: this.displayParticipantName,
-      participantImg: this.participantImg,
-      participantImgScale: this.participantImgScale,
-
-      anchorOptions: ANCHOR_OPTIONS,
-      portraitAnchor: this.portraitAnchor,
-
-      selectedFaction: this.selectedFaction,
-
-      displayFaction: this.displayFaction,
-      factionName: selectedFactionData.factionName,
-      factionLogo: selectedFactionData.factionLogo,
-      factionBannerEnabled: selectedFactionData.factionBannerEnabled,
-      factionBannerShape: selectedFactionData.factionBannerShape,
-      factionBannerTint: selectedFactionData.factionBannerTint,
-
-      linkedJournal: this.linkedJournal,
-      linkedActor: this.linkedActor,
-
-      savedFactions: savedFactions,
-
-      actors: actors,
-      journals: journals,
-    };
   }
 
   async _updateObject(event, formData) {
@@ -286,6 +352,43 @@ export class CreateOrEditParticipantForm extends FormApplication {
     this.callbackFunction(participantData);
   }
 
+  /* -------------------------------------------- */
+  /*  Handlers                                    */
+  /* -------------------------------------------- */
+
+  /**
+   *
+   * @param {*} event
+   * @param {*} form
+   * @param {*} formData
+   */
+  static async #handleSubmit(event, form, formData) {
+    const data = foundry.utils.expandObject(formData.object);
+
+    /** @type {ParticipantData} */
+    const participantData = {
+      name: data.participantName,
+      displayName: data.displayParticipantName,
+      img: data.participantImg,
+      imgScale: data.participantImgScale,
+      portraitAnchor: this.portraitAnchor,
+      linkedJournal: data.linkedJournal,
+      linkedActor: data.linkedActor,
+      faction: {
+        selectedFaction: data.selectedFaction,
+        displayFaction: data.displayFaction,
+        factionName: data.factionName,
+        factionLogo: data.factionImg,
+        factionBannerEnabled: data.displayFactionBanner,
+        factionBannerShape: this.factionBannerShape,
+        factionBannerTint: data.factionTint,
+      },
+    };
+
+    this.callbackFunction(participantData);
+  }
+
+  // TODO: Make all functions private
   onUpdateParticipantName(event) {
     if (!event.target) return;
 

@@ -25,6 +25,10 @@
   flex: 0;
 }
 
+.chud-gap-1 {
+  gap: 1rem;
+}
+
 .chud-h-100 {
   height: 100%;
 }

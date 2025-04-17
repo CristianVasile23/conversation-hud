@@ -1,4 +1,4 @@
-import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
+import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.mjs";
 import {
   convertActorToParticipant,
   getConversationDataFromJournalId,

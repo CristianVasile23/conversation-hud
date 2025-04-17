@@ -172,8 +172,10 @@
   },
 
   "CHUD.tabs": {
-    "participantConfig": "Configuration du Participant",
-    "factionConfig": "Configuration de la Faction"
+    "conversationParticipantAddEdit": {
+      "participant": "Configuration du Participant",
+      "faction": "Configuration de la Faction"
+    }
   },
 
   "CHUD.faction": {

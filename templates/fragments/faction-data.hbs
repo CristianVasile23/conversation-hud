@@ -1,4 +1,5 @@
-<div class="chud-faction-data {{#if hasSelectedFaction}}chud-view-only-faction-data{{/if}}">
+{{!-- TODO: Make the disabled state work again and have proper visual cues --}}
+<fieldset class="chud-faction-data {{#if hasSelectedFaction}}chud-view-only-faction-data{{/if}}">
   {{!-- Faction name --}}
   <div class="form-group">
     <label>{{localize "CHUD.faction.factionName.name"}}</label>
@@ -23,37 +24,24 @@
         </button>
       {{/unless}}
     </div>
-    <p class="notes">{{localize "CHUD.faction.factionName.hint"}}</p>
+    <p class="hint">{{localize "CHUD.faction.factionName.hint"}}</p>
   </div>
 
   <div class="banner-configuration">
     {{!-- Banner config --}}
-    <div>
+    <div class="flexcol chud-gap-1">
       {{!-- Faction logo --}}
       <div class="form-group">
         <label>{{localize "CHUD.faction.factionLogo.name"}}</label>
         <div class="form-fields">
-          <button
-            type="button"
-            class="file-picker"
-            data-type="imagevideo"
-            data-target="factionImg"
-            title="{{localize 'CHUD.strings.browseFiles'}}"
-            {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
-          >
-            <i class="fas fa-file-import fa-fw"></i>
-          </button>
-
-          <input
-            class="image"
-            type="text"
+          <file-picker
             name="factionImg"
-            placeholder="{{localize 'CHUD.strings.filePath'}}"
-            value="{{factionLogo}}"
+            type="imagevideo"
+            value="{{factionLogo}}" 
             {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
-          />
+          ></file-picker>
         </div>
-        <p class="notes">{{localize "CHUD.faction.factionLogo.hint"}}</p>
+        <p class="hint">{{localize "CHUD.faction.factionLogo.hint"}}</p>
       </div>
       
       {{!-- Faction banner toggle --}}
@@ -67,7 +55,7 @@
             {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
           >
         </div>
-        <p class="notes">{{localize "CHUD.faction.displayFactionBanner.hint"}}</p>
+        <p class="hint">{{localize "CHUD.faction.displayFactionBanner.hint"}}</p>
       </div>
 
       {{!-- Faction banner shape --}}
@@ -82,7 +70,7 @@
             name="shape-1"
             {{#if hasSelectedFaction}}tabindex="-1"{{/if}}  
           >
-            {{> "modules/conversation-hud/templates/banner-shapes/shape-1.hbs" color='#000000'}}
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-1.hbs" color='var(--button-text-color)'}}
           </button>
 
           <button
@@ -92,7 +80,7 @@
             name="shape-2"
             {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
           >
-            {{> "modules/conversation-hud/templates/banner-shapes/shape-2.hbs" color='#000000'}}
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-2.hbs" color='var(--button-text-color)'}}
           </button>
 
           <button
@@ -102,7 +90,7 @@
             name="shape-3"
             {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
           >
-            {{> "modules/conversation-hud/templates/banner-shapes/shape-3.hbs" color='#000000'}}
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-3.hbs" color='var(--button-text-color)'}}
           </button>
 
           <button
@@ -112,7 +100,7 @@
             name="shape-4"
             {{#if hasSelectedFaction}}tabindex="-1"{{/if}}  
           >
-            {{> "modules/conversation-hud/templates/banner-shapes/shape-4.hbs" color='#000000'}}
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-4.hbs" color='var(--button-text-color)'}}
           </button>
 
           <button
@@ -122,7 +110,7 @@
             name="shape-5"
             {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
           >
-            {{> "modules/conversation-hud/templates/banner-shapes/shape-5.hbs" color='#000000'}}
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-5.hbs" color='var(--button-text-color)'}}
           </button>
 
           <button
@@ -132,33 +120,24 @@
             name="shape-6"
             {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
           >
-            {{> "modules/conversation-hud/templates/banner-shapes/shape-6.hbs" color='#000000'}}
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-6.hbs" color='var(--button-text-color)'}}
           </button>
         </div>
       
-        <p class="notes">{{localize "CHUD.faction.factionBannerShape.hint"}}</p>
+        <p class="hint">{{localize "CHUD.faction.factionBannerShape.hint"}}</p>
       </div>
 
       {{!-- Faction banner tint --}}
       <div class="form-group">
         <label>{{ localize "CHUD.faction.factionBannerColor.name" }}</label>
         <div class="form-fields">
-          <input
-            class="color"
-            type="text"
+          <color-picker
             name="factionTint"
             value="{{factionBannerTint}}"
             {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
-          />
-          <input
-            type="color"
-            name="factionTintPicker"
-            value="{{factionBannerTint}}"
-            data-edit="factionTint"
-            {{#if hasSelectedFaction}}tabindex="-1"{{/if}}
-          />
+          ></color-picker>
         </div>
-        <p class="notes">{{localize "CHUD.faction.factionBannerColor.hint"}}</p>
+        <p class="hint">{{localize "CHUD.faction.factionBannerColor.hint"}}</p>
       </div>
     </div>
 
@@ -178,7 +157,8 @@
         }}
       </div>
 
-      <p>{{localize "CHUD.faction.bannerPreview"}}</p>
+      {{!-- TODO: Remove inline style --}}
+      <p style="color: var(--color-form-label); font-weight: 700">{{localize "CHUD.faction.bannerPreview"}}</p>
     </div>
   </div>
-</div>
+</fieldset>

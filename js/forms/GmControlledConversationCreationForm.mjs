@@ -2,7 +2,7 @@
 /// <reference path="../types/ConversationData.js" />
 
 import { ANCHOR_OPTIONS, ConversationTypes } from "../constants/index.js";
-import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.js";
+import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.mjs";
 import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
 import {
   getActorDataFromDragEvent,
@@ -30,8 +30,11 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
   dropzoneVisible = false;
   draggingParticipant = false;
 
-  static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
-    // TODO: Change ID
+  /* -------------------------------------------- */
+  /*  Rendering                                   */
+  /* -------------------------------------------- */
+
+  static DEFAULT_OPTIONS = {
     id: "conversation-creation-form",
     classes: ["form"],
     tag: "form",
@@ -47,7 +50,7 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
       width: 635,
       height: 840,
     },
-  });
+  };
 
   static PARTS = {
     body: {
@@ -67,10 +70,6 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
     super();
     this.callbackFunction = callbackFunction;
   }
-
-  /* -------------------------------------------- */
-  /*  Rendering                                   */
-  /* -------------------------------------------- */
 
   async _prepareContext(_options = {}) {
     for (const participant of this.participants) {
