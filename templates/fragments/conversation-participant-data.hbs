@@ -46,7 +46,7 @@
   <div class="form-group">
     <label>{{localize "CHUD.strings.portraitAnchor.vertical.name"}}</label>
     <select name="portraitAnchorVertical">
-      {{ selectOptions anchorOptions.vertical selected=portraitAnchor.vertical valueAttr="value" labelAttr="label"}}
+      {{selectOptions anchorOptions.vertical selected=portraitAnchor.vertical valueAttr="value" labelAttr="label"}}
     </select>
     <p class="hint">{{localize "CHUD.strings.portraitAnchor.vertical.hint"}}</p>
   </div>
@@ -54,7 +54,7 @@
   <div class="form-group">
     <label>{{localize "CHUD.strings.portraitAnchor.horizontal.name"}}</label>
     <select name="portraitAnchorHorizontal">
-      {{ selectOptions anchorOptions.horizontal selected=portraitAnchor.horizontal valueAttr="value" labelAttr="label"}}
+      {{selectOptions anchorOptions.horizontal selected=portraitAnchor.horizontal valueAttr="value" labelAttr="label"}}
     </select>
     <p class="hint">{{localize "CHUD.strings.portraitAnchor.horizontal.hint"}}</p>
   </div>
@@ -64,7 +64,7 @@
   <div class="form-group">
     <label>{{localize "CHUD.strings.linkedJournal.name"}}</label>
     <select name="linkedJournal">
-      {{ selectOptions journals selected=linkedJournal blank="" valueAttr="id" labelAttr="name"}}
+      {{selectOptions journals selected=linkedJournal blank="" valueAttr="id" labelAttr="name"}}
     </select>
     <p class="hint">{{localize "CHUD.strings.linkedJournal.hint"}}</p>
   </div>
@@ -72,7 +72,7 @@
   <div class="form-group">
     <label>{{localize "CHUD.strings.linkedActor.name"}}</label>
     <select name="linkedActor">
-      {{ selectOptions actors selected=linkedActor blank="" valueAttr="id" labelAttr="name"}}
+      {{selectOptions actors selected=linkedActor blank="" valueAttr="id" labelAttr="name"}}
     </select>
     <p class="hint">{{localize "CHUD.strings.linkedActor.hint"}}</p>
   </div>
