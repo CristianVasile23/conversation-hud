@@ -7,11 +7,11 @@
   </div>
 
   {{!-- Active participant --}}
-  <div id="active-participant-anchor-point">
+  <div id="ui-conversation-active-participant">
   </div>
 
   {{!-- Participants list --}}
-  <div id="gmControlledConversationParticipantsList" class="chud-participants-list">
+  <div id="gmControlledConversationParticipantsList" class="faded-ui chud-participants-list">
     {{#if isGM}}
       {{#each participants as |participant index|}}
         <div class="participant-drag-drop-container">
@@ -41,13 +41,14 @@
     {{!-- GMs also have an add participant button that needs to be rendered inside the list --}}
     {{#if isGM}}
       <div class="chud-list-entry">
-        <div
+        <button
           id="conversation-add-button"
-          class="chud-content chud-add-participant-button chud-has-control"
+          {{!-- class="ui-control chud-content chud-add-participant-button chud-has-control" --}}
+          class="ui-control plain icon fa-solid fa-plus chud-add-participant-button"
           onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-participant")}}})'
-        >
-          <i class="fas fa-plus"></i>
-        </div>
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.participant.add'}}"
+        />
       </div>
     {{/if}}
   </div>

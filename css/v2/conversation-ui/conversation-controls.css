@@ -1,0 +1,25 @@
+/* -------------------------------------------- */
+/*  Conversation controls                       */
+/* -------------------------------------------- */
+
+/* #region */
+#ui-conversation-controls {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+}
+/* #endregion */
+
+/* -------------------------------------------- */
+/*  Misc                                        */
+/* -------------------------------------------- */
+
+/* #region */
+#ui-conversation-controls > menu {
+  gap: 8px;
+}
+
+#ui-conversation-controls > menu > .chud-spacer {
+  width: 16px;
+}
+/* #endregion */

@@ -1,4 +1,4 @@
-<menu class="flexrow faded-ui" style="gap: 8px">
+<menu class="flexrow faded-ui">
   {{#if isGM}}
     {{!-- <div
       class="control-button margin-bottom"
@@ -20,7 +20,7 @@
   {{/if}}
 
   {{#if features.minimizeEnabled}}
-    <div style="width: 16px"></div>
+    <div class="chud-spacer"></div>
 
     {{#if (or isVisible isGM)}}
       {{{renderMinimizeButton isGM isMinimized isMinimizationLocked}}}
@@ -49,7 +49,7 @@
   {{/if}}
 
   {{#if isGM}}
-    <div style="width: 16px"></div>
+    <div class="chud-spacer"></div>
 
     {{!-- <div
       class="control-button toggle {{#if isVisible}}active{{/if}}"
@@ -154,7 +154,7 @@
       <i class="fas fa-save"></i>
     </div> --}}
 
-    <div style="width: 16px"></div>
+    <div class="chud-spacer"></div>
 
     <li>
       <button

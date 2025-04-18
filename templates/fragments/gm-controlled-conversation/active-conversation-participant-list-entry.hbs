@@ -1,48 +1,81 @@
 <div class="chud-list-entry">
   {{!-- Controls --}}
   {{#if isGM}}
-    <div class="chud-controls">
-      <a
+    <div class="chud-controls" data-tooltip-direction="LEFT">
+      {{!-- <a
         class="edit"
         title="{{localize 'CHUD.actions.participant.edit'}}"
         onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="edit-participant" data=(object index=index))}}})'
       >
         <i class="fas fa-edit"></i>
-      </a>
+      </a> --}}
 
-      <a
+      <button
+        type="button"
+        class="ui-control icon fa-solid fa-edit"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="edit-participant" data=(object index=index))}}})'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.participant.edit'}}"
+      />
+
+      {{!-- <a
         class="remove"
         title="{{localize 'CHUD.actions.participant.delete'}}"
         onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="remove-participant" data=(object index=index))}}})'
       >
         <i class="fas fa-trash"></i>
-      </a>
+      </a> --}}
+
+      <button
+        type="button"
+        class="ui-control icon fa-solid fa-trash"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="remove-participant" data=(object index=index))}}})'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.participant.delete'}}"
+      />
 
       {{#if participant.linkedJournal}}
-        <a
+        {{!-- <a
           class="notes"
           title="{{localize 'CHUD.strings.linkedJournal.name'}}"
           onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})"
         >
           <i class="fas fa-book"></i>
-        </a>
+        </a> --}}
+
+        <button
+          type="notes"
+          class="ui-control icon fa-solid fa-book"
+          onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})"
+          data-tooltip
+          aria-label="{{localize 'CHUD.strings.linkedJournal.name'}}"
+        />
       {{/if}}
 
       {{#if participant.linkedActor}}
-        <a
+        {{!-- <a
           class="notes"
           title="{{localize 'CHUD.strings.linkedActor.name'}}"
           onclick="game.ConversationHud.displayLinkedParticipantActor({{index}})"
         >
           <i class="fas fa-user"></i>
-        </a>
+        </a> --}}
+
+        <button
+          type="notes"
+          class="ui-control icon fa-solid fa-user"
+          onclick="game.ConversationHud.displayLinkedParticipantActor({{index}})"
+          data-tooltip
+          aria-label="{{localize 'CHUD.strings.linkedActor.name'}}"
+        />
       {{/if}}
     </div>
   {{/if}}
 
   {{!-- Participant --}}
-  <div
-    class="chud-content {{#if isGM}}chud-has-control{{/if}}"
+  <button
+    {{!-- class="chud-content {{#if isGM}}chud-has-control{{/if}}" --}}
+    class="ui-control plain chud-conversation-participant-entry"
     {{#unless isGM}}
       data-tooltip="
         {{!-- TODO: Create a hbs helper for this portion of code  --}}
@@ -74,7 +107,7 @@
         {{participant.name}}
       {{/if}}
     </p>
-  </div>
+  </button>
 
   {{!-- Faction --}}
   <div data-tooltip="{{participant.faction.factionName}}" style="align-self: flex-start;">

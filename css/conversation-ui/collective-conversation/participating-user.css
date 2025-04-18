@@ -4,7 +4,7 @@
   align-items: center;
 }
 
-/* #collectiveConversation .chud-participating-user #active-participant-anchor-point {
+/* #collectiveConversation .chud-participating-user #ui-conversation-active-participant {
   height: 500px;
   width: 240px;
   border: 1px solid red;

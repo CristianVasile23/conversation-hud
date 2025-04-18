@@ -1,5 +1,5 @@
-<div class="active-participant-wrapper" data-tooltip-direction="DOWN">
-  {{!-- Faction wrapper --}}
+<div class="chud-active-participant-content" data-tooltip-direction="DOWN">
+  {{!-- Faction display --}}
   <div
     class="active-participant-faction {{#unless participant.faction.displayFaction}}faction-disabled{{/unless}}"
     {{#if displayParticipant}}data-tooltip="{{participant.faction.factionName}}"{{/if}}
@@ -10,7 +10,8 @@
     <p class="faction-name {{activeParticipantFactionFontSize}}">{{participant.faction.factionName}}</p>
   </div>
 
-  <div>
+  {{!-- Participant display  --}}
+  <div class="chud-participant-display">
     {{!-- User name --}}
     {{#if participatingUser}}
       <div class="chud-user-details">

@@ -1,11 +1,3 @@
-/* ----- Active participant wrapper ----- */
-/* #region */
-.conversation-hud-content .active-participant-wrapper {
-  display: flex;
-  flex-direction: row;
-}
-/* #endregion */
-
 /* ----- Active participant faction ----- */
 /* #region */
 .conversation-hud-content .active-participant-wrapper .active-participant-faction {

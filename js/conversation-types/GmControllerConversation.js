@@ -67,7 +67,7 @@ export class GmControllerConversation {
     const body = document.body;
     body.append(conversationBackground);
 
-    const uiInterface = document.getElementById("interface");
+    const uiInterface = document.getElementById("ui-middle");
     uiInterface.append(uiContainer);
 
     // Render conversation controls
@@ -816,7 +816,7 @@ export class GmControllerConversation {
       }
     );
 
-    const activeParticipantAnchorPoint = document.querySelector("#active-participant-anchor-point");
+    const activeParticipantAnchorPoint = document.querySelector("#ui-conversation-active-participant");
     activeParticipantAnchorPoint.innerHTML = template;
   }
 

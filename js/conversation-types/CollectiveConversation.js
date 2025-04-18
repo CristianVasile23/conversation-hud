@@ -608,7 +608,7 @@ export class CollectiveConversation {
       }
     );
 
-    const activeParticipantAnchorPoint = document.querySelector(`#active-participant-anchor-point-${userIndex}`);
+    const activeParticipantAnchorPoint = document.querySelector(`#ui-conversation-active-participant-${userIndex}`);
     activeParticipantAnchorPoint.innerHTML = template;
   }
 
