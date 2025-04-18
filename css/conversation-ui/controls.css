@@ -2,9 +2,9 @@
 /* #region */
 #ui-conversation-controls {
   display: flex;
-  flex-flow: column;
   justify-content: center;
-  z-index: 20;
+  margin-bottom: 5px;
+  gap: 8px;
 }
 
 #ui-conversation-controls .control-button {
@@ -15,8 +15,6 @@
 
   width: 32px;
   height: 32px;
-  margin-top: 4px;
-  margin-bottom: 4px;
   padding: 4px;
 
   background: rgba(0, 0, 0, 0.5);
@@ -55,9 +53,9 @@
 }
 
 #ui-conversation-controls .control-button.margin-top {
-  margin-top: 30px;
+  margin-left: 30px;
 }
 #ui-conversation-controls .control-button.margin-bottom {
-  margin-bottom: 30px;
+  margin-right: 30px;
 }
 /* #endregion */

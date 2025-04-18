@@ -1,7 +1,8 @@
 export function registerRenderMinimizeButtonHelper() {
   Handlebars.registerHelper("renderMinimizeButton", (isGM, isMinimized, isMinimizationLocked) => {
-    let button = document.createElement("div");
-    button.classList.add("control-button");
+    let button = document.createElement("button");
+    button.type = "button";
+    button.classList.add("ui-control", "plain", "icon", "fa-solid");
 
     button.setAttribute(
       "onclick",
@@ -20,14 +21,15 @@ export function registerRenderMinimizeButtonHelper() {
       button.setAttribute("data-tooltip", game.i18n.localize("CHUD.actions.minimizeConversation"));
     }
 
-    let icon = document.createElement("i");
     if (isMinimized) {
-      icon.classList.add("fas", "fa-chevron-left");
+      button.classList.add("fa-chevron-left");
     } else {
-      icon.classList.add("fas", "fa-chevron-right");
+      button.classList.add("fa-chevron-right");
     }
-    button.append(icon);
 
-    return button.outerHTML;
+    let listItem = document.createElement("li");
+    listItem.append(button);
+
+    return listItem.outerHTML;
   });
 }

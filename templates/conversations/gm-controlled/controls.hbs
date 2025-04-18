@@ -1,77 +1,169 @@
-{{#if isGM}}
-  <div
-    class="control-button margin-bottom"
-    onclick="game.ConversationHud.closeActiveConversation()"
-    data-tooltip="{{localize 'CHUD.actions.closeConversation'}}"
-  >
-    <i class="fas fa-times"></i>
-  </div>
-{{/if}}
+<menu class="flexrow faded-ui" style="gap: 8px">
+  {{#if isGM}}
+    {{!-- <div
+      class="control-button margin-bottom"
+      onclick="game.ConversationHud.closeActiveConversation()"
+      data-tooltip="{{localize 'CHUD.actions.closeConversation'}}"
+    >
+      <i class="fas fa-times"></i>
+    </div> --}}
 
-{{#if features.minimizeEnabled}}
-  {{#if (or isVisible isGM)}}
-    {{{renderMinimizeButton isGM isMinimized isMinimizationLocked}}}
+    <li>
+      <button
+        type="button"
+        class="ui-control plain icon fa-solid fa-times"
+        onclick="game.ConversationHud.closeActiveConversation()"
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.closeConversation'}}"
+      />
+    </li>
+  {{/if}}
+
+  {{#if features.minimizeEnabled}}
+    <div style="width: 16px"></div>
+
+    {{#if (or isVisible isGM)}}
+      {{{renderMinimizeButton isGM isMinimized isMinimizationLocked}}}
+    {{/if}}
+
+    {{#if isGM}}
+      {{!-- <div
+        class="control-button toggle {{#if isMinimizationLocked}}active{{/if}} margin-bottom {{#unless isVisible}}disabled{{/unless}}"
+        onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-lock-minimization" data=(object))}}})'
+        data-tooltip="{{localize 'CHUD.actions.lockMinimization'}}"
+      >
+        <i class="fas fa-lock"></i>
+      </div> --}}
+
+      <li>
+        <button
+          type="button"
+          class="ui-control toggle icon fa-solid fa-lock {{#unless isVisible}}disabled{{/unless}}"
+          onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-lock-minimization" data=(object))}}})'
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.lockMinimization'}}"
+          aria-pressed="{{#if isMinimizationLocked}}true{{else}}false{{/if}}"
+        />
+      </li>
+    {{/if}}
   {{/if}}
 
   {{#if isGM}}
-    <div
-      class="control-button toggle {{#if isMinimizationLocked}}active{{/if}} margin-bottom {{#unless isVisible}}disabled{{/unless}}"
-      onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-lock-minimization" data=(object))}}})'
-      data-tooltip="{{localize 'CHUD.actions.lockMinimization'}}"
+    <div style="width: 16px"></div>
+
+    {{!-- <div
+      class="control-button toggle {{#if isVisible}}active{{/if}}"
+      onclick="game.ConversationHud.toggleConversationVisibility()"
+      data-tooltip="{{localize 'CHUD.actions.toggleVisibility'}}"
     >
-      <i class="fas fa-lock"></i>
-    </div>
-  {{/if}}
-{{/if}}
+      <i class="fas fa-eye"></i>
+    </div> --}}
 
-{{#if isGM}}
-  <div
-    class="control-button toggle {{#if isVisible}}active{{/if}}"
-    onclick="game.ConversationHud.toggleConversationVisibility()"
-    data-tooltip="{{localize 'CHUD.actions.toggleVisibility'}}"
-  >
-    <i class="fas fa-eye"></i>
-  </div>
+    <li>
+      <button
+        type="button"
+        class="ui-control toggle icon fa-solid fa-eye"
+        onclick='game.ConversationHud.toggleConversationVisibility()'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.toggleVisibility'}}"
+        aria-pressed="{{#if isVisible}}true{{else}}false{{/if}}"
+      />
+    </li>
 
-  {{#if features.speakAsEnabled}}
-    <div
-      class="control-button toggle {{#if isSpeakingAs}}active{{/if}}"
-      onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-speaking-as" data=(object))}}})'
-      data-tooltip="{{localize 'CHUD.actions.toggleSpeakAs'}}"
+    {{#if features.speakAsEnabled}}
+      {{!-- <div
+        class="control-button toggle {{#if isSpeakingAs}}active{{/if}}"
+        onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-speaking-as" data=(object))}}})'
+        data-tooltip="{{localize 'CHUD.actions.toggleSpeakAs'}}"
+      >
+        <i class="fas fa-comment-quote"></i>
+      </div> --}}
+
+      <li>
+        <button
+          type="button"
+          class="ui-control toggle icon fa-solid fa-comment-quote"
+          onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-speaking-as" data=(object))}}})'
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.toggleSpeakAs'}}"
+          aria-pressed="{{#if isSpeakingAs}}true{{else}}false{{/if}}"
+        />
+      </li>
+    {{/if}}
+
+    {{!-- <div
+      class="control-button toggle {{#if isBackgroundVisible}}active{{/if}}"
+      onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-background" data=(object))}}})'
+      data-tooltip="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
     >
-      <i class="fas fa-comment-quote"></i>
-    </div>
+      <i class="fas fa-smoke"></i>
+    </div> --}}
+
+    <li>
+      <button
+        type="button"
+        class="ui-control toggle icon fa-solid fa-smoke"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-background" data=(object))}}})'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
+        aria-pressed="{{#if isBackgroundVisible}}true{{else}}false{{/if}}"
+      />
+    </li>
+
+    {{!-- <div
+      class="control-button"
+      onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="change-background" data=(object))}}})'
+      data-tooltip="{{localize 'CHUD.actions.changeConversationBackground'}}"
+    >
+      <i class="fas fa-image"></i>
+    </div> --}}
+
+    <li>
+      <button
+        type="button"
+        class="ui-control plain icon fa-solid fa-image"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="change-background" data=(object))}}})'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.changeConversationBackground'}}"
+      />
+    </li>
+
+    {{!-- <div
+      class="control-button"
+      onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="pull-participants-from-scene" data=(object))}}})'
+      data-tooltip="{{localize 'CHUD.actions.pullParticipants'}}"
+    >
+      <i class="fas fa-up-from-bracket"></i>
+    </div> --}}
+
+    <li>
+      <button
+        type="button"
+        class="ui-control plain icon fa-solid fa-up-from-bracket"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="pull-participants-from-scene" data=(object))}}})'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.pullParticipants'}}"
+      />
+    </li>
+
+    {{!-- <div
+      class="control-button margin-top"
+      onclick="game.ConversationHud.saveActiveConversation()"
+      data-tooltip="{{localize 'CHUD.actions.saveConversation'}}"
+    >
+      <i class="fas fa-save"></i>
+    </div> --}}
+
+    <div style="width: 16px"></div>
+
+    <li>
+      <button
+        type="button"
+        class="ui-control plain icon fa-solid fa-save"
+        onclick='game.ConversationHud.saveActiveConversation()'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.saveConversation'}}"
+      />
+    </li>
   {{/if}}
-
-  <div
-    class="control-button toggle {{#if isBackgroundVisible}}active{{/if}}"
-    onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-background" data=(object))}}})'
-    data-tooltip="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
-  >
-    <i class="fas fa-smoke"></i>
-  </div>
-
-  <div
-    class="control-button"
-    onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="change-background" data=(object))}}})'
-    data-tooltip="{{localize 'CHUD.actions.changeConversationBackground'}}"
-  >
-    <i class="fas fa-image"></i>
-  </div>
-
-  <div
-    class="control-button"
-    onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="pull-participants-from-scene" data=(object))}}})'
-    data-tooltip="{{localize 'CHUD.actions.pullParticipants'}}"
-  >
-    <i class="fas fa-up-from-bracket"></i>
-  </div>
-
-  <div
-    class="control-button margin-top"
-    onclick="game.ConversationHud.saveActiveConversation()"
-    data-tooltip="{{localize 'CHUD.actions.saveConversation'}}"
-  >
-    <i class="fas fa-save"></i>
-  </div>
-{{/if}}
+</menu>

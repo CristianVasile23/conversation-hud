@@ -67,8 +67,8 @@ export class GmControllerConversation {
     const body = document.body;
     body.append(conversationBackground);
 
-    const uiBottom = document.getElementById("ui-bottom");
-    uiBottom.before(uiContainer);
+    const uiInterface = document.getElementById("interface");
+    uiInterface.append(uiContainer);
 
     // Render conversation controls
     this.#updateConversationControls();
@@ -153,10 +153,10 @@ export class GmControllerConversation {
     }
 
     // Remove GM conversation controls
-    const uiInterface = document.getElementById("interface");
+    const uiBottom = document.getElementById("ui-bottom");
     const controls = document.getElementById("ui-conversation-controls");
     if (controls) {
-      uiInterface.removeChild(controls);
+      uiBottom.removeChild(controls);
     }
   }
 
@@ -615,7 +615,7 @@ export class GmControllerConversation {
    * @returns {HTMLDivElement}
    */
   #createConversationContainer(htmlContent, conversationIsVisible) {
-    const element = document.createElement("div");
+    const element = document.createElement("section");
     element.id = "ui-conversation-hud";
     element.className = "chud-active-conversation-wrapper";
 
@@ -766,12 +766,12 @@ export class GmControllerConversation {
 
   async #updateConversationControls() {
     // Get the HTML elements
-    const uiInterface = document.getElementById("interface");
+    const uiBottom = document.getElementById("ui-bottom");
     const controls = document.getElementById("ui-conversation-controls");
 
     // Remove the old controls if they exist
     if (controls) {
-      uiInterface.removeChild(controls);
+      uiBottom.removeChild(controls);
     }
 
     const conversationControls = await renderTemplate(
@@ -794,11 +794,10 @@ export class GmControllerConversation {
 
     const updatedControls = document.createElement("section");
     updatedControls.id = "ui-conversation-controls";
-    updatedControls.setAttribute("data-tooltip-direction", "LEFT");
+    updatedControls.setAttribute("data-tooltip-direction", "UP");
     updatedControls.innerHTML = conversationControls;
 
-    const uiRight = document.getElementById("ui-right");
-    uiRight.before(updatedControls);
+    uiBottom.insertBefore(updatedControls, uiBottom.firstChild);
   }
 
   async #updateActiveParticipantImage(index) {

@@ -86,8 +86,8 @@ export class CollectiveConversation {
     const body = document.body;
     body.append(conversationBackground);
 
-    const uiBottom = document.getElementById("ui-bottom");
-    uiBottom.before(uiContainer);
+    const uiInterface = document.getElementById("interface");
+    uiInterface.append(uiContainer);
 
     // Render conversation controls
     this.#updateConversationControls();
@@ -180,10 +180,10 @@ export class CollectiveConversation {
     }
 
     // Remove GM conversation controls
-    const uiInterface = document.getElementById("interface");
+    const hotbar = document.getElementById("hotbar");
     const controls = document.getElementById("ui-conversation-controls");
     if (controls) {
-      uiInterface.removeChild(controls);
+      hotbar.removeChild(controls);
     }
   }
 
@@ -478,7 +478,7 @@ export class CollectiveConversation {
    * @returns {HTMLDivElement}
    */
   #createConversationContainer(htmlContent, conversationIsVisible) {
-    const element = document.createElement("div");
+    const element = document.createElement("section");
     element.id = "ui-conversation-hud";
     element.className = "chud-active-conversation-wrapper";
 
@@ -545,12 +545,12 @@ export class CollectiveConversation {
    */
   async #updateConversationControls() {
     // Get the HTML elements
-    const uiInterface = document.getElementById("interface");
+    const hotbar = document.getElementById("hotbar");
     const controls = document.getElementById("ui-conversation-controls");
 
     // Remove the old controls if they exist
     if (controls) {
-      uiInterface.removeChild(controls);
+      hotbar.removeChild(controls);
     }
 
     const conversationControls = await renderTemplate(
@@ -573,11 +573,10 @@ export class CollectiveConversation {
 
     const updatedControls = document.createElement("section");
     updatedControls.id = "ui-conversation-controls";
-    updatedControls.setAttribute("data-tooltip-direction", "LEFT");
+    updatedControls.setAttribute("data-tooltip-direction", "UP");
     updatedControls.innerHTML = conversationControls;
 
-    const uiRight = document.getElementById("ui-right");
-    uiRight.before(updatedControls);
+    hotbar.before(updatedControls);
   }
 
   async #updateActiveParticipantImage(userID, participantIndex) {

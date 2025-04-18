@@ -1,0 +1,29 @@
+/* -------------------------------------------- */
+/*  Interface section                           */
+/* -------------------------------------------- */
+
+/* #region */
+#ui-conversation-hud {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: calc(var(--z-index-canvas) + 1);
+  pointer-events: none;
+}
+/* #region */
+
+/* -------------------------------------------- */
+/*  Interface section                           */
+/* -------------------------------------------- */
+
+/* #region */
+#ui-conversation-hud .chud-active-conversation-content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  margin: auto;
+  pointer-events: all;
+}
+/* #region */
