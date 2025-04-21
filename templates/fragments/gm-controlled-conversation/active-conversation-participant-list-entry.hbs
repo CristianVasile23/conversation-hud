@@ -2,29 +2,13 @@
   {{!-- Controls --}}
   {{#if isGM}}
     <div class="chud-controls" data-tooltip-direction="LEFT">
-      {{!-- <a
-        class="edit"
-        title="{{localize 'CHUD.actions.participant.edit'}}"
-        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="edit-participant" data=(object index=index))}}})'
-      >
-        <i class="fas fa-edit"></i>
-      </a> --}}
-
       <button
         type="button"
         class="ui-control icon fa-solid fa-edit"
         onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="edit-participant" data=(object index=index))}}})'
         data-tooltip
         aria-label="{{localize 'CHUD.actions.participant.edit'}}"
-      />
-
-      {{!-- <a
-        class="remove"
-        title="{{localize 'CHUD.actions.participant.delete'}}"
-        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="remove-participant" data=(object index=index))}}})'
-      >
-        <i class="fas fa-trash"></i>
-      </a> --}}
+      ></button>
 
       <button
         type="button"
@@ -32,42 +16,26 @@
         onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="remove-participant" data=(object index=index))}}})'
         data-tooltip
         aria-label="{{localize 'CHUD.actions.participant.delete'}}"
-      />
+      ></button>
 
       {{#if participant.linkedJournal}}
-        {{!-- <a
-          class="notes"
-          title="{{localize 'CHUD.strings.linkedJournal.name'}}"
-          onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})"
-        >
-          <i class="fas fa-book"></i>
-        </a> --}}
-
         <button
           type="notes"
           class="ui-control icon fa-solid fa-book"
           onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})"
           data-tooltip
           aria-label="{{localize 'CHUD.strings.linkedJournal.name'}}"
-        />
+        ></button>
       {{/if}}
 
       {{#if participant.linkedActor}}
-        {{!-- <a
-          class="notes"
-          title="{{localize 'CHUD.strings.linkedActor.name'}}"
-          onclick="game.ConversationHud.displayLinkedParticipantActor({{index}})"
-        >
-          <i class="fas fa-user"></i>
-        </a> --}}
-
         <button
           type="notes"
           class="ui-control icon fa-solid fa-user"
           onclick="game.ConversationHud.displayLinkedParticipantActor({{index}})"
           data-tooltip
           aria-label="{{localize 'CHUD.strings.linkedActor.name'}}"
-        />
+        ></button>
       {{/if}}
     </div>
   {{/if}}

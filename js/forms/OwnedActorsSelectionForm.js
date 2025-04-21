@@ -62,7 +62,7 @@ export class OwnedActorsSelectionForm extends FormApplication {
     return foundry.utils.mergeObject(super.defaultOptions, {
       classes: ["form"],
       popOut: true,
-      template: `modules/conversation-hud/templates/forms/pull-scene-participants-forms.hbs`,
+      template: `modules/conversation-hud/templates/forms/pull-scene-participants-form.hbs`,
       id: "conversation-pull-participants",
       title: game.i18n.localize("CHUD.actions.pullParticipants"),
       width: 450,

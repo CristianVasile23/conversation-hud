@@ -131,19 +131,21 @@ export class ConversationHud {
         });
 
         // TODO: Localize strings
-        return Dialog.prompt({
-          title: "Save Conversation",
-          content: dialogContent,
-          label: "Save Conversation",
-          callback: (html) => {
-            const formElement = html[0].querySelector("form");
-            const formData = new FormDataExtended(formElement);
-            const formDataObject = formData.object;
+        return foundry.applications.api.DialogV2.prompt(
+          foundry.utils.mergeObject({
+            content: dialogContent,
+            window: { title: "Save Conversation" },
+            ok: {
+              label: "Save Conversation",
+              callback: (event, button) => {
+                const formData = new foundry.applications.ux.FormDataExtended(button.form);
+                const formDataObject = formData.object;
 
-            this.#handleSaveConversation(formDataObject);
-          },
-          rejectClose: false,
-        });
+                this.#handleSaveConversation(formDataObject);
+              },
+            },
+          })
+        );
       } else {
         ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
       }

@@ -5,5 +5,5 @@ export { ConversationCreationForm } from "./ConversationCreationForm.mjs";
 export { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.mjs";
 export { GmControlledConversationCreationForm } from "./GmControlledConversationCreationForm.mjs";
 export { OwnedActorsSelectionForm } from "./OwnedActorsSelectionForm.js";
-export { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
+export { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.mjs";
 export { SelectParticipatingUsersFrom } from "./SelectParticipatingUsersFrom.js";

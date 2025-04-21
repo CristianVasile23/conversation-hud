@@ -3,7 +3,7 @@
 
 import { ANCHOR_OPTIONS, ConversationTypes } from "../constants/index.js";
 import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.mjs";
-import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.js";
+import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.mjs";
 import {
   getActorDataFromDragEvent,
   moveInArray,

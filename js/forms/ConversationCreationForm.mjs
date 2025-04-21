@@ -5,11 +5,18 @@ const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
 export class ConversationCreationForm extends HandlebarsApplicationMixin(ApplicationV2) {
   /* -------------------------------------------- */
+  /*  State                                       */
+  /* -------------------------------------------- */
+
+  constructor() {
+    super();
+  }
+
+  /* -------------------------------------------- */
   /*  Rendering                                   */
   /* -------------------------------------------- */
 
   static DEFAULT_OPTIONS = {
-    // TODO: Change ID
     id: "conversation-type-selection-form",
     classes: ["form"],
     tag: "form",
@@ -31,10 +38,6 @@ export class ConversationCreationForm extends HandlebarsApplicationMixin(Applica
       template: "modules/conversation-hud/templates/forms/conversation-creation-type-selection-form.hbs",
     },
   };
-
-  constructor() {
-    super();
-  }
 
   _onRender(context, options) {
     super._onRender(context, options);

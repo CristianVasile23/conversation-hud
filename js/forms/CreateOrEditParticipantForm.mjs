@@ -37,6 +37,48 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
   factionBannerShape = "shape-1";
   factionBannerTint = "#000000";
 
+  /**
+   * @param {boolean} isEditing Boolean used to determine if the input form is for creating a participant or editing an existing one
+   * @param {() => void} callbackFunction Callback function which is called when saving the form
+   * @param {ParticipantData | undefined} participantData Participant
+   */
+  constructor(isEditing, callbackFunction, participantData) {
+    super();
+
+    this.isEditing = isEditing;
+    this.callbackFunction = callbackFunction;
+    this.participantData = participantData;
+
+    if (participantData) {
+      // Participant data
+      this.participantName = participantData.name || "";
+      this.displayParticipantName = participantData.displayName === undefined ? true : participantData.displayName;
+      this.participantImg = participantData.img || "";
+      this.participantImgScale = participantData.imgScale || 1;
+
+      // Set portrait anchor only if the participant data has an anchor object
+      // Otherwise, use the default options from the module settings
+      if (participantData.portraitAnchor) {
+        this.portraitAnchor = participantData.portraitAnchor;
+      }
+
+      // Linked objects
+      this.linkedJournal = participantData.linkedJournal || "";
+      this.linkedActor = participantData.linkedActor || "";
+
+      // Faction data
+      if (participantData.faction) {
+        this.selectedFaction = participantData.faction.selectedFaction || "";
+        this.displayFaction = participantData.faction.displayFaction || false;
+        this.factionName = participantData.faction.factionName || "";
+        this.factionLogo = participantData.faction.factionLogo || "";
+        this.factionBannerEnabled = participantData.faction.factionBannerEnabled || false;
+        this.factionBannerShape = participantData.faction.factionBannerShape || "shape-1";
+        this.factionBannerTint = participantData.faction.factionBannerTint || "#000000";
+      }
+    }
+  }
+
   /* -------------------------------------------- */
   /*  Rendering                                   */
   /* -------------------------------------------- */
@@ -83,48 +125,6 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
       labelPrefix: "CHUD.tabs.conversationParticipantAddEdit",
     },
   };
-
-  /**
-   * @param {boolean} isEditing Boolean used to determine if the input form is for creating a participant or editing an existing one
-   * @param {() => void} callbackFunction Callback function which is called when saving the form
-   * @param {ParticipantData | undefined} participantData Participant
-   */
-  constructor(isEditing, callbackFunction, participantData) {
-    super();
-
-    this.isEditing = isEditing;
-    this.callbackFunction = callbackFunction;
-    this.participantData = participantData;
-
-    if (participantData) {
-      // Participant data
-      this.participantName = participantData.name || "";
-      this.displayParticipantName = participantData.displayName === undefined ? true : participantData.displayName;
-      this.participantImg = participantData.img || "";
-      this.participantImgScale = participantData.imgScale || 1;
-
-      // Set portrait anchor only if the participant data has an anchor object
-      // Otherwise, use the default options from the module settings
-      if (participantData.portraitAnchor) {
-        this.portraitAnchor = participantData.portraitAnchor;
-      }
-
-      // Linked objects
-      this.linkedJournal = participantData.linkedJournal || "";
-      this.linkedActor = participantData.linkedActor || "";
-
-      // Faction data
-      if (participantData.faction) {
-        this.selectedFaction = participantData.faction.selectedFaction || "";
-        this.displayFaction = participantData.faction.displayFaction || false;
-        this.factionName = participantData.faction.factionName || "";
-        this.factionLogo = participantData.faction.factionLogo || "";
-        this.factionBannerEnabled = participantData.faction.factionBannerEnabled || false;
-        this.factionBannerShape = participantData.faction.factionBannerShape || "shape-1";
-        this.factionBannerTint = participantData.faction.factionBannerTint || "#000000";
-      }
-    }
-  }
 
   async _prepareContext(options) {
     const context = await super._prepareContext(options);

@@ -5,8 +5,13 @@ import {
   processParticipantData,
 } from "../helpers/index.js";
 
-export class PullParticipantsFromSceneForm extends FormApplication {
-  // State variables
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class PullParticipantsFromSceneForm extends HandlebarsApplicationMixin(ApplicationV2) {
+  /* -------------------------------------------- */
+  /*  State                                       */
+  /* -------------------------------------------- */
+
   callbackFunction = undefined;
   participants = [];
 
@@ -64,26 +69,103 @@ export class PullParticipantsFromSceneForm extends FormApplication {
     this.participants = participants;
   }
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["form"],
-      popOut: true,
-      template: `modules/conversation-hud/templates/forms/pull-scene-participants-forms.hbs`,
-      id: "conversation-pull-participants",
-      title: game.i18n.localize("CHUD.actions.pullParticipants"),
+  /* -------------------------------------------- */
+  /*  Rendering                                   */
+  /* -------------------------------------------- */
+
+  static DEFAULT_OPTIONS = {
+    id: "conversation-pull-participants-{id}",
+    classes: ["form"],
+    tag: "form",
+    window: {
+      contentClasses: ["standard-form"],
+      title: "CHUD.actions.pullParticipants",
+    },
+    form: {
+      handler: this.#handleSubmit,
+      closeOnSubmit: true,
+    },
+    position: {
       width: 450,
       height: 650,
-      resizable: false,
-    });
-  }
+    },
+  };
 
-  getData() {
+  static PARTS = {
+    body: {
+      template: "modules/conversation-hud/templates/forms/pull-scene-participants-form.hbs",
+      scrollable: ["#sceneParticipantsList"],
+    },
+    footer: {
+      template: "templates/generic/form-footer.hbs",
+    },
+  };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.buttons = [
+      {
+        type: "submit",
+        icon: "fa-solid fa-plus",
+        label: "CHUD.actions.addActors",
+      },
+    ];
+
     return {
       participants: this.participants,
+      ...context,
     };
   }
 
-  async _updateObject(event, formData) {
+  _onRender(context, options) {
+    super._onRender(context, options);
+
+    const html = this.element;
+
+    html.querySelector("#deselect-all").addEventListener("click", () => {
+      this.#setCheckedStatusForAllActors(false);
+    });
+
+    html.querySelector("#select-visible").addEventListener("click", () => {
+      this.#handleSelectOnlyVisibleActors();
+    });
+
+    html.querySelector("#select-all").addEventListener("click", () => {
+      this.#setCheckedStatusForAllActors(true);
+    });
+
+    const actorsObject = html.querySelector("#participants-pulled-from-scene");
+    if (actorsObject) {
+      const pulledActors = actorsObject.children;
+      for (let i = 0; i < pulledActors.length; i++) {
+        pulledActors[i]
+          .querySelector("#pull-participant-checkbox")
+          .addEventListener("change", (event) => this.#handleSetIncludeActorCheckbox(event, i));
+
+        const participantEditButton = pulledActors[i].querySelector("#participant-edit-button");
+        if (participantEditButton) {
+          participantEditButton.addEventListener("click", () => this.#handleEditParticipant(i));
+        }
+
+        const showLinkedConversationButton = pulledActors[i].querySelector("#show-linked-conversation-button");
+        if (showLinkedConversationButton) {
+          showLinkedConversationButton.addEventListener("click", () => this.#handleShowLinkedConversation(i));
+        }
+      }
+    }
+  }
+
+  /* -------------------------------------------- */
+  /*  Handlers                                    */
+  /* -------------------------------------------- */
+
+  /**
+   *
+   * @param {*} event
+   * @param {*} form
+   * @param {*} formData
+   */
+  static async #handleSubmit(event, form, formData) {
     const selectedParticipants = [];
     for (const participant of this.participants) {
       if (participant.checked) {
@@ -120,41 +202,6 @@ export class PullParticipantsFromSceneForm extends FormApplication {
       }
     }
     this.callbackFunction(selectedParticipants);
-  }
-
-  activateListeners(html) {
-    super.activateListeners(html);
-
-    html.find("#deselect-all").click(() => {
-      this.#setCheckedStatusForAllActors(false);
-    });
-
-    html.find("#select-visible").click(() => {
-      this.#handleSelectOnlyVisibleActors();
-    });
-
-    html.find("#select-all").click(() => {
-      this.#setCheckedStatusForAllActors(true);
-    });
-
-    const actorsObject = html.find("#participants-pulled-from-scene")[0];
-    if (actorsObject) {
-      const pulledActors = actorsObject.children;
-      for (let i = 0; i < pulledActors.length; i++) {
-        pulledActors[i].querySelector("#pull-participant-checkbox").onchange = (event) =>
-          this.#handleSetIncludeActorCheckbox(event, i);
-
-        const participantEditButton = pulledActors[i].querySelector("#participant-edit-button");
-        if (participantEditButton) {
-          participantEditButton.onclick = () => this.#handleEditParticipant(i);
-        }
-
-        const showLinkedConversationButton = pulledActors[i].querySelector("#show-linked-conversation-button");
-        if (showLinkedConversationButton) {
-          showLinkedConversationButton.onclick = () => this.#handleShowLinkedConversation(i);
-        }
-      }
-    }
   }
 
   #setCheckedStatusForAllActors(value) {

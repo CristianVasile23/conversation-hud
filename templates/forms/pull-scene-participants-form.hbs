@@ -1,0 +1,109 @@
+<div class="standard-form chud-flex-1" data-application-part="body">
+  <fieldset class="chud-flex-1">
+    <legend class="chud-fieldset-legend-with-actions">
+      <span class="chud-label">
+        {{localize 'CHUD.strings.sceneActors'}}
+      </span>
+
+      <span class="chud-line"></span>
+      
+      <span class="chud-actions">
+        <button
+          type="button"
+          name="deselect-all"
+          id="deselect-all"
+          class="icon fa-solid fa-square"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.selection.deselectAll'}}"
+        ></button>
+
+        <button
+          type="button"
+          name="select-visible"
+          id="select-visible"
+          class="icon fa-solid fa-square-minus"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.selection.selectVisible'}}"
+        ></button>
+              
+        <button
+          type="button"
+          name="select-all"
+          id="select-all"
+          class="icon fa-solid fa-square-check"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.selection.selectAll'}}"
+        ></button>
+      </span>
+    </legend>
+
+    {{!-- Actors pulled from current scene --}}
+    <div class="flexcol chud-form-content">
+      <div id="sceneParticipantsList" class="scrollable chud-flex-1">
+        {{#each participants as |participant index|}}
+          <div class="chud-list-entry">
+            <div class="chud-actions-wrapper">
+              {{#if (eq participant.type 'conversation')}}
+                <a
+                  id="show-linked-conversation-button"
+                  class="show-linked-conversation"
+                  title="{{localize 'CHUD.actions.showLinkedConversation'}}"
+                >
+                  <i class="fas fa-book"></i>
+                </a>
+              {{else}}
+                {{#if (eq participant.type 'participant')}}
+                  <a
+                    id="participant-edit-button"
+                    class="edit"
+                    title="{{localize 'CHUD.actions.participant.edit'}}"
+                  >
+                    <i class="fas fa-pencil"></i>
+                  </a>
+                {{else}}
+                  {{!-- TODO: Display a better error container --}}
+                  <p>ERROR</p>
+                {{/if}}
+              {{/if}}
+            </div>
+
+            <div class="chud-portrait-wrapper">
+              {{#if (eq participant.type 'participant')}}
+                <img src="{{participant.data.img}}"/>
+              {{else}}
+                <img src="{{participant.img}}"/>
+              {{/if}}
+            </div>
+
+            <div class="chud-text-wrapper">
+              <p class="name">
+                {{#if (eq participant.type 'participant')}}
+                  {{#if (eq participant.data.displayName false)}}
+                    {{localize 'CHUD.strings.unknown'}}
+                  {{else}}
+                    {{participant.data.name}}
+                  {{/if}}
+                {{else}}
+                  {{participant.name}}
+                {{/if}}
+              </p>
+
+              {{#if participant.hidden}}
+                <div class="chud-is-hidden-text">
+                  <i class="fa-regular fa-eye-slash"></i>
+                  <p>{{localize 'CHUD.strings.tokenIsHidden'}}</p>
+                </div>
+              {{/if}}
+            </div>
+
+            <input
+              id="pull-participant-checkbox"
+              type="checkbox"
+              {{#if participant.checked}}checked="checked"{{/if}}
+            >
+          </div>
+        {{/each}}
+      </div>
+    </div>
+  </fieldset>
+</div>
