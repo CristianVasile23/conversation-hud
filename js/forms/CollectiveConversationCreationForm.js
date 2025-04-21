@@ -11,7 +11,7 @@ import {
   getConfirmationFromUser,
   activateConversationParticipantsListListeners,
 } from "../helpers/index.js";
-import { SelectParticipatingUsersFrom } from "./SelectParticipatingUsersFrom.js";
+import { SelectParticipatingUsersFrom } from "./SelectParticipatingUsersFrom.mjs";
 
 export class CollectiveConversationCreationForm extends FormApplication {
   // State variables

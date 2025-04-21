@@ -1,38 +1,9 @@
-<form class="sheet chud-h-100">
+<div class="standard-form chud-flex-1" data-application-part="body">
   <div class="form-group">
     <label>{{localize "CHUD.strings.conversationBackground.name"}}</label>
     <div class="form-fields">
-      <button
-        type="button"
-        class="file-picker"
-        data-type="imagevideo"
-        data-target="conversationBackground"
-        title="{{localize 'CHUD.strings.browseFiles'}}"
-      >
-        <i class="fas fa-file-import fa-fw"></i>
-      </button>
-
-      <input
-        class="image"
-        type="text"
-        name="conversationBackground"
-        placeholder="{{localize 'CHUD.strings.filePath'}}"
-        value="{{conversationBackground}}"
-      />
+      <file-picker name="conversationBackground" type="imagevideo" value="{{conversationBackground}}"></file-picker>
     </div>
-    <p class="notes">{{localize "CHUD.strings.conversationBackground.hint"}}</p>
+    <p class="hint">{{localize "CHUD.strings.conversationBackground.hint"}}</p>
   </div>
-  
-  <div class="chud-form-footer">
-    <footer class="sheet-footer flexrow">
-      <button
-        type="submit"
-        name="submit"
-        title="{{localize 'CHUD.actions.save'}}"
-      >
-        <i class="fa fa-check"></i>
-        {{localize 'CHUD.actions.save'}}
-      </button>
-    </footer>
-  </div>
-</form>
+</div>
