@@ -1,28 +1,36 @@
-<div class="flexrow chud-form-sub-header">
-  <p>{{localize 'CHUD.strings.participatingUsers'}}</p>
+<fieldset class="chud-flex-1">
+  <legend class="chud-fieldset-legend-with-actions">
+    <span class="chud-label">
+      {{localize 'CHUD.strings.participatingUsers'}}
+    </span>
 
-  <button
-    type="button"
-    name="add-participating-users"
-    id="addParticipatingUsers"
-    title="{{localize 'CHUD.actions.participatingUsers.add'}}"
-  >
-    <i class="fas fa-users-gear"></i>
-  </button>
-</div>
+    <span class="chud-line"></span>
 
-<div class="chud-form-section chud-form-content chud-drag-and-drop-container chud-overflow-y-auto">
-  {{!-- TODO: Add drag-and-drop functionality --}}
-  {{!-- <div class="chud-dropzone">
-    <i class="far fa-square-plus"></i>
-    <p> {{localize 'CHUD.strings.dropItem'}} </p>
-    <p class="hold-control"> ({{localize 'CHUD.strings.holdControl'}}) </p>
-  </div> --}}
+    <span class="chud-actions">
+      <button
+        type="button"
+        name="add-participating-users"
+        id="addParticipatingUsers"
+        class="icon fa-solid fa-users-gear"
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.participatingUsers.add'}}"
+      ></button>
+    </span>
+  </legend>
 
-  <div class="chud-non-dropzone-content chud-h-100">
-    {{> "modules/conversation-hud/templates/fragments/participating-users-list.hbs"
-      isGM=isGM
-      participatingUsers=participatingUsers
-    }}
+  <div class="flexcol chud-form-content chud-drag-and-drop-container">
+    {{!-- TODO: Add drag-and-drop functionality --}}
+    {{!-- <div class="chud-dropzone">
+      <i class="far fa-square-plus"></i>
+      <p> {{localize 'CHUD.strings.dropItem'}} </p>
+      <p class="hold-control"> ({{localize 'CHUD.strings.holdControl'}}) </p>
+    </div> --}}
+
+    <div class="flexcol chud-non-dropzone-content chud-flex-1">
+      {{> "modules/conversation-hud/templates/fragments/participating-users-list.hbs"
+        isGM=isGM
+        participatingUsers=participatingUsers
+      }}
+    </div>
   </div>
-</div>
+</fieldset>

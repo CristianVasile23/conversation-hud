@@ -29,5 +29,6 @@ export function preloadHandlebarsTemplates() {
     "modules/conversation-hud/templates/banner-shapes/shape-5.hbs",
     "modules/conversation-hud/templates/banner-shapes/shape-6.hbs",
   ];
-  return loadTemplates(templates);
+
+  return foundry.applications.handlebars.loadTemplates(templates);
 }

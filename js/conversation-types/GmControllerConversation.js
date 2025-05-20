@@ -597,14 +597,17 @@ export class GmControllerConversation {
    * @returns {Promise<string>}
    */
   async #getConversationTemplate(conversationData) {
-    return await renderTemplate("modules/conversation-hud/templates/conversations/gm-controlled/interface.hbs", {
-      isGM: game.user.isGM,
-      hasDock: checkIfCameraDockIsOnBottomOrTop(),
-      participants: conversationData.participants,
-      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
-      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
-    });
+    return await foundry.applications.handlebars.renderTemplate(
+      "modules/conversation-hud/templates/conversations/gm-controlled/interface.hbs",
+      {
+        isGM: game.user.isGM,
+        hasDock: checkIfCameraDockIsOnBottomOrTop(),
+        participants: conversationData.participants,
+        portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+        displayParticipantsToPlayers: game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers),
+        activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+      }
+    );
   }
 
   /**
@@ -774,7 +777,7 @@ export class GmControllerConversation {
       uiBottom.removeChild(controls);
     }
 
-    const conversationControls = await renderTemplate(
+    const conversationControls = await foundry.applications.handlebars.renderTemplate(
       "modules/conversation-hud/templates/conversations/gm-controlled/controls.hbs",
       {
         isGM: game.user.isGM,
@@ -801,7 +804,7 @@ export class GmControllerConversation {
   }
 
   async #updateActiveParticipantImage(index) {
-    const template = await renderTemplate(
+    const template = await foundry.applications.handlebars.renderTemplate(
       "modules/conversation-hud/templates/fragments/active-participant-content.hbs",
       {
         displayParticipant: index === -1 ? false : true,

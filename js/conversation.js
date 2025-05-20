@@ -125,10 +125,13 @@ export class ConversationHud {
       if (game.ConversationHud.activeConversation) {
         // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
         const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
-        const dialogContent = await renderTemplate("modules/conversation-hud/templates/forms/save-form.hbs", {
-          folders,
-          name: game.i18n.format("DOCUMENT.New", { type: "Conversation Sheet" }),
-        });
+        const dialogContent = await foundry.applications.handlebars.renderTemplate(
+          "modules/conversation-hud/templates/forms/save-form.hbs",
+          {
+            folders,
+            name: game.i18n.format("DOCUMENT.New", { type: "Conversation Sheet" }),
+          }
+        );
 
         // TODO: Localize strings
         return foundry.applications.api.DialogV2.prompt(

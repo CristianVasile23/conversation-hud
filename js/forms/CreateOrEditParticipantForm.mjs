@@ -478,10 +478,13 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
   async saveFaction() {
     // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
     const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
-    const dialogContent = await renderTemplate("modules/conversation-hud/templates/form/save-form.hbs", {
-      folders,
-      name: game.i18n.format("DOCUMENT.New", { type: "Faction Sheet" }),
-    });
+    const dialogContent = await foundry.applications.handlebars.renderTemplate(
+      "modules/conversation-hud/templates/form/save-form.hbs",
+      {
+        folders,
+        name: game.i18n.format("DOCUMENT.New", { type: "Faction Sheet" }),
+      }
+    );
 
     return Dialog.prompt({
       title: "Save Faction",

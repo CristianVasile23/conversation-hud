@@ -30,6 +30,16 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
   dropzoneVisible = false;
   draggingParticipant = false;
 
+  /**
+   * TODO: Add JSDoc
+   *
+   * @param {(conversationData: GMControlledConversationData) => void} callbackFunction
+   */
+  constructor(callbackFunction) {
+    super();
+    this.callbackFunction = callbackFunction;
+  }
+
   /* -------------------------------------------- */
   /*  Rendering                                   */
   /* -------------------------------------------- */
@@ -61,17 +71,16 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
     },
   };
 
-  /**
-   * TODO: Add JSDoc
-   *
-   * @param {(conversationData: GMControlledConversationData) => void} callbackFunction
-   */
-  constructor(callbackFunction) {
-    super();
-    this.callbackFunction = callbackFunction;
-  }
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.buttons = [
+      {
+        type: "submit",
+        icon: "fa-solid fa-check",
+        label: "CHUD.actions.startConversation",
+      },
+    ];
 
-  async _prepareContext(_options = {}) {
     for (const participant of this.participants) {
       processParticipantData(participant);
     }
@@ -82,7 +91,7 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
       conversationBackground: this.conversationBackground,
       participants: this.participants,
       defaultActiveParticipant: this.defaultActiveParticipant,
-      buttons: [{ type: "submit", icon: "fa-solid fa-check", label: "CHUD.actions.startConversation" }],
+      ...context,
     };
   }
 
@@ -93,20 +102,16 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
 
     // Add event listener on the pull participants from scene button
     html.querySelector("#pull-participants-from-scene").addEventListener("click", () => {
-      const pullParticipantsFromSceneForm = new PullParticipantsFromSceneForm((data) => {
+      new PullParticipantsFromSceneForm((data) => {
         for (const participant of data) {
           this.#handleAddParticipant(participant);
         }
-      });
-      return pullParticipantsFromSceneForm.render(true);
+      }).render(true);
     });
 
     // Add event listener on the add participant button
     html.querySelector("#add-participant").addEventListener("click", () => {
-      const participantCreationForm = new CreateOrEditParticipantForm(false, (data) =>
-        this.#handleAddParticipant(data)
-      );
-      return participantCreationForm.render(true);
+      new CreateOrEditParticipantForm(false, (data) => this.#handleAddParticipant(data)).render(true);
     });
 
     // Drag and drop functionality

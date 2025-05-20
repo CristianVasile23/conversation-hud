@@ -457,17 +457,20 @@ export class CollectiveConversation {
     const currentUserID = game.user.id;
     const currentParticipatingUserData = conversationData.participatingUsers.find((user) => user.id === currentUserID);
 
-    return await renderTemplate("modules/conversation-hud/templates/conversations/collective/interface.hbs", {
-      isGM: game.user.isGM,
-      hasDock: checkIfCameraDockIsOnBottomOrTop(),
+    return await foundry.applications.handlebars.renderTemplate(
+      "modules/conversation-hud/templates/conversations/collective/interface.hbs",
+      {
+        isGM: game.user.isGM,
+        hasDock: checkIfCameraDockIsOnBottomOrTop(),
 
-      userIsParticipating: Boolean(currentParticipatingUserData),
-      currentParticipatingUserData: currentParticipatingUserData,
-      participatingUsers: conversationData.participatingUsers,
+        userIsParticipating: Boolean(currentParticipatingUserData),
+        currentParticipatingUserData: currentParticipatingUserData,
+        participatingUsers: conversationData.participatingUsers,
 
-      portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
-      activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
-    });
+        portraitStyle: game.settings.get(MODULE_NAME, ModuleSettings.portraitStyle),
+        activeParticipantFontSize: game.settings.get(MODULE_NAME, ModuleSettings.activeParticipantFontSize),
+      }
+    );
   }
 
   /**
@@ -553,7 +556,7 @@ export class CollectiveConversation {
       hotbar.removeChild(controls);
     }
 
-    const conversationControls = await renderTemplate(
+    const conversationControls = await foundry.applications.handlebars.renderTemplate(
       "modules/conversation-hud/templates/conversations/collective/controls.hbs",
       {
         isGM: game.user.isGM,
@@ -590,7 +593,7 @@ export class CollectiveConversation {
         : this.#conversationData.conversation.data.participatingUsers[userIndex].participants[participantIndex];
     const participatingUserData = this.#conversationData.conversation.data.participatingUsers[userIndex];
 
-    const template = await renderTemplate(
+    const template = await foundry.applications.handlebars.renderTemplate(
       "modules/conversation-hud/templates/fragments/active-participant-content.hbs",
       {
         displayParticipant: participantIndex === -1 ? false : true,

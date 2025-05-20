@@ -12,7 +12,7 @@ export const registerHook = () => {
     const excludeFromBeingPulled = data.object["flags"]["conversation-hud"]?.excludeFromBeingPulled || undefined;
     const linkedConversation = data.object["flags"]["conversation-hud"]?.linkedConversation || undefined;
 
-    const renderedHtml = await renderTemplate(
+    const renderedHtml = await foundry.applications.handlebars.renderTemplate(
       "modules/conversation-hud/templates/fragments/actor-linked-conversation-data.hbs",
       {
         excludeFromBeingPulled: excludeFromBeingPulled,

@@ -1,5 +1,5 @@
 export { ChangeConversationBackgroundForm } from "./ChangeConversationBackgroundForm.mjs";
-export { CollectiveConversationCreationForm } from "./CollectiveConversationCreationForm.js";
+export { CollectiveConversationCreationForm } from "./CollectiveConversationCreationForm.mjs";
 export { CollectiveConversationParticipantsEditForm } from "./CollectiveConversationParticipantsEditForm.js";
 export { ConversationCreationForm } from "./ConversationCreationForm.mjs";
 export { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.mjs";

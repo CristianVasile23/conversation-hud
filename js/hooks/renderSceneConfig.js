@@ -16,7 +16,7 @@ export const registerHook = () => {
       const sceneConversationVisibilityOff =
         data.data["flags"]["conversation-hud"]?.sceneConversationVisibilityOff || undefined;
 
-      const renderedHtml = await renderTemplate(
+      const renderedHtml = await foundry.applications.handlebars.renderTemplate(
         "modules/conversation-hud/templates/fragments/scene-conversation-data.hbs",
         {
           conversations: conversations,

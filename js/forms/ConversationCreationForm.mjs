@@ -1,4 +1,4 @@
-import { CollectiveConversationCreationForm } from "./CollectiveConversationCreationForm.js";
+import { CollectiveConversationCreationForm } from "./CollectiveConversationCreationForm.mjs";
 import { GmControlledConversationCreationForm } from "./GmControlledConversationCreationForm.mjs";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
