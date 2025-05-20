@@ -33,7 +33,7 @@
 /* ----- Add Participant Button ----- */
 /* #region */
 #gmControlledConversationParticipantsList .chud-add-participant-button {
-  margin-left: 26px;
+  margin-left: 28px;
   margin-right: 45px;
 
   /* TODO: Maybe move these to the .chud-content class of the gm-controller conversation */

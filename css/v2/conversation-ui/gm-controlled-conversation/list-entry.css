@@ -19,8 +19,10 @@
 }
 
 #gmControlledConversationParticipantsList .chud-list-entry .chud-controls > .ui-control {
-  width: 21px;
-  height: 21px;
+  width: 23px;
+  min-width: 23px;
+  height: 23px;
+  min-height: 23px;
   font-size: 12px;
 }
 /* #endregion */
