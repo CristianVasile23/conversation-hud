@@ -88,11 +88,10 @@
   height: 40px;
   position: relative;
 
-  background: rgba(0, 0, 0, 0.5);
-  border: 1px solid var(--color-border-dark);
-  box-shadow: 0 0 10px var(--color-shadow-dark);
+  background: var(--active-participant-bg-color);
+  border: 1px solid var(--active-participant-border-color);
 
-  border-radius: 5px;
+  border-radius: 4px;
 }
 
 #gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner.disabled {

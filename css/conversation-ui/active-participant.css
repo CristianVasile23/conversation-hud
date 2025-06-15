@@ -1,6 +1,6 @@
 /* ----- Active participant faction ----- */
 /* #region */
-.conversation-hud-content .active-participant-wrapper .active-participant-faction {
+.chud-active-conversation-content .chud-active-participant-content .active-participant-faction {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -19,21 +19,21 @@
   overflow: hidden;
 }
 
-.conversation-hud-content .active-participant-wrapper .active-participant-faction.faction-disabled {
+.chud-active-conversation-content .chud-active-participant-content .active-participant-faction.faction-disabled {
   visibility: hidden;
 }
 
-.conversation-hud-content .active-participant-faction .chud-faction-banner {
+.chud-active-conversation-content .active-participant-faction .chud-faction-banner {
   width: 165px;
   height: 165px;
   position: relative;
 }
 
-.conversation-hud-content .active-participant-faction .chud-faction-banner.disabled {
+.chud-active-conversation-content .active-participant-faction .chud-faction-banner.disabled {
   visibility: hidden;
 }
 
-.conversation-hud-content .active-participant-faction .chud-faction-banner .chud-faction-logo {
+.chud-active-conversation-content .active-participant-faction .chud-faction-banner .chud-faction-logo {
   position: absolute;
 
   top: 0;
@@ -49,7 +49,10 @@
   border: 0;
 }
 
-.conversation-hud-content .active-participant-faction .chud-faction-banner.chud-banner-enabled .chud-faction-logo {
+.chud-active-conversation-content
+  .active-participant-faction
+  .chud-faction-banner.chud-banner-enabled
+  .chud-faction-logo {
   top: 30px;
   bottom: unset;
 
@@ -57,11 +60,11 @@
   max-height: 70px;
 }
 
-.conversation-hud-content .active-participant-faction .chud-faction-banner .chud-faction-logo[src=""] {
+.chud-active-conversation-content .active-participant-faction .chud-faction-banner .chud-faction-logo[src=""] {
   display: none;
 }
 
-.conversation-hud-content .active-participant-faction .faction-name {
+.chud-active-conversation-content .active-participant-faction .faction-name {
   margin: 0;
   width: 100%;
 
@@ -84,7 +87,7 @@
 
 /* ----- Active participant ----- */
 /* #region */
-.conversation-hud-content .active-participant {
+.chud-active-conversation-content .active-participant {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -98,14 +101,14 @@
 
   overflow: hidden;
 }
-.conversation-hud-content .active-participant.hidden {
+.chud-active-conversation-content .active-participant.hidden {
   visibility: hidden;
 }
 /* #endregion */
 
 /* ----- Active participant portrait ----- */
 /* #region */
-.conversation-hud-content .active-participant .portrait {
+.chud-active-conversation-content .active-participant .portrait {
   position: absolute;
 
   height: 100%;
@@ -118,7 +121,7 @@
 
 /* ----- Active participant name ----- */
 /* #region */
-.conversation-hud-content .active-participant .name {
+.chud-active-conversation-content .active-participant .name {
   position: absolute;
 
   bottom: 0;
@@ -146,7 +149,7 @@
 
 /* ----- No active participant text ----- */
 /* #region */
-.conversation-hud-content .no-participant-text {
+.chud-active-conversation-content .no-participant-text {
   display: flex;
   justify-content: center;
   align-items: center;
