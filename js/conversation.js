@@ -6,13 +6,16 @@ import { ConversationCreationForm } from "./forms/index.js";
 import { checkIfUserIsGM, getConfirmationFromUser } from "./helpers/index.js";
 import { ConversationTypes, SHEET_CLASSES } from "./constants/index.js";
 import { CollectiveConversation, GmControllerConversation } from "./conversation-types/index.js";
+import { ConversationEvents } from "./constants/events.js";
 
-export class ConversationHud {
+export class ConversationHud extends EventTarget {
   conversationIsActive = false;
   conversationIsVisible = false;
   activeConversation = undefined;
 
   constructor() {
+    super();
+
     // Register socket hooks
     this.registerSocketFunctions();
   }
@@ -23,17 +26,17 @@ export class ConversationHud {
   registerSocketFunctions() {
     // Wait for the socket to be initialized (if it hasn't been already)
     if (socket) {
-      socket.register("createConversation", this.createConversation);
-      socket.register("getConversation", this.getConversation);
-      socket.register("removeConversation", this.removeConversation);
+      socket.register("createConversation", this.createConversation.bind(this));
+      socket.register("getConversation", this.getConversation.bind(this));
+      socket.register("removeConversation", this.removeConversation.bind(this));
 
-      socket.register("setConversationVisibility", this.setConversationVisibility);
+      socket.register("setConversationVisibility", this.setConversationVisibility.bind(this));
 
-      socket.register("executeFunction", this.#executeFunctionHelper);
+      socket.register("executeFunction", this.#executeFunctionHelper.bind(this));
 
-      socket.register("setActivateConversationHudButtonState", this.setActivateConversationHudButtonState);
+      socket.register("setActivateConversationHudButtonState", this.setActivateConversationHudButtonState.bind(this));
     } else {
-      setTimeout(this.registerSocketFunctions, 250);
+      setTimeout(() => this.registerSocketFunctions(), 250);
     }
   }
 
@@ -71,6 +74,8 @@ export class ConversationHud {
     }
 
     game.ConversationHud.activeConversation.createConversation();
+
+    Hooks.call(ConversationEvents.Created);
   }
 
   /**
@@ -112,6 +117,8 @@ export class ConversationHud {
     game.ConversationHud.conversationIsVisible = false;
     game.ConversationHud.activeConversation.removeConversation();
     game.ConversationHud.activeConversation = undefined;
+
+    Hooks.call(ConversationEvents.Removed);
   }
 
   // Function that saves the active conversation to a journal entry

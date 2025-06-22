@@ -9,47 +9,4 @@
   {{!-- Active participant --}}
   <div id="ui-conversation-active-participant">
   </div>
-
-  {{!-- Participants list --}}
-  <div id="gmControlledConversationParticipantsList" class="faded-ui chud-participants-list">
-    {{#if isGM}}
-      {{#each participants as |participant index|}}
-        <div class="participant-drag-drop-container">
-          <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
-
-          {{> "modules/conversation-hud/templates/fragments/gm-controlled-conversation/active-conversation-participant-list-entry.hbs"
-            isGM=true
-            index=index
-            participant=participant
-          }}
-
-          <div id="drag-drop-indicator-bottom" class="drag-drop-indicator"></div>
-        </div>
-      {{/each}}
-    {{else}}
-      {{#if displayParticipantsToPlayers}}
-        {{#each participants as |participant index|}}
-          {{> "modules/conversation-hud/templates/fragments/gm-controlled-conversation/active-conversation-participant-list-entry.hbs"
-            isGM=false
-            index=index
-            participant=participant
-          }}
-        {{/each}}
-      {{/if}}
-    {{/if}}
-    
-    {{!-- GMs also have an add participant button that needs to be rendered inside the list --}}
-    {{#if isGM}}
-      <div class="chud-list-entry">
-        <button
-          id="conversation-add-button"
-          {{!-- class="ui-control chud-content chud-add-participant-button chud-has-control" --}}
-          class="ui-control plain icon fa-solid fa-plus chud-add-participant-button"
-          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-participant")}}})'
-          data-tooltip
-          aria-label="{{localize 'CHUD.actions.participant.add'}}"
-        />
-      </div>
-    {{/if}}
-  </div>
 </div>

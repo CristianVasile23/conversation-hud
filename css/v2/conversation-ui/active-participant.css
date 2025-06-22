@@ -134,6 +134,10 @@
 
 /* ----- Container ----- */
 /* #region */
+#ui-conversation-hud .chud-active-conversation-content .chud-participant-display {
+  margin-right: 178px;
+}
+
 #ui-conversation-hud .chud-active-conversation-content .active-participant {
   display: flex;
   flex-direction: column;

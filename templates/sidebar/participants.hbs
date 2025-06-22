@@ -1,0 +1,33 @@
+<div id="conversation-sidebar-content" class="conversation-participants">
+  {{#if isActive}}
+    {{#switch conversationType}}
+      {{#case "gm-controlled"}}
+        {{#if participants}}
+          <div class="gm-controlled-participants-list">
+            {{#each participants as |participant index|}}
+              {{> "modules/conversation-hud/templates/sidebar/participant.hbs"
+                index=index
+                participant=participant
+                activeParticipantIndex=../activeParticipantIndex
+              }}
+            {{/each}}
+          </div>
+        {{else}}
+          <div class="chud-no-data-message">
+            <i class="fa fa-users-slash" aria-hidden="true"></i>
+            <p>{{localize "CHUD.strings.noParticipants"}}</p>
+          </div>
+        {{/if}}
+      {{/case}}
+
+      {{#default}}
+        <p>{{localize "CHUD.strings.unsupportedConversationType"}}: <code>{{conversationType}}</code></p>
+      {{/default}}
+    {{/switch}}
+  {{else}}
+    <div class="chud-no-data-message">
+      <i class="fa-solid fa-comment-slash" aria-hidden="true"></i>
+      <p>{{localize "CHUD.strings.noActiveConversation"}}</p>
+    </div>
+  {{/if}}
+</div>

@@ -24,6 +24,7 @@ import {
   OwnedActorsSelectionForm,
   PullParticipantsFromSceneForm,
 } from "../forms/index.js";
+import { ConversationEvents } from "../constants/events.js";
 
 export class CollectiveConversation {
   /** @type {CollectiveConversationObject | undefined} */
@@ -273,6 +274,8 @@ export class CollectiveConversation {
         });
       }
     }
+
+    this.#emitUpdate();
   }
 
   #editParticipatingUsers() {
@@ -490,7 +493,7 @@ export class CollectiveConversation {
     }
 
     if (this.#conversationData.conversation.features.isMinimized) {
-      element.classList.add("minimized");
+      element.classList.add("chud-minimized");
     }
 
     element.innerHTML = htmlContent;
@@ -582,6 +585,12 @@ export class CollectiveConversation {
     hotbar.before(updatedControls);
   }
 
+  /**
+   * TODO: Finish JSDoc
+   *
+   * @param {*} userID
+   * @param {*} participantIndex
+   */
   async #updateActiveParticipantImage(userID, participantIndex) {
     const userIndex = this.#conversationData.conversation.data.participatingUsers.findIndex(
       (user) => user.id === userID
@@ -633,5 +642,12 @@ export class CollectiveConversation {
         }
       }
     }
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  #emitUpdate() {
+    Hooks.call(ConversationEvents.Updated);
   }
 }

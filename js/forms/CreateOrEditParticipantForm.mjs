@@ -187,7 +187,7 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
         partContext.participantImgScale = this.participantImgScale;
         partContext.portraitAnchor = this.portraitAnchor;
         partContext.linkedJournal = this.linkedJournal;
-        partContext.linkedActor = this.linkedJournal;
+        partContext.linkedActor = this.linkedActor;
 
         break;
       case "faction":

@@ -1,0 +1,30 @@
+<div class="conversation-header">
+  {{#if isActive}}
+    {{#if (isGm)}}
+      <div class="control-buttons left flexrow">
+        <button
+          type="button"
+          class="inline-control icon fa-solid fa-user-plus"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.participant.add'}}"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-participant")}}})'
+        ></button>
+
+        <button
+          type="button"
+          class="inline-control icon fa-solid fa-user-plus"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.participant.add'}}"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-participant")}}})'
+        ></button>
+      </div>
+    {{/if}}
+
+    <strong class="conversation-title">Participants</strong>
+
+
+    {{#if (isGm)}}
+      <div style="width: 24px;"></div>
+    {{/if}}
+  {{/if}}
+</div>

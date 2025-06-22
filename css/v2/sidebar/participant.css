@@ -1,0 +1,161 @@
+/* ----- General CSS ----- */
+/* #region */
+.conversation-sidebar .gm-controlled-participants-list {
+  display: flex;
+  flex-flow: column;
+  gap: 4px;
+}
+
+.conversation-sidebar .chud-participant {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  height: 70px;
+  padding: 8px;
+
+  cursor: pointer;
+}
+.conversation-sidebar .chud-participant:hover {
+  background: var(--entry-hover-bg, rgba(255, 255, 255, 0.1));
+}
+
+.conversation-sidebar .chud-participant.chud-active {
+  position: relative;
+  background: var(--entry-active-bg, rgba(255, 255, 255, 0.15));
+}
+
+.conversation-sidebar .chud-participant.chud-active::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border: 1px solid var(--color-warm-2);
+  border-radius: 4px;
+}
+/* #endregion */
+
+/* ----- Portrait ----- */
+/* #region */
+.conversation-sidebar .chud-portrait-wrapper {
+  flex: 0 0 auto;
+
+  height: 44px;
+  width: 44px;
+
+  border: 1px solid var(--color-cool-4);
+  border-radius: 3px;
+}
+
+.conversation-sidebar .chud-portrait-wrapper > * {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  border: 0;
+  border-radius: 0;
+}
+/* #endregion */
+
+/* ----- Details ----- */
+/* #region */
+.conversation-sidebar .chud-participant-details {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin-left: 8px;
+  margin-right: 8px;
+
+  flex: 1 1 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.conversation-sidebar .chud-participant-details .chud-details-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.conversation-sidebar .chud-participant-details .chud-details-text .chud-name {
+  margin: 0;
+  font-weight: bold;
+  font-size: var(--font-size-14);
+  color: var(--color-text-primary);
+}
+
+.conversation-sidebar .chud-participant-details .chud-details-text .chud-faction {
+  margin: 0;
+  font-style: italic;
+  font-size: var(--font-size-11);
+  color: var(--color-text-secondary);
+}
+
+.conversation-sidebar .chud-name,
+.conversation-sidebar .chud-faction {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.conversation-sidebar .chud-participant-details .chud-action-buttons {
+  margin: 0;
+  margin-top: 4px;
+  display: flex;
+  flex-direction: row;
+  gap: 3px;
+}
+
+.conversation-sidebar .chud-participant-details .chud-action-buttons .inline-control {
+  --button-text-color: var(--color-text-subtle);
+  font-size: var(--font-size-10);
+
+  max-width: 20px;
+  max-height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+}
+/* #endregion */
+
+/* ----- Faction ----- */
+/* #region */
+.conversation-sidebar .chud-faction-banner {
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  position: relative;
+  margin-left: auto;
+}
+
+.conversation-sidebar .chud-faction-banner.disabled > * {
+  visibility: hidden;
+}
+
+.conversation-sidebar .chud-faction-banner .chud-faction-logo {
+  position: absolute;
+
+  border: 0;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  max-width: 40px;
+  max-height: 40px;
+
+  margin: auto;
+}
+.conversation-sidebar .chud-faction-banner.chud-banner-enabled .chud-faction-logo {
+  top: 6px;
+  bottom: unset;
+  max-width: 16px;
+  max-height: 16px;
+}
+.conversation-sidebar .chud-faction-banner .chud-faction-logo[src=""] {
+  display: none;
+}
+/* #endregion */

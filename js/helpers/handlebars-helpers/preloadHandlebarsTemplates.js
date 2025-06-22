@@ -9,6 +9,8 @@ export function preloadHandlebarsTemplates() {
     "modules/conversation-hud/templates/forms/content/collective-conversation-creation-form-content.hbs",
     "modules/conversation-hud/templates/forms/content/gm-controlled-conversation-creation-form-content.hbs",
 
+    "modules/conversation-hud/templates/sidebar/participant.hbs",
+
     "modules/conversation-hud/templates/fragments/conversation-participant-data.hbs",
     "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs",
     "modules/conversation-hud/templates/fragments/faction-data.hbs",

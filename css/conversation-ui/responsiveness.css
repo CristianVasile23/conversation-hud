@@ -48,6 +48,7 @@
   }
 }
 
+/* TODO: Check if needed */
 @media only screen and (max-height: 960px) {
   /* CSS rules to make sure that the conversation hud displays properly when using the camera dock on the top or bottom */
   .conversation-hud-content.has-dock .active-participant.vertical {

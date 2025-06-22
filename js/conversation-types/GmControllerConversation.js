@@ -20,6 +20,7 @@ import {
   CreateOrEditParticipantForm,
   PullParticipantsFromSceneForm,
 } from "../forms/index.js";
+import { ConversationEvents } from "../constants/events.js";
 
 export class GmControllerConversation {
   /** @type {GMControlledConversationData | undefined} */
@@ -128,7 +129,7 @@ export class GmControllerConversation {
         },
       },
       currentState: {
-        currentActiveParticipantL: this.#currentActiveParticipant,
+        currentActiveParticipant: this.#currentActiveParticipant,
       },
     };
 
@@ -240,6 +241,9 @@ export class GmControllerConversation {
       this.#addDragAndDropListeners(chudInterface);
       this.#changeActiveParticipant({ index: this.#currentActiveParticipant });
     }
+
+    console.log(this);
+    this.#emitUpdate();
   }
 
   /**
@@ -403,7 +407,9 @@ export class GmControllerConversation {
 
     this.#currentActiveParticipant = index;
     this.#updateActiveParticipantImage(index);
-    this.#updateParticipantsList(index);
+    // this.#updateParticipantsList(index);
+
+    this.#emitUpdate();
   }
 
   /**
@@ -627,7 +633,7 @@ export class GmControllerConversation {
     }
 
     if (this.#conversationData.conversation.features.isMinimized) {
-      element.classList.add("minimized");
+      element.classList.add("chud-minimized");
     }
 
     element.innerHTML = htmlContent;
@@ -680,90 +686,91 @@ export class GmControllerConversation {
       };
 
       // Drag & drop listeners for the participants list
-      const conversationParticipantList = element.querySelector("#gmControlledConversationParticipantsList");
-      const conversationParticipants = conversationParticipantList.children;
-      if (conversationParticipants) {
-        for (let i = 0; i < conversationParticipants.length - 1; i++) {
-          conversationParticipants[i].ondragstart = (event) => {
-            this.#draggingParticipant = true;
-            conversationParticipantList.classList.add("drag-active");
+      // TODO: Add drag and drop logic
+      // const conversationParticipantList = element.querySelector("#gmControlledConversationParticipantsList");
+      // const conversationParticipants = conversationParticipantList?.children;
+      // if (conversationParticipants) {
+      //   for (let i = 0; i < conversationParticipants.length - 1; i++) {
+      //     conversationParticipants[i].ondragstart = (event) => {
+      //       this.#draggingParticipant = true;
+      //       conversationParticipantList.classList.add("drag-active");
 
-            // Save the index of the dragged participant in the data transfer object
-            event.dataTransfer.setData(
-              "text/plain",
-              JSON.stringify({
-                index: i,
-                type: DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant,
-                participant: this.#conversationData.conversation.data.participants[i],
-              })
-            );
-          };
+      //       // Save the index of the dragged participant in the data transfer object
+      //       event.dataTransfer.setData(
+      //         "text/plain",
+      //         JSON.stringify({
+      //           index: i,
+      //           type: DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant,
+      //           participant: this.#conversationData.conversation.data.participants[i],
+      //         })
+      //       );
+      //     };
 
-          conversationParticipants[i].ondragend = () => {
-            this.#draggingParticipant = false;
-            conversationParticipantList.classList.remove("drag-active");
-          };
+      //     conversationParticipants[i].ondragend = () => {
+      //       this.#draggingParticipant = false;
+      //       conversationParticipantList.classList.remove("drag-active");
+      //     };
 
-          conversationParticipants[i].ondragover = (event) => {
-            showDragAndDropIndicator(conversationParticipants[i], event);
-          };
+      //     conversationParticipants[i].ondragover = (event) => {
+      //       showDragAndDropIndicator(conversationParticipants[i], event);
+      //     };
 
-          conversationParticipants[i].ondragleave = () => {
-            hideDragAndDropIndicator(conversationParticipants[i]);
-          };
+      //     conversationParticipants[i].ondragleave = () => {
+      //       hideDragAndDropIndicator(conversationParticipants[i]);
+      //     };
 
-          conversationParticipants[i].ondrop = (event) => {
-            const data = JSON.parse(event.dataTransfer.getData("text/plain"));
+      //     conversationParticipants[i].ondrop = (event) => {
+      //       const data = JSON.parse(event.dataTransfer.getData("text/plain"));
 
-            if (data) {
-              hideDragAndDropIndicator(conversationParticipants[i]);
+      //       if (data) {
+      //         hideDragAndDropIndicator(conversationParticipants[i]);
 
-              const oldIndex = data.index;
+      //         const oldIndex = data.index;
 
-              // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
-              if (oldIndex === i) {
-                return;
-              }
+      //         // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
+      //         if (oldIndex === i) {
+      //           return;
+      //         }
 
-              // Get the new index of the dropped element
-              let newIndex = getDragAndDropIndex(event, i, oldIndex);
+      //         // Get the new index of the dropped element
+      //         let newIndex = getDragAndDropIndex(event, i, oldIndex);
 
-              // Reorder the array
-              const participants = this.#conversationData.conversation.data.participants;
-              moveInArray(participants, oldIndex, newIndex);
+      //         // Reorder the array
+      //         const participants = this.#conversationData.conversation.data.participants;
+      //         moveInArray(participants, oldIndex, newIndex);
 
-              // Update active participant index
-              const activeParticipantIndex = game.ConversationHud.activeConversation.activeParticipant;
-              if (activeParticipantIndex === oldIndex) {
-                game.ConversationHud.activeConversation.activeParticipant = newIndex;
-              } else {
-                if (activeParticipantIndex > oldIndex && activeParticipantIndex <= newIndex) {
-                  game.ConversationHud.activeConversation.activeParticipant -= 1;
-                }
-                if (activeParticipantIndex < oldIndex && activeParticipantIndex >= newIndex) {
-                  game.ConversationHud.activeConversation.activeParticipant += 1;
-                }
-              }
+      //         // Update active participant index
+      //         const activeParticipantIndex = game.ConversationHud.activeConversation.activeParticipant;
+      //         if (activeParticipantIndex === oldIndex) {
+      //           game.ConversationHud.activeConversation.activeParticipant = newIndex;
+      //         } else {
+      //           if (activeParticipantIndex > oldIndex && activeParticipantIndex <= newIndex) {
+      //             game.ConversationHud.activeConversation.activeParticipant -= 1;
+      //           }
+      //           if (activeParticipantIndex < oldIndex && activeParticipantIndex >= newIndex) {
+      //             game.ConversationHud.activeConversation.activeParticipant += 1;
+      //           }
+      //         }
 
-              // Update the list of participants
-              this.#conversationData.conversation.data.participants = participants;
+      //         // Update the list of participants
+      //         this.#conversationData.conversation.data.participants = participants;
 
-              // Update the conversation interface for all the connected players
-              game.ConversationHud.executeFunction({
-                scope: "everyone",
-                type: "update-conversation",
-                data: {
-                  ...this.#conversationData,
-                },
-              });
-            } else {
-              console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
-            }
+      //         // Update the conversation interface for all the connected players
+      //         game.ConversationHud.executeFunction({
+      //           scope: "everyone",
+      //           type: "update-conversation",
+      //           data: {
+      //             ...this.#conversationData,
+      //           },
+      //         });
+      //       } else {
+      //         console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
+      //       }
 
-            this.#draggingParticipant = false;
-          };
-        }
-      }
+      //       this.#draggingParticipant = false;
+      //     };
+      //   }
+      // }
     }
   }
 
@@ -823,28 +830,29 @@ export class GmControllerConversation {
     activeParticipantAnchorPoint.innerHTML = template;
   }
 
-  #updateParticipantsList(index) {
-    // Change active class of all other elements
-    const conversationParticipants = document.getElementById("gmControlledConversationParticipantsList").children;
-    if (conversationParticipants) {
-      for (let i = 0; i < conversationParticipants.length; i++) {
-        const entryElement = conversationParticipants[i].getElementsByClassName("chud-content")[0];
-        if (index === i) {
-          entryElement?.classList.add("chud-active");
-        } else {
-          entryElement?.classList.remove("chud-active");
-        }
-      }
-    }
-  }
+  // TODO: Remove
+  // #updateParticipantsList(index) {
+  //   // Change active class of all other elements
+  //   const conversationParticipants = document.getElementById("gmControlledConversationParticipantsList").children;
+  //   if (conversationParticipants) {
+  //     for (let i = 0; i < conversationParticipants.length; i++) {
+  //       const entryElement = conversationParticipants[i].getElementsByClassName("chud-content")[0];
+  //       if (index === i) {
+  //         entryElement?.classList.add("chud-active");
+  //       } else {
+  //         entryElement?.classList.remove("chud-active");
+  //       }
+  //     }
+  //   }
+  // }
 
   #updateLayout() {
     // Update the layout
     const conversationHud = document.getElementById("ui-conversation-hud");
     if (this.#conversationData.conversation.features.isMinimized) {
-      conversationHud.classList.add("minimized");
+      conversationHud.classList.add("chud-minimized");
     } else {
-      conversationHud.classList.remove("minimized");
+      conversationHud.classList.remove("chud-minimized");
     }
 
     if (game.ConversationHud.conversationIsVisible) {
@@ -857,5 +865,12 @@ export class GmControllerConversation {
     }
 
     this.#updateConversationControls();
+  }
+
+  /**
+   * TODO: Finish JSDoc
+   */
+  #emitUpdate() {
+    Hooks.call(ConversationEvents.Updated);
   }
 }

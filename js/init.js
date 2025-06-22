@@ -10,6 +10,7 @@ import {
 import { registerHooks } from "./hooks/index.js";
 import { ModuleSettings, registerSettings } from "./settings.js";
 import { registerSheets } from "./sheets/index.js";
+import { ConversationSidebar } from "./sidebar/ConversationSidebar.mjs";
 
 // Warning hook in case libWrapper is not installed
 Hooks.once("ready", () => {
@@ -22,6 +23,17 @@ Hooks.once("ready", () => {
 export let socket;
 Hooks.once("socketlib.ready", () => {
   socket = socketlib.registerModule("conversation-hud");
+});
+
+Hooks.once("uiExtender.init", (uiExtender) => {
+  uiExtender.registerDirectory({
+    moduleId: MODULE_NAME,
+    id: "conversation",
+    tooltip: "Conversation",
+    icon: "fas fa-comment-music",
+    order: 1,
+    applicationClass: ConversationSidebar,
+  });
 });
 
 Hooks.on("init", async () => {

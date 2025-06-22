@@ -10,6 +10,12 @@
   z-index: calc(var(--z-index-canvas) + 1);
   pointer-events: none;
 }
+
+/* TODO: Improve minimization state */
+#ui-conversation-hud.chud-minimized {
+  top: 20px;
+  bottom: unset;
+}
 /* #region */
 
 /* -------------------------------------------- */
