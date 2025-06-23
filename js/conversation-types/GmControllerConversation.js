@@ -21,6 +21,7 @@ import {
   PullParticipantsFromSceneForm,
 } from "../forms/index.js";
 import { ConversationEvents } from "../constants/events.js";
+import { GmControlledConversationControls } from "./GmControlledConversationControls.mjs";
 
 export class GmControllerConversation {
   /** @type {GMControlledConversationData | undefined} */
@@ -29,6 +30,9 @@ export class GmControllerConversation {
   #currentActiveParticipant = -1;
 
   #draggingParticipant = false;
+
+  /** @type {GmControlledConversationControls | undefined} */
+  #conversationControls = undefined;
 
   /**
    * TODO: Finish JSDoc
@@ -72,7 +76,7 @@ export class GmControllerConversation {
     uiInterface.append(uiContainer);
 
     // Render conversation controls
-    this.#updateConversationControls();
+    this.#renderOrUpdateControls();
 
     // After elements are rendered, render the active participant
     this.#changeActiveParticipant({ index: -1 });
@@ -104,7 +108,7 @@ export class GmControllerConversation {
       }
     }
 
-    this.#updateConversationControls();
+    this.#renderOrUpdateControls();
   }
 
   /**
@@ -154,6 +158,11 @@ export class GmControllerConversation {
     }
 
     // Remove GM conversation controls
+    if (this.#conversationControls) {
+      this.#conversationControls.close();
+      this.#conversationControls = undefined;
+    }
+
     const uiBottom = document.getElementById("ui-bottom");
     const controls = document.getElementById("ui-conversation-controls");
     if (controls) {
@@ -242,7 +251,6 @@ export class GmControllerConversation {
       this.#changeActiveParticipant({ index: this.#currentActiveParticipant });
     }
 
-    console.log(this);
     this.#emitUpdate();
   }
 
@@ -496,7 +504,7 @@ export class GmControllerConversation {
       if (checkIfUserIsGM() && game.ConversationHud.conversationIsActive) {
         this.#conversationData.conversation.features.isSpeakingAs =
           !this.#conversationData.conversation.features.isSpeakingAs;
-        this.#updateConversationControls();
+        this.#renderOrUpdateControls();
       }
     } else {
       ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
@@ -586,7 +594,7 @@ export class GmControllerConversation {
     }
 
     if (game.user.isGM) {
-      this.#updateConversationControls();
+      this.#renderOrUpdateControls();
     }
   }
 
@@ -775,40 +783,66 @@ export class GmControllerConversation {
     }
   }
 
-  async #updateConversationControls() {
-    // Get the HTML elements
-    const uiBottom = document.getElementById("ui-bottom");
-    const controls = document.getElementById("ui-conversation-controls");
+  // async #updateConversationControls() {
+  //   // Get the parent container for the controls
+  //   const uiBottom = document.getElementById("ui-bottom");
 
-    // Remove the old controls if they exist
-    if (controls) {
-      uiBottom.removeChild(controls);
+  //   // Render the new controls HTML using Handlebars template
+  //   const conversationControlsHTML = await foundry.applications.handlebars.renderTemplate(
+  //     "modules/conversation-hud/templates/conversations/gm-controlled/controls.hbs",
+  //     {
+  //       isGM: game.user.isGM,
+  //       isVisible: game.ConversationHud.conversationIsVisible,
+  //       isMinimized: this.#conversationData.conversation.features.isMinimized,
+  //       isMinimizationLocked: this.#conversationData.conversation.features.isMinimizationLocked,
+  //       isSpeakingAs: this.#conversationData.conversation.features.isSpeakingAs,
+  //       isBackgroundVisible: this.#conversationData.conversation.features.isBackgroundVisible,
+  //       features: {
+  //         minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
+  //         speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
+  //       },
+  //     }
+  //   );
+
+  //   // Try to find the existing controls section
+  //   let controls = document.getElementById("ui-conversation-controls");
+
+  //   // If it doesn't exist, create and insert it
+  //   if (!controls) {
+  //     controls = document.createElement("section");
+  //     controls.id = "ui-conversation-controls";
+  //     controls.setAttribute("data-tooltip-direction", "UP");
+  //     uiBottom.insertBefore(controls, uiBottom.firstChild);
+  //   }
+
+  //   // Update the inner HTML without replacing the element
+  //   controls.innerHTML = conversationControlsHTML;
+  // }
+
+  #ensureControlsContainerExists() {
+    if (!document.getElementById("ui-conversation-controls")) {
+      const container = document.createElement("section");
+      container.id = "ui-conversation-controls";
+      container.classList.add("chud-controls", "faded-ui");
+      container.setAttribute("data-tooltip-direction", "UP");
+
+      const uiBottom = document.getElementById("ui-bottom");
+      if (uiBottom) {
+        uiBottom.insertBefore(container, uiBottom.firstChild);
+      }
+    }
+  }
+
+  #renderOrUpdateControls() {
+    if (!game.user.isGM) return;
+
+    this.#ensureControlsContainerExists();
+
+    if (!this.#conversationControls) {
+      this.#conversationControls = new GmControlledConversationControls();
     }
 
-    const conversationControls = await foundry.applications.handlebars.renderTemplate(
-      "modules/conversation-hud/templates/conversations/gm-controlled/controls.hbs",
-      {
-        isGM: game.user.isGM,
-        isVisible: game.ConversationHud.conversationIsVisible,
-
-        isMinimized: this.#conversationData.conversation.features.isMinimized,
-        isMinimizationLocked: this.#conversationData.conversation.features.isMinimizationLocked,
-        isSpeakingAs: this.#conversationData.conversation.features.isSpeakingAs,
-        isBackgroundVisible: this.#conversationData.conversation.features.isBackgroundVisible,
-
-        features: {
-          minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
-          speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
-        },
-      }
-    );
-
-    const updatedControls = document.createElement("section");
-    updatedControls.id = "ui-conversation-controls";
-    updatedControls.setAttribute("data-tooltip-direction", "UP");
-    updatedControls.innerHTML = conversationControls;
-
-    uiBottom.insertBefore(updatedControls, uiBottom.firstChild);
+    this.#conversationControls.prepareAndRender();
   }
 
   async #updateActiveParticipantImage(index) {
@@ -865,7 +899,7 @@ export class GmControllerConversation {
       }
     }
 
-    this.#updateConversationControls();
+    this.#renderOrUpdateControls();
   }
 
   /**

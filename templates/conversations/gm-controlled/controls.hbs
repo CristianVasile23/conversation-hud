@@ -1,13 +1,5 @@
-<menu class="flexrow faded-ui">
+<menu class="flexrow">
   {{#if isGM}}
-    {{!-- <div
-      class="control-button margin-bottom"
-      onclick="game.ConversationHud.closeActiveConversation()"
-      data-tooltip="{{localize 'CHUD.actions.closeConversation'}}"
-    >
-      <i class="fas fa-times"></i>
-    </div> --}}
-
     <li>
       <button
         type="button"
@@ -27,14 +19,6 @@
     {{/if}}
 
     {{#if isGM}}
-      {{!-- <div
-        class="control-button toggle {{#if isMinimizationLocked}}active{{/if}} margin-bottom {{#unless isVisible}}disabled{{/unless}}"
-        onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-lock-minimization" data=(object))}}})'
-        data-tooltip="{{localize 'CHUD.actions.lockMinimization'}}"
-      >
-        <i class="fas fa-lock"></i>
-      </div> --}}
-
       <li>
         <button
           type="button"
@@ -51,14 +35,6 @@
   {{#if isGM}}
     <div class="chud-spacer"></div>
 
-    {{!-- <div
-      class="control-button toggle {{#if isVisible}}active{{/if}}"
-      onclick="game.ConversationHud.toggleConversationVisibility()"
-      data-tooltip="{{localize 'CHUD.actions.toggleVisibility'}}"
-    >
-      <i class="fas fa-eye"></i>
-    </div> --}}
-
     <li>
       <button
         type="button"
@@ -71,14 +47,6 @@
     </li>
 
     {{#if features.speakAsEnabled}}
-      {{!-- <div
-        class="control-button toggle {{#if isSpeakingAs}}active{{/if}}"
-        onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-speaking-as" data=(object))}}})'
-        data-tooltip="{{localize 'CHUD.actions.toggleSpeakAs'}}"
-      >
-        <i class="fas fa-comment-quote"></i>
-      </div> --}}
-
       <li>
         <button
           type="button"
@@ -91,14 +59,6 @@
       </li>
     {{/if}}
 
-    {{!-- <div
-      class="control-button toggle {{#if isBackgroundVisible}}active{{/if}}"
-      onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-background" data=(object))}}})'
-      data-tooltip="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
-    >
-      <i class="fas fa-smoke"></i>
-    </div> --}}
-
     <li>
       <button
         type="button"
@@ -110,14 +70,6 @@
       />
     </li>
 
-    {{!-- <div
-      class="control-button"
-      onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="change-background" data=(object))}}})'
-      data-tooltip="{{localize 'CHUD.actions.changeConversationBackground'}}"
-    >
-      <i class="fas fa-image"></i>
-    </div> --}}
-
     <li>
       <button
         type="button"
@@ -127,32 +79,6 @@
         aria-label="{{localize 'CHUD.actions.changeConversationBackground'}}"
       />
     </li>
-
-    {{!-- <div
-      class="control-button"
-      onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="pull-participants-from-scene" data=(object))}}})'
-      data-tooltip="{{localize 'CHUD.actions.pullParticipants'}}"
-    >
-      <i class="fas fa-up-from-bracket"></i>
-    </div> --}}
-
-    <li>
-      <button
-        type="button"
-        class="ui-control plain icon fa-solid fa-up-from-bracket"
-        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="pull-participants-from-scene" data=(object))}}})'
-        data-tooltip
-        aria-label="{{localize 'CHUD.actions.pullParticipants'}}"
-      />
-    </li>
-
-    {{!-- <div
-      class="control-button margin-top"
-      onclick="game.ConversationHud.saveActiveConversation()"
-      data-tooltip="{{localize 'CHUD.actions.saveConversation'}}"
-    >
-      <i class="fas fa-save"></i>
-    </div> --}}
 
     <div class="chud-spacer"></div>
 
