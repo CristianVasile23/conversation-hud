@@ -39,8 +39,11 @@ export class GmControllerConversation {
    *
    * @param {GMControlledConversationData} conversationData
    */
-  constructor(conversationData) {
+  constructor(conversationData, currentState) {
     this.#conversationData = conversationData;
+
+    // Update state
+    this.#currentActiveParticipant = currentState.currentActiveParticipant;
   }
 
   /**
@@ -79,7 +82,7 @@ export class GmControllerConversation {
     this.#renderOrUpdateControls();
 
     // After elements are rendered, render the active participant
-    this.#changeActiveParticipant({ index: -1 });
+    this.#setActiveParticipant(this.#currentActiveParticipant);
   }
 
   /**
@@ -120,16 +123,18 @@ export class GmControllerConversation {
 
     /** @type {GMControlledConversationData} */
     const conversationData = {
-      type: this.#conversationData.type,
-      background: this.#conversationData.background,
-      conversation: {
-        data: data,
-        features: {
-          ...features,
+      conversationData: {
+        type: this.#conversationData.type,
+        background: this.#conversationData.background,
+        conversation: {
+          data: data,
+          features: {
+            ...features,
 
-          // Since minimization is something that is also client-sided, we only get the minimization state
-          // if the minimization is locked (and that means all clients should have the same minimization state)
-          isMinimized: features.isMinimizationLocked ? features.isMinimized : false,
+            // Since minimization is something that is also client-sided, we only get the minimization state
+            // if the minimization is locked (and that means all clients should have the same minimization state)
+            isMinimized: features.isMinimizationLocked ? features.isMinimized : false,
+          },
         },
       },
       currentState: {
@@ -248,7 +253,7 @@ export class GmControllerConversation {
 
       chudInterface.innerHTML = template;
       this.#addDragAndDropListeners(chudInterface);
-      this.#changeActiveParticipant({ index: this.#currentActiveParticipant });
+      this.#setActiveParticipant(this.#currentActiveParticipant);
     }
 
     this.#emitUpdate();
@@ -417,6 +422,12 @@ export class GmControllerConversation {
     this.#updateActiveParticipantImage(index);
     // this.#updateParticipantsList(index);
 
+    this.#emitUpdate();
+  }
+
+  #setActiveParticipant(index) {
+    this.#currentActiveParticipant = index;
+    this.#updateActiveParticipantImage(index);
     this.#emitUpdate();
   }
 

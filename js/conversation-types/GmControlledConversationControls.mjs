@@ -16,15 +16,15 @@ export class GmControlledConversationControls extends EmbeddedComponent {
   }
 
   async prepareAndRender() {
-    const { conversation } = game.ConversationHud.activeConversation.getConversation();
+    const { conversationData } = game.ConversationHud.activeConversation.getConversation();
 
     await this.update({
       isGM: game.user.isGM,
       isVisible: game.ConversationHud.conversationIsVisible,
-      isMinimized: conversation.features.isMinimized,
-      isMinimizationLocked: conversation.features.isMinimizationLocked,
-      isSpeakingAs: conversation.features.isSpeakingAs,
-      isBackgroundVisible: conversation.features.isBackgroundVisible,
+      isMinimized: conversationData.conversation.features.isMinimized,
+      isMinimizationLocked: conversationData.conversation.features.isMinimizationLocked,
+      isSpeakingAs: conversationData.conversation.features.isSpeakingAs,
+      isBackgroundVisible: conversationData.conversation.features.isBackgroundVisible,
       features: {
         minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
         speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),

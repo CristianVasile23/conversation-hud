@@ -44,16 +44,16 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
 
   async _prepareContext(options) {
     const base = await super._prepareContext(options);
-    const hud = game.ConversationHud;
-    const conversationData = hud.activeConversation?.getConversation();
+
+    const { conversationData, currentState } = game.ConversationHud.activeConversation?.getConversation() ?? {};
 
     return {
       ...base,
-      isActive: hud.conversationIsActive,
-      isVisible: hud.conversationIsVisible,
+      isActive: game.ConversationHud.conversationIsActive,
+      isVisible: game.ConversationHud.conversationIsVisible,
       conversationType: conversationData?.type ?? null,
-      activeParticipantIndex: conversationData?.currentState?.currentActiveParticipant ?? -1,
-      participants: conversationData?.conversation?.data?.participants ?? [],
+      participants: conversationData?.conversation.data.participants ?? [],
+      activeParticipantIndex: currentState?.currentActiveParticipant ?? -1,
     };
   }
 

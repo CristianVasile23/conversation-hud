@@ -3,7 +3,6 @@
 .conversation-sidebar .gm-controlled-participants-list {
   display: flex;
   flex-flow: column;
-  gap: 4px;
 }
 
 .conversation-sidebar .chud-participant {

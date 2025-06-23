@@ -41,7 +41,7 @@ export class ConversationHud extends EventTarget {
   /**
    * Function that creates and displays the ConversationHUD UI
    *
-   * @param {{ conversationData: GMControlledConversationData; conversationCurrentState: any; }} conversation TODO
+   * @param {{ conversationData: GMControlledConversationData; currentState: any; }} conversation TODO
    * @param {boolean} conversationIsVisible TODO
    */
   async createConversation(conversation, conversationIsVisible) {
@@ -53,14 +53,14 @@ export class ConversationHud extends EventTarget {
       case ConversationTypes.GMControlled:
         game.ConversationHud.activeConversation = new GmControllerConversation(
           conversation.conversationData,
-          conversation.conversationCurrentState
+          conversation.currentState
         );
         break;
 
       case ConversationTypes.Collective:
         game.ConversationHud.activeConversation = new CollectiveConversation(
           conversation.conversationData,
-          conversation.conversationCurrentState
+          conversation.currentState
         );
         break;
 
@@ -84,7 +84,7 @@ export class ConversationHud extends EventTarget {
    *  conversationIsVisible: boolean;
    *  activeConversation: {
    *    conversationData: GMControlledConversationData | undefined;
-   *    conversationCurrentState: any;
+   *    currentState: any;
    *  };
    * }}
    */
@@ -95,10 +95,10 @@ export class ConversationHud extends EventTarget {
     };
 
     if (game.ConversationHud.conversationIsActive) {
-      const { conversationData, conversationCurrentState } = game.ConversationHud.activeConversation.getConversation();
+      const { conversationData, currentState } = game.ConversationHud.activeConversation.getConversation();
       dataToReturn.activeConversation = {
-        conversationData: conversationData,
-        conversationCurrentState: conversationCurrentState,
+        conversationData,
+        currentState,
       };
     } else {
       dataToReturn.activeConversation = undefined;
