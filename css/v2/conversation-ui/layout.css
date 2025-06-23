@@ -11,6 +11,10 @@
   pointer-events: none;
 }
 
+#ui-conversation-hud:not(.visible) {
+  display: none;
+}
+
 /* TODO: Improve minimization state */
 #ui-conversation-hud.chud-minimized {
   top: 20px;

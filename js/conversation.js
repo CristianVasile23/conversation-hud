@@ -33,8 +33,6 @@ export class ConversationHud extends EventTarget {
       socket.register("setConversationVisibility", this.setConversationVisibility.bind(this));
 
       socket.register("executeFunction", this.#executeFunctionHelper.bind(this));
-
-      socket.register("setActivateConversationHudButtonState", this.setActivateConversationHudButtonState.bind(this));
     } else {
       setTimeout(() => this.registerSocketFunctions(), 250);
     }
@@ -236,9 +234,6 @@ export class ConversationHud extends EventTarget {
     if (checkIfUserIsGM()) {
       if (shouldCreateConversation) {
         if (!game.ConversationHud.conversationIsActive) {
-          // Set button active status to false until a successful form has been completed
-          this.setActivateConversationHudButtonState(false);
-
           // Create form
           new ConversationCreationForm().render(true);
         } else {
@@ -247,22 +242,11 @@ export class ConversationHud extends EventTarget {
       } else {
         if (game.ConversationHud.conversationIsActive) {
           socket.executeForEveryone("removeConversation");
-          socket.executeForAllGMs("setActivateConversationHudButtonState", false);
         } else {
           ui.notifications.error(game.i18n.localize("CHUD.errors.noActiveConversation"));
         }
       }
     }
-  }
-
-  /**
-   * TODO: Add JSDoc documentation
-   *
-   * @param {boolean} state
-   */
-  setActivateConversationHudButtonState(state) {
-    ui.controls.controls.notes.tools["activateHud"].active = state;
-    ui.controls.render();
   }
 
   /**
@@ -350,8 +334,5 @@ export class ConversationHud extends EventTarget {
     };
 
     socket.executeForEveryone("createConversation", conversation, visibility);
-
-    // Finally, set the button status to active now that a conversation is active
-    socket.executeForAllGMs("setActivateConversationHudButtonState", true);
   }
 }

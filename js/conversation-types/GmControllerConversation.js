@@ -509,6 +509,7 @@ export class GmControllerConversation {
   async #updateBackground(data) {
     const background = data.background;
     const backgroundContainer = document.getElementById("active-conversation-background");
+
     if (backgroundContainer) {
       if (background) {
         backgroundContainer.classList.add("chud-active-conversation-background-image");
@@ -540,7 +541,7 @@ export class GmControllerConversation {
    * @param {*} data
    */
   #changeBackgroundHelper(data) {
-    this.#conversationData.background = data.conversationBackground;
+    this.#conversationData.background = data.object.conversationBackground;
 
     // Update the conversation for all connected players
     game.ConversationHud.executeFunction({
