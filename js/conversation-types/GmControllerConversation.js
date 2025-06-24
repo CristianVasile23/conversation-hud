@@ -43,7 +43,7 @@ export class GmControllerConversation {
     this.#conversationData = conversationData;
 
     // Update state
-    this.#currentActiveParticipant = currentState.currentActiveParticipant;
+    this.#currentActiveParticipant = currentState?.currentActiveParticipant ?? -1;
   }
 
   /**

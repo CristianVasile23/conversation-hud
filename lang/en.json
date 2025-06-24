@@ -34,6 +34,7 @@
     "name": "Name",
 
     "noLinkedDocuments": "No linked documents",
+    "noActiveConversation": "No active conversation",
 
     "linkedJournal": {
       "name": "Linked Journal",
@@ -58,6 +59,7 @@
 
     "currentParticipants": "Current Participants",
     "noActiveParticipant": "No active participant",
+    "noParticipants": "No participants",
     "noParticipantsInList": "Conversation has no participants. Try adding some. (Drag and drop is supported)",
 
     "conversationEntry": "Conversation Entry",

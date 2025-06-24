@@ -330,7 +330,7 @@ export class ConversationHud extends EventTarget {
 
     const conversation = {
       conversationData: conversationData,
-      conversationCurrentState: undefined,
+      currentState: undefined,
     };
 
     socket.executeForEveryone("createConversation", conversation, visibility);
