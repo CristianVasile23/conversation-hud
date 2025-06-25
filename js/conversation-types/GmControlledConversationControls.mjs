@@ -3,10 +3,6 @@ import { ModuleSettings } from "../settings.js";
 import { EmbeddedComponent } from "../utils/index.js";
 
 export class GmControlledConversationControls extends EmbeddedComponent {
-  static id = "ui-conversation-controls";
-  static template = "modules/conversation-hud/templates/conversations/gm-controlled/controls.hbs";
-  static target = "#ui-conversation-controls";
-
   constructor() {
     super({
       id: "ui-conversation-controls",
@@ -16,7 +12,9 @@ export class GmControlledConversationControls extends EmbeddedComponent {
   }
 
   async prepareAndRender() {
-    const { conversationData } = game.ConversationHud.activeConversation.getConversation();
+    const { conversationData } = game.ConversationHud.activeConversation.getConversation({
+      respectMinimizationLock: false,
+    });
 
     await this.update({
       isGM: game.user.isGM,

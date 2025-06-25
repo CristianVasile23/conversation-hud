@@ -117,7 +117,7 @@ export class GmControllerConversation {
   /**
    * TODO: Finish JSDoc
    */
-  getConversation() {
+  getConversation({ respectMinimizationLock = true } = {}) {
     const data = this.#conversationData.conversation.data;
     const features = this.#conversationData.conversation.features;
 
@@ -133,7 +133,11 @@ export class GmControllerConversation {
 
             // Since minimization is something that is also client-sided, we only get the minimization state
             // if the minimization is locked (and that means all clients should have the same minimization state)
-            isMinimized: features.isMinimizationLocked ? features.isMinimized : false,
+            isMinimized: respectMinimizationLock
+              ? features.isMinimizationLocked
+                ? features.isMinimized
+                : false
+              : features.isMinimized,
           },
         },
       },
@@ -845,7 +849,7 @@ export class GmControllerConversation {
   }
 
   #renderOrUpdateControls() {
-    if (!game.user.isGM) return;
+    // if (!game.user.isGM) return;
 
     this.#ensureControlsContainerExists();
 

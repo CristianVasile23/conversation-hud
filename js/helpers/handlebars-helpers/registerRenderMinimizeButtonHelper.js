@@ -22,9 +22,9 @@ export function registerRenderMinimizeButtonHelper() {
     }
 
     if (isMinimized) {
-      button.classList.add("fa-chevron-left");
+      button.classList.add("fa-arrows-maximize");
     } else {
-      button.classList.add("fa-chevron-right");
+      button.classList.add("fa-arrows-minimize");
     }
 
     let listItem = document.createElement("li");
