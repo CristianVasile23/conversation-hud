@@ -108,7 +108,9 @@
     "linkedConversation": {
       "name": "Linked Conversation",
       "hint": "A linked conversation that will be used whenever the token is being pulled into an active conversation."
-    }
+    },
+
+    "chooseType": "Choose Type"
   },
 
   "CHUD.dialogue": {
@@ -150,6 +152,7 @@
     "toggleBackgroundBlur": "Toggle Background",
     "maximizeConversation": "Maximize Conversation",
     "minimizeConversation": "Minimize Conversation",
+    "lockMinimization": "Lock Minimization",
 
     "discardChanges": "Discard Changes",
 
@@ -220,6 +223,17 @@
   "CHUD.sheets": {
     "entrySheet": "Conversation Entry Sheet",
     "factionSheet": "Conversation Faction Sheet"
+  },
+
+  "CHUD.conversationTypes": {
+    "gmControlled": {
+      "name": "GM Controlled",
+      "description": "Only GMs choose who is speaking. Best for scenes where NPCs address the party, managed solely by the GM."
+    },
+    "collective": {
+      "name": "Collective",
+      "description": "Each player selects their speaker. Useful for group scenes where players take turns speaking as different characters."
+    }
   },
 
   "CHUD.errors": {

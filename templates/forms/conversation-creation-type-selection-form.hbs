@@ -2,17 +2,17 @@
 <div class="standard-form chud-conversation-creation-form chud-flex-1" data-application-part="body">
   <button id="gm-controlled-conversation-selector" class="chud-type-selector">
     <i class="fas fa-user"></i>
-    <h3 class="chud-type-name">GM Controlled</h3>
+    <h3 class="chud-type-name">{{localize 'CHUD.conversationTypes.gmControlled.name'}}</h3>
     <p class="chud-type-description">
-      [TODO: Add description]
+      {{localize 'CHUD.conversationTypes.gmControlled.description'}}
     </p>
   </button>
 
-  <button id="collective-conversation-selector" class="chud-type-selector">
+  <button id="collective-conversation-selector" class="chud-type-selector" disabled data-tooltip aria-label="Coming Soon" style="opacity: 0.5;">
     <i class="fas fa-users"></i>
-    <h3 class="chud-type-name">Collective</h3>
+    <h3 class="chud-type-name">{{localize 'CHUD.conversationTypes.collective.name'}}</h3>
     <p class="chud-type-description">
-      [TODO: Add description]
+      {{localize 'CHUD.conversationTypes.collective.description'}}
     </p>
   </button>
 </div>

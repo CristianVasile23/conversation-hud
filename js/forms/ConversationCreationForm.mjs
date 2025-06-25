@@ -22,7 +22,6 @@ export class ConversationCreationForm extends HandlebarsApplicationMixin(Applica
     tag: "form",
     window: {
       contentClasses: ["standard-form"],
-      title: "CHUD.actions.createConversation - Choose Type", // TODO: Localize
     },
     form: {
       closeOnSubmit: true,
@@ -38,6 +37,12 @@ export class ConversationCreationForm extends HandlebarsApplicationMixin(Applica
       template: "modules/conversation-hud/templates/forms/conversation-creation-type-selection-form.hbs",
     },
   };
+
+  get title() {
+    return `${game.i18n.localize("CHUD.actions.createConversation")} - ${game.i18n.localize(
+      "CHUD.strings.chooseType"
+    )}`;
+  }
 
   _onRender(context, options) {
     super._onRender(context, options);
