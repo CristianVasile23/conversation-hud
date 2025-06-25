@@ -15,18 +15,6 @@
   display: none;
 }
 
-/* TODO: Improve minimization state */
-#ui-conversation-hud.chud-minimized {
-  top: 20px;
-  bottom: unset;
-}
-/* #region */
-
-/* -------------------------------------------- */
-/*  Interface section                           */
-/* -------------------------------------------- */
-
-/* #region */
 #ui-conversation-hud .chud-active-conversation-content {
   position: relative;
   display: flex;
@@ -36,4 +24,63 @@
   margin: auto;
   pointer-events: all;
 }
+/* #endregion */
+
+/* -------------------------------------------- */
+/*  Minimization section                           */
+/* -------------------------------------------- */
+
 /* #region */
+#ui-conversation-hud.chud-minimized {
+  top: unset;
+  bottom: 16px;
+  right: 245px;
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-conversation-content .chud-active-participant-content {
+  flex-direction: row-reverse;
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-participant-display {
+  margin-right: 0;
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-faction-display {
+  width: 84px;
+  margin-right: 0;
+  margin-left: 10px;
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-faction-display .chud-faction-banner {
+  width: 82px;
+  height: 82px;
+}
+
+#ui-conversation-hud.chud-minimized
+  .chud-active-participant-content
+  .chud-faction-display
+  .chud-faction-banner
+  .chud-faction-logo {
+  max-width: 82px;
+  max-height: 82px;
+}
+
+#ui-conversation-hud.chud-minimized
+  .chud-active-participant-content
+  .chud-faction-display
+  .chud-faction-banner.chud-banner-enabled
+  .chud-faction-logo {
+  top: 14px;
+
+  max-width: 36px;
+  max-height: 36px;
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-faction-display .faction-name {
+  display: none;
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-participant-display .no-participant-text {
+  font-size: 16px;
+}
+/* #endregion */

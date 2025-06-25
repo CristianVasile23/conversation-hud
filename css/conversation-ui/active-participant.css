@@ -87,7 +87,7 @@
 
 /* ----- Active participant ----- */
 /* #region */
-.chud-active-conversation-content .active-participant {
+/* .chud-active-conversation-content .active-participant {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -103,7 +103,7 @@
 }
 .chud-active-conversation-content .active-participant.hidden {
   visibility: hidden;
-}
+} */
 /* #endregion */
 
 /* ----- Active participant portrait ----- */

@@ -1,7 +1,7 @@
 <div class="chud-active-participant-content" data-tooltip-direction="DOWN">
   {{!-- Faction display --}}
   <div
-    class="active-participant-faction {{#unless participant.faction.displayFaction}}faction-disabled{{/unless}}"
+    class="chud-faction-display {{#unless participant.faction.displayFaction}}chud-disabled{{/unless}}"
     {{#if displayParticipant}}data-tooltip="{{participant.faction.factionName}}"{{/if}}
   >
     {{> "modules/conversation-hud/templates/fragments/faction-banner.hbs"

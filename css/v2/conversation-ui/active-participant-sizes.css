@@ -27,26 +27,26 @@
 
 /* ----- Active participant portrait types when conversation is minimized ----- */
 /* #region */
-.chud-active-conversation-wrapper.minimized .conversation-hud-content .active-participant.vertical {
+#ui-conversation-hud.chud-minimized .chud-active-conversation-content .active-participant.vertical {
   height: 186px;
   width: 124px;
 }
 
-.chud-active-conversation-wrapper.minimized .conversation-hud-content .active-participant.horizontal {
+#ui-conversation-hud.chud-minimized .chud-active-conversation-content .active-participant.horizontal {
   height: 124px;
   width: 220px;
 }
 
-.chud-active-conversation-wrapper.minimized .conversation-hud-content .active-participant.square {
+#ui-conversation-hud.chud-minimized .chud-active-conversation-content .active-participant.square {
   height: 124px;
   width: 124px;
 }
 
-.chud-active-conversation-wrapper.minimized .conversation-hud-content .active-participant.auto {
+#ui-conversation-hud.chud-minimized .chud-active-conversation-content .active-participant.auto {
   height: unset;
   width: unset;
 }
-.chud-active-conversation-wrapper.minimized .conversation-hud-content .active-participant.auto .portrait {
+#ui-conversation-hud.chud-minimized .chud-active-conversation-content .active-participant.auto .portrait {
   max-height: 186px;
   max-width: 220px;
 }
