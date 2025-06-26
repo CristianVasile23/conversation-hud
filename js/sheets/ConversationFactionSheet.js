@@ -133,13 +133,12 @@ export class ConversationFactionSheet extends JournalSheet {
 
   async close(options) {
     if (this.dirty) {
-      await getConfirmationFromUser(
+      const confirmed = await getConfirmationFromUser(
         "CHUD.dialogue.unsavedChanges",
-        this.#handleConfirmationClose.bind(this, true),
-        this.#handleConfirmationClose.bind(this, false),
         '<i class="fas fa-save"></i>',
         '<i class="fas fa-trash"></i>'
       );
+      this.#handleConfirmationClose.bind(confirmed);
     } else {
       this.dirty = false;
       Object.values(this.editors).forEach((editor) => {

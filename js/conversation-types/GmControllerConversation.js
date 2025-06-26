@@ -242,6 +242,8 @@ export class GmControllerConversation {
    * @param {*} conversationData
    */
   async #updateConversation(conversationData) {
+    // TODO: Activate default participant and update background in this function as well
+
     this.#conversationData = conversationData;
 
     // Parse all participants and update their data
@@ -368,7 +370,7 @@ export class GmControllerConversation {
    *
    * @param {*} data
    */
-  #removeParticipant(data) {
+  async #removeParticipant(data) {
     if (!checkIfUserIsGM()) {
       // TODO: Log error in console
       return;
@@ -380,7 +382,10 @@ export class GmControllerConversation {
       return;
     }
 
-    getConfirmationFromUser("CHUD.dialogue.onRemoveParticipant", () => this.#removeParticipantHelper(index));
+    const confirmed = await getConfirmationFromUser("CHUD.dialogue.onRemoveParticipant");
+    if (confirmed) {
+      this.#removeParticipantHelper(index);
+    }
   }
 
   /**

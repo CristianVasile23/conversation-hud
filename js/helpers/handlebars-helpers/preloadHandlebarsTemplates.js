@@ -4,7 +4,7 @@
 export function preloadHandlebarsTemplates() {
   const templates = [
     // TODO: Re-order modules to be arranged in the order they are presented by the system file-viewer
-    "modules/conversation-hud/templates/sheets/content/gm-controlled-sheet-content.hbs",
+    "modules/conversation-hud/templates/sheets/conversation-sheet/content/gm-controlled-sheet-content.hbs",
 
     "modules/conversation-hud/templates/forms/content/collective-conversation-creation-form-content.hbs",
     "modules/conversation-hud/templates/forms/content/gm-controlled-conversation-creation-form-content.hbs",

@@ -1,0 +1,24 @@
+<div class="standard-form chud-flex-1">
+  <fieldset>
+    <legend>{{localize 'CHUD.strings.conversationSettings'}}</legend>
+    <div class="chud-form-section chud-flex-0">
+      <div class="form-group">
+        <label>{{localize "CHUD.strings.conversationBackground.name"}}</label>
+        <div class="form-fields">
+          <file-picker name="conversationBackground" type="imagevideo" value="{{conversationData.background}}"></file-picker>
+        </div>
+        <p class="hint">{{localize "CHUD.strings.conversationBackground.hint"}}</p>
+      </div>
+    </div>
+  </fieldset>
+
+  {{#switch conversationData.type}} 
+    {{#case 'gm-controlled'}}
+      {{> "modules/conversation-hud/templates/sheets/conversation-sheet/content/gm-controlled-sheet-content.hbs" data=conversationData.conversation.data isGM=isGM}}
+    {{/case}} 
+    {{#case 'default'}}
+      {{!-- TODO: Add message type that is also localized --}}
+      <p>Type not supported</p>
+    {{/case}}
+  {{/switch}}
+</div>

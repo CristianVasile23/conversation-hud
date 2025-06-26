@@ -4,7 +4,7 @@
 import { socket } from "./init.js";
 import { ConversationCreationForm } from "./forms/index.js";
 import { checkIfUserIsGM, getConfirmationFromUser } from "./helpers/index.js";
-import { ConversationTypes, SHEET_CLASSES } from "./constants/index.js";
+import { ConversationTypes, MODULE_NAME, SHEET_CLASSES } from "./constants/index.js";
 import { CollectiveConversation, GmControllerConversation } from "./conversation-types/index.js";
 import { ConversationEvents } from "./constants/events.js";
 
@@ -166,7 +166,7 @@ export class ConversationHud extends EventTarget {
    * @param {*} conversationData
    * @param {*} visibility
    */
-  startConversationFromData(conversationData, visibility) {
+  startConversationFromData(data, visibility) {
     if (!checkIfUserIsGM()) {
       return;
     }
@@ -183,11 +183,11 @@ export class ConversationHud extends EventTarget {
       game.ConversationHud.executeFunction({
         scope: "everyone",
         type: "update-conversation",
-        data: conversationData,
+        data: data.conversationData,
       });
       socket.executeForEveryone("setConversationVisibility", parsedVisibility);
     } else {
-      game.ConversationHud.createConversation(conversationData, parsedVisibility);
+      game.ConversationHud.createConversation(data, parsedVisibility);
     }
   }
 
@@ -195,7 +195,9 @@ export class ConversationHud extends EventTarget {
     const permissions = {};
     game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
 
-    const dataToSave = game.ConversationHud.getConversation().activeConversation;
+    const dataToSave = game.ConversationHud.getConversation().activeConversation.conversationData;
+
+    // TODO: Maybe check that data to save actually exists
 
     const newConversationSheet = await JournalEntry.create({
       name: data.name || "New Conversation",
@@ -204,6 +206,7 @@ export class ConversationHud extends EventTarget {
         core: {
           sheetClass: SHEET_CLASSES.conversationSheetClass,
         },
+        [MODULE_NAME]: { type: "conversation-sheet" },
       },
       ownership: permissions,
     });
@@ -214,7 +217,7 @@ export class ConversationHud extends EventTarget {
           text: { content: JSON.stringify(dataToSave) },
           name: "Conversation Sheet Data",
           flags: {
-            "conversation-hud": { type: "conversation-sheet-data" },
+            [MODULE_NAME]: { type: "conversation-sheet-data" },
           },
         },
       ]);
@@ -252,10 +255,11 @@ export class ConversationHud extends EventTarget {
   /**
    * Function that handles conversation being closed
    */
-  closeActiveConversation() {
-    getConfirmationFromUser("CHUD.dialogue.onCloseActiveConversation", () => {
+  async closeActiveConversation() {
+    const confirmed = await getConfirmationFromUser("CHUD.dialogue.onCloseActiveConversation");
+    if (confirmed) {
       game.ConversationHud.onToggleConversation(false);
-    });
+    }
   }
 
   /**

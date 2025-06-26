@@ -113,8 +113,8 @@ export class SelectParticipatingUsersFrom extends HandlebarsApplicationMixin(App
     // If there are participating users that have been removed, inform the user of this fact so that they do not
     // unknowingly remove a participating user that has associated data
     if (removedIDs.size !== 0) {
-      const userHasConfirmed = await getConfirmationFromUser("CHUD.dialogue.onRemoveParticipatingUser");
-      if (userHasConfirmed) {
+      const confirmed = await getConfirmationFromUser("CHUD.dialogue.onRemoveParticipatingUser");
+      if (confirmed) {
         this.callbackFunction(payload);
       }
     } else {

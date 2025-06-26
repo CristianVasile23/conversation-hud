@@ -1,5 +1,5 @@
 import { ConversationFactionSheet } from "./ConversationFactionSheet.js";
-import { ConversationSheet } from "./ConversationSheet.js";
+import { ConversationSheet } from "./ConversationSheet.mjs";
 
 /**
  * TODO: Finish JSDoc

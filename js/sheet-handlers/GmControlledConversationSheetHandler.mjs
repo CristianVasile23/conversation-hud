@@ -33,6 +33,14 @@ export class GmControlledConversationSheetHandler {
   }
 
   /**
+   * Replace the current conversation object reference.
+   * @param {GmControlledConversation} conversation
+   */
+  setConversation(conversation) {
+    this.#conversation = conversation;
+  }
+
+  /**
    * TODO: Finish JSDoc
    *
    * @param {GmControlledConversation | undefined} conversation
@@ -47,23 +55,21 @@ export class GmControlledConversationSheetHandler {
   }
 
   activateListeners(html) {
-    html.find("#pull-participants-from-scene").click(async (e) => {
-      const pullParticipantsForm = new PullParticipantsFromSceneForm((data) => {
+    html.querySelector("#pull-participants-from-scene").addEventListener("click", async (e) => {
+      new PullParticipantsFromSceneForm((data) => {
         for (const participant of data) {
           this.#handleAddParticipant(participant);
         }
-      });
-      return pullParticipantsForm.render(true);
+      }).render(true);
     });
 
-    html.find("#add-participant").click(async (e) => {
-      const participantInputForm = new CreateOrEditParticipantForm(false, (data) => this.#handleAddParticipant(data));
-      return participantInputForm.render(true);
+    html.querySelector("#add-participant").addEventListener("click", (e) => {
+      new CreateOrEditParticipantForm(false, (data) => this.#handleAddParticipant(data)).render(true);
     });
 
     // Drag and drop functionality
-    const dragDropWrapper = html.find(".chud-drag-and-drop-container")[0];
-    const dragDropZone = html.find(".chud-dropzone")[0];
+    const dragDropWrapper = html.querySelector(".chud-drag-and-drop-container");
+    const dragDropZone = html.querySelector(".chud-dropzone");
     if (dragDropWrapper && dragDropZone) {
       dragDropWrapper.ondragenter = () => {
         if (!this.#draggingParticipant) {
@@ -100,7 +106,7 @@ export class GmControlledConversationSheetHandler {
       };
     }
 
-    const participantsObject = html.find("#conversationParticipantsList")[0];
+    const participantsObject = html.querySelector("#conversationParticipantsList");
     if (participantsObject) {
       const conversationParticipants = participantsObject.children;
       for (let i = 0; i < conversationParticipants.length; i++) {
