@@ -79,7 +79,6 @@ export class ConversationSheet extends HandlebarsApplicationMixin(JournalEntrySh
   };
 
   static DEFAULT_OPTIONS = {
-    id: "conversation-sheet",
     classes: ["chud-conversation-sheet"],
     tag: "form",
     window: {

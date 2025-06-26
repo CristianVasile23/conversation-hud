@@ -80,8 +80,10 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
     const result = await super.render(force, options);
 
     queueMicrotask(() => {
-      const newContainer = this.element?.querySelector(".conversation-participants");
-      if (newContainer) newContainer.scrollTop = scrollTop;
+      const participantsList = this.element?.querySelector(".conversation-participants");
+      if (participantsList) {
+        participantsList.scrollTop = scrollTop;
+      }
     });
 
     return result;

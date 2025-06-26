@@ -17,7 +17,7 @@
   height: 165px;
   position: relative;
 
-  border: 1px solid var(--color-border-light-tertiary);
+  border: 1px solid var(--color-fieldset-border);
   border-radius: 3px;
 
   background: rgba(0, 0, 0, 0.05);

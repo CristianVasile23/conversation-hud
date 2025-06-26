@@ -1,4 +1,5 @@
-.chud-conversation-sheet .chud-conversation-sheet-content {
+.chud-conversation-sheet .chud-conversation-sheet-content,
+.chud-faction-sheet .chud-faction-sheet-content {
   flex: 1;
   display: flex;
   flex-flow: column nowrap;
@@ -7,11 +8,13 @@
   gap: 1rem;
 }
 
-.chud-conversation-sheet .chud-conversation-sheet-content .journal-header {
+.chud-conversation-sheet .chud-conversation-sheet-content .journal-header,
+.chud-faction-sheet .chud-faction-sheet-content .journal-header {
   margin: 0;
 }
 
-.chud-conversation-sheet .chud-conversation-sheet-content .chud-sheet-footer {
+.chud-conversation-sheet .chud-conversation-sheet-content .chud-sheet-footer,
+.chud-faction-sheet .chud-faction-sheet-content .chud-sheet-footer {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -19,7 +22,8 @@
   gap: 0.5rem;
 }
 
-.chud-conversation-sheet .chud-conversation-sheet-content .chud-sheet-footer > button {
+.chud-conversation-sheet .chud-conversation-sheet-content .chud-sheet-footer > button,
+.chud-faction-sheet .chud-faction-sheet-content .chud-sheet-footer > button {
   --button-size: calc(1.25 * var(--input-height));
   flex: 1;
 }

@@ -143,7 +143,7 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
       (journal) =>
         // TODO: Use proper sheet class from constants
         journal.sheetClass !== "conversation-sheet.ConversationSheet" &&
-        journal.sheetClass !== "conversation-faction-sheet.ConversationFactionSheet"
+        journal.sheetClass !== "faction-sheet.FactionSheet"
     );
     journals.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -155,7 +155,7 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
     // Get a list of all the saved factions
     const savedFactions = game.journal.filter(
       // TODO: Use proper sheet class from constants
-      (item) => item.flags.core?.sheetClass === "conversation-faction-sheet.ConversationFactionSheet"
+      (item) => item.flags.core?.sheetClass === "faction-sheet.FactionSheet"
     );
 
     return {
@@ -202,8 +202,12 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
 
         if (this.selectedFaction) {
           const factionData = getConversationDataFromJournalId(this.selectedFaction);
-          selectedFactionData = factionData.faction;
-          this.factionBannerShape = factionData.faction.factionBannerShape;
+          if (factionData) {
+            selectedFactionData = factionData.faction;
+            this.factionBannerShape = factionData.faction.factionBannerShape;
+          } else {
+            // TODO: Log a warning or error
+          }
         }
 
         partContext.selectedFaction = this.selectedFaction;
@@ -265,9 +269,6 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
 
     const factionBannerColorPicker = html.querySelector("[name=factionTint]");
     factionBannerColorPicker.addEventListener("change", (event) => this.onUpdateBannerTint(event));
-
-    // const factionBannerTintPicker = html.querySelector("[name=factionTintPicker]");
-    // factionBannerTintPicker.addEventListener("change", (event) => this.onUpdateBannerTint(event));
 
     // Faction dropzone
     const dragDropWrapper = html.querySelector(".chud-drag-and-drop-container");
@@ -479,25 +480,30 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
     // Create a prompt for saving the conversation, asking the users to introduce a name and to specify a folder
     const folders = game.folders.filter((f) => f.type === "JournalEntry" && f.displayed);
     const dialogContent = await foundry.applications.handlebars.renderTemplate(
-      "modules/conversation-hud/templates/form/save-form.hbs",
+      "modules/conversation-hud/templates/forms/save-form.hbs",
       {
         folders,
+        // TODO: Localize
         name: game.i18n.format("DOCUMENT.New", { type: "Faction Sheet" }),
       }
     );
 
-    return Dialog.prompt({
-      title: "Save Faction",
-      content: dialogContent,
-      label: "Save Faction",
-      callback: (html) => {
-        const formElement = html[0].querySelector("form");
-        const formData = new FormDataExtended(formElement);
-        const formDataObject = formData.object;
-        this.#handleSaveFaction(formDataObject);
-      },
-      rejectClose: false,
-    });
+    // TODO: Localize
+    return foundry.applications.api.DialogV2.prompt(
+      foundry.utils.mergeObject({
+        content: dialogContent,
+        window: { title: "Save Faction" },
+        ok: {
+          label: "Save Faction",
+          callback: (event, button) => {
+            const formData = new foundry.applications.ux.FormDataExtended(button.form);
+            const formDataObject = formData.object;
+
+            this.#handleSaveFaction(formDataObject);
+          },
+        },
+      })
+    );
   }
 
   async #handleSaveFaction(data) {
@@ -529,9 +535,9 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
       await newFactionSheet.createEmbeddedDocuments("JournalEntryPage", [
         {
           text: { content: JSON.stringify(dataToSave) },
-          name: "Faction Sheet",
+          name: "_chud_faction_data",
           flags: {
-            "conversation-hud": { type: "faction" },
+            "conversation-hud": { type: "faction-sheet-data" },
           },
         },
       ]);

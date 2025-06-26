@@ -66,9 +66,6 @@
     "participantData": "Conversation Participant Data",
     "factionData": "Conversation Faction Data",
 
-    "unsavedChanges": "Unsaved Changes",
-    "unsavedChangesHint": "The conversation contains unsaved changes. Do you wish to save them?",
-
     "browseFiles": "Browse Files",
     "filePath": "File Path",
 
@@ -128,7 +125,7 @@
     },
     "unsavedChanges": {
       "title": "Unsaved Changes",
-      "content": "The conversation contains unsaved changes. Do you wish to save them?",
+      "content": "The document contains unsaved changes. Do you wish to save them?",
       "confirm": "Save Changes",
       "reject": "Discard Changes"
     }

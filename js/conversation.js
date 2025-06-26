@@ -134,11 +134,12 @@ export class ConversationHud extends EventTarget {
           "modules/conversation-hud/templates/forms/save-form.hbs",
           {
             folders,
+            // TODO: Localize
             name: game.i18n.format("DOCUMENT.New", { type: "Conversation Sheet" }),
           }
         );
 
-        // TODO: Localize strings
+        // TODO: Localize
         return foundry.applications.api.DialogV2.prompt(
           foundry.utils.mergeObject({
             content: dialogContent,
