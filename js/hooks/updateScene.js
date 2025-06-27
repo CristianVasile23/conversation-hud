@@ -10,10 +10,10 @@ export const registerHook = () => {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableSceneConversations)) {
       if (scene.active) {
         const journalId = scene["flags"]["conversation-hud"]?.sceneConversation;
-        const visibilityOff = scene["flags"]["conversation-hud"]?.sceneConversationVisibilityOff || false;
+        const startWithVisibilityOff = scene["flags"]["conversation-hud"]?.sceneConversationVisibilityOff || false;
 
         if (journalId) {
-          game.ConversationHud.startConversationFromJournalId(journalId, visibilityOff);
+          game.ConversationHud.startConversationFromJournalId(journalId, startWithVisibilityOff);
         }
       }
     }

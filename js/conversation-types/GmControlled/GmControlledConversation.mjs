@@ -186,7 +186,7 @@ export class GmControlledConversation {
   executeFunction(functionData) {
     switch (functionData.type) {
       case "update-conversation":
-        this.#updateConversation(functionData.data);
+        this.#updateConversation(functionData.data, functionData.options);
         break;
       case "add-participant":
         this.#addParticipant();
@@ -240,8 +240,9 @@ export class GmControlledConversation {
    * TODO: Finish JSDoc
    *
    * @param {*} conversationData
+   * @param {*} options
    */
-  async #updateConversation(conversationData) {
+  async #updateConversation(conversationData, options) {
     // TODO: Activate default participant and update background in this function as well
 
     this.#conversationData = conversationData;
@@ -259,7 +260,12 @@ export class GmControlledConversation {
 
       chudInterface.innerHTML = template;
       this.#addDragAndDropListeners(chudInterface);
-      this.#setActiveParticipant(this.#currentActiveParticipant);
+
+      const activeParticipant = options?.setDefaultParticipant
+        ? conversationData.conversation.data.defaultActiveParticipant
+        : this.#currentActiveParticipant;
+
+      this.#setActiveParticipant(activeParticipant ?? -1);
     }
 
     this.#emitUpdate();
@@ -803,42 +809,6 @@ export class GmControlledConversation {
     }
   }
 
-  // async #updateConversationControls() {
-  //   // Get the parent container for the controls
-  //   const uiBottom = document.getElementById("ui-bottom");
-
-  //   // Render the new controls HTML using Handlebars template
-  //   const conversationControlsHTML = await foundry.applications.handlebars.renderTemplate(
-  //     "modules/conversation-hud/templates/conversations/gm-controlled/controls.hbs",
-  //     {
-  //       isGM: game.user.isGM,
-  //       isVisible: game.ConversationHud.conversationIsVisible,
-  //       isMinimized: this.#conversationData.conversation.features.isMinimized,
-  //       isMinimizationLocked: this.#conversationData.conversation.features.isMinimizationLocked,
-  //       isSpeakingAs: this.#conversationData.conversation.features.isSpeakingAs,
-  //       isBackgroundVisible: this.#conversationData.conversation.features.isBackgroundVisible,
-  //       features: {
-  //         minimizeEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize),
-  //         speakAsEnabled: game.settings.get(MODULE_NAME, ModuleSettings.enableSpeakAs),
-  //       },
-  //     }
-  //   );
-
-  //   // Try to find the existing controls section
-  //   let controls = document.getElementById("ui-conversation-controls");
-
-  //   // If it doesn't exist, create and insert it
-  //   if (!controls) {
-  //     controls = document.createElement("section");
-  //     controls.id = "ui-conversation-controls";
-  //     controls.setAttribute("data-tooltip-direction", "UP");
-  //     uiBottom.insertBefore(controls, uiBottom.firstChild);
-  //   }
-
-  //   // Update the inner HTML without replacing the element
-  //   controls.innerHTML = conversationControlsHTML;
-  // }
-
   #ensureControlsContainerExists() {
     if (!document.getElementById("ui-conversation-controls")) {
       const container = document.createElement("section");
@@ -854,8 +824,6 @@ export class GmControlledConversation {
   }
 
   #renderOrUpdateControls() {
-    // if (!game.user.isGM) return;
-
     this.#ensureControlsContainerExists();
 
     if (!this.#conversationControls) {
@@ -884,22 +852,6 @@ export class GmControlledConversation {
     const activeParticipantAnchorPoint = document.querySelector("#ui-conversation-active-participant");
     activeParticipantAnchorPoint.innerHTML = template;
   }
-
-  // TODO: Remove
-  // #updateParticipantsList(index) {
-  //   // Change active class of all other elements
-  //   const conversationParticipants = document.getElementById("gmControlledConversationParticipantsList").children;
-  //   if (conversationParticipants) {
-  //     for (let i = 0; i < conversationParticipants.length; i++) {
-  //       const entryElement = conversationParticipants[i].getElementsByClassName("chud-content")[0];
-  //       if (index === i) {
-  //         entryElement?.classList.add("chud-active");
-  //       } else {
-  //         entryElement?.classList.remove("chud-active");
-  //       }
-  //     }
-  //   }
-  // }
 
   #updateLayout() {
     // Update the layout

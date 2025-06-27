@@ -91,7 +91,7 @@
     },
 
     "sceneConversationVisibilityOff": {
-      "name": "Conversation Visibility Off",
+      "name": "Start Conversation With Visibility Off",
       "hint": "Set whether or not to start the conversation with the visibility off. When unchecked, the conversation will start as visible."
     },
 

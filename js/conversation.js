@@ -3,7 +3,7 @@
 
 import { socket } from "./init.js";
 import { ConversationCreationForm } from "./forms/index.js";
-import { checkIfUserIsGM, getConfirmationFromUser } from "./helpers/index.js";
+import { checkIfUserIsGM, getConfirmationFromUser, getConversationDataFromJournalId } from "./helpers/index.js";
 import { ConversationTypes, MODULE_NAME, SHEET_CLASSES } from "./constants/index.js";
 import { CollectiveConversation, GmControlledConversation } from "./conversation-types/index.js";
 import { ConversationEvents } from "./constants/events.js";
@@ -146,7 +146,7 @@ export class ConversationHud extends EventTarget {
             window: { title: "Save Conversation" },
             ok: {
               label: "Save Conversation",
-              callback: (event, button) => {
+              callback: (_event, button) => {
                 const formData = new foundry.applications.ux.FormDataExtended(button.form);
                 const formDataObject = formData.object;
 
@@ -185,10 +185,41 @@ export class ConversationHud extends EventTarget {
         scope: "everyone",
         type: "update-conversation",
         data: data.conversationData,
+        options: {
+          setDefaultParticipant: true,
+        },
       });
       socket.executeForEveryone("setConversationVisibility", parsedVisibility);
     } else {
       game.ConversationHud.createConversation(data, parsedVisibility);
+    }
+  }
+
+  /**
+   * TODO: Add JSDoc
+   *
+   * @param {*} journalId
+   * @param {*} startwithVisibilityOff
+   */
+  startConversationFromJournalId(journalId, startwithVisibilityOff = false) {
+    const conversationData = getConversationDataFromJournalId(journalId);
+
+    if (conversationData) {
+      const visibility = !startwithVisibilityOff;
+
+      if (this.activeConversation) {
+        game.ConversationHud.executeFunction({
+          scope: "everyone",
+          type: "update-conversation",
+          data: conversationData,
+          options: {
+            setDefaultParticipant: true,
+          },
+        });
+        socket.executeForEveryone("setConversationVisibility", visibility);
+      } else {
+        this.#handleCreateConversationFromData(conversationData, visibility);
+      }
     }
   }
 
@@ -264,6 +295,7 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
+   * TODO
    *
    * @param {*} formData
    */

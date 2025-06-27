@@ -1,38 +1,39 @@
-<hr>
-<div class="form-group">
-  <label>{{localize 'CHUD.strings.sceneConversation.name'}}</label>
-  <div class="form-fields">
-    <select name="flags.conversation-hud.sceneConversation">
-      {{#select linkedConversation}}
-        <option value=""></option>
-        {{#each conversations}}
-          <option value="{{ this.id }}">{{ this.name }}</option>
-        {{/each}}
-      {{/select}}
-    </select>
+<fieldset>
+  {{!-- Saved factions select --}}
+  <div class="form-group">
+    <label>{{localize 'CHUD.strings.sceneConversation.name'}}</label>
 
-    <button
-      type="button"
-      class="capture-position"
-      id="activate-conversation"
-      title="{{localize 'CHUD.actions.activateConversation'}}"
-      onclick="game.ConversationHud.startConversationFromJournalId('{{linkedConversation}}')"
-      {{#unless linkedConversation}} disabled {{/unless}}
-    >
-      <i class="fas fa-eye fa-fw"></i>
-    </button>
-  </div>
-  <p class="notes">{{localize 'CHUD.strings.sceneConversation.hint'}}</p>
-</div>
+    <div class="form-fields">
+      <select name="flags.conversation-hud.sceneConversation">
+        {{selectOptions conversations selected=linkedConversation blank="" valueAttr="id" labelAttr="name"}}
+      </select>
 
-<div class="form-group">
-  <label>{{localize 'CHUD.strings.sceneConversationVisibilityOff.name'}}</label>
-  <div class="form-fields">
-    <input
-      type="checkbox"
-      name="flags.conversation-hud.sceneConversationVisibilityOff"
-      {{checked sceneConversationVisibilityOff}}
-    >
+      <button
+        type="button"
+        class="capture-position"
+        id="activate-conversation"
+        title="{{localize 'CHUD.actions.activateConversation'}}"
+        onclick="game.ConversationHud.startConversationFromJournalId('{{linkedConversation}}')"
+        {{#unless linkedConversation}} disabled {{/unless}}
+      >
+        <i class="fas fa-eye fa-fw"></i>
+      </button>
+    </div>
+
+    <p class="hint">{{localize "CHUD.strings.sceneConversation.hint"}}</p>
   </div>
-  <p class="notes">{{localize 'CHUD.strings.sceneConversationVisibilityOff.hint'}}</p>
-</div>
+
+  <div class="form-group slim">
+    <label>{{localize 'CHUD.strings.sceneConversationVisibilityOff.name'}}</label>
+
+    <div class="form-fields">
+      <input
+        type="checkbox"
+        name="flags.conversation-hud.sceneConversationVisibilityOff"
+        {{checked sceneConversationVisibilityOff}}
+      >
+    </div>
+
+    <p class="hint">{{localize 'CHUD.strings.sceneConversationVisibilityOff.hint'}}</p>
+  </div>
+</fieldset>
