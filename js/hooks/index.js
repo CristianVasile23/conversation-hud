@@ -1,9 +1,9 @@
-import { registerHook as registerChatMessageHook } from "./chatMessage.js";
-import { registerHook as registerRenderChatMessageHook } from "./renderChatMessage.js";
-import { registerHook as registerRenderSceneConfigHook } from "./renderSceneConfig.js";
+import { registerHook as registerChatMessageHook } from "./chatMessage.mjs";
+import { registerHook as registerRenderChatMessageHook } from "./renderChatMessage.mjs";
+import { registerHook as registerRenderSceneConfigHook } from "./renderSceneConfig.mjs";
 import { registerHook as registerRenderSettingsConfigHook } from "./renderSettingsConfig.js";
 import { registerHook as registerRenderTokenConfigHook } from "./renderTokenConfig.js";
-import { registerHook as registerUpdateSceneHook } from "./updateScene.js";
+import { registerHook as registerUpdateSceneHook } from "./updateScene.mjs";
 
 export const registerHooks = () => {
   registerChatMessageHook();
