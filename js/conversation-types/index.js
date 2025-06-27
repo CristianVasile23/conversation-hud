@@ -1,4 +1,4 @@
-import { CollectiveConversation } from "./CollectiveConversation.js";
-import { GmControllerConversation } from "./GmControllerConversation.js";
+import { CollectiveConversation } from "./Collective/index.js";
+import { GmControlledConversation, GmControlledConversationControls } from "./GmControlled/index.js";
 
-export { CollectiveConversation, GmControllerConversation };
+export { CollectiveConversation, GmControlledConversation, GmControlledConversationControls };

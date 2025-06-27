@@ -1,8 +1,8 @@
-/// <reference path="../types/ConversationData.js" />
-/// <reference path="../types/CollectiveConversation/CollectiveConversationCurrentState.js" />
+/// <reference path="../../types/ConversationData.js" />
+/// <reference path="../../types/CollectiveConversation/CollectiveConversationCurrentState.js" />
 
-import { ANCHOR_OPTIONS, DRAG_AND_DROP_DATA_TYPES, MODULE_NAME } from "../constants/index.js";
-import { ModuleSettings } from "../settings.js";
+import { ANCHOR_OPTIONS, DRAG_AND_DROP_DATA_TYPES, MODULE_NAME } from "../../constants/index.js";
+import { ModuleSettings } from "../../settings.js";
 import {
   createConversationBackgroundContainer,
   checkIfCameraDockIsOnBottomOrTop,
@@ -16,15 +16,15 @@ import {
   getActorDataFromDragEvent,
   serializeActiveParticipantsMap,
   deserializeActiveParticipantsMap,
-} from "../helpers/index.js";
+} from "../../helpers/index.js";
 import {
   ChangeConversationBackgroundForm,
   CollectiveConversationParticipantsEditForm,
   CreateOrEditParticipantForm,
   OwnedActorsSelectionForm,
   PullParticipantsFromSceneForm,
-} from "../forms/index.js";
-import { ConversationEvents } from "../constants/events.js";
+} from "../../forms/index.js";
+import { ConversationEvents } from "../../constants/events.js";
 
 export class CollectiveConversation {
   /** @type {CollectiveConversationObject | undefined} */

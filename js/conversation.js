@@ -5,7 +5,7 @@ import { socket } from "./init.js";
 import { ConversationCreationForm } from "./forms/index.js";
 import { checkIfUserIsGM, getConfirmationFromUser } from "./helpers/index.js";
 import { ConversationTypes, MODULE_NAME, SHEET_CLASSES } from "./constants/index.js";
-import { CollectiveConversation, GmControllerConversation } from "./conversation-types/index.js";
+import { CollectiveConversation, GmControlledConversation } from "./conversation-types/index.js";
 import { ConversationEvents } from "./constants/events.js";
 
 export class ConversationHud extends EventTarget {
@@ -51,7 +51,7 @@ export class ConversationHud extends EventTarget {
 
     switch (conversation.conversationData.type) {
       case ConversationTypes.GMControlled:
-        game.ConversationHud.activeConversation = new GmControllerConversation(
+        game.ConversationHud.activeConversation = new GmControlledConversation(
           conversation.conversationData,
           conversation.currentState
         );

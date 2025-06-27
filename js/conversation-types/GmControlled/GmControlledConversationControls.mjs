@@ -1,6 +1,6 @@
-import { MODULE_NAME } from "../constants/index.js";
-import { ModuleSettings } from "../settings.js";
-import { EmbeddedComponent } from "../utils/index.js";
+import { MODULE_NAME } from "../../constants/index.js";
+import { ModuleSettings } from "../../settings.js";
+import { EmbeddedComponent } from "../../utils/index.js";
 
 export class GmControlledConversationControls extends EmbeddedComponent {
   constructor() {

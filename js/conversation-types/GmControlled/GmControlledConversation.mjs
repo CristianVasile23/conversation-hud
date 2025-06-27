@@ -1,8 +1,8 @@
-/// <reference path="../types/ConversationData.js" />
-/// <reference path="../types/GmControlledConversation/GmControlledConversationData.js" />
+/// <reference path="../../types/ConversationData.js" />
+/// <reference path="../../types/GmControlledConversation/GmControlledConversationData.js" />
 
-import { ANCHOR_OPTIONS, DRAG_AND_DROP_DATA_TYPES, MODULE_NAME } from "../constants/index.js";
-import { ModuleSettings } from "../settings.js";
+import { ANCHOR_OPTIONS, DRAG_AND_DROP_DATA_TYPES, MODULE_NAME } from "../../constants/index.js";
+import { ModuleSettings } from "../../settings.js";
 import {
   createConversationBackgroundContainer,
   checkIfCameraDockIsOnBottomOrTop,
@@ -14,16 +14,16 @@ import {
   getDragAndDropIndex,
   moveInArray,
   getActorDataFromDragEvent,
-} from "../helpers/index.js";
+} from "../../helpers/index.js";
 import {
   ChangeConversationBackgroundForm,
   CreateOrEditParticipantForm,
   PullParticipantsFromSceneForm,
-} from "../forms/index.js";
-import { ConversationEvents } from "../constants/events.js";
+} from "../../forms/index.js";
+import { ConversationEvents } from "../../constants/events.js";
 import { GmControlledConversationControls } from "./GmControlledConversationControls.mjs";
 
-export class GmControllerConversation {
+export class GmControlledConversation {
   /** @type {GMControlledConversationData | undefined} */
   #conversationData = undefined;
 
