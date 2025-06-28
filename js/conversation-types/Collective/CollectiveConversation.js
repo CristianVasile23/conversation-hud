@@ -80,15 +80,12 @@ export class CollectiveConversation {
     // Create the template for the ConversationHUD UI elements
     const template = await this.#getConversationTemplate(this.#conversationData.conversation.data);
 
-    // Create the conversation container
-    const uiContainer = this.#createConversationContainer(template, conversationIsVisible);
+    // Create the conversation interface and attach it to the document
+    this.#createConversationInterface(template, conversationIsVisible);
 
-    // Attacher ConversationHUD UI elements to the other FoundryVTT UI elements
+    // Attacher the background to the HTML
     const body = document.body;
     body.append(conversationBackground);
-
-    const uiInterface = document.getElementById("interface");
-    uiInterface.append(uiContainer);
 
     // Render conversation controls
     this.#updateConversationControls();
@@ -181,10 +178,9 @@ export class CollectiveConversation {
     }
 
     // Remove GM conversation controls
-    const hotbar = document.getElementById("hotbar");
     const controls = document.getElementById("ui-conversation-controls");
     if (controls) {
-      hotbar.removeChild(controls);
+      hotbar.innerHTML = "";
     }
   }
 
@@ -481,27 +477,23 @@ export class CollectiveConversation {
    *
    * @param {string} htmlContent
    * @param {boolean} conversationIsVisible
-   * @returns {HTMLDivElement}
    */
-  #createConversationContainer(htmlContent, conversationIsVisible) {
-    const element = document.createElement("section");
-    element.id = "ui-conversation-hud";
-    element.className = "chud-active-conversation-wrapper";
+  #createConversationInterface(htmlContent, conversationIsVisible) {
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    if (conversationHud) {
+      if (conversationIsVisible) {
+        conversationHud.classList.add("visible");
+      }
 
-    if (conversationIsVisible) {
-      element.classList.add("visible");
+      if (this.#conversationData.conversation.features.isMinimized) {
+        conversationHud.classList.add("chud-minimized");
+      }
+
+      conversationHud.innerHTML = htmlContent;
+
+      // TODO: Activate drag and drop listener
+      // this.#addDragAndDropListeners(element);
     }
-
-    if (this.#conversationData.conversation.features.isMinimized) {
-      element.classList.add("chud-minimized");
-    }
-
-    element.innerHTML = htmlContent;
-
-    // TODO: Activate drag and drop listened
-    // this.#addDragAndDropListeners(element);
-
-    return element;
   }
 
   /**

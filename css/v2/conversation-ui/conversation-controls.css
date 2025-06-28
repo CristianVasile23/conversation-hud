@@ -8,6 +8,19 @@
   justify-content: center;
   margin-bottom: 5px;
 }
+
+#ui-conversation-controls.faded-ui {
+  transition: opacity var(--ui-fade-delay) var(--ui-fade-duration), transform 250ms ease;
+}
+
+#ui-conversation-controls.offset:not(.lg, .min) {
+  --offset: 0;
+  transform: translateX(var(--offset));
+}
+
+#ui-conversation-controls.min {
+  transform: translateX(-70px);
+}
 /* #endregion */
 
 /* -------------------------------------------- */
@@ -19,7 +32,15 @@
   gap: 8px;
 }
 
+#ui-conversation-controls.min > menu {
+  gap: 4px;
+}
+
 #ui-conversation-controls > menu > .chud-spacer {
   width: 16px;
+}
+
+#ui-conversation-controls.min > menu > .chud-spacer {
+  width: 8px;
 }
 /* #endregion */

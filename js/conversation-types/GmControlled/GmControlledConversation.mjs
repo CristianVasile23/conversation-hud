@@ -69,14 +69,11 @@ export class GmControlledConversation {
     const template = await this.#getConversationTemplate(this.#conversationData.conversation.data);
 
     // Create the conversation container
-    const uiContainer = this.#createConversationContainer(template, conversationIsVisible);
+    this.#createConversationInterface(template, conversationIsVisible);
 
     // Attacher ConversationHUD UI elements to the other FoundryVTT UI elements
     const body = document.body;
     body.append(conversationBackground);
-
-    const uiInterface = document.getElementById("ui-middle");
-    uiInterface.append(uiContainer);
 
     // Render conversation controls
     this.#renderOrUpdateControls();
@@ -153,17 +150,17 @@ export class GmControlledConversation {
    * TODO: Finish JSDoc
    */
   async removeConversation() {
-    const body = document.body;
+    // Remove conversation background
     const conversationBackground = document.getElementById("active-conversation-background");
     if (conversationBackground) {
-      body.removeChild(conversationBackground);
+      document.body.removeChild(conversationBackground);
     }
 
-    const uiMiddle = document.getElementById("ui-middle");
-    const conversation = document.getElementById("ui-conversation-hud");
-    // TODO: Add check that uiMiddle exists
-    if (conversation) {
-      uiMiddle.removeChild(conversation);
+    // Remove conversation interface
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    if (conversationHud) {
+      conversationHud.classList.remove("visible");
+      conversationHud.innerHTML = "";
     }
 
     // Remove GM conversation controls
@@ -172,10 +169,9 @@ export class GmControlledConversation {
       this.#conversationControls = undefined;
     }
 
-    const uiBottom = document.getElementById("ui-bottom");
     const controls = document.getElementById("ui-conversation-controls");
     if (controls) {
-      uiBottom.removeChild(controls);
+      controls.innerHTML = "";
     }
   }
 
@@ -253,13 +249,15 @@ export class GmControlledConversation {
     }
 
     // Add rendered template to the conversation hud
-    const chudInterface = document.getElementById("ui-conversation-hud");
-    if (chudInterface) {
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    if (conversationHud) {
       // Create the template for the ConversationHUD UI elements
       const template = await this.#getConversationTemplate(this.#conversationData.conversation.data);
 
-      chudInterface.innerHTML = template;
-      this.#addDragAndDropListeners(chudInterface);
+      conversationHud.innerHTML = template;
+
+      // TODO: Activate drag and drop listeners
+      // this.#addDragAndDropListeners(conversationHud);
 
       const activeParticipant = options?.setDefaultParticipant
         ? conversationData.conversation.data.defaultActiveParticipant
@@ -658,25 +656,22 @@ export class GmControlledConversation {
    * @param {boolean} conversationIsVisible
    * @returns {HTMLDivElement}
    */
-  #createConversationContainer(htmlContent, conversationIsVisible) {
-    const element = document.createElement("section");
-    element.id = "ui-conversation-hud";
-    element.className = "chud-active-conversation-wrapper";
+  #createConversationInterface(htmlContent, conversationIsVisible) {
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    if (conversationHud) {
+      if (conversationIsVisible) {
+        conversationHud.classList.add("visible");
+      }
 
-    if (conversationIsVisible) {
-      element.classList.add("visible");
+      if (this.#conversationData.conversation.features.isMinimized) {
+        conversationHud.classList.add("chud-minimized");
+      }
+
+      conversationHud.innerHTML = htmlContent;
+
+      // TODO: Activate drag and drop listened
+      // this.#addDragAndDropListeners(conversationHud);
     }
-
-    if (this.#conversationData.conversation.features.isMinimized) {
-      element.classList.add("chud-minimized");
-    }
-
-    element.innerHTML = htmlContent;
-
-    // Activate drag and drop listened
-    this.#addDragAndDropListeners(element);
-
-    return element;
   }
 
   /**
@@ -809,23 +804,7 @@ export class GmControlledConversation {
     }
   }
 
-  #ensureControlsContainerExists() {
-    if (!document.getElementById("ui-conversation-controls")) {
-      const container = document.createElement("section");
-      container.id = "ui-conversation-controls";
-      container.classList.add("chud-controls", "faded-ui");
-      container.setAttribute("data-tooltip-direction", "UP");
-
-      const uiBottom = document.getElementById("ui-bottom");
-      if (uiBottom) {
-        uiBottom.insertBefore(container, uiBottom.firstChild);
-      }
-    }
-  }
-
   #renderOrUpdateControls() {
-    this.#ensureControlsContainerExists();
-
     if (!this.#conversationControls) {
       this.#conversationControls = new GmControlledConversationControls();
     }
