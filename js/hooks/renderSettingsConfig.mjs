@@ -101,8 +101,8 @@ export const registerHook = () => {
       ],
       "CHUD.settings.settingsSheetHeaders.interface",
       {
-        "settings-config-conversation-hud.displayAllParticipantsToPlayers": "slim",
-        "settings-config-conversation-hud.displayNoParticipantBox": "slim",
+        "settings-config-conversation-hud.displayAllParticipantsToPlayers": "very-slim",
+        "settings-config-conversation-hud.displayNoParticipantBox": "very-slim",
       }
     );
 
@@ -117,11 +117,11 @@ export const registerHook = () => {
       ],
       "CHUD.settings.settingsSheetHeaders.features",
       {
-        "settings-config-conversation-hud.enableSpeakAs": "slim",
-        "settings-config-conversation-hud.enableMinimize": "slim",
-        "settings-config-conversation-hud.keepMinimize": "slim",
-        "settings-config-conversation-hud.clearActiveParticipantOnVisibilityChange": "slim",
-        "settings-config-conversation-hud.enableSceneConversations": "slim",
+        "settings-config-conversation-hud.enableSpeakAs": "very-slim",
+        "settings-config-conversation-hud.enableMinimize": "very-slim",
+        "settings-config-conversation-hud.keepMinimize": "very-slim",
+        "settings-config-conversation-hud.clearActiveParticipantOnVisibilityChange": "very-slim",
+        "settings-config-conversation-hud.enableSceneConversations": "very-slim",
       }
     );
 

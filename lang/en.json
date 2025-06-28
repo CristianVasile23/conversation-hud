@@ -98,7 +98,7 @@
     "sceneActors": "Actors in scene",
 
     "excludeFromBeingPulled": {
-      "name": "Exclude From Being Pulled",
+      "name": "Exclude From Being Pulled Into a Conversation",
       "hint": "Toggle whether not not token will be displayed on the list of actors being pulled into an active conversation."
     },
 
