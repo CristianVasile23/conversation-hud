@@ -15,8 +15,9 @@ export const registerHook = () => {
    * @param {HTMLElement} section - The settings tab section.
    * @param {string[]} inputIds - List of input IDs.
    * @param {string} legendKey - i18n key for the legend.
+   * @param {Object<string, string|string[]>} [classMap={}] - Optional map of inputId to class(es) to add.
    */
-  const wrapLabeledSettingsInFieldset = (section, inputIds, legendKey) => {
+  const wrapLabeledSettingsInFieldset = (section, inputIds, legendKey, classMap = {}) => {
     const fieldset = document.createElement("fieldset");
     fieldset.classList.add("chud-settings-group");
 
@@ -28,6 +29,16 @@ export const registerHook = () => {
       const label = section.querySelector(`label[for="${inputId}"]`);
       const formGroup = label?.closest(".form-group");
       if (formGroup && !wrappedGroups.has(formGroup)) {
+        // Apply custom class(es) if defined
+        const classes = classMap[inputId];
+        if (classes) {
+          if (Array.isArray(classes)) {
+            classes.forEach((cls) => formGroup.classList.add(cls));
+          } else {
+            formGroup.classList.add(classes);
+          }
+        }
+
         wrappedGroups.add(formGroup);
         fieldset.appendChild(formGroup);
       }
@@ -88,7 +99,11 @@ export const registerHook = () => {
         "settings-config-conversation-hud.displayNoParticipantBox",
         "settings-config-conversation-hud.blurAmount",
       ],
-      "CHUD.settings.settingsSheetHeaders.interface"
+      "CHUD.settings.settingsSheetHeaders.interface",
+      {
+        "settings-config-conversation-hud.displayAllParticipantsToPlayers": "slim",
+        "settings-config-conversation-hud.displayNoParticipantBox": "slim",
+      }
     );
 
     wrapLabeledSettingsInFieldset(
@@ -100,7 +115,14 @@ export const registerHook = () => {
         "settings-config-conversation-hud.clearActiveParticipantOnVisibilityChange",
         "settings-config-conversation-hud.enableSceneConversations",
       ],
-      "CHUD.settings.settingsSheetHeaders.features"
+      "CHUD.settings.settingsSheetHeaders.features",
+      {
+        "settings-config-conversation-hud.enableSpeakAs": "slim",
+        "settings-config-conversation-hud.enableMinimize": "slim",
+        "settings-config-conversation-hud.keepMinimize": "slim",
+        "settings-config-conversation-hud.clearActiveParticipantOnVisibilityChange": "slim",
+        "settings-config-conversation-hud.enableSceneConversations": "slim",
+      }
     );
 
     wrapLabeledSettingsInFieldset(
