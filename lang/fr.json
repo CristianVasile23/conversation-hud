@@ -333,10 +333,6 @@
       "regular": "Régulier",
       "large": "Grand",
       "veryLarge": "Très Grand"
-    },
-    "rpgUiFix": {
-      "name": "Activer la correction de l'interface utilisateur personnalisée",
-      "hint": "Si vous utilisez un module qui change l'apparence de l'interface utilisateur et que vous rencontrez un problème qui fait que la barre latérale chevauche l'interface de conversation ou les boutons de contrôle, activer cette fonctionnalité devrait résoudre les problèmes."
     }
   }
 }

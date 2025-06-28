@@ -4,7 +4,6 @@ import {
   registerHandlebarsHelpers,
   preloadHandlebarsTemplates,
   checkConversationDataAvailability,
-  fixRpgUiIncompatibility,
   handleOnClickContentLink,
 } from "./helpers/index.js";
 import { registerHooks } from "./hooks/index.js";
@@ -71,11 +70,6 @@ Hooks.on("init", async () => {
 
   // Initialize the ConversationHUD object
   game.ConversationHud = new ConversationHud();
-
-  // If RPG UI fix setting is enabled, add the fixed CSS class to the sidebar
-  if (game.settings.get(MODULE_NAME, ModuleSettings.rpgUiFix)) {
-    fixRpgUiIncompatibility();
-  }
 });
 
 Hooks.on("ready", async () => {

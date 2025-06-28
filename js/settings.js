@@ -14,7 +14,6 @@ export const ModuleSettings = {
   blurAmount: "blurAmount",
   activeParticipantFontSize: "activeParticipantFontSize",
   activeParticipantFactionFontSize: "activeParticipantFactionFontSize",
-  rpgUiFix: "rpgUiFix",
 };
 
 export function registerSettings() {
@@ -181,15 +180,5 @@ export function registerSettings() {
       large: game.i18n.localize(`CHUD.settings.fontSizeOptions.large`),
       veryLarge: game.i18n.localize(`CHUD.settings.fontSizeOptions.veryLarge`),
     },
-  });
-
-  game.settings.register(MODULE_NAME, ModuleSettings.rpgUiFix, {
-    name: game.i18n.localize(`CHUD.settings.rpgUiFix.name`),
-    hint: game.i18n.localize(`CHUD.settings.rpgUiFix.hint`),
-    scope: "world",
-    config: true,
-    requiresReload: true,
-    type: Boolean,
-    default: false,
   });
 }

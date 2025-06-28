@@ -8,7 +8,6 @@ import { checkIfCameraDockIsOnBottomOrTop } from "./checkIfCameraDockIsOnBottomO
 import { checkIfUserIsGM } from "./checkIfUserIsGM.js";
 import { convertActorToParticipant } from "./convertActorToParticipant.js";
 import { createPortraitAnchorObject } from "./createPortraitAnchorObject.js";
-import { fixRpgUiIncompatibility } from "./fixRpgUiIncompatibility.js";
 import { getActorDataFromDragEvent } from "./getActorDataFromDragEvent.js";
 import { getConfirmationFromUser } from "./getConfirmationFromUser.js";
 import { getConversationDataFromJournalId } from "./getConversationDataFromJournalId.js";
@@ -43,7 +42,6 @@ export {
   checkIfUserIsGM,
   convertActorToParticipant,
   createPortraitAnchorObject,
-  fixRpgUiIncompatibility,
   getActorDataFromDragEvent,
   getConfirmationFromUser,
   getConversationDataFromJournalId,

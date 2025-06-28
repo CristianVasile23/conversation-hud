@@ -268,9 +268,11 @@
 
   "CHUD.settings": {
     "settingsSheetHeaders": {
-      "portrait": "Portrait Settings",
-      "feature": "Feature Settings",
-      "compatibility": "Compatibility Settings"
+      "portrait": "Portrait",
+      "interface": "Interface",
+      "features": "Features",
+      "fontSize": "Font Size",
+      "others": "Other Settings"
     },
     "portraitStyle": {
       "name": "Portrait Style",
@@ -346,10 +348,6 @@
       "regular": "Regular",
       "large": "Large",
       "veryLarge": "Very Large"
-    },
-    "rpgUiFix": {
-      "name": "Enable Custom UI Fix",
-      "hint": "If you are using a module that changes the look of the UI and you are experiencing an issue which makes the sidebar overlap the conversation interface or the control buttons, enabling this feature should fix the issues."
     }
   }
 }
