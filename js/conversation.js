@@ -327,6 +327,34 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
+   * Function that receives a journal ID and renders the referenced journal sheet in a separate tab
+   *
+   * @param {string} journalId
+   */
+  renderJournalSheet(journalId) {
+    let journal = game.journal.get(journalId);
+    if (!journal) {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.invalidJournalEntry"));
+    } else {
+      journal.sheet.render(true);
+    }
+  }
+
+  /**
+   * Function that receives am actor ID and renders the referenced actor sheet in a separate tab
+   *
+   * @param {string} actorId
+   */
+  async renderActorSheet(actorId) {
+    let actor = game.actors.get(actorId);
+    if (!actor) {
+      ui.notifications.error(game.i18n.localize("CHUD.errors.invalidActorEntry"));
+    } else {
+      actor.sheet.render(true);
+    }
+  }
+
+  /**
    *
    * @param {{scope: string, type: string, data: any}} functionData
    */

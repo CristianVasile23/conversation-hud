@@ -59,15 +59,29 @@
             
             {{#if ../isGM}}
               <div class="chud-participant-action-buttons">
-                <a id="participant-clone-button" class="chud-clone" title="{{localize 'CHUD.actions.participant.clone'}}">
-                  <i class="fas fa-clone"></i>
-                </a>
-                <a id="participant-edit-button" class="chud-edit" title="{{localize 'CHUD.actions.participant.edit'}}">
-                  <i class="fas fa-pencil"></i>
-                </a>
-                <a id="participant-delete-button" class="chud-delete" title="{{localize 'CHUD.actions.participant.delete'}}">
-                  <i class="fas fa-trash"></i>
-                </a>
+                <button
+                  id="participant-clone-button"
+                  type="button"
+                  class="inline-control icon fa-solid fa-clone"
+                  data-tooltip
+                  aria-label="{{localize 'CHUD.actions.participant.clone'}}"
+                ></button>
+
+                <button
+                  id="participant-edit-button"
+                  type="button"
+                  class="inline-control icon fa-solid fa-edit"
+                  data-tooltip
+                  aria-label="{{localize 'CHUD.actions.participant.edit'}}"
+                ></button>
+
+                <button
+                  id="participant-delete-button"
+                  type="button"
+                  class="inline-control icon fa-solid fa-trash"
+                  data-tooltip
+                  aria-label="{{localize 'CHUD.actions.participant.delete'}}"
+                ></button>
               </div>
             {{/if}}
           </div>

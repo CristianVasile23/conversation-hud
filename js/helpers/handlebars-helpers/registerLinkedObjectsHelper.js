@@ -3,22 +3,29 @@
  */
 export function registerLinkedObjectsHelper() {
   Handlebars.registerHelper("renderParticipantLinkedObjects", (journalId, actorId) => {
-    let html = `<p class="chud-linked-objects">`;
+    let html = `<div class="chud-linked-objects">`;
 
     if (!journalId && !actorId) {
-      html += `${game.i18n.localize("CHUD.strings.noLinkedDocuments")}`;
+      html += `<p>${game.i18n.localize("CHUD.strings.noLinkedDocuments")}</p>`;
     } else {
       if (journalId) {
         const journal = game.journal.get(journalId);
         if (journal) {
           html += `
-            <a onclick="game.ConversationHud.renderJournalSheet('${journalId}')" title="${journal.name}">
-              <i class="fas fa-book"></i>
-            </a>
+            <button
+              class="inline-control icon fa-solid fa-book"
+              onclick="game.ConversationHud.renderJournalSheet('${journalId}')"
+              data-tooltip
+              aria-label="${journal.name}"
+            ></button>
           `;
         } else {
           html += `
-            <i class="fas fa-book" title="${game.i18n.localize("CHUD.strings.invalidDocumentRef")}"></i>
+            <i
+              class="fas fa-book chud-invalid-reference"
+              data-tooltip
+              aria-label="${game.i18n.localize("CHUD.strings.invalidDocumentRef")}"
+            ></i>
           `;
         }
       }
@@ -26,17 +33,26 @@ export function registerLinkedObjectsHelper() {
         const actor = game.actors.get(actorId);
         if (actor) {
           html += `
-            <a onclick="game.ConversationHud.renderActorSheet('${actorId}')" title="${actor.name}">
-              <i class="fas fa-user"></i>
-            </a>
+            <button
+              class="inline-control icon fa-solid fa-user"
+              onclick="game.ConversationHud.renderActorSheet('${actorId}')"
+              data-tooltip
+              aria-label="${actor.name}"
+            ></button>
           `;
         } else {
-          html += `${game.i18n.localize("CHUD.strings.invalidDocumentRef")}`;
+          html += `
+            <i
+              class="fas fa-user-slash chud-invalid-reference"
+              data-tooltip
+              aria-label="${game.i18n.localize("CHUD.strings.invalidDocumentRef")}"
+            ></i>
+          `;
         }
       }
     }
 
-    html += `</p>`;
+    html += `</div>`;
     return html;
   });
 }
