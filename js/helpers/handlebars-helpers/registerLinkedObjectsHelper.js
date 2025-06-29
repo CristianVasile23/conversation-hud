@@ -13,7 +13,7 @@ export function registerLinkedObjectsHelper() {
         if (journal) {
           html += `
             <button
-              class="inline-control icon fa-solid fa-book"
+              class="inline-control icon fa-solid fa-book-open"
               onclick="game.ConversationHud.renderJournalSheet('${journalId}')"
               data-tooltip
               aria-label="${journal.name}"
@@ -22,7 +22,7 @@ export function registerLinkedObjectsHelper() {
         } else {
           html += `
             <i
-              class="fas fa-book chud-invalid-reference"
+              class="fas fa-book-open chud-invalid-reference"
               data-tooltip
               aria-label="${game.i18n.localize("CHUD.strings.invalidDocumentRef")}"
             ></i>

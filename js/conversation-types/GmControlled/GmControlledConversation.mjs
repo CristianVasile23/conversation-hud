@@ -225,6 +225,13 @@ export class GmControlledConversation {
         break;
       case "pull-participants-from-scene":
         this.#pullParticipantsFromScene();
+        break;
+      case "render-linked-journal":
+        this.#renderLinkedJournal(functionData.data);
+        break;
+      case "render-linked-actor":
+        this.#renderLinkedActor(functionData.data);
+        break;
       default:
         // TODO: Log error
         break;
@@ -810,6 +817,40 @@ export class GmControlledConversation {
     }
 
     this.#conversationControls.prepareAndRender();
+  }
+
+  #renderLinkedJournal(data) {
+    const index = data.index;
+
+    if (checkIfUserIsGM()) {
+      if (index < 0 || this.#conversationData.conversation.data.participants.length < index) {
+        // TODO: Improve error
+        console.error("ConversationHUD | Tried to access a participant with an invalid index");
+        return;
+      }
+
+      const linkedJournalId = this.#conversationData.conversation.data.participants[index].linkedJournal;
+      if (linkedJournalId) {
+        game.ConversationHud.renderJournalSheet(linkedJournalId);
+      }
+    }
+  }
+
+  #renderLinkedActor(data) {
+    const index = data.index;
+
+    if (checkIfUserIsGM()) {
+      if (index < 0 || this.#conversationData.conversation.data.participants.length < index) {
+        // TODO: Improve error
+        console.error("ConversationHUD | Tried to access a participant with an invalid index");
+        return;
+      }
+
+      const linkedActorId = this.#conversationData.conversation.data.participants[index].linkedActor;
+      if (linkedActorId) {
+        game.ConversationHud.renderActorSheet(linkedActorId);
+      }
+    }
   }
 
   async #updateActiveParticipantImage(index) {

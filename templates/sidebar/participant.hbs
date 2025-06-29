@@ -64,11 +64,11 @@
         {{#if participant.linkedJournal}}
           <button
             type="button"
-            class="inline-control icon fa-solid fa-book"
+            class="inline-control icon fa-solid fa-book-open"
             data-action="viewLinkedJournal"
             data-tooltip
             aria-label="{{localize 'CHUD.strings.linkedJournal.name'}}"
-            onclick="event.stopPropagation(); game.ConversationHud.displayLinkedParticipantNotes({{index}});"
+            onclick='event.stopPropagation(); game.ConversationHud.executeFunction({{{json (object scope="local" type="render-linked-journal" data=(object index=index))}}});'
           ></button>
         {{/if}}
 
@@ -79,7 +79,7 @@
             data-action="viewLinkedActor"
             data-tooltip
             aria-label="{{localize 'CHUD.strings.linkedActor.name'}}"
-            onclick="event.stopPropagation(); game.ConversationHud.displayLinkedParticipantActor({{index}});"
+            onclick='event.stopPropagation(); game.ConversationHud.executeFunction({{{json (object scope="local" type="render-linked-actor" data=(object index=index))}}});'
           ></button>
         {{/if}}
       </div>

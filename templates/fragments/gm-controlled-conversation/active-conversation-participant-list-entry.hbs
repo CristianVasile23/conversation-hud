@@ -21,8 +21,8 @@
       {{#if participant.linkedJournal}}
         <button
           type="notes"
-          class="ui-control icon fa-solid fa-book"
-          onclick="game.ConversationHud.displayLinkedParticipantNotes({{index}})"
+          class="ui-control icon fa-solid fa-book-open"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="render-linked-journal" data=(object index=index))}}})'
           data-tooltip
           aria-label="{{localize 'CHUD.strings.linkedJournal.name'}}"
         ></button>
@@ -32,7 +32,7 @@
         <button
           type="notes"
           class="ui-control icon fa-solid fa-user"
-          onclick="game.ConversationHud.displayLinkedParticipantActor({{index}})"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="render-linked-actor" data=(object index=index))}}})'
           data-tooltip
           aria-label="{{localize 'CHUD.strings.linkedActor.name'}}"
         ></button>
