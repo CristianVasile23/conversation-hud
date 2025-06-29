@@ -1,7 +1,7 @@
 /// <reference path="../types/ParticipantData.js" />
 /// <reference path="../types/PortraitAnchor.js" />
 
-import { ANCHOR_OPTIONS, SHEET_CLASSES } from "../constants/index.js";
+import { ANCHOR_OPTIONS, MODULE_NAME, SHEET_CLASSES } from "../constants/index.js";
 import { createPortraitAnchorObject, getConversationDataFromJournalId } from "../helpers/index.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
@@ -517,6 +517,7 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
         core: {
           sheetClass: SHEET_CLASSES.factionSheetClass,
         },
+        [MODULE_NAME]: { type: "conversation-sheet" },
       },
       ownership: permissions,
     });

@@ -8,6 +8,8 @@ import { ConversationTypes, MODULE_NAME, SHEET_CLASSES } from "./constants/index
 import { CollectiveConversation, GmControlledConversation } from "./conversation-types/index.js";
 import { ConversationEvents } from "./constants/events.js";
 
+import { migrateConversations, migrateFactions } from "./migration.js";
+
 export class ConversationHud extends EventTarget {
   conversationIsActive = false;
   conversationIsVisible = false;
@@ -67,6 +69,10 @@ export class ConversationHud extends EventTarget {
       default:
         // TODO: Handle error case in a better way + add improved logging
         // What needs to be done is set the creation button state to be disabled as there is no active conversation
+
+        game.ConversationHud.conversationIsActive = false;
+        game.ConversationHud.conversationIsVisible = false;
+
         console.error("ConversationHUD | Unknown conversation type");
         return;
     }
@@ -372,4 +378,10 @@ export class ConversationHud extends EventTarget {
 
     socket.executeForEveryone("createConversation", conversation, visibility);
   }
+
+  // TODO: Remove
+  // migrateData() {
+  //   migrateConversations();
+  //   migrateFactions();
+  // }
 }

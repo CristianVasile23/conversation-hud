@@ -19,7 +19,6 @@ export class FactionSheet extends HandlebarsApplicationMixin(JournalEntrySheet) 
       (p) => foundry.utils.getProperty(p, "flags.conversation-hud.type") === "faction-sheet-data"
     );
 
-    // const pages = this.object.getEmbeddedCollection("JournalEntryPage").contents;
     if (page) {
       try {
         const data = JSON.parse(page.text.content);
