@@ -29,7 +29,7 @@ Hooks.once("uiExtender.init", (uiExtender) => {
     moduleId: MODULE_NAME,
     id: "conversation",
     tooltip: "Conversation",
-    icon: "fas fa-comment-music",
+    icon: "fa-solid fa-masks-theater",
     order: 1,
     applicationClass: ConversationSidebar,
   });

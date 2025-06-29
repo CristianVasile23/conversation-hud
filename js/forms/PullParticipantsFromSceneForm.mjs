@@ -4,6 +4,7 @@ import {
   getConversationDataFromJournalId,
   processParticipantData,
 } from "../helpers/index.js";
+import { ConversationTypes } from "../constants/conversation-types.js";
 
 const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
 
@@ -174,11 +175,12 @@ export class PullParticipantsFromSceneForm extends HandlebarsApplicationMixin(Ap
             const data = getConversationDataFromJournalId(participant.data);
             let linkedParticipants = [];
 
-            // Determine if the data parsed respects the old data format or the new data format
-            if (data instanceof Array) {
-              linkedParticipants = data;
-            } else {
-              linkedParticipants = data.participants;
+            switch (data.type) {
+              case ConversationTypes.GMControlled:
+                linkedParticipants = data.conversation.data.participants;
+                break;
+              default:
+                break;
             }
 
             linkedParticipants.forEach((item) => {
