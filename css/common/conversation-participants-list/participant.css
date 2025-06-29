@@ -88,13 +88,14 @@
 .chud-conversation-participants-list .chud-text-wrapper .chud-name {
   margin: 0;
   font-weight: bold;
-  color: var(--color-text-dark-secondary);
+  color: var(--color-text-primary);
 }
 
 .chud-conversation-participants-list .chud-text-wrapper .chud-faction {
   margin: 0;
   font-style: italic;
   font-size: 11px;
+  color: var(--color-text-secondary);
 }
 
 .chud-conversation-participants-list .chud-text-wrapper .chud-linked-objects {

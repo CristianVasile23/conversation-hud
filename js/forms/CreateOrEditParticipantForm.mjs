@@ -132,7 +132,7 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
       {
         type: "submit",
         icon: "fa-solid fa-check",
-        label: "CHUD.actions.participant.add",
+        label: this.isEditing ? "CHUD.actions.participant.edit" : "CHUD.actions.participant.add",
       },
     ];
 

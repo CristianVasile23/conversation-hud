@@ -10,12 +10,7 @@
     <label>{{ localize 'DOCUMENT.Folder' }}</label>
     <div class="form-fields">
       <select name="folder">
-        {{#select folder}}
-          <option value=""></option>
-          {{#each folders}}
-            <option value="{{ this.id }}">{{ this.name }}</option>
-          {{/each}}
-        {{/select}}
+        {{selectOptions folders selected=folder blank="" valueAttr="id" labelAttr="name"}}
       </select>
     </div>
   </div>
