@@ -95,7 +95,7 @@ export class PullParticipantsFromSceneForm extends HandlebarsApplicationMixin(Ap
   static PARTS = {
     body: {
       template: "modules/conversation-hud/templates/forms/pull-scene-participants-form.hbs",
-      scrollable: ["#sceneParticipantsList"],
+      scrollable: [".scrollable"],
     },
     footer: {
       template: "templates/generic/form-footer.hbs",
@@ -135,7 +135,7 @@ export class PullParticipantsFromSceneForm extends HandlebarsApplicationMixin(Ap
       this.#setCheckedStatusForAllActors(true);
     });
 
-    const actorsObject = html.querySelector("#participants-pulled-from-scene");
+    const actorsObject = html.querySelector("#scene-participants-list");
     if (actorsObject) {
       const pulledActors = actorsObject.children;
       for (let i = 0; i < pulledActors.length; i++) {
@@ -229,12 +229,11 @@ export class PullParticipantsFromSceneForm extends HandlebarsApplicationMixin(Ap
   }
 
   #handleEditParticipant(index) {
-    const participantEditForm = new CreateOrEditParticipantForm(
+    new CreateOrEditParticipantForm(
       true,
       (data) => this.#handleEditParticipantHelper(data, index),
       this.participants[index].data
-    );
-    participantEditForm.render(true);
+    ).render(true);
   }
 
   #handleEditParticipantHelper(data, index) {
