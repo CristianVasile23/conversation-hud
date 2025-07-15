@@ -1,4 +1,5 @@
 import { MODULE_NAME } from "./constants/index.js";
+import { MigrationForm, getConversationsToMigrate, getFactionsToMigrate } from "./migration/index.mjs";
 
 export const ModuleSettings = {
   portraitStyle: "portraitStyle",
@@ -14,6 +15,7 @@ export const ModuleSettings = {
   blurAmount: "blurAmount",
   activeParticipantFontSize: "activeParticipantFontSize",
   activeParticipantFactionFontSize: "activeParticipantFactionFontSize",
+  scehmaVersion: "schemaVersion",
 };
 
 export function registerSettings() {
@@ -180,5 +182,28 @@ export function registerSettings() {
       large: game.i18n.localize(`CHUD.settings.fontSizeOptions.large`),
       veryLarge: game.i18n.localize(`CHUD.settings.fontSizeOptions.veryLarge`),
     },
+  });
+
+  game.settings.registerMenu(MODULE_NAME, "migrationWizard", {
+    name: game.i18n.localize("CHUD.settings.migrationWizard.name"),
+    label: game.i18n.localize("CHUD.settings.migrationWizard.button"),
+    hint: game.i18n.localize("CHUD.settings.migrationWizard.hint"),
+    icon: "fa-solid fa-screwdriver-wrench",
+    type: MigrationForm,
+    restricted: true,
+    onOpen: () => {
+      const conversationsToMigrate = getConversationsToMigrate();
+      const factionsToMigrate = getFactionsToMigrate();
+      const dataToMigrate = { conversationsToMigrate, factionsToMigrate };
+      return new MigrationForm(dataToMigrate);
+    },
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.scehmaVersion, {
+    name: "Schema Version",
+    scope: "world",
+    config: false,
+    type: String,
+    default: "",
   });
 }

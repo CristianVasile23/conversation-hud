@@ -8,8 +8,6 @@ import { ConversationTypes, MODULE_NAME, SHEET_CLASSES } from "./constants/index
 import { CollectiveConversation, GmControlledConversation } from "./conversation-types/index.js";
 import { ConversationEvents } from "./constants/events.js";
 
-import { migrateConversations, migrateFactions } from "./migration.js";
-
 export class ConversationHud extends EventTarget {
   conversationIsActive = false;
   conversationIsVisible = false;
@@ -406,10 +404,4 @@ export class ConversationHud extends EventTarget {
 
     socket.executeForEveryone("createConversation", conversation, visibility);
   }
-
-  // TODO: Remove
-  // migrateData() {
-  //   migrateConversations();
-  //   migrateFactions();
-  // }
 }

@@ -75,7 +75,6 @@ export class PullParticipantsFromSceneForm extends HandlebarsApplicationMixin(Ap
   /* -------------------------------------------- */
 
   static DEFAULT_OPTIONS = {
-    id: "conversation-pull-participants-{id}",
     classes: ["form"],
     tag: "form",
     window: {

@@ -151,8 +151,8 @@ export class FactionSheet extends HandlebarsApplicationMixin(JournalEntrySheet) 
     if (this.#dirty) {
       const confirmed = await getConfirmationFromUser(
         "CHUD.dialogue.unsavedChanges",
-        '<i class="fas fa-save"></i>',
-        '<i class="fas fa-trash"></i>'
+        "fa-solid fa-save",
+        "fa-solid fa-trash"
       );
 
       if (confirmed === null) {

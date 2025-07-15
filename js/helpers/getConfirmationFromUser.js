@@ -3,8 +3,8 @@
  */
 export function getConfirmationFromUser(
   localizationString,
-  confirmIcon = '<i class="fas fa-check"></i>',
-  rejectIcon = '<i class="fas fa-times"></i>'
+  confirmIcon = "fa-solid fa-check",
+  rejectIcon = "fa-solid fa-xmark"
 ) {
   const titleText = game.i18n.localize(`${localizationString}.title`);
   const contentText = game.i18n.localize(`${localizationString}.content`);
@@ -15,8 +15,13 @@ export function getConfirmationFromUser(
     let resolved = false;
 
     foundry.applications.api.DialogV2.confirm({
-      content: `<div style="margin-bottom: 8px;">${contentText}</div>`,
-      window: { title: titleText },
+      content: `<p>${contentText}</p>`,
+      window: {
+        title: titleText,
+      },
+      position: {
+        width: 450,
+      },
       yes: {
         icon: confirmIcon,
         label: confirmText,

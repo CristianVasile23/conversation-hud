@@ -127,6 +127,12 @@ export const registerHook = () => {
 
     wrapLabeledSettingsInFieldset(
       section,
+      ["settings-config-conversation-hud.migrationWizard"],
+      "CHUD.settings.settingsSheetHeaders.dataMigration"
+    );
+
+    wrapLabeledSettingsInFieldset(
+      section,
       [
         "settings-config-conversation-hud.activeParticipantFontSize",
         "settings-config-conversation-hud.activeParticipantFactionFontSize",

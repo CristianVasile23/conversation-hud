@@ -1,4 +1,6 @@
-function getMigratedConversations() {
+import { MODULE_NAME } from "../constants/index.js";
+
+export function getConversationsToMigrate() {
   const DEFAULT_PARTICIPANT = {
     name: "Anonymous",
     displayName: true,
@@ -36,17 +38,16 @@ function getMigratedConversations() {
     try {
       originalData = JSON.parse(pageContent);
     } catch (e) {
-      console.warn(`Could not parse JSON for journal ${journal.name}`);
+      console.warn(`${MODULE_NAME} | Could not parse JSON for journal ${journal.name}`);
       continue;
     }
 
-    const oldContent = originalData;
     let participants = [];
     let defaultActiveParticipant = -1;
     let background = "";
 
-    // Format 1: Array
     if (Array.isArray(originalData)) {
+      // Format 1: Array
       participants = originalData.map((p) => ({
         ...structuredClone(DEFAULT_PARTICIPANT),
         ...p,
@@ -59,9 +60,8 @@ function getMigratedConversations() {
         faction: structuredClone(DEFAULT_PARTICIPANT.faction),
         linkedJournal: p.linkedJournal || "",
       }));
-    }
-    // Format 2: Object with participants
-    else if (originalData?.participants) {
+    } else if (originalData?.participants) {
+      // Format 2: Object with participants
       participants = originalData.participants.map((p) => ({
         ...structuredClone(DEFAULT_PARTICIPANT),
         ...p,
@@ -80,6 +80,7 @@ function getMigratedConversations() {
       defaultActiveParticipant = originalData.defaultActiveParticipant ?? -1;
       background = originalData.conversationBackground ?? "";
     }
+
     // Already migrated or invalid format
     else if (originalData?.conversation?.data?.participants) {
       continue;
@@ -88,7 +89,6 @@ function getMigratedConversations() {
       continue;
     }
 
-    // Final migrated structure
     const newContent = {
       type: "gm-controlled",
       background,
@@ -109,7 +109,6 @@ function getMigratedConversations() {
     migrated[journal.id] = {
       journalName: journal.name,
       pageId: conversationPage.id,
-      // oldContent,
       newContent,
     };
   }
@@ -117,7 +116,7 @@ function getMigratedConversations() {
   return migrated;
 }
 
-function getMigratedFactions() {
+export function getFactionsToMigrate() {
   const migrated = {};
 
   for (const journal of game.journal) {
@@ -150,109 +149,99 @@ function getMigratedFactions() {
 }
 
 export async function migrateConversations() {
-  const migratedData = getMigratedConversations();
-  if (!migratedData || Object.keys(migratedData).length === 0) {
-    ui.notifications.warn("No conversations were migrated.");
-    return;
-  }
+  const migratedData = getConversationsToMigrate();
+  const failedMigrations = [];
 
-  // Find or create the "MigratedEntries" folder
-  let folder = game.folders.find((f) => f.name === "Migration - Conversations" && f.type === "JournalEntry");
-  if (!folder) {
-    folder = await Folder.create({
-      name: "Migration - Conversations",
-      type: "JournalEntry",
-      color: "#6c757d",
-    });
+  if (!migratedData || Object.keys(migratedData).length === 0) {
+    ui.notifications.warn("No conversations were found to migrate.");
+    return [];
   }
 
   for (const [journalId, data] of Object.entries(migratedData)) {
-    const originalName = data.journalName;
-    const newName = `${originalName} (Migrated)`;
-    const conversationData = data.newContent;
+    try {
+      const journal = game.journal.get(journalId);
+      if (!journal) throw new Error("Journal not found");
 
-    await JournalEntry.create({
-      name: newName,
-      folder: folder.id,
-      flags: {
-        "conversation-hud": {
-          type: "conversation-sheet",
+      const page = journal.pages.get(data.pageId);
+      if (!page) throw new Error("Page not found");
+
+      await page.update({
+        name: "_chud_conversation_data",
+        text: {
+          content: JSON.stringify(data.newContent, null, 2),
+          format: CONST.JOURNAL_ENTRY_PAGE_FORMATS.PLAIN_TEXT,
         },
-        core: {
-          sheetClass: "conversation-sheet.ConversationSheet",
-        },
-      },
-      pages: [
-        {
-          name: "_chud_conversation_data",
-          type: "text",
-          text: {
-            content: JSON.stringify(conversationData, null, 2),
-            format: CONST.JOURNAL_ENTRY_PAGE_FORMATS.PLAIN_TEXT,
-          },
-          flags: {
-            "conversation-hud": {
-              type: "conversation-sheet-data",
-            },
+        flags: {
+          "conversation-hud": {
+            type: "conversation-sheet-data",
           },
         },
-      ],
-    });
+      });
+
+      await journal.update({
+        flags: {
+          "conversation-hud": {
+            type: "conversation-sheet",
+          },
+          core: {
+            sheetClass: "conversation-sheet.ConversationSheet",
+          },
+        },
+      });
+    } catch (error) {
+      console.error(`${MODULE_NAME} | Failed to migrate conversation ${data.journalName}:`, error);
+      failedMigrations.push(data.journalName);
+    }
   }
 
-  ui.notifications.info("Conversations migrated successfully.");
+  return failedMigrations;
 }
 
 export async function migrateFactions() {
-  const migratedData = getMigratedFactions();
-  if (!migratedData || Object.keys(migratedData).length === 0) {
-    ui.notifications.warn("No journals were migrated.");
-    return;
-  }
+  const migratedData = getFactionsToMigrate();
+  const failedMigrations = [];
 
-  // Find or create the "MigratedEntries" folder
-  let folder = game.folders.find((f) => f.name === "Migration - Factions" && f.type === "JournalEntry");
-  if (!folder) {
-    folder = await Folder.create({
-      name: "Migration - Factions",
-      type: "JournalEntry",
-      color: "#6c757d",
-    });
+  if (!migratedData || Object.keys(migratedData).length === 0) {
+    ui.notifications.warn("No factions were found to migrate.");
+    return [];
   }
 
   for (const [journalId, data] of Object.entries(migratedData)) {
-    const originalName = data.journalName;
-    const newName = `${originalName} (Migrated)`;
-    const factionData = data.newContent;
+    try {
+      const journal = game.journal.get(journalId);
+      if (!journal) throw new Error("Journal not found");
 
-    await JournalEntry.create({
-      name: newName,
-      folder: folder.id,
-      flags: {
-        "conversation-hud": {
-          type: "faction-sheet",
+      const page = journal.pages.get(data.pageId);
+      if (!page) throw new Error("Page not found");
+
+      await page.update({
+        name: "_chud_faction_data",
+        text: {
+          content: JSON.stringify(data.newContent, null, 2),
+          format: CONST.JOURNAL_ENTRY_PAGE_FORMATS.PLAIN_TEXT,
         },
-        core: {
-          sheetClass: "faction-sheet.FactionSheet",
-        },
-      },
-      pages: [
-        {
-          name: "_chud_faction_data",
-          type: "text",
-          text: {
-            content: JSON.stringify(factionData, null, 2),
-            format: CONST.JOURNAL_ENTRY_PAGE_FORMATS.PLAIN_TEXT,
-          },
-          flags: {
-            "conversation-hud": {
-              type: "faction-sheet-data",
-            },
+        flags: {
+          "conversation-hud": {
+            type: "faction-sheet-data",
           },
         },
-      ],
-    });
+      });
+
+      await journal.update({
+        flags: {
+          "conversation-hud": {
+            type: "faction-sheet",
+          },
+          core: {
+            sheetClass: "faction-sheet.FactionSheet",
+          },
+        },
+      });
+    } catch (error) {
+      console.error(`${MODULE_NAME} | Failed to migrate faction ${data.journalName}:`, error);
+      failedMigrations.push(data.journalName);
+    }
   }
 
-  ui.notifications.info("Factions migrated successfully.");
+  return failedMigrations;
 }

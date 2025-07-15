@@ -85,6 +85,14 @@
 
     "invalidDocumentRef": "Invalid document reference",
 
+    "migration": {
+      "migrationWizard": "Migration Wizard",
+      "migrationInfo": "This migration will update outdated <strong>Conversations</strong> and <strong>Factions</strong> to the latest format used by ConversationHUD.<br><br>Only entries containing legacy or incompatible data will be affected. No new content will be created, and unrelated documents will remain unchanged.",
+      "migrationWarning": "<strong>Important:</strong> Before continuing, please ensure that your world is backed up. This migration will overwrite existing data within affected journal entries.",
+      "documentsToMigrate": "Documents in Need of Migration",
+      "noDocumentsToMigrate": "All Conversation and Faction sheets are up to date. No migration needed."
+    },
+
     "sceneConversation": {
       "name": "Scene Conversation",
       "hint": "A linked conversation that will activate automatically whenever the scene is activated."
@@ -128,6 +136,12 @@
       "content": "The document contains unsaved changes. Do you wish to save them?",
       "confirm": "Save Changes",
       "reject": "Discard Changes"
+    },
+    "onMigrateData": {
+      "title": "Are you sure?",
+      "content": "This will migrate outdated Conversations and Factions. Affected journal entries will be overwritten. Please ensure your world is backed up before continuing.",
+      "confirm": "Migrate Data",
+      "reject": "Cancel"
     }
   },
 
@@ -170,7 +184,9 @@
 
     "changeConversationBackground": "Change Conversation Background",
     "pullParticipants": "Pull Participants from Scene",
-    "addActors": "Add Actors"
+    "addActors": "Add Actors",
+
+    "startMigration": "Start Migration"
   },
 
   "CHUD.tabs": {
@@ -259,11 +275,13 @@
 
   "CHUD.warnings": {
     "noParticipantDataFound": "No viable participant data was found in this journal entry.",
-    "noFactionDataFound": "No viable faction data was found in this journal entry."
+    "noFactionDataFound": "No viable faction data was found in this journal entry.",
+    "migrationNotComplete": "Migration incomplete: some entries could not be updated. Check the console for more information."
   },
 
   "CHUD.info": {
-    "saveSuccessful": "Current conversation has been saved successfully."
+    "saveSuccessful": "Current conversation has been saved successfully.",
+    "migrationComplete": "Migration successful: all entries were updated without errors."
   },
 
   "CHUD.settings": {
@@ -272,6 +290,7 @@
       "interface": "Interface",
       "features": "Features",
       "fontSize": "Font Size",
+      "dataMigration": "Data Migration",
       "others": "Other Settings"
     },
     "portraitStyle": {
@@ -348,6 +367,11 @@
       "regular": "Regular",
       "large": "Large",
       "veryLarge": "Very Large"
+    },
+    "migrationWizard": {
+      "name": "Migration Wizard",
+      "button": "Open Wizard",
+      "hint": "Open the migration wizard to migrate outdated Conversations or Factions to the new format."
     }
   }
 }
