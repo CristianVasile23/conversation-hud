@@ -45,7 +45,7 @@
 #ui-conversation-hud.chud-minimized {
   top: unset;
   bottom: 16px;
-  margin-right: 850px;
+  right: var(--chud-minimized-margin-right, 0px);
 }
 
 #ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-faction-display {

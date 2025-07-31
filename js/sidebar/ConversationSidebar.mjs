@@ -33,13 +33,12 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
   };
 
   static DEFAULT_OPTIONS = {
-    // TODO: Localize
-    title: "Conversation",
     id: "conversation-sidebar",
     classes: ["sidebar-tab", "conversation-sidebar"],
-    popOut: true,
-    width: 350,
-    height: "auto",
+    window: { title: "CHUD.strings.activeConversation" },
+    position: {
+      height: "auto",
+    },
   };
 
   async _prepareContext(options) {

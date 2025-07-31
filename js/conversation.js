@@ -195,7 +195,7 @@ export class ConversationHud extends EventTarget {
       });
       socket.executeForEveryone("setConversationVisibility", parsedVisibility);
     } else {
-      game.ConversationHud.createConversation(data, parsedVisibility);
+      this.#handleCreateConversationFromData(data.conversationData, parsedVisibility, { setDefaultParticipant: true });
     }
   }
 
@@ -251,7 +251,7 @@ export class ConversationHud extends EventTarget {
       await newConversationSheet.createEmbeddedDocuments("JournalEntryPage", [
         {
           text: { content: JSON.stringify(dataToSave) },
-          name: "Conversation Sheet Data",
+          name: "_chud_conversation_data",
           flags: {
             [MODULE_NAME]: { type: "conversation-sheet-data" },
           },
@@ -322,6 +322,8 @@ export class ConversationHud extends EventTarget {
     // TODO: Check for an active conversation
     game.ConversationHud.conversationIsVisible = isVisible;
     game.ConversationHud.activeConversation.updateConversationVisibility(isVisible);
+
+    Hooks.call(ConversationEvents.Updated);
   }
 
   /**

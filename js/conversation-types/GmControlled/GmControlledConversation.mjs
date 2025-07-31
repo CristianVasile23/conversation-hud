@@ -34,6 +34,8 @@ export class GmControlledConversation {
   /** @type {GmControlledConversationControls | undefined} */
   #conversationControls = undefined;
 
+  #resizeObserver = undefined;
+
   /**
    * TODO: Finish JSDoc
    *
@@ -43,7 +45,18 @@ export class GmControlledConversation {
     this.#conversationData = conversationData;
 
     // Update state
-    this.#currentActiveParticipant = currentState?.currentActiveParticipant ?? -1;
+    if (currentState?.currentActiveParticipant !== undefined) {
+      this.#currentActiveParticipant = currentState.currentActiveParticipant;
+    } else {
+      this.#currentActiveParticipant = conversationData.conversation.data.defaultActiveParticipant ?? -1;
+    }
+
+    // Hotbar resize observer
+    this.#resizeObserver = new ResizeObserver(() => {
+      if (this.#conversationData?.conversation.features.isMinimized) {
+        this.#updateMinimizedPosition();
+      }
+    });
   }
 
   /**
@@ -57,12 +70,15 @@ export class GmControlledConversation {
       processParticipantData(this.#conversationData.conversation.data.participants[i]);
     }
 
-    // Create background
-    const conversationBackground = createConversationBackgroundContainer(this.#conversationData, conversationIsVisible);
+    let conversationBackground = document.getElementById("active-conversation-background");
+    if (!conversationBackground) {
+      conversationBackground = createConversationBackgroundContainer(this.#conversationData, conversationIsVisible);
 
-    // Disable the background if the conversation is minimized
-    if (this.#conversationData.conversation.features.isMinimized) {
-      conversationBackground.classList.remove("visible");
+      if (this.#conversationData.conversation.features.isMinimized) {
+        conversationBackground.classList.remove("visible");
+      }
+
+      document.body.append(conversationBackground);
     }
 
     // Create the template for the ConversationHUD UI elements
@@ -71,15 +87,18 @@ export class GmControlledConversation {
     // Create the conversation container
     this.#createConversationInterface(template, conversationIsVisible);
 
-    // Attacher ConversationHUD UI elements to the other FoundryVTT UI elements
-    const body = document.body;
-    body.append(conversationBackground);
-
     // Render conversation controls
     this.#renderOrUpdateControls();
 
-    // After elements are rendered, render the active participant
+    // Render the active participant
     this.#setActiveParticipant(this.#currentActiveParticipant);
+
+    // Start observing UI elements for resize events
+    const uiBottom = document.getElementById("ui-bottom");
+    const hotbar = document.getElementById("hotbar");
+
+    if (uiBottom) this.#resizeObserver.observe(uiBottom);
+    if (hotbar) this.#resizeObserver.observe(hotbar);
   }
 
   /**
@@ -173,6 +192,11 @@ export class GmControlledConversation {
     if (controls) {
       controls.innerHTML = "";
     }
+
+    // Cleanup resize observer
+    if (this.#resizeObserver) {
+      this.#resizeObserver.disconnect();
+    }
   }
 
   /**
@@ -246,14 +270,20 @@ export class GmControlledConversation {
    * @param {*} options
    */
   async #updateConversation(conversationData, options) {
-    // TODO: Activate default participant and update background in this function as well
-
     this.#conversationData = conversationData;
 
     // Parse all participants and update their data
     for (let i = 0; i < this.#conversationData.conversation.data.participants.length; i++) {
       processParticipantData(this.#conversationData.conversation.data.participants[i]);
     }
+
+    // Set the current active participant index from options if present
+    if (options?.setCurrentActiveParticipant !== undefined) {
+      this.#currentActiveParticipant = options.setCurrentActiveParticipant;
+    }
+
+    // Update background
+    this.#updateBackground({ background: this.#conversationData.background });
 
     // Add rendered template to the conversation hud
     const conversationHud = document.getElementById("ui-conversation-hud");
@@ -411,7 +441,7 @@ export class GmControlledConversation {
     if (this.#currentActiveParticipant === index) {
       this.#currentActiveParticipant = -1;
     } else if (index < this.#currentActiveParticipant) {
-      this.#currentActiveParticipant = -1;
+      this.#currentActiveParticipant = this.#currentActiveParticipant - 1;
     }
 
     // Remove participant with the given index
@@ -423,6 +453,9 @@ export class GmControlledConversation {
       type: "update-conversation",
       data: {
         ...this.#conversationData,
+      },
+      options: {
+        setCurrentActiveParticipant: this.#currentActiveParticipant,
       },
     });
   }
@@ -455,24 +488,30 @@ export class GmControlledConversation {
    * TODO: Finish JSDoc
    */
   #toggleMinimize() {
-    if (game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
-      if (game.ConversationHud.conversationIsActive) {
-        if (this.#conversationData.conversation.features.isMinimizationLocked) {
-          game.ConversationHud.executeFunction({
-            scope: "everyone",
-            type: "set-minimization",
-            data: {
-              isMinimized: !this.#conversationData.conversation.features.isMinimized,
-            },
-          });
-        } else {
-          this.#conversationData.conversation.features.isMinimized =
-            !this.#conversationData.conversation.features.isMinimized;
-          this.#updateLayout();
-        }
-      }
-    } else {
+    if (!game.settings.get(MODULE_NAME, ModuleSettings.enableMinimize)) {
       ui.notifications.error(game.i18n.localize("CHUD.errors.featureNotEnabled"));
+      return;
+    }
+
+    if (!game.ConversationHud.conversationIsActive) return;
+
+    if (this.#conversationData.conversation.features.isMinimizationLocked && !checkIfUserIsGM()) {
+      ui.notifications.warn(game.i18n.localize("CHUD.errors.minimizationLocked"));
+      return;
+    }
+
+    if (this.#conversationData.conversation.features.isMinimizationLocked) {
+      game.ConversationHud.executeFunction({
+        scope: "everyone",
+        type: "set-minimization",
+        data: {
+          isMinimized: !this.#conversationData.conversation.features.isMinimized,
+        },
+      });
+    } else {
+      this.#conversationData.conversation.features.isMinimized =
+        !this.#conversationData.conversation.features.isMinimized;
+      this.#updateLayout();
     }
   }
 
@@ -878,6 +917,7 @@ export class GmControlledConversation {
     const conversationHud = document.getElementById("ui-conversation-hud");
     if (this.#conversationData.conversation.features.isMinimized) {
       conversationHud.classList.add("chud-minimized");
+      this.#updateMinimizedPosition();
     } else {
       conversationHud.classList.remove("chud-minimized");
     }
@@ -899,5 +939,27 @@ export class GmControlledConversation {
    */
   #emitUpdate() {
     Hooks.call(ConversationEvents.Updated);
+  }
+
+  /**
+   * Updates the position of the minimized conversation based on UI bottom container
+   * and hotbar widths
+   */
+  #updateMinimizedPosition() {
+    const conversationHud = document.getElementById("ui-conversation-hud");
+    const uiBottom = document.getElementById("ui-bottom");
+    const hotbar = document.getElementById("hotbar");
+
+    if (!conversationHud || !uiBottom || !hotbar) return;
+
+    const uiBottomWidth = uiBottom.getBoundingClientRect().width;
+    const hotbarWidth = hotbar.getBoundingClientRect().width;
+    const emptySpace = (uiBottomWidth - hotbarWidth) / 2;
+
+    const offset = 16;
+
+    // Calculate margin from right side
+    const marginRight = hotbarWidth + emptySpace + offset;
+    conversationHud.style.setProperty("--chud-minimized-margin-right", `${marginRight}px`);
   }
 }

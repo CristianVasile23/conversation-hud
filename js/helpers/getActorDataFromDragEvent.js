@@ -5,7 +5,7 @@ import { ConversationTypes, DRAG_AND_DROP_DATA_TYPES } from "../constants/index.
  */
 export async function getActorDataFromDragEvent(event) {
   try {
-    const data = TextEditor.getDragEventData(event);
+    const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
 
     switch (data.type) {
       case DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant:

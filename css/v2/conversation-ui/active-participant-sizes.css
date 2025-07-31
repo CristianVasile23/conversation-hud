@@ -50,4 +50,8 @@
   max-height: 186px;
   max-width: 220px;
 }
+
+#ui-conversation-hud.chud-minimized .chud-active-conversation-content .chud-participant-display {
+  margin-right: 0;
+}
 /* #endregion */

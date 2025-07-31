@@ -9,13 +9,11 @@ export function registerRenderMinimizeButtonHelper() {
       `game.ConversationHud.executeFunction({ scope: "local", type: "toggle-minimize", data: {} })`
     );
 
-    if (isMinimizationLocked) {
-      if (!isGM) {
-        button.classList.add("disabled");
-      }
-    }
-
-    if (isMinimized) {
+    if (isMinimizationLocked && !isGM) {
+      button.classList.add("disabled");
+      button.disabled = true;
+      button.setAttribute("data-tooltip", game.i18n.localize("CHUD.strings.featureLocked"));
+    } else if (isMinimized) {
       button.setAttribute("data-tooltip", game.i18n.localize("CHUD.actions.maximizeConversation"));
     } else {
       button.setAttribute("data-tooltip", game.i18n.localize("CHUD.actions.minimizeConversation"));

@@ -2,7 +2,7 @@
   {{#if isActive}}
     {{#switch conversationType}}
       {{#case "gm-controlled"}}
-        {{#if participants}}
+        {{#if (and participants.length (or (isGm) isVisible))}}
           <div class="gm-controlled-participants-list">
             {{#each participants as |participant index|}}
               {{> "modules/conversation-hud/templates/sidebar/participant.hbs"
