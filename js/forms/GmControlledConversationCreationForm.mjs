@@ -159,11 +159,13 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
     if (participantsObject) {
       const conversationParticipants = participantsObject.children;
       for (let i = 0; i < conversationParticipants.length; i++) {
-        const dragDropHandler = conversationParticipants[i].querySelector(".chud-drag-drop-handler");
+        const dragDropContainer = conversationParticipants[i];
+        const participantElement = dragDropContainer.querySelector(".chud-participant");
+        const dragDropHandler = participantElement.querySelector(".chud-drag-drop-handler");
 
         dragDropHandler.ondragstart = (event) => {
           this.draggingParticipant = true;
-          event.dataTransfer.setDragImage(conversationParticipants[i], 0, 0);
+          event.dataTransfer.setDragImage(participantElement, 0, 0);
 
           // Save the index of the dragged participant in the data transfer object
           event.dataTransfer.setData(
@@ -180,19 +182,21 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
           this.draggingParticipant = false;
         };
 
-        conversationParticipants[i].ondragover = (event) => {
-          showDragAndDropIndicator(conversationParticipants[i], event);
+        // Attach drag events to the drag-drop-container (which contains the indicators)
+        dragDropContainer.ondragover = (event) => {
+          event.preventDefault();
+          showDragAndDropIndicator(dragDropContainer, event);
         };
 
-        conversationParticipants[i].ondragleave = () => {
-          hideDragAndDropIndicator(conversationParticipants[i]);
+        dragDropContainer.ondragleave = () => {
+          hideDragAndDropIndicator(dragDropContainer);
         };
 
-        conversationParticipants[i].ondrop = (event) => {
+        dragDropContainer.ondrop = (event) => {
           const data = JSON.parse(event.dataTransfer.getData("text/plain"));
 
           if (data) {
-            hideDragAndDropIndicator(conversationParticipants[i]);
+            hideDragAndDropIndicator(dragDropContainer);
 
             const oldIndex = data.index;
 
@@ -230,12 +234,12 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
         };
 
         // Bind function to the set active by default checkbox
-        conversationParticipants[i]
+        participantElement
           .querySelector("#participant-active-by-default-checkbox")
           .addEventListener("change", (event) => this.#handleSetDefaultActiveParticipant(event, i));
 
         // Bind functions to the edit and remove buttons
-        const controls = conversationParticipants[i].querySelector(".chud-participant-action-buttons");
+        const controls = participantElement.querySelector(".chud-participant-action-buttons");
         controls
           .querySelector("#participant-clone-button")
           .addEventListener("click", () => this.#handleCloneParticipant(i));

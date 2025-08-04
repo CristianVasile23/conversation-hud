@@ -4,7 +4,7 @@
   height: 2px;
   border-radius: 2px;
   width: 100%;
-  background-color: var(--color-border-highlight);
+  background-color: var(--color-warm-2);
 
   display: none;
   pointer-events: none;
@@ -12,10 +12,10 @@
   position: absolute;
 }
 
-#drag-drop-indicator-top {
+.drag-drop-indicator-top {
   top: 0;
 }
-#drag-drop-indicator-bottom {
+.drag-drop-indicator-bottom {
   bottom: 0;
 }
 

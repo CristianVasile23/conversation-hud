@@ -15,7 +15,8 @@ export const ModuleSettings = {
   blurAmount: "blurAmount",
   activeParticipantFontSize: "activeParticipantFontSize",
   activeParticipantFactionFontSize: "activeParticipantFactionFontSize",
-  scehmaVersion: "schemaVersion",
+  migrationWizard: "migrationWizard",
+  schemaVersion: "schemaVersion",
 };
 
 export function registerSettings() {
@@ -184,7 +185,7 @@ export function registerSettings() {
     },
   });
 
-  game.settings.registerMenu(MODULE_NAME, "migrationWizard", {
+  game.settings.registerMenu(MODULE_NAME, ModuleSettings.migrationWizard, {
     name: game.i18n.localize("CHUD.settings.migrationWizard.name"),
     label: game.i18n.localize("CHUD.settings.migrationWizard.button"),
     hint: game.i18n.localize("CHUD.settings.migrationWizard.hint"),
@@ -199,7 +200,7 @@ export function registerSettings() {
     },
   });
 
-  game.settings.register(MODULE_NAME, ModuleSettings.scehmaVersion, {
+  game.settings.register(MODULE_NAME, ModuleSettings.schemaVersion, {
     name: "Schema Version",
     scope: "world",
     config: false,

@@ -14,7 +14,7 @@
     <div id="selectable-participants-list" class="chud-selectable-participants-list">
       {{#each currentParticipatingUserData.participants as |participant index|}}
         <div class="participant-drag-drop-container">
-          <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
+          <div class="drag-drop-indicator drag-drop-indicator-top"></div>
 
           {{> "modules/conversation-hud/templates/fragments/selectable-participant-entry.hbs"
             isGM=true
@@ -22,7 +22,7 @@
             data=(object userID=../currentParticipatingUserData.id participantIndex=index)
           }}
 
-          <div id="drag-drop-indicator-bottom" class="drag-drop-indicator"></div>
+          <div class="drag-drop-indicator drag-drop-indicator-bottom"></div>
         </div>
       {{/each}}
     </div>

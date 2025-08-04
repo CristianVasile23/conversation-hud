@@ -115,7 +115,7 @@ export class MigrationForm extends HandlebarsApplicationMixin(ApplicationV2) {
         conversations: failedConversationMigrations,
       });
     } else {
-      await game.settings.set(MODULE_NAME, ModuleSettings.scehmaVersion, CHUD_SCHEMA_VERSION);
+      await game.settings.set(MODULE_NAME, ModuleSettings.schemaVersion, CHUD_SCHEMA_VERSION);
       ui.notifications.info(game.i18n.localize("CHUD.info.migrationComplete"));
     }
 

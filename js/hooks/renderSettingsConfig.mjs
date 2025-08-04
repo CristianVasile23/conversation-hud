@@ -26,8 +26,19 @@ export const registerHook = () => {
     fieldset.appendChild(legend);
 
     for (const inputId of inputIds) {
-      const label = section.querySelector(`label[for="${inputId}"]`);
-      const formGroup = label?.closest(".form-group");
+      let formGroup = null;
+
+      // Determine if this is a settings menu (button) or regular setting (input)
+      if (inputId.startsWith("settings-config-")) {
+        // Regular settings: look for the input via label
+        const label = section.querySelector(`label[for="${inputId}"]`);
+        formGroup = label?.closest(".form-group");
+      } else {
+        // Settings menus: look for the button with data-key
+        const button = section.querySelector(`button[data-key="${inputId}"]`);
+        formGroup = button?.closest(".form-group");
+      }
+
       if (formGroup && !wrappedGroups.has(formGroup)) {
         // Apply custom class(es) if defined
         const classes = classMap[inputId];
@@ -127,17 +138,17 @@ export const registerHook = () => {
 
     wrapLabeledSettingsInFieldset(
       section,
-      ["settings-config-conversation-hud.migrationWizard"],
-      "CHUD.settings.settingsSheetHeaders.dataMigration"
-    );
-
-    wrapLabeledSettingsInFieldset(
-      section,
       [
         "settings-config-conversation-hud.activeParticipantFontSize",
         "settings-config-conversation-hud.activeParticipantFactionFontSize",
       ],
       "CHUD.settings.settingsSheetHeaders.fontSize"
+    );
+
+    wrapLabeledSettingsInFieldset(
+      section,
+      ["conversation-hud.migrationWizard"],
+      "CHUD.settings.settingsSheetHeaders.dataMigration"
     );
 
     // Fallback group

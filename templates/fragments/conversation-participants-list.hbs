@@ -10,7 +10,7 @@
     <div id="conversationParticipantsList" class="scrollable chud-content chud-flex-1">
       {{#each participants as |participant index|}}
         <div class="participant-drag-drop-container">
-          <div id="drag-drop-indicator-top" class="drag-drop-indicator"></div>
+          <div class="drag-drop-indicator drag-drop-indicator-top"></div>
 
           <div class="chud-participant">
             {{#if ../isGM}}
@@ -86,7 +86,7 @@
             {{/if}}
           </div>
 
-          <div id="drag-drop-indicator-bottom" class="drag-drop-indicator"></div>
+          <div class="drag-drop-indicator drag-drop-indicator-bottom"></div>
         </div>
       {{/each}}
     </div>

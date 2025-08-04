@@ -15,7 +15,7 @@ export const registerHook = () => {
   };
 
   Hooks.once("ready", async function () {
-    const currentSchemaVersion = game.settings.get(MODULE_NAME, ModuleSettings.scehmaVersion);
+    const currentSchemaVersion = game.settings.get(MODULE_NAME, ModuleSettings.schemaVersion);
 
     if (!currentSchemaVersion || foundry.utils.isNewerVersion(CHUD_SCHEMA_VERSION, currentSchemaVersion)) {
       const dataToMigrate = getDataToMigrate();
@@ -23,7 +23,7 @@ export const registerHook = () => {
       if (!Object.keys(dataToMigrate).length !== 0) {
         new MigrationForm(dataToMigrate).render(true);
       } else {
-        await game.settings.set(MODULE_NAME, ModuleSettings.scehmaVersion, CHUD_SCHEMA_VERSION);
+        await game.settings.set(MODULE_NAME, ModuleSettings.schemaVersion, CHUD_SCHEMA_VERSION);
       }
     }
   });
