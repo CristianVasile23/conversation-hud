@@ -36,22 +36,31 @@ Hooks.once("uiExtender.init", (uiExtender) => {
 });
 
 Hooks.on("init", async () => {
-  // Register the module within libWrapper
-  // This will enable users to CTRL + Click conversation links within journals to activate the conversation
-  // instead of just rendering the conversation sheet
+  // Register libWrapper for content link handling
+  if (libWrapper) {
+    try {
+      libWrapper.register(
+        MODULE_NAME,
+        `JournalEntry.prototype._onClickDocumentLink`,
+        function (wrapped, event) {
+          if (!event.ctrlKey) {
+            return wrapped(event);
+          }
 
-  // TODO: Uncomment
-  // if (libWrapper) {
-  //   libWrapper.register(
-  //     MODULE_NAME,
-  //     // TPODO: Update method
-  //     "TextEditor._onClickContentLink",
-  //     function (wrapped, event) {
-  //       return handleOnClickContentLink.bind(this)(event, wrapped);
-  //     },
-  //     "MIXED"
-  //   );
-  // }
+          // Check if document is a conversation
+          if (this.flags?.core?.sheetClass === "conversation-sheet.ConversationSheet") {
+            return handleOnClickContentLink.call(this, event, wrapped);
+          }
+
+          return wrapped(event);
+        },
+        "MIXED"
+      );
+    } catch (error) {
+      // TODO: Improve error logging
+      console.warn(`ConversationHUD | Could not register libWrapper for JournalEntry:`, error);
+    }
+  }
 
   // Register all other hooks
   registerHooks();
