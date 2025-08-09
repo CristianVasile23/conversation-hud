@@ -1,3 +1,19 @@
+## 5.6.3
+
+- Fixed an issue that displayed the Insufficient Rights error message to players.
+- Fixed the omission of not linking actors to participants when using the drag and drop functionality.
+
+## 5.6.2
+
+- Fixed an issue that caused the tooltip to display the actual name of participants with hidden names.
+- Fixed an issue that caused the scene conversation feature to not appear on FoundryVTT v12.
+- Fixed an issue that caused the macros compendium to be empty.
+
+## 5.6.1
+
+- Added setting for clearing the currently active participant whenever the conversation visibility is toggled off.
+- Fixed an issue that caused the conversation background change and background toggle to be reflected only on the client that trigger these changes.
+
 ## 5.6.0
 
 - Added the option to link actors to conversation participants. You can then view the linked actor sheet by clicking on a button similar to the one used for linked notes.

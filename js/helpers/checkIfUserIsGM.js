@@ -4,9 +4,8 @@
  * @returns {boolean}
  */
 export function checkIfUserIsGM() {
-  if (!game.user.isGM) {
-    // ui.notifications.error(game.i18n.localize("CHUD.errors.insufficientRights"));
-    return false;
+  if (game.user.isGM) {
+    return true;
   }
-  return true;
+  return false;
 }

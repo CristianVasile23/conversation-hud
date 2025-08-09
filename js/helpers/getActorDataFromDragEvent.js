@@ -16,6 +16,7 @@ export async function getActorDataFromDragEvent(event) {
           const data = {
             name: actor.name || "",
             img: actor.img || "",
+            linkedActor: actor.id || undefined,
           };
           return [data];
         } else {
