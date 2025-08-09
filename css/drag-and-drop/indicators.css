@@ -24,4 +24,35 @@
   flex-direction: column;
   position: relative;
 }
+
+/* TODO: Move to a separate file */
+/* Sidebar-specific drag handle styles */
+.conversation-sidebar .chud-participant {
+  position: relative;
+}
+
+.conversation-sidebar .chud-drag-handle {
+  color: var(--color-text-light-6);
+  cursor: grab;
+  font-size: 12px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  margin-right: 6px;
+}
+
+.conversation-sidebar .chud-participant:hover .chud-drag-handle {
+  opacity: 1;
+}
+
+.conversation-sidebar .chud-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Ensure sidebar drag indicators are visible */
+.conversation-sidebar .drag-drop-indicator {
+  width: 100% !important;
+  margin-left: 0 !important;
+  left: 0 !important;
+  background-color: var(--color-warm-2);
+}
 /* #endregion */

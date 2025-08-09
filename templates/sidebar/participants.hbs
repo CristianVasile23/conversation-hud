@@ -5,11 +5,17 @@
         {{#if (and participants.length (or (isGm) isVisible))}}
           <div class="gm-controlled-participants-list">
             {{#each participants as |participant index|}}
-              {{> "modules/conversation-hud/templates/sidebar/participant.hbs"
-                index=index
-                participant=participant
-                activeParticipantIndex=../activeParticipantIndex
-              }}
+              <div class="participant-drag-drop-container">
+                <div class="drag-drop-indicator drag-drop-indicator-top"></div>
+                
+                {{> "modules/conversation-hud/templates/sidebar/participant.hbs"
+                  index=index
+                  participant=participant
+                  activeParticipantIndex=../activeParticipantIndex
+                }}
+                
+                <div class="drag-drop-indicator drag-drop-indicator-bottom"></div>
+              </div>
             {{/each}}
           </div>
         {{else}}

@@ -1,8 +1,21 @@
 /**
  * [TODO: Add JSDoc]
  */
-export function getDragAndDropIndex(event, targetIndex, oldIndex) {
-  let bounding = event.target.getBoundingClientRect();
+export function getDragAndDropIndex(event, targetIndex, oldIndex, targetElement = null) {
+  // Use the provided targetElement, or find it by traversing up from event.target
+  if (!targetElement) {
+    targetElement = event.target;
+    while (targetElement && !targetElement.classList.contains('participant-drag-drop-container')) {
+      targetElement = targetElement.parentElement;
+    }
+    
+    if (!targetElement) {
+      // Fallback to the original behavior if we can't find the container
+      targetElement = event.target;
+    }
+  }
+  
+  let bounding = targetElement.getBoundingClientRect();
   let offset = bounding.y + bounding.height / 2;
 
   // Get the new index of the dropped element

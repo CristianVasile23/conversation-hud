@@ -1,4 +1,5 @@
 import { ConversationEvents } from "../constants/events.js";
+import { showDragAndDropIndicator, hideDragAndDropIndicator, getDragAndDropIndex } from "../helpers/index.js";
 
 const { AbstractSidebarTab } = foundry.applications.sidebar;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -59,6 +60,85 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
   _onConversationUpdate() {
     if (this.rendered) {
       this.render(false);
+    }
+  }
+
+  _onRender(context, options) {
+    super._onRender?.(context, options);
+
+    // Only add drag and drop for GMs on GM-controlled conversations
+    if (!game.user.isGM || !context.isActive || context.conversationType !== "gm-controlled") {
+      return;
+    }
+
+    this.#addDragAndDropListeners();
+  }
+
+  #addDragAndDropListeners() {
+    const html = this.element;
+    const participantsObject = html.querySelector(".gm-controlled-participants-list");
+
+    if (!participantsObject) return;
+
+    const participantContainers = participantsObject.children; // These are the participant-drag-drop-container elements
+
+    for (let i = 0; i < participantContainers.length; i++) {
+      const dragDropContainer = participantContainers[i];
+      const participantElement = dragDropContainer.querySelector(".chud-participant");
+
+      if (!participantElement) continue;
+
+      // Make the participant draggable
+      participantElement.draggable = true;
+
+      participantElement.ondragstart = (event) => {
+        event.dataTransfer.setDragImage(participantElement, 0, 0);
+        event.dataTransfer.setData(
+          "text/plain",
+          JSON.stringify({
+            index: i,
+            type: "ConversationParticipant",
+          })
+        );
+      };
+
+      // Attach drag events to the drag-drop-container
+      dragDropContainer.ondragover = (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        showDragAndDropIndicator(dragDropContainer, event);
+      };
+
+      dragDropContainer.ondragleave = (event) => {
+        // Only hide indicators if we're actually leaving the container
+        if (!dragDropContainer.contains(event.relatedTarget)) {
+          hideDragAndDropIndicator(dragDropContainer);
+        }
+      };
+
+      dragDropContainer.ondrop = (event) => {
+        event.preventDefault();
+        const data = JSON.parse(event.dataTransfer.getData("text/plain"));
+
+        if (data && data.type === "ConversationParticipant") {
+          hideDragAndDropIndicator(dragDropContainer);
+
+          const oldIndex = data.index;
+          const newIndex = getDragAndDropIndex(event, i, oldIndex, dragDropContainer);
+
+          // Don't do anything if dropped on the same spot
+          if (oldIndex === newIndex) {
+            return;
+          }
+
+          // Execute the reorder function
+          game.ConversationHud.executeFunction({
+            scope: "everyone",
+            type: "reorder-participants",
+            data: { oldIndex, newIndex },
+          });
+        }
+      };
     }
   }
 

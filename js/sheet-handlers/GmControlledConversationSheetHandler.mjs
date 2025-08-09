@@ -132,11 +132,16 @@ export class GmControlledConversationSheetHandler {
         };
 
         conversationParticipants[i].ondragover = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
           showDragAndDropIndicator(conversationParticipants[i], event);
         };
 
         conversationParticipants[i].ondragleave = (event) => {
-          hideDragAndDropIndicator(conversationParticipants[i]);
+          // Only hide indicators if we're actually leaving the participant container
+          if (!conversationParticipants[i].contains(event.relatedTarget)) {
+            hideDragAndDropIndicator(conversationParticipants[i]);
+          }
         };
 
         conversationParticipants[i].ondrop = (event) => {
@@ -153,7 +158,7 @@ export class GmControlledConversationSheetHandler {
             }
 
             // Get the new index of the dropped element
-            let newIndex = getDragAndDropIndex(event, i, oldIndex);
+            let newIndex = getDragAndDropIndex(event, i, oldIndex, conversationParticipants[i]);
 
             // Reorder the array
             moveInArray(this.#conversation.data.participants, oldIndex, newIndex);

@@ -220,6 +220,9 @@ export class GmControlledConversation {
       case "change-active-participant":
         this.#changeActiveParticipant(functionData.data);
         break;
+      case "reorder-participants":
+        this.#reorderParticipants(functionData.data);
+        break;
       case "toggle-minimize":
         this.#toggleMinimize();
         break;
@@ -482,6 +485,63 @@ export class GmControlledConversation {
     this.#currentActiveParticipant = index;
     this.#updateActiveParticipantImage(index);
     this.#emitUpdate();
+  }
+
+  /**
+   * Reorders participants in the conversation
+   *
+   * @param {Object} data - Contains oldIndex and newIndex
+   */
+  #reorderParticipants(data) {
+    if (!checkIfUserIsGM()) {
+      // TODO: Log error in console
+      return;
+    }
+
+    const { oldIndex, newIndex } = data;
+
+    // Validate indices
+    if (
+      oldIndex < 0 ||
+      newIndex < 0 ||
+      oldIndex >= this.#conversationData.conversation.data.participants.length ||
+      newIndex >= this.#conversationData.conversation.data.participants.length
+    ) {
+      // TODO: Better logging
+      console.error("ConversationHUD | Invalid indices for participant reordering");
+      return;
+    }
+
+    // Don't do anything if indices are the same
+    if (oldIndex === newIndex) {
+      return;
+    }
+
+    // Reorder the participants array
+    moveInArray(this.#conversationData.conversation.data.participants, oldIndex, newIndex);
+
+    // Update active participant index if necessary
+    if (this.#currentActiveParticipant === oldIndex) {
+      this.#currentActiveParticipant = newIndex;
+    } else {
+      if (this.#currentActiveParticipant > oldIndex && this.#currentActiveParticipant <= newIndex) {
+        this.#currentActiveParticipant -= 1;
+      } else if (this.#currentActiveParticipant < oldIndex && this.#currentActiveParticipant >= newIndex) {
+        this.#currentActiveParticipant += 1;
+      }
+    }
+
+    // Update the conversation for all connected players
+    game.ConversationHud.executeFunction({
+      scope: "everyone",
+      type: "update-conversation",
+      data: {
+        ...this.#conversationData,
+      },
+      options: {
+        setCurrentActiveParticipant: this.#currentActiveParticipant,
+      },
+    });
   }
 
   /**

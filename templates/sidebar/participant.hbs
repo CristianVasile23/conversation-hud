@@ -5,6 +5,12 @@
     onclick='game.ConversationHud.executeFunction({{{json (object scope="everyone" type="change-active-participant" data=(object index=index))}}})'
   {{/if}}
 >
+  {{#if (isGm)}}
+    <div class="chud-drag-handle">
+      <i class="fa-solid fa-arrows-up-down-left-right"></i>
+    </div>
+  {{/if}}
+  
   <div class="chud-portrait-wrapper">
     {{{renderParticipantPortrait
       participant.img

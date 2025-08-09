@@ -58,11 +58,16 @@ export function activateConversationParticipantsListListeners(props) {
     };
 
     participant.ondragover = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       showDragAndDropIndicator(participant, event);
     };
 
-    participant.ondragleave = () => {
-      hideDragAndDropIndicator(participant);
+    participant.ondragleave = (event) => {
+      // Only hide indicators if we're actually leaving the participant container
+      if (!participant.contains(event.relatedTarget)) {
+        hideDragAndDropIndicator(participant);
+      }
     };
 
     participant.ondrop = (event) => {
@@ -79,7 +84,7 @@ export function activateConversationParticipantsListListeners(props) {
         }
 
         // Get the new index of the dropped element
-        let newIndex = getDragAndDropIndex(event, index, oldIndex);
+        let newIndex = getDragAndDropIndex(event, index, oldIndex, participant);
 
         handleDrop(oldIndex, newIndex);
       } else {

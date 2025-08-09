@@ -185,11 +185,15 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
         // Attach drag events to the drag-drop-container (which contains the indicators)
         dragDropContainer.ondragover = (event) => {
           event.preventDefault();
+          event.stopPropagation();
           showDragAndDropIndicator(dragDropContainer, event);
         };
 
-        dragDropContainer.ondragleave = () => {
-          hideDragAndDropIndicator(dragDropContainer);
+        dragDropContainer.ondragleave = (event) => {
+          // Only hide indicators if we're actually leaving the container
+          if (!dragDropContainer.contains(event.relatedTarget)) {
+            hideDragAndDropIndicator(dragDropContainer);
+          }
         };
 
         dragDropContainer.ondrop = (event) => {
@@ -206,7 +210,7 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
             }
 
             // Get the new index of the dropped element
-            let newIndex = getDragAndDropIndex(event, i, oldIndex);
+            let newIndex = getDragAndDropIndex(event, i, oldIndex, dragDropContainer);
 
             // Reorder the array
             moveInArray(this.participants, oldIndex, newIndex);
