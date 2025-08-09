@@ -1,20 +1,19 @@
 {
   "id": "conversation-hud",
   "title": "ConversationHUD",
-  "name": "conversation-hud",
-  "description": "A simple module that adds a nice HUD that display the portraits of all the characters present in a conversation.",
+  "description": "<p>A simple module that adds a nice HUD that display the portraits of all the characters present in a conversation.</p>",
   "version": "#{VERSION}#",
-  "library": "false",
   "compatibility": {
-    "minimum": 13,
-    "verified": 13,
-    "maximum": 13
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
   },
   "authors": [
     {
       "name": "Saervicus (Cristian Vasile)",
       "discord": "Saervicus#7305",
-      "url": "https://github.com/CristianVasile23"
+      "url": "https://github.com/CristianVasile23",
+      "flags": {}
     }
   ],
   "relationships": {
@@ -34,21 +33,35 @@
           "minimum": "1.0.10",
           "verified": "1.0.13"
         }
+      },
+      {
+        "id": "lib-dfreds-ui-extender",
+        "type": "module",
+        "compatibility": {}
       }
     ]
   },
   "esmodules": ["js/init.js"],
-  "styles": ["css/main.css", "font/font.css"],
+  "styles": [
+    {
+      "src": "css/main.css"
+    },
+    {
+      "src": "font/font.css"
+    }
+  ],
   "languages": [
     {
       "lang": "en",
       "name": "English",
-      "path": "lang/en.json"
+      "path": "lang/en.json",
+      "flags": {}
     },
     {
       "lang": "fr",
       "name": "Français",
-      "path": "lang/fr.json"
+      "path": "lang/fr.json",
+      "flags": {}
     }
   ],
   "socket": true,
@@ -70,5 +83,6 @@
       "loop": false,
       "flags": {}
     }
-  ]
+  ],
+  "flags": {}
 }
