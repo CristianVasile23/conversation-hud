@@ -127,6 +127,11 @@ export class GmControlledConversation {
       }
     }
 
+    // Check setting to clear active participant when visibility is turned off
+    if (!isVisible && game.settings.get(MODULE_NAME, ModuleSettings.clearActiveParticipantOnVisibilityChange)) {
+      this.#setActiveParticipant(-1);
+    }
+
     this.#renderOrUpdateControls();
   }
 

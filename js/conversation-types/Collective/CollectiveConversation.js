@@ -124,6 +124,21 @@ export class CollectiveConversation {
         conversationBackground.classList.remove("visible");
       }
     }
+
+    // TODO: Decide if this should be done for collective conversations also
+    // Check setting to clear active participants when visibility is turned off
+    // if (!isVisible && game.settings.get(MODULE_NAME, ModuleSettings.clearActiveParticipantOnVisibilityChange)) {
+    //   // Clear active participants for all participating users
+    //   for (const [userID] of this.#participatingUsersActiveParticipantMap) {
+    //     this.#participatingUsersActiveParticipantMap.set(userID, -1);
+    //     this.#updateActiveParticipantImage(userID, -1);
+    //   }
+    //   // Update participants list for current user if they're participating
+    //   if (this.#participatingUsersActiveParticipantMap.has(game.user.id)) {
+    //     this.#updateParticipantsList(-1);
+    //   }
+    // }
+
     this.#updateConversationControls();
   }
 
