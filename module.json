@@ -84,5 +84,18 @@
       "flags": {}
     }
   ],
-  "flags": {}
+  "packs": [
+    {
+      "name": "chud-macro-compendium",
+      "label": "ConversationHUD Macros",
+      "path": "packs/chud-macro-compendium",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "NONE",
+        "TRUSTED": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "system": "dnd5e"
+    }
+  ]
 }

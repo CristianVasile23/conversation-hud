@@ -1,3 +1,8 @@
+## 6.0.0b
+
+- Updated core logic for FoundryVTT V13 and migrated all UI elements to ApplicationV2.
+- More exstensive changelog coming soon.
+
 ## 5.6.3
 
 - Fixed an issue that displayed the Insufficient Rights error message to players.

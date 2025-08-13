@@ -1,2 +1,6 @@
 .vscode
 packs/macros
+packs/*
+!packs/*/*.ldb
+!packs/*/MANIFEST*
+!packs/*/*.log

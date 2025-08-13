@@ -301,8 +301,8 @@ export class GmControlledConversation {
 
       conversationHud.innerHTML = template;
 
-      // TODO: Activate drag and drop listeners
-      // this.#addDragAndDropListeners(conversationHud);
+      // Activate drag and drop listeners
+      this.#addDragAndDropListeners(conversationHud);
 
       const activeParticipant = options?.setDefaultParticipant
         ? conversationData.conversation.data.defaultActiveParticipant
@@ -780,8 +780,8 @@ export class GmControlledConversation {
 
       conversationHud.innerHTML = htmlContent;
 
-      // TODO: Activate drag and drop listened
-      // this.#addDragAndDropListeners(conversationHud);
+      // Activate drag and drop listeners
+      this.#addDragAndDropListeners(conversationHud);
     }
   }
 
