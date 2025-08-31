@@ -1,6 +1,6 @@
 import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.mjs";
 import {
-  convertActorToParticipant,
+  convertTokenToParticipant,
   getConversationDataFromJournalId,
   processParticipantData,
 } from "../helpers/index.js";
@@ -36,29 +36,31 @@ export class PullParticipantsFromSceneForm extends HandlebarsApplicationMixin(Ap
     let participants = [];
 
     filteredTokens.forEach((token) => {
-      const actor = token.actor;
+      if (!token) {
+        // TODO: Improve logging
+        console.warn("ConversationHUD | Skipping null token in PullParticipantsFromSceneForm");
+        return;
+      }
+
       const linkedConversation = token["flags"]["conversation-hud"]?.linkedConversation;
 
       // Create a participant object that is used to display data inside the form
       const participant = {
-        name: token.name,
-        img: actor.img,
+        name: token.name || "Unknown Token",
         id: token.id,
         actorId: token.actorId,
         checked: token.hidden ? false : true,
-        hidden: token.hidden,
-        type: undefined,
-        data: undefined,
+        hidden: token.hidden || false,
       };
 
       // Determine if the actor has a conversation linked or not
-      // If not, create a conversation participant object which can be edited
       if (linkedConversation) {
         participant.type = "conversation";
         participant.data = linkedConversation;
+        participant.img = token.texture?.src || token.img;
       } else {
         participant.type = "participant";
-        participant.data = convertActorToParticipant(actor);
+        participant.data = convertTokenToParticipant(token);
         if (participant.hidden) {
           participant.data.displayName = false;
         }
@@ -159,13 +161,7 @@ export class PullParticipantsFromSceneForm extends HandlebarsApplicationMixin(Ap
   /*  Handlers                                    */
   /* -------------------------------------------- */
 
-  /**
-   *
-   * @param {*} event
-   * @param {*} form
-   * @param {*} formData
-   */
-  static async #handleSubmit(event, form, formData) {
+  static async #handleSubmit() {
     const selectedParticipants = [];
     for (const participant of this.participants) {
       if (participant.checked) {
