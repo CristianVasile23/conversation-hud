@@ -1,5 +1,15 @@
+/// <reference path="../types/MigrationData.js" />
+
 import { MODULE_NAME } from "../constants/index.js";
 
+/**
+ * Scans all journals in the world to find conversations that need migration from old formats.
+ * Supports two legacy formats:
+ * - Format 1: Array of participants
+ * - Format 2: Object with participants array and additional properties
+ *
+ * @returns {Record<string, MigrationData>} An object mapping journal IDs to their migration data
+ */
 export function getConversationsToMigrate() {
   const DEFAULT_PARTICIPANT = {
     name: "Anonymous",
@@ -116,6 +126,12 @@ export function getConversationsToMigrate() {
   return migrated;
 }
 
+/**
+ * Scans all journals in the world to find factions that need migration from the old sheet class format.
+ * Identifies journals using the legacy "conversation-faction-sheet.ConversationFactionSheet" sheet class.
+ *
+ * @returns {Record<string, MigrationData>} An object mapping journal IDs to their migration data
+ */
 export function getFactionsToMigrate() {
   const migrated = {};
 
@@ -148,6 +164,13 @@ export function getFactionsToMigrate() {
   return migrated;
 }
 
+/**
+ * Migrates all conversations from old formats to the new format.
+ * Updates journal pages with the new data structure and sets appropriate flags.
+ * Shows notifications for successful migrations and logs errors for failures.
+ *
+ * @returns {Promise<string[]>} A promise that resolves to an array of journal names that failed to migrate
+ */
 export async function migrateConversations() {
   const migratedData = getConversationsToMigrate();
   const failedMigrations = [];
@@ -197,6 +220,13 @@ export async function migrateConversations() {
   return failedMigrations;
 }
 
+/**
+ * Migrates all factions from the old sheet class format to the new format.
+ * Updates journal pages with the new data structure and sets appropriate flags.
+ * Shows notifications for successful migrations and logs errors for failures.
+ *
+ * @returns {Promise<string[]>} A promise that resolves to an array of journal names that failed to migrate
+ */
 export async function migrateFactions() {
   const migratedData = getFactionsToMigrate();
   const failedMigrations = [];
