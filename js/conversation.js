@@ -8,11 +8,24 @@ import { ConversationTypes, MODULE_NAME, SHEET_CLASSES } from "./constants/index
 import { CollectiveConversation, GmControlledConversation } from "./conversation-types/index.js";
 import { ConversationEvents } from "./constants/events.js";
 
+/**
+ * Main conversation HUD class that manages conversation lifecycle and UI interactions.
+ * Extends EventTarget to provide custom event handling capabilities.
+ */
 export class ConversationHud extends EventTarget {
+  /** @type {boolean} Whether a conversation is currently active */
   conversationIsActive = false;
+
+  /** @type {boolean} Whether the conversation UI is visible to users */
   conversationIsVisible = false;
+
+  /** @type {CollectiveConversation|GmControlledConversation|undefined} The currently active conversation instance */
   activeConversation = undefined;
 
+  /**
+   * Initializes the ConversationHud instance and registers socket functions.
+   * @constructor
+   */
   constructor() {
     super();
 
@@ -21,7 +34,9 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * Function that registers all socket functions that are used by CHUD.
+   * Registers all socket functions that are used by CHUD for cross-client communication.
+   * If the socket is not yet initialized, it will retry after 250ms.
+   * @returns {void}
    */
   registerSocketFunctions() {
     // Wait for the socket to be initialized (if it hasn't been already)
@@ -39,10 +54,11 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * Function that creates and displays the ConversationHUD UI
-   *
-   * @param {{ conversationData: GMControlledConversationData; currentState: any; }} conversation TODO
-   * @param {boolean} conversationIsVisible TODO
+   * Creates and displays the ConversationHUD UI based on the provided conversation data.
+   * Instantiates the appropriate conversation type (GM Controlled or Collective) and initializes the UI.
+   * @param {{conversationData: GMControlledConversationData|CollectiveConversationData, currentState: any}} conversation - The conversation data and current state
+   * @param {boolean} conversationIsVisible - Whether the conversation should be visible to users
+   * @returns {Promise<void>}
    */
   async createConversation(conversation, conversationIsVisible) {
     // Set conversation data
@@ -81,16 +97,15 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * Function that gets the data of the currently active conversation
-   *
+   * Retrieves the data of the currently active conversation including its visibility state.
    * @returns {{
-   *  conversationIsActive: boolean;
-   *  conversationIsVisible: boolean;
-   *  activeConversation: {
-   *    conversationData: GMControlledConversationData | undefined;
-   *    currentState: any;
-   *  };
-   * }}
+   *   conversationIsActive: boolean,
+   *   conversationIsVisible: boolean,
+   *   activeConversation: {
+   *     conversationData: GMControlledConversationData|CollectiveConversationData,
+   *     currentState: any
+   *   }|undefined
+   * }} The current conversation state and data
    */
   getConversation() {
     const dataToReturn = {
@@ -112,7 +127,9 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * TODO: Add JSDoc
+   * Removes the currently active conversation and cleans up the UI.
+   * Resets all conversation state variables and triggers the conversation removed event.
+   * @returns {Promise<void>}
    */
   async removeConversation() {
     game.ConversationHud.conversationIsActive = false;
@@ -126,7 +143,8 @@ export class ConversationHud extends EventTarget {
   // Function that saves the active conversation to a journal entry
 
   /**
-   *
+   * Saves the currently active conversation to a journal entry.
+   * Only accessible to GM users. Prompts for a name and folder location.
    * @returns {Promise<void>}
    */
   async saveActiveConversation() {
@@ -166,10 +184,12 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * TODO: Add JSDoc
-   *
-   * @param {*} conversationData
-   * @param {*} visibility
+   * Starts a conversation from provided conversation data.
+   * If a conversation is already active, it updates the existing one; otherwise creates a new one.
+   * Only accessible to GM users.
+   * @param {{conversationData: GMControlledConversationData|CollectiveConversationData}} data - The conversation data to start from
+   * @param {boolean} [visibility] - Whether the conversation should be visible (optional, defaults to current visibility state)
+   * @returns {void}
    */
   startConversationFromData(data, visibility) {
     if (!checkIfUserIsGM()) {
@@ -200,10 +220,11 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * TODO: Add JSDoc
-   *
-   * @param {*} journalId
-   * @param {*} startwithVisibilityOff
+   * Starts a conversation from a journal entry ID by extracting the conversation data.
+   * If a conversation is already active, it updates the existing one; otherwise creates a new one.
+   * @param {string} journalId - The ID of the journal entry containing conversation data
+   * @param {boolean} [startwithVisibilityOff=false] - Whether to start with visibility turned off
+   * @returns {void}
    */
   startConversationFromJournalId(journalId, startwithVisibilityOff = false) {
     const conversationData = getConversationDataFromJournalId(journalId);
@@ -227,6 +248,15 @@ export class ConversationHud extends EventTarget {
     }
   }
 
+  /**
+   * Handles saving the current conversation to a journal entry with the provided form data.
+   * Creates a new journal entry with appropriate permissions and flags.
+   * @private
+   * @param {Object} data - The form data containing name and folder information
+   * @param {string} data.name - The name for the new journal entry
+   * @param {string} data.folder - The folder ID to save the journal entry in
+   * @returns {Promise<void>}
+   */
   async #handleSaveConversation(data) {
     const permissions = {};
     game.users?.forEach((u) => (permissions[u.id] = game.user?.id === u.id ? 3 : 0));
@@ -265,9 +295,10 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * Function that either triggers the conversation creation form, or removes the active conversation
-   *
-   * @param {boolean} shouldCreateConversation
+   * Handles the conversation toggle action - either creates a new conversation or removes the active one.
+   * Only accessible to GM users. Shows appropriate notifications for various states.
+   * @param {boolean} shouldCreateConversation - Whether to create a conversation (true) or remove it (false)
+   * @returns {Promise<void>}
    */
   async onToggleConversation(shouldCreateConversation) {
     if (checkIfUserIsGM()) {
@@ -289,7 +320,9 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * Function that handles conversation being closed
+   * Closes the currently active conversation after getting user confirmation.
+   * Prompts the user to confirm the action before proceeding.
+   * @returns {Promise<void>}
    */
   async closeActiveConversation() {
     const confirmed = await getConfirmationFromUser("CHUD.dialogue.onCloseActiveConversation");
@@ -299,24 +332,29 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * TODO
-   *
-   * @param {*} formData
+   * Creates a conversation from the provided form data.
+   * This is a public wrapper for the private conversation creation handler.
+   * @param {GMControlledConversationData|CollectiveConversationData} formData - The conversation data from form input
+   * @returns {void}
    */
   createConversationFromData(formData) {
     this.#handleCreateConversationFromData(formData);
   }
 
   /**
-   * TODO: Finish JSDoc
+   * Toggles the visibility state of the current conversation for all connected users.
+   * Sends the toggle command to all clients via socket communication.
+   * @returns {void}
    */
   toggleConversationVisibility() {
     socket.executeForEveryone("setConversationVisibility", !this.conversationIsVisible);
   }
 
   /**
-   *
-   * @param {boolean} isVisible
+   * Sets the visibility state of the current conversation and updates the UI accordingly.
+   * Triggers the conversation updated event after changing visibility.
+   * @param {boolean} isVisible - Whether the conversation should be visible
+   * @returns {void}
    */
   setConversationVisibility(isVisible) {
     // TODO: Check for an active conversation
@@ -327,9 +365,10 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * Function that receives a journal ID and renders the referenced journal sheet in a separate tab
-   *
-   * @param {string} journalId
+   * Renders a journal sheet in a separate tab based on the provided journal ID.
+   * Shows an error notification if the journal entry is not found.
+   * @param {string} journalId - The ID of the journal entry to render
+   * @returns {void}
    */
   renderJournalSheet(journalId) {
     let journal = game.journal.get(journalId);
@@ -341,9 +380,10 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   * Function that receives am actor ID and renders the referenced actor sheet in a separate tab
-   *
-   * @param {string} actorId
+   * Renders an actor sheet in a separate tab based on the provided actor ID.
+   * Shows an error notification if the actor is not found.
+   * @param {string} actorId - The ID of the actor to render
+   * @returns {Promise<void>}
    */
   async renderActorSheet(actorId) {
     let actor = game.actors.get(actorId);
@@ -355,8 +395,10 @@ export class ConversationHud extends EventTarget {
   }
 
   /**
-   *
-   * @param {{scope: string, type: string, data: any}} functionData
+   * Executes a function on the active conversation with the specified scope.
+   * Supports local execution, all users, or all GMs based on the scope parameter.
+   * @param {{scope: 'local'|'everyone'|'all-gms', type: string, data: any, options?: any}} functionData - The function execution data
+   * @returns {void}
    */
   executeFunction(functionData) {
     // TODO: Check if there is an active conversation
@@ -376,17 +418,28 @@ export class ConversationHud extends EventTarget {
     }
   }
 
+  /**
+   * Helper function that executes a function on the active conversation locally.
+   * This is used internally by the socket system to execute functions received from other clients.
+   * @private
+   * @param {{type: string, data: any, options?: any}} functionData - The function execution data
+   * @returns {void}
+   */
   #executeFunctionHelper(functionData) {
     game.ConversationHud.activeConversation.executeFunction(functionData);
   }
 
   /**
-   * Function that parses conversation input form data and then activates the conversation hud
-   *
-   * @param {GMControlledConversationData} conversationData
-   * @param {boolean} visibility
+   * Handles the creation of a conversation from the provided data and visibility settings.
+   * Ensures no other conversation is active before creating a new one.
+   * Sends the conversation creation command to all connected clients.
+   * @private
+   * @param {GMControlledConversationData|CollectiveConversationData} conversationData - The conversation data to create from
+   * @param {boolean} [visibility=true] - Whether the conversation should be visible initially
+   * @param {Object} [options] - Additional options for conversation creation
+   * @returns {void}
    */
-  #handleCreateConversationFromData(conversationData, visibility = true) {
+  #handleCreateConversationFromData(conversationData, visibility = true, options) {
     // This function should only be called when there is no other conversation active
     // TODO: Maybe rework this feature so that if there is a conversation active, a dialogue prompt appears
     if (game.ConversationHud.conversationIsActive) {
@@ -401,7 +454,7 @@ export class ConversationHud extends EventTarget {
 
     const conversation = {
       conversationData: conversationData,
-      currentState: undefined,
+      currentState: options,
     };
 
     socket.executeForEveryone("createConversation", conversation, visibility);
