@@ -202,11 +202,10 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
 
         if (this.selectedFaction) {
           const factionData = getConversationDataFromJournalId(this.selectedFaction);
-          if (factionData) {
+
+          if (factionData && factionData.faction) {
             selectedFactionData = factionData.faction;
             this.factionBannerShape = factionData.faction.factionBannerShape;
-          } else {
-            // TODO: Log a warning or error
           }
         }
 
@@ -250,6 +249,12 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
     participantImgHorizontalAnchorInput.addEventListener("change", (event) =>
       this.onUpdateParticipantImgAnchor(event, "horizontal")
     );
+
+    const linkedJournalInput = html.querySelector("[name=linkedJournal]");
+    linkedJournalInput.addEventListener("change", (event) => this.onUpdateLinkedJournal(event));
+
+    const linkedActorInput = html.querySelector("[name=linkedActor]");
+    linkedActorInput.addEventListener("change", (event) => this.onUpdateLinkedActor(event));
 
     // Listeners in the faction form
     const selectedFaction = html.querySelector("[name=selectedFaction]");
@@ -418,6 +423,18 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
     if (!event.target) return;
 
     this.portraitAnchor[type] = event.target.value;
+  }
+
+  onUpdateLinkedJournal(event) {
+    if (!event.target) return;
+
+    this.linkedJournal = event.target.value;
+  }
+
+  onUpdateLinkedActor(event) {
+    if (!event.target) return;
+
+    this.linkedActor = event.target.value;
   }
 
   onChangeSelectedFaction(event) {

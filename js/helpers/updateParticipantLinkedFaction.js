@@ -3,18 +3,22 @@
 import { getConversationDataFromJournalId } from "./getConversationDataFromJournalId.js";
 
 /**
- * [TODO: Complete JSDoc documentation]
+ * Updates a participant's faction data by fetching it from a linked faction journal.
+ * Preserves the displayFaction and selectedFaction values while updating other faction properties.
  *
- * @param {ParticipantData} participant
+ * @param {ParticipantData} participant - The participant whose faction data should be updated
+ * @returns {void}
  */
 export function updateParticipantLinkedFaction(participant) {
   if (participant.faction?.selectedFaction) {
     const factionData = getConversationDataFromJournalId(participant.faction.selectedFaction);
-    const selectedFactionData = factionData.faction;
-    participant.faction = {
-      ...selectedFactionData,
-      displayFaction: participant.faction.displayFaction,
-      selectedFaction: participant.faction.selectedFaction,
-    };
+
+    if (factionData?.faction) {
+      participant.faction = {
+        ...factionData.faction,
+        displayFaction: participant.faction.displayFaction,
+        selectedFaction: participant.faction.selectedFaction,
+      };
+    }
   }
 }
