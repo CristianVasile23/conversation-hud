@@ -1,4 +1,6 @@
 import { ConversationEvents } from "../constants/events.js";
+import { MODULE_NAME } from "../constants/index.js";
+import { ModuleSettings } from "../settings.js";
 import { showDragAndDropIndicator, hideDragAndDropIndicator, getDragAndDropIndex } from "../helpers/index.js";
 
 const { AbstractSidebarTab } = foundry.applications.sidebar;
@@ -47,6 +49,9 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
 
     const { conversationData, currentState } = game.ConversationHud.activeConversation?.getConversation() ?? {};
 
+    // TODO: Improve code used to display list, ideally should be a single variable and check for GM and settings should be here, template should only check one variable to determine if list is shown
+    const displayParticipantsToPlayers = game.settings.get(MODULE_NAME, ModuleSettings.displayAllParticipantsToPlayers);
+
     return {
       ...base,
       isActive: game.ConversationHud.conversationIsActive,
@@ -54,6 +59,7 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
       conversationType: conversationData?.type ?? null,
       participants: conversationData?.conversation.data.participants ?? [],
       activeParticipantIndex: currentState?.currentActiveParticipant ?? -1,
+      displayParticipantsToPlayers,
     };
   }
 

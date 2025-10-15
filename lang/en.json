@@ -62,6 +62,7 @@
     "currentParticipants": "Current Participants",
     "noActiveParticipant": "No active participant",
     "noParticipants": "No participants",
+    "participantsHidden": "Participants list is hidden",
     "noParticipantsInList": "Conversation has no participants. Try adding some. (Drag and drop is supported)",
 
     "conversationEntry": "Conversation Entry",
