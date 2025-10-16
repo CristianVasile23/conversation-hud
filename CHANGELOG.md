@@ -1,7 +1,28 @@
-## 6.0.0b
+## 6.0.0
 
-- Updated core logic for FoundryVTT V13 and migrated all UI elements to ApplicationV2.
-- More exstensive changelog coming soon.
+**Overview**  
+Version 6.0.0 of ConversationHUD brings a large rework of the codebase as well as support for ApplicationV2 and FoundryVTT v13. Many changes were necessary in order to update to FoundryVTT v13.
+Unfortunately, many of these changes were breaking changes which is why ConversationHUD version 6.0.0 will no longer support versions lower than v13. The macro API has also been changed so it is very likely that some of your macros might no longer work. For the other data (saved conversations and factions), I have created a migration script which will update all saved data to the new supported format.
+
+**Older saved conversations and factions will not work in version 6.0.0 without the migration.**
+
+Finally, version 13 introduced large changes to the Foundry UI. In order to make sure the module provides a smooth and intuitive user experience, some elements have been moved around or they have been replaced. The key changes are as follows:
+
+- The ConversationHUD button has been removed from the _Journal Notes_ tab and a new sidebar tab called _Conversation_ has been added. The new sidebar tab now contains most of the functionality related to ConversationHUD.
+- The participant list has been removed from the central display and it now resides inside the _Conversation_ tab.
+- Conversation controls are now placed above the macro hotbar.
+
+For a more comprehensive guide on how to create and manage a conversation with the new updated flow, please read [this guide](https://github.com/CristianVasile23/conversation-hud/wiki/Quick-Start).
+
+As always, if you have any issues or encounter any bugs, feel free to contact me or to raise an issue on GitHub.
+
+**Changes**
+
+- Updated core module logic for FoundryVTT V13 and migrated all UI elements to ApplicationV2.
+- Added support for different conversation types. Currently, only the classic GM controlled conversation type is enabled, but a new collective conversation type is in the works.
+- Added a new _Minimization lock_ feature. When turned on, all players will have the same minimization status as the GM.
+- Added support for wildcard tokens. If an actor token uses a wildcard for the token image, the conversation participant will now properly reflect the wildcard image that is used by the token.
+- Numerous small bug fixes and improvements (most caused by the rework and update to FoundryVTT v13).
 
 ## 5.6.3
 
@@ -17,7 +38,7 @@
 ## 5.6.1
 
 - Added setting for clearing the currently active participant whenever the conversation visibility is toggled off.
-- Fixed an issue that caused the conversation background change and background toggle to be reflected only on the client that trigger these changes.
+- Fixed an issue that caused the conversation background change and background toggle to be reflected only on the client that triggered these changes.
 
 ## 5.6.0
 
