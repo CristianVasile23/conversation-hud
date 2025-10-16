@@ -101,6 +101,12 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
 
     const html = this.element;
 
+    // Add event listener on the background file picker
+    const backgroundPicker = html.querySelector('file-picker[name="conversationBackground"]');
+    if (backgroundPicker) {
+      backgroundPicker.addEventListener("change", (event) => this.#handleChangeBackground(event));
+    }
+
     // Add event listener on the pull participants from scene button
     html.querySelector("#pull-participants-from-scene").addEventListener("click", () => {
       new PullParticipantsFromSceneForm((data) => {
@@ -356,5 +362,9 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
     }
 
     this.render(false);
+  }
+
+  #handleChangeBackground(event) {
+    this.conversationBackground = event.target.value || "";
   }
 }
