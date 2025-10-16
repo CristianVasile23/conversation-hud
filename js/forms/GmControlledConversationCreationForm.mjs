@@ -1,7 +1,7 @@
 /// <reference path="../types/GmControlledConversation/GmControlledConversation.js" />
 /// <reference path="../types/ConversationData.js" />
 
-import { ANCHOR_OPTIONS, ConversationTypes } from "../constants/index.js";
+import { ANCHOR_OPTIONS, ConversationTypes, DRAG_AND_DROP_DATA_TYPES } from "../constants/index.js";
 import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.mjs";
 import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.mjs";
 import {
@@ -172,7 +172,7 @@ export class GmControlledConversationCreationForm extends HandlebarsApplicationM
             "text/plain",
             JSON.stringify({
               index: i,
-              type: "ConversationParticipant",
+              type: DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant,
               participant: this.participants[i],
             })
           );

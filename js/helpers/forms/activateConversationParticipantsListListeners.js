@@ -1,3 +1,4 @@
+import { DRAG_AND_DROP_DATA_TYPES } from "../../constants/drag-and-drop.js";
 import { getDragAndDropIndex, hideDragAndDropIndicator, showDragAndDropIndicator } from "../index.js";
 
 /**
@@ -47,7 +48,7 @@ export function activateConversationParticipantsListListeners(props) {
         "text/plain",
         JSON.stringify({
           index,
-          type: "ConversationParticipant",
+          type: DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant,
           participant: getParticipantData(index),
         })
       );

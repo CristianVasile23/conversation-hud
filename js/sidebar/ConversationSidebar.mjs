@@ -1,7 +1,12 @@
 import { ConversationEvents } from "../constants/events.js";
-import { MODULE_NAME } from "../constants/index.js";
+import { DRAG_AND_DROP_DATA_TYPES, MODULE_NAME } from "../constants/index.js";
 import { ModuleSettings } from "../settings.js";
-import { showDragAndDropIndicator, hideDragAndDropIndicator, getDragAndDropIndex } from "../helpers/index.js";
+import {
+  showDragAndDropIndicator,
+  hideDragAndDropIndicator,
+  getDragAndDropIndex,
+  getActorDataFromDragEvent,
+} from "../helpers/index.js";
 
 const { AbstractSidebarTab } = foundry.applications.sidebar;
 const { HandlebarsApplicationMixin } = foundry.applications.api;
@@ -10,6 +15,10 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
   constructor(options = {}) {
     super(options);
     this.hud = game.ConversationHud;
+
+    // Drag and drop state
+    this.dropzoneVisible = false;
+    this.draggingParticipant = false;
 
     // Bind the update handler once so it can be correctly removed later
     this._boundOnUpdate = this._onConversationUpdate.bind(this);
@@ -78,6 +87,7 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
     }
 
     this.#addDragAndDropListeners();
+    this.#addDropzoneListener();
   }
 
   #addDragAndDropListeners() {
@@ -86,7 +96,11 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
 
     if (!participantsObject) return;
 
-    const participantContainers = participantsObject.children; // These are the participant-drag-drop-container elements
+    // Get participants data from the active conversation
+    const { conversationData } = game.ConversationHud.activeConversation?.getConversation() ?? {};
+    const participants = conversationData?.conversation.data.participants ?? [];
+
+    const participantContainers = participantsObject.children;
 
     for (let i = 0; i < participantContainers.length; i++) {
       const dragDropContainer = participantContainers[i];
@@ -98,14 +112,22 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
       participantElement.draggable = true;
 
       participantElement.ondragstart = (event) => {
+        this.draggingParticipant = true;
         event.dataTransfer.setDragImage(participantElement, 0, 0);
+
+        // Save the index of the dragged participant in the data transfer object
         event.dataTransfer.setData(
           "text/plain",
           JSON.stringify({
             index: i,
-            type: "ConversationParticipant",
+            type: DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant,
+            participant: participants[i],
           })
         );
+      };
+
+      participantElement.ondragend = () => {
+        this.draggingParticipant = false;
       };
 
       // Attach drag events to the drag-drop-container
@@ -126,9 +148,7 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
         event.preventDefault();
         const data = JSON.parse(event.dataTransfer.getData("text/plain"));
 
-        if (data && data.type === "ConversationParticipant") {
-          hideDragAndDropIndicator(dragDropContainer);
-
+        if (data && data.type === DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant) {
           const oldIndex = data.index;
           const newIndex = getDragAndDropIndex(event, i, oldIndex, dragDropContainer);
 
@@ -144,8 +164,61 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
             data: { oldIndex, newIndex },
           });
         }
+
+        hideDragAndDropIndicator(dragDropContainer);
+        this.draggingParticipant = false;
       };
     }
+  }
+
+  #addDropzoneListener() {
+    const html = this.element;
+    const dropzoneContainer = html.querySelector(".conversation-participants");
+
+    if (!dropzoneContainer) {
+      return;
+    }
+
+    dropzoneContainer.ondragenter = (event) => {
+      if (!this.draggingParticipant) {
+        this.dropzoneVisible = true;
+        dropzoneContainer.classList.add("active-dropzone");
+      }
+    };
+
+    dropzoneContainer.ondragleave = (event) => {
+      // Only hide if we're leaving the container entirely
+      if (this.dropzoneVisible && !dropzoneContainer.contains(event.relatedTarget)) {
+        this.dropzoneVisible = false;
+        dropzoneContainer.classList.remove("active-dropzone");
+      }
+    };
+
+    dropzoneContainer.ondragover = (event) => {
+      if (this.dropzoneVisible) {
+        event.preventDefault();
+      }
+    };
+
+    dropzoneContainer.ondrop = async (event) => {
+      if (this.dropzoneVisible) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const data = await getActorDataFromDragEvent(event);
+        if (data && data.length > 0) {
+          // Add participants to the active conversation
+          game.ConversationHud.executeFunction({
+            scope: "everyone",
+            type: "add-participants",
+            data: data,
+          });
+        }
+
+        this.dropzoneVisible = false;
+        dropzoneContainer.classList.remove("active-dropzone");
+      }
+    };
   }
 
   /** @override */

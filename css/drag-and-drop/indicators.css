@@ -32,7 +32,7 @@
 }
 
 .conversation-sidebar .chud-drag-handle {
-  color: var(--color-text-light-6);
+  color: var(--color-text-subtle);
   cursor: grab;
   font-size: 12px;
   opacity: 0.7;

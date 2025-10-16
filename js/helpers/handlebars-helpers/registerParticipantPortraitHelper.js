@@ -5,7 +5,7 @@ export function registerParticipantPortraitHelper() {
   const videoFormats = ["mpg", "mp2", "mpeg", "mpe", "mpv", "mp4"];
 
   Handlebars.registerHelper("renderParticipantPortrait", (portraitPath, additionalParams) => {
-    const isVideo = videoFormats.includes(portraitPath.split(".")[1]);
+    const isVideo = portraitPath ? videoFormats.includes(portraitPath.split(".")[1]) : false;
     let html;
 
     if (isVideo) {

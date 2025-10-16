@@ -1,49 +1,59 @@
-<div id="conversation-sidebar-content" class="conversation-participants">
-  {{#if isActive}}
-    {{#switch conversationType}}
-      {{#case "gm-controlled"}}
-        {{#if (or (isGm) (and isVisible displayParticipantsToPlayers))}}
-          {{#if participants.length}}
-            {{!-- Show participants list --}}
-            <div class="gm-controlled-participants-list">
-              {{#each participants as |participant index|}}
-                <div class="participant-drag-drop-container">
-                  <div class="drag-drop-indicator drag-drop-indicator-top"></div>
-                  
-                  {{> "modules/conversation-hud/templates/sidebar/participant.hbs"
-                    index=index
-                    participant=participant
-                    activeParticipantIndex=../activeParticipantIndex
-                  }}
-                  
-                  <div class="drag-drop-indicator drag-drop-indicator-bottom"></div>
-                </div>
-              {{/each}}
-            </div>
+<div style="display: flex; flex: 1; flex-direction: column; position: relative; overflow-y: auto;">
+  {{!-- Participants List --}}
+  <div id="conversation-sidebar-content" class="conversation-participants">
+    {{#if isActive}}
+      {{#switch conversationType}}
+        {{#case "gm-controlled"}}
+          {{#if (or (isGm) (and isVisible displayParticipantsToPlayers))}}
+            {{#if participants.length}}
+              {{!-- Show participants list --}}
+              <div class="gm-controlled-participants-list">
+                {{#each participants as |participant index|}}
+                  <div class="participant-drag-drop-container">
+                    <div class="drag-drop-indicator drag-drop-indicator-top"></div>
+                    
+                    {{> "modules/conversation-hud/templates/sidebar/participant.hbs"
+                      index=index
+                      participant=participant
+                      activeParticipantIndex=../activeParticipantIndex
+                    }}
+                    
+                    <div class="drag-drop-indicator drag-drop-indicator-bottom"></div>
+                  </div>
+                {{/each}}
+              </div>
+            {{else}}
+              {{!-- No participants exist --}}
+              <div class="chud-no-data-message">
+                <i class="fa fa-users-slash" aria-hidden="true"></i>
+                <p>{{localize "CHUD.strings.noParticipants"}}</p>
+              </div>
+            {{/if}}
           {{else}}
-            {{!-- No participants exist --}}
+            {{!-- Participants list is hidden from non-GMs --}}
             <div class="chud-no-data-message">
-              <i class="fa fa-users-slash" aria-hidden="true"></i>
-              <p>{{localize "CHUD.strings.noParticipants"}}</p>
+              <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+              <p>{{localize "CHUD.strings.participantsHidden"}}</p>
             </div>
           {{/if}}
-        {{else}}
-          {{!-- Participants list is hidden from non-GMs --}}
-          <div class="chud-no-data-message">
-            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
-            <p>{{localize "CHUD.strings.participantsHidden"}}</p>
-          </div>
-        {{/if}}
-      {{/case}}
+        {{/case}}
 
-      {{#default}}
-        <p>{{localize "CHUD.strings.unsupportedConversationType"}}: <code>{{conversationType}}</code></p>
-      {{/default}}
-    {{/switch}}
-  {{else}}
-    <div class="chud-no-data-message">
-      <i class="fa-solid fa-comment-slash" aria-hidden="true"></i>
-      <p>{{localize "CHUD.strings.noActiveConversation"}}</p>
+        {{#default}}
+          <p>{{localize "CHUD.strings.unsupportedConversationType"}}: <code>{{conversationType}}</code></p>
+        {{/default}}
+      {{/switch}}
+    {{else}}
+      <div class="chud-no-data-message">
+        <i class="fa-solid fa-comment-slash" aria-hidden="true"></i>
+        <p>{{localize "CHUD.strings.noActiveConversation"}}</p>
+      </div>
+    {{/if}}
+  </div>
+
+  {{!-- Dropzone overlay for drag and drop --}}
+  <div class="chud-dropzone-overlay">
+    <div class="chud-dropzone-message">
+      <p>{{localize "CHUD.strings.dropItem"}}</p>
     </div>
-  {{/if}}
+  </div>
 </div>
