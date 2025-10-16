@@ -1,0 +1,87 @@
+/* -------------------------------------------- */
+/*  Interface section                           */
+/* -------------------------------------------- */
+
+/* #region */
+#ui-conversation-hud {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: calc(var(--z-index-canvas) + 1);
+  pointer-events: none;
+
+  transition: transform 250ms ease;
+}
+
+#ui-conversation-hud.offset:not(.lg, .minm .chud-minimized) {
+  --offset: 0;
+  transform: translateX(var(--offset));
+}
+
+#ui-conversation-hud.min {
+  transform: translateX(-70px);
+}
+
+#ui-conversation-hud:not(.visible) {
+  display: none;
+}
+
+#ui-conversation-hud .chud-active-conversation-content {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+  margin: auto;
+  pointer-events: all;
+}
+/* #endregion */
+
+/* -------------------------------------------- */
+/*  Minimization section                           */
+/* -------------------------------------------- */
+
+/* #region */
+#ui-conversation-hud.chud-minimized {
+  top: unset;
+  bottom: 16px;
+  right: var(--chud-minimized-margin-right, 0px);
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-faction-display {
+  width: 84px;
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-faction-display .chud-faction-banner {
+  width: 82px;
+  height: 82px;
+}
+
+#ui-conversation-hud.chud-minimized
+  .chud-active-participant-content
+  .chud-faction-display
+  .chud-faction-banner
+  .chud-faction-logo {
+  max-width: 82px;
+  max-height: 82px;
+}
+
+#ui-conversation-hud.chud-minimized
+  .chud-active-participant-content
+  .chud-faction-display
+  .chud-faction-banner.chud-banner-enabled
+  .chud-faction-logo {
+  top: 14px;
+
+  max-width: 36px;
+  max-height: 36px;
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-faction-display .faction-name {
+  display: none;
+}
+
+#ui-conversation-hud.chud-minimized .chud-active-participant-content .chud-participant-display .no-participant-text {
+  font-size: 16px;
+}
+/* #endregion */

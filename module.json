@@ -1,12 +1,12 @@
 {
   "id": "conversation-hud",
   "title": "ConversationHUD",
-  "description": "A simple module that adds a nice HUD that display the portraits of all the characters present in a conversation.",
+  "description": "<p>A simple module that adds a nice HUD that display the portraits of all the characters present in a conversation.</p>",
   "version": "#{VERSION}#",
   "compatibility": {
-    "minimum": "10",
-    "verified": "12",
-    "maximum": "12"
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
   },
   "authors": [
     {
@@ -33,21 +33,21 @@
           "minimum": "1.0.10",
           "verified": "1.0.13"
         }
+      },
+      {
+        "id": "lib-dfreds-ui-extender",
+        "type": "module",
+        "compatibility": {}
       }
     ]
   },
-  "esmodules": ["js/init.js", "js/controls.js", "js/hooks.js"],
-  "styles": ["css/main.css"],
-  "packs": [
+  "esmodules": ["js/init.js"],
+  "styles": [
     {
-      "name": "conversation-hud-macro-pack",
-      "label": "ConversationHUD Macros",
-      "path": "packs/conversation-hud-macro-pack",
-      "type": "Macro",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
+      "src": "css/main.css"
+    },
+    {
+      "src": "font/font.css"
     }
   ],
   "languages": [
@@ -82,6 +82,20 @@
       "url": "https://raw.githubusercontent.com/CristianVasile23/conversation-hud/main/docs/icons/cover.jpg",
       "loop": false,
       "flags": {}
+    }
+  ],
+  "packs": [
+    {
+      "name": "chud-macro-compendium",
+      "label": "ConversationHUD Macros",
+      "path": "packs/chud-macro-compendium",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "NONE",
+        "TRUSTED": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      },
+      "system": "dnd5e"
     }
   ]
 }

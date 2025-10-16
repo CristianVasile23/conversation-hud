@@ -1,0 +1,8 @@
+.chud-conversation-participants-list .chud-participant .chud-drag-drop-handler {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+
+  margin-right: 10px;
+}

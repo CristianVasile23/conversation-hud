@@ -1,0 +1,208 @@
+/* -------------------------------------------- */
+/*  Theme                                       */
+/* -------------------------------------------- */
+
+/* #region */
+#interface.themed.theme-dark #ui-conversation-hud {
+  --active-participant-bg-color: rgba(11, 10, 19, 0.75);
+  --active-participant-border-color: var(--color-cool-4);
+  --text-color: var(--color-text-primary);
+}
+
+#interface.themed.theme-light #ui-conversation-hud {
+  --active-participant-bg-color: rgba(255, 255, 255, 0.35);
+  --active-participant-border-color: rgba(255, 255, 255, 0.8);
+  --text-color: var(--color-text-primary);
+}
+/* #endregion */
+
+/* -------------------------------------------- */
+/*  Active participant container                */
+/* -------------------------------------------- */
+
+/* #region */
+#ui-conversation-hud .chud-active-conversation-content .chud-active-participant-content {
+  display: flex;
+  flex-direction: row;
+}
+/* #endregion */
+
+/* -------------------------------------------- */
+/*  Active participant faction                  */
+/* -------------------------------------------- */
+
+/* #region */
+#ui-conversation-hud .chud-active-conversation-content .chud-faction-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  align-self: flex-start;
+
+  width: 168px;
+
+  margin-right: 10px;
+
+  background: var(--active-participant-bg-color);
+  border: 1px solid var(--active-participant-border-color);
+  border-radius: 5px;
+
+  overflow: hidden;
+}
+
+#ui-conversation-hud .chud-active-conversation-content .chud-faction-display.chud-disabled {
+  visibility: hidden;
+}
+
+#ui-conversation-hud .chud-active-conversation-content .chud-faction-display .chud-faction-banner {
+  width: 165px;
+  height: 165px;
+  position: relative;
+}
+
+#ui-conversation-hud .chud-active-conversation-content .chud-faction-display .chud-faction-banner.disabled {
+  visibility: hidden;
+}
+
+#ui-conversation-hud .chud-active-conversation-content .chud-faction-display .chud-faction-banner .chud-faction-logo {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  max-width: 165px;
+  max-height: 165px;
+
+  margin: auto;
+
+  border: 0;
+}
+
+#ui-conversation-hud
+  .chud-active-conversation-content
+  .chud-faction-display
+  .chud-faction-banner.chud-banner-enabled
+  .chud-faction-logo {
+  top: 30px;
+  bottom: unset;
+
+  max-width: 70px;
+  max-height: 70px;
+}
+
+#ui-conversation-hud
+  .chud-active-conversation-content
+  .chud-faction-display
+  .chud-faction-banner
+  .chud-faction-logo[src=""] {
+  display: none;
+}
+
+#ui-conversation-hud .chud-active-conversation-content .chud-faction-display .faction-name {
+  margin: 0;
+  width: 100%;
+
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  overflow: hidden;
+  white-space: nowrap;
+  font-size: 16px;
+  text-align: center;
+
+  color: var(--text-color);
+  text-overflow: ellipsis;
+  background: var(--active-participant-bg-color);
+  border-top: 1px solid var(--active-participant-border-color);
+  backdrop-filter: blur(4px);
+}
+/* #endregion */
+
+/* -------------------------------------------- */
+/*  Active participant display                  */
+/* -------------------------------------------- */
+
+/* ----- Container ----- */
+/* #region */
+#ui-conversation-hud .chud-active-conversation-content .chud-participant-display {
+  margin-right: 178px;
+}
+
+#ui-conversation-hud .chud-active-conversation-content .active-participant {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  background: var(--active-participant-bg-color);
+  border: 1px solid var(--active-participant-border-color);
+  border-radius: 5px;
+
+  overflow: hidden;
+}
+#ui-conversation-hud .chud-active-conversation-content .active-participant.hidden {
+  visibility: hidden;
+}
+/* #endregion */
+
+/* ----- Portrait ----- */
+/* #region */
+#ui-conversation-hud .chud-active-conversation-content .active-participant .portrait {
+  position: absolute;
+
+  height: 100%;
+  width: auto;
+  max-width: unset;
+
+  border: 0;
+}
+/* #endregion */
+
+/* ----- Name ----- */
+/* #region */
+#ui-conversation-hud .chud-active-conversation-content .active-participant .name {
+  position: absolute;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: 0;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  overflow: hidden;
+  white-space: nowrap;
+
+  font-size: 16px;
+  text-align: center;
+  color: var(--text-color);
+  text-overflow: ellipsis;
+
+  background: var(--active-participant-bg-color);
+  border-top: 1px solid var(--active-participant-border-color);
+  backdrop-filter: blur(4px);
+}
+/* #endregion */
+
+/* ----- No active participant message ----- */
+/* #region */
+#ui-conversation-hud .chud-active-conversation-content .no-participant-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 200px;
+  margin: 0;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: 36px;
+}
+/* #endregion */

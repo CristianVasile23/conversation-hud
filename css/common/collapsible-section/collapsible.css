@@ -1,0 +1,7 @@
+.chud-collapsible-content-wrapper {
+  overflow: hidden;
+}
+
+.chud-collapsible-content-wrapper.chud-collapsed > .chud-collapsible-content {
+  display: none;
+}

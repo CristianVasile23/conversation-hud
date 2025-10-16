@@ -1,0 +1,151 @@
+/* ----- General CSS ----- */
+/* #region */
+.chud-conversation-participants-list .chud-participant {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  padding: 5px;
+  height: 62px;
+}
+/* #endregion */
+
+/* ----- Active by default checkbox ----- */
+/* #region */
+.chud-conversation-participants-list .chud-checkbox#participant-active-by-default-checkbox {
+  margin-right: 20px;
+}
+/* #endregion */
+
+/* ----- Faction ----- */
+/* #region */
+.chud-conversation-participants-list .chud-faction-banner {
+  width: 40px;
+  height: 40px;
+  position: relative;
+}
+
+.chud-conversation-participants-list .chud-faction-banner.disabled > * {
+  visibility: hidden;
+}
+
+.chud-conversation-participants-list .chud-faction-banner .chud-faction-logo {
+  position: absolute;
+
+  border: 0;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  max-width: 40px;
+  max-height: 40px;
+
+  margin: auto;
+}
+.chud-conversation-participants-list .chud-faction-banner.chud-banner-enabled .chud-faction-logo {
+  top: 6px;
+  bottom: unset;
+  max-width: 16px;
+  max-height: 16px;
+}
+.chud-conversation-participants-list .chud-faction-banner .chud-faction-logo[src=""] {
+  display: none;
+}
+/* #endregion */
+
+/* ----- Portrait ----- */
+/* #region */
+.chud-conversation-participants-list .chud-portrait-wrapper {
+  height: 44px;
+  width: 44px;
+  margin-left: 15px;
+
+  border: 1px solid var(--color-border-dark);
+  border-radius: 3px;
+}
+
+.chud-conversation-participants-list .chud-portrait-wrapper > * {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+  border: 0;
+  border-radius: 0;
+}
+/* #endregion */
+
+/* ----- Text ----- */
+/* #region */
+.chud-conversation-participants-list .chud-text-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  margin-left: 10px;
+}
+
+.chud-conversation-participants-list .chud-text-wrapper .chud-name {
+  margin: 0;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}
+
+.chud-conversation-participants-list .chud-text-wrapper .chud-faction {
+  margin: 0;
+  font-style: italic;
+  font-size: 11px;
+  color: var(--color-text-secondary);
+}
+
+.chud-conversation-participants-list .chud-text-wrapper .chud-linked-objects {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  margin-top: 4px;
+
+  --button-size: 18px;
+  --button-text-color: var(--color-text-subtle);
+  font-size: var(--font-size-10);
+}
+
+.chud-conversation-participants-list .chud-text-wrapper .chud-linked-objects > p,
+.chud-conversation-participants-list .chud-text-wrapper .chud-linked-objects .chud-invalid-reference {
+  margin: 0;
+  font-size: var(--font-size-10);
+  color: var(--button-text-color);
+}
+
+.chud-conversation-participants-list .chud-text-wrapper .chud-linked-objects .chud-invalid-reference {
+  height: var(--button-size);
+  min-height: var(--button-size);
+  width: var(--button-size);
+  min-width: var(--button-size);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0.5;
+}
+
+.chud-conversation-participants-list .chud-text-wrapper .chud-linked-objects .inline-control {
+  --button-size: 18px;
+  font-size: var(--font-size-10);
+}
+/* #endregion */
+
+/* ----- Controls ----- */
+/* #region */
+.chud-conversation-participants-list .chud-participant-action-buttons {
+  display: flex;
+  flex-direction: row;
+  margin-left: auto;
+  gap: 4px;
+}
+
+.chud-conversation-participants-list .chud-participant-action-buttons .inline-control {
+  font-size: var(--font-size-12);
+  --button-text-color: var(--color-text-subtle);
+}
+/* #endregion */

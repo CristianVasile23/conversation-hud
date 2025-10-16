@@ -1,0 +1,98 @@
+<div
+  class="chud-participant {{#if (eq index activeParticipantIndex)}}chud-active{{/if}}"
+  {{#if (isGm)}}
+    draggable="true"
+    onclick='game.ConversationHud.executeFunction({{{json (object scope="everyone" type="change-active-participant" data=(object index=index))}}})'
+  {{/if}}
+>
+  {{#if (isGm)}}
+    <div class="chud-drag-handle">
+      <i class="fa-solid fa-arrows-up-down-left-right"></i>
+    </div>
+  {{/if}}
+  
+  <div class="chud-portrait-wrapper">
+    {{{renderParticipantPortrait
+      participant.img
+      null
+    }}}
+  </div>
+
+  <div class="chud-participant-details">
+    <div class="chud-details-text">
+      <p 
+        class="chud-name"
+        data-tooltip="{{#if (eq participant.displayName false)}}{{localize 'CHUD.strings.unknown'}}{{else}}{{participant.name}}{{/if}}"
+        data-tooltip-direction="LEFT"
+      >
+        {{#if (eq participant.displayName false)}}
+          {{localize 'CHUD.strings.unknown'}}
+        {{else}}
+          {{participant.name}}
+        {{/if}}
+      </p>
+
+      {{#if participant.faction.displayFaction}}
+        <p
+          class="chud-faction"
+          data-tooltip="{{participant.faction.factionName}}"
+          data-tooltip-direction="LEFT"
+        >
+          {{participant.faction.factionName}}
+        </p>
+      {{else}}
+        <p class="chud-faction">
+          {{localize 'CHUD.faction.unaffiliated'}}
+        </p>
+      {{/if}}
+    </div>
+
+    {{#if (isGm)}}
+      <div class="chud-action-buttons">
+        <button
+          type="button"
+          class="inline-control icon fa-solid fa-edit"
+          data-action="editParticipant"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.participant.edit'}}"
+          onclick='event.stopPropagation(); game.ConversationHud.executeFunction({{{json (object scope="local" type="edit-participant" data=(object index=index))}}});'
+        ></button>
+
+        <button
+          type="button"
+          class="inline-control icon fa-solid fa-trash"
+          data-action="removeParticipant"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.participant.delete'}}"
+          onclick='event.stopPropagation(); game.ConversationHud.executeFunction({{{json (object scope="local" type="remove-participant" data=(object index=index))}}});'
+        ></button>
+
+        {{#if participant.linkedJournal}}
+          <button
+            type="button"
+            class="inline-control icon fa-solid fa-book-open"
+            data-action="viewLinkedJournal"
+            data-tooltip
+            aria-label="{{localize 'CHUD.strings.linkedJournal.name'}}"
+            onclick='event.stopPropagation(); game.ConversationHud.executeFunction({{{json (object scope="local" type="render-linked-journal" data=(object index=index))}}});'
+          ></button>
+        {{/if}}
+
+        {{#if participant.linkedActor}}
+          <button
+            type="button"
+            class="inline-control icon fa-solid fa-user"
+            data-action="viewLinkedActor"
+            data-tooltip
+            aria-label="{{localize 'CHUD.strings.linkedActor.name'}}"
+            onclick='event.stopPropagation(); game.ConversationHud.executeFunction({{{json (object scope="local" type="render-linked-actor" data=(object index=index))}}});'
+          ></button>
+        {{/if}}
+      </div>
+    {{/if}}
+  </div>
+
+  {{> "modules/conversation-hud/templates/fragments/faction-banner.hbs"
+    faction=participant.faction
+  }}
+</div>

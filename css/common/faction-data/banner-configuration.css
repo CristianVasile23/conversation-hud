@@ -1,0 +1,49 @@
+/* ----- Banner configuration ----- */
+/* #region */
+.chud-faction-data .banner-configuration {
+  display: flex;
+  flex-direction: row;
+}
+
+.chud-faction-data .banner-options {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  flex: 1 !important;
+}
+
+.chud-faction-data .banner-options .banner-shape-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 30px;
+  height: 30px;
+
+  padding: 0;
+  margin: 0;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+.chud-faction-data .banner-options .banner-shape-button.active {
+  background-color: var(--color-border-highlight);
+}
+
+.chud-faction-data .banner-options button img {
+  border: none;
+  height: 20px;
+  width: auto;
+}
+/* #endregion */
+
+/* ----- Faction export button ----- */
+/* #region */
+.participant-add-edit-form #exportFaction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0;
+  width: 36px;
+  height: 28px;
+}
+/* #endregion */

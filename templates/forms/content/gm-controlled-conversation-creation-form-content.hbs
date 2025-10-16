@@ -1,0 +1,44 @@
+<fieldset class="chud-flex-1">
+  <legend class="chud-fieldset-legend-with-actions">
+    <span class="chud-label">
+      {{localize 'CHUD.strings.conversationParticipants'}}
+    </span>
+
+    <span class="chud-line"></span>
+
+    <span class="chud-actions">
+      <button
+        type="button"
+        name="pull-participants-from-scene"
+        id="pull-participants-from-scene"
+        class="icon fa-solid fa-up-from-bracket"
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.pullParticipants'}}"
+      ></button>
+
+      <button
+        type="button"
+        name="add-participant"
+        id="add-participant"
+        class="icon fa-solid fa-user-plus"
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.participant.add'}}"
+      ></button>
+    </span>
+  </legend>
+
+  <div class="flexcol chud-form-content chud-drag-and-drop-container">
+    <div class="chud-dropzone">
+      <i class="far fa-square-plus"></i>
+      <p> {{localize 'CHUD.strings.dropItem'}} </p>
+      <p class="hold-control"> ({{localize 'CHUD.strings.holdControl'}}) </p>
+    </div>
+
+    <div class="flexcol chud-non-dropzone-content chud-flex-1">
+      {{> "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs"
+        isGM=isGM
+        participants=participants 
+      }}
+    </div>
+  </div>
+</fieldset>

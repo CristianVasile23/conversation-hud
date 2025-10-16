@@ -1,0 +1,105 @@
+/* ----- General CSS ----- */
+/* #region */
+.chud-participating-users-list .chud-participating-user {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+/* #endregion */
+
+.chud-participating-users-list .chud-participating-user .chud-entry-header {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+/* --------------------------- */
+
+.chud-participating-users-list .chud-participating-user .chud-entry-header .chud-accordion {
+  margin-right: 20px;
+}
+
+.chud-participating-users-list .chud-participating-user .chud-entry-header .chud-accordion > i {
+  font-size: 16px;
+}
+
+.chud-participating-users-list .chud-participating-user .chud-entry-header .chud-accordion.chud-collapsed > i {
+  transform: rotate(180deg);
+}
+
+/* --------------------------- */
+
+.chud-participating-users-list .chud-participating-user .chud-entry-header .chud-name {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.chud-participating-users-list .chud-participating-user .chud-entry-header .chud-name > i {
+  margin-right: 5px;
+}
+
+.chud-participating-users-list .chud-participating-user .chud-entry-header .chud-name > p {
+  font-weight: bold;
+  margin: 0;
+}
+
+/* --------------------------- */
+
+.chud-participating-users-list .chud-participating-user .chud-entry-header .chud-actions {
+  display: flex;
+  flex-flow: row;
+  margin-left: auto;
+  gap: 10px;
+}
+
+/* --------------------------- */
+
+.chud-participating-users-list .chud-participating-user .chud-entry-content .chud-entry-content-section .chud-header {
+  margin: 0;
+  margin-bottom: 5px;
+
+  font-size: var(--font-size-12);
+  font-weight: bold;
+  color: var(--color-text-dark-secondary);
+}
+
+/* --------------------------- */
+
+.chud-participating-users-list .chud-participating-user .chud-entry-content .chud-user-settings-entry {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.chud-participating-users-list .chud-participating-user .chud-entry-content .chud-user-settings-entry:last-child {
+  margin-bottom: none;
+}
+
+.chud-participating-users-list
+  .chud-participating-user
+  .chud-entry-content
+  .chud-user-settings-entry
+  input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  margin: 0;
+  margin-right: 5px;
+}
+
+.chud-participating-users-list .chud-participating-user .chud-entry-content .chud-user-settings-entry p {
+  margin: 0;
+}
+
+/* --------------------------- */
+
+.chud-participating-users-list
+  .chud-participating-user
+  .chud-entry-content
+  .chud-entry-content-section.chud-has-no-participants
+  .chud-conversation-participants-list {
+  height: 120px;
+}

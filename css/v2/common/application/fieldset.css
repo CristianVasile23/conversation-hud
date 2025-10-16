@@ -1,0 +1,27 @@
+.chud-fieldset-legend-with-actions {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.chud-fieldset-legend-with-actions > .chud-line {
+  flex: 1;
+  border-bottom: 2px groove var(--color-fieldset-border);
+  margin-left: 3px;
+  margin-right: 3px;
+  margin-top: 1px;
+}
+
+.chud-fieldset-legend-with-actions > .chud-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.chud-fieldset-legend-with-actions > .chud-actions > button {
+  flex: 0 0 28px;
+  width: 28px;
+  min-width: 28px;
+  height: 28px;
+  min-height: 28px;
+}

@@ -1,4 +1,5 @@
-import { MODULE_NAME } from "./constants.js";
+import { MODULE_NAME } from "./constants/index.js";
+import { MigrationForm, getConversationsToMigrate, getFactionsToMigrate } from "./migration/index.mjs";
 
 export const ModuleSettings = {
   portraitStyle: "portraitStyle",
@@ -14,7 +15,8 @@ export const ModuleSettings = {
   blurAmount: "blurAmount",
   activeParticipantFontSize: "activeParticipantFontSize",
   activeParticipantFactionFontSize: "activeParticipantFactionFontSize",
-  rpgUiFix: "rpgUiFix",
+  migrationWizard: "migrationWizard",
+  schemaVersion: "schemaVersion",
 };
 
 export function registerSettings() {
@@ -183,13 +185,26 @@ export function registerSettings() {
     },
   });
 
-  game.settings.register(MODULE_NAME, ModuleSettings.rpgUiFix, {
-    name: game.i18n.localize(`CHUD.settings.rpgUiFix.name`),
-    hint: game.i18n.localize(`CHUD.settings.rpgUiFix.hint`),
+  game.settings.registerMenu(MODULE_NAME, ModuleSettings.migrationWizard, {
+    name: game.i18n.localize("CHUD.settings.migrationWizard.name"),
+    label: game.i18n.localize("CHUD.settings.migrationWizard.button"),
+    hint: game.i18n.localize("CHUD.settings.migrationWizard.hint"),
+    icon: "fa-solid fa-screwdriver-wrench",
+    type: MigrationForm,
+    restricted: true,
+    onOpen: () => {
+      const conversationsToMigrate = getConversationsToMigrate();
+      const factionsToMigrate = getFactionsToMigrate();
+      const dataToMigrate = { conversationsToMigrate, factionsToMigrate };
+      return new MigrationForm(dataToMigrate);
+    },
+  });
+
+  game.settings.register(MODULE_NAME, ModuleSettings.schemaVersion, {
+    name: "Schema Version",
     scope: "world",
-    config: true,
-    requiresReload: true,
-    type: Boolean,
-    default: false,
+    config: false,
+    type: String,
+    default: "",
   });
 }

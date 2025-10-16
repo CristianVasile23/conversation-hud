@@ -1,0 +1,53 @@
+<div class="standard-form chud-flex-1" data-application-part="body">
+  <fieldset class="chud-flex-1">
+    <legend class="chud-fieldset-legend-with-actions">
+      <span class="chud-label">
+        {{localize 'CHUD.strings.availableUsers'}}
+      </span>
+
+      <span class="chud-line"></span>
+
+      <span class="chud-actions">
+        <button
+          type="button"
+          name="deselect-all"
+          id="deselect-all"
+          class="icon fa-regular fa-square"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.selection.deselectAll'}}"
+        ></button>
+
+        <button
+          type="button"
+          name="select-all"
+          id="select-all"
+          class="icon fa-regular fa-square-check"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.selection.selectAll'}}"
+        ></button>
+      </span>
+    </legend>
+
+    <div class="flexcol chud-form-content">
+      <div id="participatingUsersList" class="scrollable">
+        {{#if users}}
+          {{#each users}}
+            <label class="checkbox">
+              <input
+                type="checkbox"
+                name="users"
+                value="{{userData.id}}"
+                {{#if isChecked}}checked{{/if}}
+              />
+              {{userData.name}}
+            </label>
+          {{/each}}
+        {{else}}
+          <p class="chud-no-users-message">
+            {{localize 'CHUD.strings.noUsersInList'}}
+          </p> 
+        {{/if}}
+      </div>
+    </div>
+  </fieldset>
+</div>

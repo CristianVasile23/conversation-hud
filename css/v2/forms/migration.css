@@ -1,0 +1,15 @@
+#documents-in-need-of-migration .chud-no-data-message {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  text-align: center;
+  padding: 1rem;
+  color: var(--color-text-subtle);
+  gap: 5px;
+}
+
+#documents-in-need-of-migration .chud-no-data-message i {
+  font-size: 3rem;
+}

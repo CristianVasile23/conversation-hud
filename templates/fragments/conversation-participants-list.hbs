@@ -1,0 +1,102 @@
+<div class="chud-conversation-participants-list chud-flex-1">
+  {{#if participants}}
+    <div class="chud-header">
+      <p class="chud-active-by-default">{{localize 'CHUD.strings.active'}}</p>
+      <p class="chud-faction">{{localize 'CHUD.strings.banner'}}</p>
+      <p class="chud-details">{{localize 'CHUD.strings.details'}}</p>
+      <p class="chud-controls">{{localize 'CHUD.strings.actions'}}</p>
+    </div>
+
+    <div id="conversationParticipantsList" class="scrollable chud-content chud-flex-1">
+      {{#each participants as |participant index|}}
+        <div class="participant-drag-drop-container">
+          <div class="drag-drop-indicator drag-drop-indicator-top"></div>
+
+          <div class="chud-participant">
+            {{#if ../isGM}}
+              <i
+                id="conversation-sheet-drag-drop-handler"
+                class="chud-drag-drop-handler fa-solid fa-arrows-up-down-left-right"
+                draggable="true"
+              ></i>
+
+              <input
+                id="participant-active-by-default-checkbox"
+                class="chud-checkbox"
+                type="checkbox"
+                {{#if (eq index ../defaultActiveParticipant)}}checked="checked"{{/if}}
+              />
+            {{/if}}
+
+            {{> "modules/conversation-hud/templates/fragments/faction-banner.hbs"
+              faction=participant.faction
+            }}
+
+            <div class="chud-portrait-wrapper">
+              {{{renderParticipantPortrait
+                participant.img
+                null
+              }}}
+            </div>
+
+            <div class="chud-text-wrapper">
+              <p class="chud-name">
+                {{#if (eq participant.displayName false)}}
+                  {{localize 'CHUD.strings.unknown'}}
+                {{else}}
+                  {{participant.name}}
+                {{/if}}
+              </p>
+
+              {{#if participant.faction.displayFaction}}
+                <p class="chud-faction">{{participant.faction.factionName}}</p>
+              {{else}}
+                <p class="chud-faction">{{localize 'CHUD.faction.unaffiliated'}}</p>
+              {{/if}}
+
+              {{{renderParticipantLinkedObjects participant.linkedJournal participant.linkedActor}}}
+            </div>
+            
+            {{#if ../isGM}}
+              <div class="chud-participant-action-buttons">
+                <button
+                  id="participant-clone-button"
+                  type="button"
+                  class="inline-control icon fa-solid fa-clone"
+                  data-tooltip
+                  aria-label="{{localize 'CHUD.actions.participant.clone'}}"
+                ></button>
+
+                <button
+                  id="participant-edit-button"
+                  type="button"
+                  class="inline-control icon fa-solid fa-edit"
+                  data-tooltip
+                  aria-label="{{localize 'CHUD.actions.participant.edit'}}"
+                ></button>
+
+                <button
+                  id="participant-delete-button"
+                  type="button"
+                  class="inline-control icon fa-solid fa-trash"
+                  data-tooltip
+                  aria-label="{{localize 'CHUD.actions.participant.delete'}}"
+                ></button>
+              </div>
+            {{/if}}
+          </div>
+
+          <div class="drag-drop-indicator drag-drop-indicator-bottom"></div>
+        </div>
+      {{/each}}
+    </div>
+  {{else}}
+    <p class="chud-no-participants-message">
+      {{#if customNoDataMessage}}
+        {{customNoDataMessage}}
+      {{else}}
+        {{localize 'CHUD.strings.noParticipantsInList'}}
+      {{/if}}
+    </p> 
+  {{/if}}
+</div>

@@ -1,0 +1,50 @@
+<div id="collectiveConversation" class="chud-active-conversation-content {{#if hasDock}}has-dock{{/if}}">
+  <div id="chud-participating-users-list" class="chud-participating-users-list">
+    {{#each participatingUsers as |participatingUser index|}}
+      <div class="chud-participating-user">
+        {{!-- Active participant --}}
+        <div id="ui-conversation-active-participant-{{index}}">
+        </div>
+      </div>
+    {{/each}}
+  </div>
+
+  {{!-- Selectable participants list --}}
+  <div class="chud-controls-content-area">
+    <div id="selectable-participants-list" class="chud-selectable-participants-list">
+      {{#each currentParticipatingUserData.participants as |participant index|}}
+        <div class="participant-drag-drop-container">
+          <div class="drag-drop-indicator drag-drop-indicator-top"></div>
+
+          {{> "modules/conversation-hud/templates/fragments/selectable-participant-entry.hbs"
+            isGM=true
+            participant=participant
+            data=(object userID=../currentParticipatingUserData.id participantIndex=index)
+          }}
+
+          <div class="drag-drop-indicator drag-drop-indicator-bottom"></div>
+        </div>
+      {{/each}}
+    </div>
+
+    {{#if userIsParticipating}}
+      <div id="selectable-participants-list-controls" class="chud-selectable-participants-list-controls">
+        <div
+          class="chud-control-button"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-participant" data=(object userID=currentParticipatingUserData.id))}}})'
+          data-tooltip="{{localize 'CHUD.actions.addParticipant'}}"
+        >
+          <i class="chud-icon-participant-add"></i>
+        </div>
+
+        <div
+          class="chud-control-button"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-owned-actor")}}})'
+          data-tooltip="{{localize 'CHUD.actions.addOwnedActor'}}"
+        >
+          <i class="chud-icon-participant-lock-add"></i>
+        </div>
+      </div>
+    {{/if}}
+  </div>
+</div>

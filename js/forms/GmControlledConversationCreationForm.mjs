@@ -1,0 +1,370 @@
+/// <reference path="../types/GmControlledConversation/GmControlledConversation.js" />
+/// <reference path="../types/ConversationData.js" />
+
+import { ANCHOR_OPTIONS, ConversationTypes, DRAG_AND_DROP_DATA_TYPES } from "../constants/index.js";
+import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.mjs";
+import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.mjs";
+import {
+  getActorDataFromDragEvent,
+  moveInArray,
+  getDragAndDropIndex,
+  hideDragAndDropIndicator,
+  showDragAndDropIndicator,
+  processParticipantData,
+} from "../helpers/index.js";
+
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class GmControlledConversationCreationForm extends HandlebarsApplicationMixin(ApplicationV2) {
+  /* -------------------------------------------- */
+  /*  State                                       */
+  /* -------------------------------------------- */
+
+  /** @type {(conversationData: GMControlledConversationData) => void | undefined} } */
+  callbackFunction = undefined;
+  conversationBackground = "";
+  participants = [];
+  defaultActiveParticipant = undefined;
+
+  // Drag and drop variables
+  dropzoneVisible = false;
+  draggingParticipant = false;
+
+  /**
+   * TODO: Add JSDoc
+   *
+   * @param {(conversationData: GMControlledConversationData) => void} callbackFunction
+   */
+  constructor(callbackFunction) {
+    super();
+    this.callbackFunction = callbackFunction;
+  }
+
+  /* -------------------------------------------- */
+  /*  Rendering                                   */
+  /* -------------------------------------------- */
+
+  static DEFAULT_OPTIONS = {
+    id: "conversation-creation-form",
+    classes: ["form"],
+    tag: "form",
+    window: {
+      contentClasses: ["standard-form"],
+      title: "CHUD.actions.createConversation",
+    },
+    form: {
+      handler: this.#handleSubmit,
+      closeOnSubmit: true,
+    },
+    position: {
+      width: 635,
+      height: 840,
+    },
+  };
+
+  static PARTS = {
+    body: {
+      template: "modules/conversation-hud/templates/forms/conversation-creation-form.hbs",
+      scrollable: [".scrollable"],
+    },
+    footer: {
+      template: "templates/generic/form-footer.hbs",
+    },
+  };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.buttons = [
+      {
+        type: "submit",
+        icon: "fa-solid fa-check",
+        label: "CHUD.actions.startConversation",
+      },
+    ];
+
+    for (const participant of this.participants) {
+      processParticipantData(participant);
+    }
+
+    return {
+      isGM: game.user.isGM,
+      type: ConversationTypes.GMControlled,
+      conversationBackground: this.conversationBackground,
+      participants: this.participants,
+      defaultActiveParticipant: this.defaultActiveParticipant,
+      ...context,
+    };
+  }
+
+  _onRender(context, options) {
+    super._onRender(context, options);
+
+    const html = this.element;
+
+    // Add event listener on the background file picker
+    const backgroundPicker = html.querySelector('file-picker[name="conversationBackground"]');
+    if (backgroundPicker) {
+      backgroundPicker.addEventListener("change", (event) => this.#handleChangeBackground(event));
+    }
+
+    // Add event listener on the pull participants from scene button
+    html.querySelector("#pull-participants-from-scene").addEventListener("click", () => {
+      new PullParticipantsFromSceneForm((data) => {
+        for (const participant of data) {
+          this.#handleAddParticipant(participant);
+        }
+      }).render(true);
+    });
+
+    // Add event listener on the add participant button
+    html.querySelector("#add-participant").addEventListener("click", () => {
+      new CreateOrEditParticipantForm(false, (data) => this.#handleAddParticipant(data)).render(true);
+    });
+
+    // Drag and drop functionality
+    const dragDropWrapper = html.querySelector(".chud-drag-and-drop-container");
+    const dragDropZone = html.querySelector(".chud-dropzone");
+    if (dragDropWrapper && dragDropZone) {
+      dragDropWrapper.ondragenter = () => {
+        if (!this.draggingParticipant) {
+          this.dropzoneVisible = true;
+          dragDropWrapper.classList.add("active-dropzone");
+        }
+      };
+
+      dragDropZone.ondragleave = () => {
+        if (this.dropzoneVisible) {
+          this.dropzoneVisible = false;
+          dragDropWrapper.classList.remove("active-dropzone");
+        }
+      };
+
+      dragDropWrapper.ondrop = async (event) => {
+        if (this.dropzoneVisible) {
+          event.preventDefault();
+
+          const data = await getActorDataFromDragEvent(event);
+          if (data && data.length > 0) {
+            if (event.ctrlKey) {
+              this.#handleReplaceAllParticipants(data);
+            } else {
+              data.forEach((participant) => {
+                this.#handleAddParticipant(participant);
+              });
+            }
+          }
+
+          this.dropzoneVisible = false;
+          dragDropWrapper.classList.remove("active-dropzone");
+        }
+      };
+    }
+
+    // Add listeners on all the control buttons present on the conversation participants
+    const participantsObject = html.querySelector("#conversationParticipantsList");
+    if (participantsObject) {
+      const conversationParticipants = participantsObject.children;
+      for (let i = 0; i < conversationParticipants.length; i++) {
+        const dragDropContainer = conversationParticipants[i];
+        const participantElement = dragDropContainer.querySelector(".chud-participant");
+        const dragDropHandler = participantElement.querySelector(".chud-drag-drop-handler");
+
+        dragDropHandler.ondragstart = (event) => {
+          this.draggingParticipant = true;
+          event.dataTransfer.setDragImage(participantElement, 0, 0);
+
+          // Save the index of the dragged participant in the data transfer object
+          event.dataTransfer.setData(
+            "text/plain",
+            JSON.stringify({
+              index: i,
+              type: DRAG_AND_DROP_DATA_TYPES.ConversationHudParticipant,
+              participant: this.participants[i],
+            })
+          );
+        };
+
+        dragDropHandler.ondragend = () => {
+          this.draggingParticipant = false;
+        };
+
+        // Attach drag events to the drag-drop-container (which contains the indicators)
+        dragDropContainer.ondragover = (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          showDragAndDropIndicator(dragDropContainer, event);
+        };
+
+        dragDropContainer.ondragleave = (event) => {
+          // Only hide indicators if we're actually leaving the container
+          if (!dragDropContainer.contains(event.relatedTarget)) {
+            hideDragAndDropIndicator(dragDropContainer);
+          }
+        };
+
+        dragDropContainer.ondrop = (event) => {
+          const data = JSON.parse(event.dataTransfer.getData("text/plain"));
+
+          if (data) {
+            hideDragAndDropIndicator(dragDropContainer);
+
+            const oldIndex = data.index;
+
+            // If we drag and drop a participant on the same spot, exit the function early as it makes no sense to reorder the array
+            if (oldIndex === i) {
+              return;
+            }
+
+            // Get the new index of the dropped element
+            let newIndex = getDragAndDropIndex(event, i, oldIndex, dragDropContainer);
+
+            // Reorder the array
+            moveInArray(this.participants, oldIndex, newIndex);
+
+            // Update active participant index
+            const defaultActiveParticipantIndex = this.defaultActiveParticipant;
+            if (defaultActiveParticipantIndex === oldIndex) {
+              this.defaultActiveParticipant = newIndex;
+            } else {
+              if (defaultActiveParticipantIndex > oldIndex && defaultActiveParticipantIndex <= newIndex) {
+                this.defaultActiveParticipant -= 1;
+              }
+              if (defaultActiveParticipantIndex < oldIndex && defaultActiveParticipantIndex >= newIndex) {
+                this.defaultActiveParticipant += 1;
+              }
+            }
+
+            // Update sheet
+            this.render(false);
+          } else {
+            console.error("ConversationHUD | Data object was empty inside conversation participant ondrop function");
+          }
+
+          this.draggingParticipant = false;
+        };
+
+        // Bind function to the set active by default checkbox
+        participantElement
+          .querySelector("#participant-active-by-default-checkbox")
+          .addEventListener("change", (event) => this.#handleSetDefaultActiveParticipant(event, i));
+
+        // Bind functions to the edit and remove buttons
+        const controls = participantElement.querySelector(".chud-participant-action-buttons");
+        controls
+          .querySelector("#participant-clone-button")
+          .addEventListener("click", () => this.#handleCloneParticipant(i));
+        controls
+          .querySelector("#participant-delete-button")
+          .addEventListener("click", () => this.#handleRemoveParticipant(i));
+        controls.querySelector("#participant-edit-button").addEventListener("click", () => {
+          const participantEditForm = new CreateOrEditParticipantForm(
+            true,
+            (data) => this.#handleEditParticipant(data, i),
+            {
+              name: this.participants[i].name,
+              displayName: this.participants[i].displayName,
+              img: this.participants[i].img,
+              imgScale: this.participants[i].imgScale,
+              linkedJournal: this.participants[i].linkedJournal,
+              linkedActor: this.participants[i].linkedActor,
+              faction: this.participants[i].faction,
+              anchorOptions: ANCHOR_OPTIONS,
+              portraitAnchor: this.participants[i].portraitAnchor,
+            }
+          );
+          participantEditForm.render(true);
+        });
+      }
+    }
+  }
+
+  /* -------------------------------------------- */
+  /*  Handlers                                    */
+  /* -------------------------------------------- */
+
+  /**
+   *
+   * @param {*} event
+   * @param {*} form
+   * @param {*} formData
+   */
+  static async #handleSubmit(event, form, formData) {
+    const data = foundry.utils.expandObject(formData.object);
+
+    /** @type {GmControlledConversation} */
+    const gmControlledConversation = {
+      data: {
+        participants: this.participants,
+        defaultActiveParticipant: this.defaultActiveParticipant,
+      },
+      features: {
+        isMinimized: false,
+        isMinimizationLocked: false,
+        isSpeakingAs: false,
+        isBackgroundVisible: true,
+      },
+    };
+
+    /** @type {GMControlledConversationData} */
+    const conversationData = {
+      type: ConversationTypes.GMControlled,
+      background: data.conversationBackground,
+      conversation: gmControlledConversation,
+    };
+
+    // Pass data to conversation class
+    this.callbackFunction(conversationData);
+  }
+
+  #handleAddParticipant(data) {
+    processParticipantData(data);
+
+    this.participants.push(data);
+    this.render(false);
+  }
+
+  #handleEditParticipant(data, index) {
+    processParticipantData(data);
+
+    this.participants[index] = data;
+    this.render(false);
+  }
+
+  #handleReplaceAllParticipants(data) {
+    const processedData = data.map((participant) => {
+      processParticipantData(participant);
+      return participant;
+    });
+
+    this.defaultActiveParticipant = undefined;
+    this.participants = processedData;
+    this.render(false);
+  }
+
+  #handleRemoveParticipant(index) {
+    this.participants.splice(index, 1);
+    this.render(false);
+  }
+
+  #handleCloneParticipant(index) {
+    const clonedParticipant = this.participants[index];
+    this.participants.push(clonedParticipant);
+    this.render(false);
+  }
+
+  #handleSetDefaultActiveParticipant(event, index) {
+    if (!event.target) return;
+
+    if (event.target.checked) {
+      this.defaultActiveParticipant = index;
+    } else {
+      this.defaultActiveParticipant = undefined;
+    }
+
+    this.render(false);
+  }
+
+  #handleChangeBackground(event) {
+    this.conversationBackground = event.target.value || "";
+  }
+}

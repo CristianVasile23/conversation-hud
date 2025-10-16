@@ -1,0 +1,95 @@
+<menu class="flexrow">
+  {{#if isGM}}
+    <li>
+      <button
+        type="button"
+        class="ui-control plain icon fa-solid fa-times"
+        onclick="game.ConversationHud.closeActiveConversation()"
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.closeConversation'}}"
+      />
+    </li>
+  {{/if}}
+
+  {{#if features.minimizeEnabled}}
+    <div class="chud-spacer"></div>
+
+    {{#if (or isVisible isGM)}}
+      {{{renderMinimizeButton isGM isMinimized isMinimizationLocked}}}
+    {{/if}}
+
+    {{#if isGM}}
+      <li>
+        <button
+          type="button"
+          class="ui-control toggle icon fa-solid fa-lock {{#unless isVisible}}disabled{{/unless}}"
+          onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-lock-minimization" data=(object))}}})'
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.lockMinimization'}}"
+          aria-pressed="{{#if isMinimizationLocked}}true{{else}}false{{/if}}"
+        />
+      </li>
+    {{/if}}
+  {{/if}}
+
+  {{#if isGM}}
+    <div class="chud-spacer"></div>
+
+    <li>
+      <button
+        type="button"
+        class="ui-control toggle icon fa-solid fa-eye"
+        onclick='game.ConversationHud.toggleConversationVisibility()'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.toggleVisibility'}}"
+        aria-pressed="{{#if isVisible}}true{{else}}false{{/if}}"
+      />
+    </li>
+
+    {{#if features.speakAsEnabled}}
+      <li>
+        <button
+          type="button"
+          class="ui-control toggle icon fa-solid fa-comment-quote"
+          onClick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-speaking-as" data=(object))}}})'
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.toggleSpeakAs'}}"
+          aria-pressed="{{#if isSpeakingAs}}true{{else}}false{{/if}}"
+        />
+      </li>
+    {{/if}}
+
+    <li>
+      <button
+        type="button"
+        class="ui-control toggle icon fa-solid fa-smoke"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="toggle-background" data=(object))}}})'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.toggleBackgroundBlur'}}"
+        aria-pressed="{{#if isBackgroundVisible}}true{{else}}false{{/if}}"
+      />
+    </li>
+
+    <li>
+      <button
+        type="button"
+        class="ui-control plain icon fa-solid fa-image"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="change-background" data=(object))}}})'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.changeConversationBackground'}}"
+      />
+    </li>
+
+    <div class="chud-spacer"></div>
+
+    <li>
+      <button
+        type="button"
+        class="ui-control plain icon fa-solid fa-save"
+        onclick='game.ConversationHud.saveActiveConversation()'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.saveConversation'}}"
+      />
+    </li>
+  {{/if}}
+</menu>

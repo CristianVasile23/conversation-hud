@@ -1,0 +1,71 @@
+/* ----- Header & Sub-header ----- */
+/* #region */
+.chud-form-header {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  margin-top: 5px;
+  flex: 0 0 34px;
+}
+
+.chud-form-header > input {
+  height: 30px;
+  font-size: var(--font-size-20);
+}
+
+.chud-form-header > p {
+  display: flex;
+  align-items: center;
+  flex: 3;
+  margin: 0;
+
+  color: var(--color-text-dark-primary);
+  font-size: var(--font-size-24);
+}
+
+.chud-form-sub-header {
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  margin-top: 5px;
+  border-bottom: 1px solid var(--color-underline-header);
+  flex: 0 0 30px;
+}
+
+.chud-form-sub-header > p {
+  display: flex;
+  align-items: center;
+  flex: 3;
+  margin: 0;
+
+  color: var(--color-text-dark-primary);
+  font-size: var(--font-size-16);
+}
+/* #endregion */
+
+/* ----- Header & Sub-header buttons ----- */
+/* #region */
+.chud-form-header button,
+.chud-form-sub-header button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.chud-form-header button {
+  flex: 0 0 32px;
+  width: 32px;
+  height: 32px;
+}
+
+.chud-form-sub-header button {
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+}
+
+.chud-form-header button i,
+.chud-form-sub-header button i {
+  margin: 0;
+}
+/* #endregion */

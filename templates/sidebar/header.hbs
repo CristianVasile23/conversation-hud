@@ -1,0 +1,29 @@
+<div class="conversation-header">
+  {{#if isActive}}
+    {{#if (isGm)}}
+      <div class="control-buttons left flexrow">
+        <button
+          type="button"
+          class="inline-control icon fa-solid fa-user-plus"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.participant.add'}}"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="add-participant")}}})'
+        ></button>
+
+        <button
+          type="button"
+          class="inline-control icon fa-solid fa-up-from-bracket"
+          data-tooltip
+          aria-label="{{localize 'CHUD.actions.pullParticipants'}}"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="pull-participants-from-scene" data=(object))}}})'
+        ></button>
+      </div>
+    {{/if}}
+
+    <strong class="conversation-title">Participants</strong>
+
+    {{#if (isGm)}}
+      <div style="flex: 0 0 52px; width: 52px;"></div>
+    {{/if}}
+  {{/if}}
+</div>

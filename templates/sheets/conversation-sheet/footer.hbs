@@ -1,0 +1,22 @@
+<footer class="chud-sheet-footer">
+  <button
+    type="button"
+    name="show-conversation"
+    id="show-conversation"
+    title="{{localize 'CHUD.actions.activateConversation'}}"
+  >
+    <i class="fas fa-eye"></i>
+    <span>{{localize 'CHUD.actions.activateConversation'}}</span>
+  </button>
+
+  <button
+    type="button"
+    name="save-conversation"
+    id="save-conversation"
+    title="{{localize 'CHUD.actions.saveConversation'}}"
+    {{#unless dirty}} disabled {{/unless}}
+  >
+    <i class="fas fa-save"></i>
+    {{localize 'CHUD.actions.saveConversation'}}
+  </button>
+</footer>

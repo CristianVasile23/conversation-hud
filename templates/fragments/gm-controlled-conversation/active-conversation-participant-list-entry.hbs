@@ -1,0 +1,90 @@
+<div class="chud-list-entry">
+  {{!-- Controls --}}
+  {{#if isGM}}
+    <div class="chud-controls" data-tooltip-direction="LEFT">
+      <button
+        type="button"
+        class="ui-control icon fa-solid fa-edit"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="edit-participant" data=(object index=index))}}})'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.participant.edit'}}"
+      ></button>
+
+      <button
+        type="button"
+        class="ui-control icon fa-solid fa-trash"
+        onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="remove-participant" data=(object index=index))}}})'
+        data-tooltip
+        aria-label="{{localize 'CHUD.actions.participant.delete'}}"
+      ></button>
+
+      {{#if participant.linkedJournal}}
+        <button
+          type="notes"
+          class="ui-control icon fa-solid fa-book-open"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="render-linked-journal" data=(object index=index))}}})'
+          data-tooltip
+          aria-label="{{localize 'CHUD.strings.linkedJournal.name'}}"
+        ></button>
+      {{/if}}
+
+      {{#if participant.linkedActor}}
+        <button
+          type="notes"
+          class="ui-control icon fa-solid fa-user"
+          onclick='game.ConversationHud.executeFunction({{{json (object scope="local" type="render-linked-actor" data=(object index=index))}}})'
+          data-tooltip
+          aria-label="{{localize 'CHUD.strings.linkedActor.name'}}"
+        ></button>
+      {{/if}}
+    </div>
+  {{/if}}
+
+  {{!-- Participant --}}
+  <button
+    {{!-- class="chud-content {{#if isGM}}chud-has-control{{/if}}" --}}
+    class="ui-control plain chud-conversation-participant-entry"
+    {{#unless isGM}}
+      data-tooltip="
+        {{!-- TODO: Create a hbs helper for this portion of code  --}}
+        {{#if (eq participant.displayName false)}}
+          {{localize 'CHUD.strings.unknown'}}
+        {{else}}
+          {{participant.name}}
+        {{/if}}
+      "
+    {{/unless}}
+    {{#if isGM}}
+      draggable="true"
+      onclick='game.ConversationHud.executeFunction({{{json (object scope="everyone" type="change-active-participant" data=(object index=index))}}})'
+    {{/if}}
+  >
+    {{{renderParticipantPortrait
+      participant.img
+      (portraitParamsObject
+        class=(concat "chud-portrait " participant.portraitAnchor.vertical " " participant.portraitAnchor.horizontal)
+        alt="Portrait"
+        style=(concat "scale: " participant.imgScale ";")
+      )
+    }}}
+    
+    <p class="chud-name">
+      {{#if (eq participant.displayName false)}}
+        {{localize 'CHUD.strings.unknown'}}
+      {{else}}
+        {{participant.name}}
+      {{/if}}
+    </p>
+  </button>
+
+  {{!-- Faction --}}
+  <div
+    style="align-self: flex-start;"
+    data-tooltip="{{participant.faction.factionName}}"
+    data-tooltip-direction="RIGHT"
+  >
+    {{> "modules/conversation-hud/templates/fragments/faction-banner.hbs"
+      faction=participant.faction
+    }}
+  </div>
+</div>

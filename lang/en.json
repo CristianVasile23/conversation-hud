@@ -33,7 +33,10 @@
 
     "name": "Name",
 
+    "activeConversation": "Active Conversation",
+
     "noLinkedDocuments": "No linked documents",
+    "noActiveConversation": "No active conversation",
 
     "linkedJournal": {
       "name": "Linked Journal",
@@ -58,14 +61,13 @@
 
     "currentParticipants": "Current Participants",
     "noActiveParticipant": "No active participant",
+    "noParticipants": "No participants",
+    "participantsHidden": "Participants list is hidden",
     "noParticipantsInList": "Conversation has no participants. Try adding some. (Drag and drop is supported)",
 
     "conversationEntry": "Conversation Entry",
     "participantData": "Conversation Participant Data",
     "factionData": "Conversation Faction Data",
-
-    "unsavedChanges": "Unsaved Changes",
-    "unsavedChangesHint": "The conversation contains unsaved changes. Do you wish to save them?",
 
     "browseFiles": "Browse Files",
     "filePath": "File Path",
@@ -86,27 +88,39 @@
 
     "invalidDocumentRef": "Invalid document reference",
 
+    "migration": {
+      "migrationWizard": "Migration Wizard",
+      "migrationInfo": "This migration will update outdated <strong>Conversations</strong> and <strong>Factions</strong> to the latest format used by ConversationHUD.<br><br>Only entries containing legacy or incompatible data will be affected. No new content will be created, and unrelated documents will remain unchanged.",
+      "migrationWarning": "<strong>Important:</strong> Before continuing, please ensure that your world is backed up. This migration will overwrite existing data within affected journal entries.",
+      "documentsToMigrate": "Documents in Need of Migration",
+      "noDocumentsToMigrate": "All Conversation and Faction sheets are up to date. No migration needed."
+    },
+
     "sceneConversation": {
       "name": "Scene Conversation",
       "hint": "A linked conversation that will activate automatically whenever the scene is activated."
     },
 
     "sceneConversationVisibilityOff": {
-      "name": "Conversation Visibility Off",
+      "name": "Start Conversation With Visibility Off",
       "hint": "Set whether or not to start the conversation with the visibility off. When unchecked, the conversation will start as visible."
     },
 
     "sceneActors": "Actors in scene",
 
     "excludeFromBeingPulled": {
-      "name": "Exclude From Being Pulled",
+      "name": "Exclude From Being Pulled Into a Conversation",
       "hint": "Toggle whether not not token will be displayed on the list of actors being pulled into an active conversation."
     },
 
     "linkedConversation": {
       "name": "Linked Conversation",
       "hint": "A linked conversation that will be used whenever the token is being pulled into an active conversation."
-    }
+    },
+
+    "chooseType": "Choose Type",
+
+    "featureLocked": "Feature locked by GM"
   },
 
   "CHUD.dialogue": {
@@ -124,9 +138,15 @@
     },
     "unsavedChanges": {
       "title": "Unsaved Changes",
-      "content": "The conversation contains unsaved changes. Do you wish to save them?",
+      "content": "The document contains unsaved changes. Do you wish to save them?",
       "confirm": "Save Changes",
       "reject": "Discard Changes"
+    },
+    "onMigrateData": {
+      "title": "Are you sure?",
+      "content": "This will migrate outdated Conversations and Factions. Affected journal entries will be overwritten. Please ensure your world is backed up before continuing.",
+      "confirm": "Migrate Data",
+      "reject": "Cancel"
     }
   },
 
@@ -148,6 +168,7 @@
     "toggleBackgroundBlur": "Toggle Background",
     "maximizeConversation": "Maximize Conversation",
     "minimizeConversation": "Minimize Conversation",
+    "lockMinimization": "Lock Minimization",
 
     "discardChanges": "Discard Changes",
 
@@ -168,12 +189,16 @@
 
     "changeConversationBackground": "Change Conversation Background",
     "pullParticipants": "Pull Participants from Scene",
-    "addActors": "Add Actors"
+    "addActors": "Add Actors",
+
+    "startMigration": "Start Migration"
   },
 
   "CHUD.tabs": {
-    "participantConfig": "Participant Config",
-    "factionConfig": "Faction Config"
+    "conversationParticipantAddEdit": {
+      "participant": "Participant Config",
+      "faction": "Faction Config"
+    }
   },
 
   "CHUD.faction": {
@@ -218,6 +243,17 @@
     "factionSheet": "Conversation Faction Sheet"
   },
 
+  "CHUD.conversationTypes": {
+    "gmControlled": {
+      "name": "GM Controlled",
+      "description": "Only GMs choose who is speaking. Best for scenes where NPCs address the party, managed solely by the GM."
+    },
+    "collective": {
+      "name": "Collective",
+      "description": "Each player selects their speaker. Useful for group scenes where players take turns speaking as different characters."
+    }
+  },
+
   "CHUD.errors": {
     "generic": "An unknown error has occurred, for more information check the console.",
     "genericSheetError": "An unknown error occurred while trying to render the sheet. Are you sure this is a valid conversation sheet?",
@@ -244,18 +280,23 @@
 
   "CHUD.warnings": {
     "noParticipantDataFound": "No viable participant data was found in this journal entry.",
-    "noFactionDataFound": "No viable faction data was found in this journal entry."
+    "noFactionDataFound": "No viable faction data was found in this journal entry.",
+    "migrationNotComplete": "Migration incomplete: some entries could not be updated. Check the console for more information."
   },
 
   "CHUD.info": {
-    "saveSuccessful": "Current conversation has been saved successfully."
+    "saveSuccessful": "Current conversation has been saved successfully.",
+    "migrationComplete": "Migration successful: all entries were updated without errors."
   },
 
   "CHUD.settings": {
     "settingsSheetHeaders": {
-      "portrait": "Portrait Settings",
-      "feature": "Feature Settings",
-      "compatibility": "Compatibility Settings"
+      "portrait": "Portrait",
+      "interface": "Interface",
+      "features": "Features",
+      "fontSize": "Font Size",
+      "dataMigration": "Data Migration",
+      "others": "Other Settings"
     },
     "portraitStyle": {
       "name": "Portrait Style",
@@ -332,9 +373,10 @@
       "large": "Large",
       "veryLarge": "Very Large"
     },
-    "rpgUiFix": {
-      "name": "Enable Custom UI Fix",
-      "hint": "If you are using a module that changes the look of the UI and you are experiencing an issue which makes the sidebar overlap the conversation interface or the control buttons, enabling this feature should fix the issues."
+    "migrationWizard": {
+      "name": "Migration Wizard",
+      "button": "Open Wizard",
+      "hint": "Open the migration wizard to migrate outdated Conversations or Factions to the new format."
     }
   }
 }

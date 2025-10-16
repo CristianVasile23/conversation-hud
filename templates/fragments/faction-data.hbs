@@ -1,0 +1,164 @@
+{{!-- TODO: Make the disabled state work again and have proper visual cues --}}
+<fieldset class="chud-faction-data {{#if hasSelectedFaction}}chud-view-only-faction-data{{/if}}">
+  {{!-- Faction name --}}
+  <div class="form-group">
+    <label>{{localize "CHUD.faction.factionName.name"}}</label>
+    <div class="form-fields">
+      <input
+        class="text"
+        type="text"
+        name="factionName"
+        placeholder="{{localize 'CHUD.faction.factionName.placeholder'}}"
+        value="{{factionName}}"
+        {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+      />
+
+      {{#unless hasSelectedFaction}}
+        <button
+          type="button"
+          id="exportFaction"
+          name="exportFaction"
+          title="{{localize 'CHUD.actions.exportFaction'}}"
+        >
+          <i class="fa fa-save"></i>
+        </button>
+      {{/unless}}
+    </div>
+    <p class="hint">{{localize "CHUD.faction.factionName.hint"}}</p>
+  </div>
+
+  <div class="banner-configuration">
+    {{!-- Banner config --}}
+    <div class="flexcol chud-gap-1">
+      {{!-- Faction logo --}}
+      <div class="form-group">
+        <label>{{localize "CHUD.faction.factionLogo.name"}}</label>
+        <div class="form-fields">
+          <file-picker
+            name="factionImg"
+            type="imagevideo"
+            value="{{factionLogo}}" 
+            {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+          ></file-picker>
+        </div>
+        <p class="hint">{{localize "CHUD.faction.factionLogo.hint"}}</p>
+      </div>
+      
+      {{!-- Faction banner toggle --}}
+      <div class="form-group">
+        <label>{{localize "CHUD.faction.displayFactionBanner.name"}}</label>
+        <div class="form-fields">
+          <input
+            type="checkbox"
+            name="displayFactionBanner"
+            {{checked factionBannerEnabled}}
+            {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+          >
+        </div>
+        <p class="hint">{{localize "CHUD.faction.displayFactionBanner.hint"}}</p>
+      </div>
+
+      {{!-- Faction banner shape --}}
+      <div class="form-group">
+        <label>{{localize "CHUD.faction.factionBannerShape.name"}}</label>
+
+        <div class="banner-options">
+          <button
+            id="shape-1"
+            class="banner-shape-button {{#if (eq factionBannerShape "shape-1")}}active{{/if}}"
+            type="button"
+            name="shape-1"
+            {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+          >
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-1.hbs" color='var(--button-text-color)'}}
+          </button>
+
+          <button
+            id="shape-2"
+            class="banner-shape-button {{#if (eq factionBannerShape "shape-2")}}active{{/if}}"
+            type="button"
+            name="shape-2"
+            {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+          >
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-2.hbs" color='var(--button-text-color)'}}
+          </button>
+
+          <button
+            id="shape-3"
+            class="banner-shape-button {{#if (eq factionBannerShape "shape-3")}}active{{/if}}"
+            type="button"
+            name="shape-3"
+            {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+          >
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-3.hbs" color='var(--button-text-color)'}}
+          </button>
+
+          <button
+            id="shape-4"
+            class="banner-shape-button {{#if (eq factionBannerShape "shape-4")}}active{{/if}}"
+            type="button"
+            name="shape-4"
+            {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+          >
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-4.hbs" color='var(--button-text-color)'}}
+          </button>
+
+          <button
+            id="shape-5"
+            class="banner-shape-button {{#if (eq factionBannerShape "shape-5")}}active{{/if}}"
+            type="button"
+            name="shape-5"
+            {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+          >
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-5.hbs" color='var(--button-text-color)'}}
+          </button>
+
+          <button
+            id="shape-6"
+            class="banner-shape-button {{#if (eq factionBannerShape "shape-6")}}active{{/if}}"
+            type="button"
+            name="shape-6"
+            {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+          >
+            {{> "modules/conversation-hud/templates/banner-shapes/shape-6.hbs" color='var(--button-text-color)'}}
+          </button>
+        </div>
+      
+        <p class="hint">{{localize "CHUD.faction.factionBannerShape.hint"}}</p>
+      </div>
+
+      {{!-- Faction banner tint --}}
+      <div class="form-group">
+        <label>{{ localize "CHUD.faction.factionBannerColor.name" }}</label>
+        <div class="form-fields">
+          <color-picker
+            name="factionTint"
+            value="{{factionBannerTint}}"
+            {{#if hasSelectedFaction}}tabindex="-1" disabled{{/if}}
+          ></color-picker>
+        </div>
+        <p class="hint">{{localize "CHUD.faction.factionBannerColor.hint"}}</p>
+      </div>
+    </div>
+
+    {{!-- Banner preview --}}
+    <div class="banner-preview-wrapper">
+      <div id="banner-preview-image" class="banner-preview-image {{#if factionBannerEnabled}}chud-banner-enabled{{/if}}">
+        {{#unless (or factionLogo factionBannerEnabled)}}
+          <p class="no-banner-preview-text">{{localize 'CHUD.faction.noBannerPreview'}}</p>
+        {{/unless}}
+
+        <img id="banner-preview-logo" src="{{factionLogo}}" alt="Banner Preview Logo">
+
+        {{> "modules/conversation-hud/templates/fragments/faction-banner-shape.hbs"
+          factionBannerEnabled=factionBannerEnabled
+          factionBannerShape=factionBannerShape
+          factionBannerTint=factionBannerTint
+        }}
+      </div>
+
+      {{!-- TODO: Remove inline style --}}
+      <p style="color: var(--color-form-label); font-weight: 700">{{localize "CHUD.faction.bannerPreview"}}</p>
+    </div>
+  </div>
+</fieldset>

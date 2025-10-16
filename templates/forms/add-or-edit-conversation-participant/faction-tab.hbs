@@ -1,0 +1,41 @@
+  <section class="tab scrollable {{#if tab.active}}active{{/if}}" data-group="{{tab.group}}" data-tab="{{tab.id}}">
+    <div class="chud-form-content chud-drag-and-drop-container">
+      <div class="chud-dropzone">
+        <i class="far fa-square-plus"></i>
+        <p> {{localize 'CHUD.strings.dropFaction'}} </p>
+      </div>
+
+      <div class="flexcol chud-gap-1 chud-non-dropzone-content chud-h-100">
+        {{!-- Faction display toggle --}}
+        <div class="form-group">
+          <label>{{localize "CHUD.faction.displayFaction.name"}}</label>
+          <div class="form-fields">
+            <input type="checkbox" name="displayFaction" {{checked displayFaction}}>
+          </div>
+          <p class="hint">{{localize "CHUD.faction.displayFaction.hint"}}</p>
+        </div>
+
+        <fieldset>
+          {{!-- Saved factions select --}}
+          <div class="form-group">
+            <label>{{localize 'CHUD.faction.factionSelector.name'}}</label>
+            <select name="selectedFaction">
+              {{selectOptions savedFactions selected=selectedFaction blank="New Faction" valueAttr="id" labelAttr="name"}}
+            </select>
+            <p class="hint">{{localize "CHUD.faction.factionSelector.hint"}}</p>
+          </div>
+        </fieldset>
+
+        {{!-- TODO: Display a warning somewhere that the faction will not be displayed unless the faction display input is checked --}}
+        {{> "modules/conversation-hud/templates/fragments/faction-data.hbs"
+          displayFaction=displayFaction
+          factionName=factionName
+          factionLogo=factionLogo
+          factionBannerEnabled=factionBannerEnabled
+          factionBannerShape=factionBannerShape
+          factionBannerTint=factionBannerTint
+          hasSelectedFaction=selectedFaction
+        }}
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,32 @@
+<div class="standard-form chud-flex-1" data-application-part="body">
+  <fieldset>
+    <legend>{{localize 'CHUD.strings.conversationSettings'}} </legend>
+    <div class="chud-form-section chud-flex-0">
+      <div class="form-group">
+        <label>{{localize "CHUD.strings.conversationBackground.name"}}</label>
+        <div class="form-fields">
+          <file-picker name="conversationBackground" type="imagevideo" value="{{conversationBackground}}"></file-picker>
+        </div>
+        <p class="hint">{{localize "CHUD.strings.conversationBackground.hint"}}</p>
+      </div>
+    </div>
+  </fieldset>
+
+  {{#switch type}} 
+    {{#case 'gm-controlled'}}
+      {{> "modules/conversation-hud/templates/forms/content/gm-controlled-conversation-creation-form-content.hbs"
+        isGM=isGM
+        participants=participants 
+      }}
+    {{/case}}
+    {{#case 'collective'}}
+      {{> "modules/conversation-hud/templates/forms/content/collective-conversation-creation-form-content.hbs"
+        isGM=isGM
+      }}
+    {{/case}} 
+    {{#case 'default'}}
+      {{!-- TODO: Localize --}}
+      <p>Type not supported</p>
+    {{/case}}
+  {{/switch}}
+</div>

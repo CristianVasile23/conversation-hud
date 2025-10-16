@@ -1,0 +1,118 @@
+/* ----- Conversation HUD wrapper ----- */
+/* #region */
+.chud-active-conversation-wrapper {
+  display: flex;
+  flex-flow: column;
+  pointer-events: none;
+}
+/* #endregion */
+
+/* ----- Conversation HUD content ----- */
+/* #region */
+.conversation-hud-content {
+  position: relative;
+
+  margin: auto;
+
+  justify-content: center;
+  align-items: center;
+
+  height: 100%;
+
+  pointer-events: all;
+}
+/* #endregion */
+
+/* ----- Conversation minimized ----- */
+/* #region */
+.chud-active-conversation-wrapper.minimized .conversation-hud-content {
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-right: 10px;
+}
+
+/* Active participant */
+.chud-active-conversation-wrapper.minimized .active-participant-wrapper {
+  margin-right: 45px;
+}
+
+.chud-active-conversation-wrapper.minimized .active-participant {
+  height: 124px;
+  width: 124px;
+  flex: 0 0 auto;
+}
+
+.chud-active-conversation-wrapper.minimized .active-participant .name {
+  font-size: 12px !important;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+/* Faction display for active participant */
+.chud-active-conversation-wrapper.minimized .active-participant-wrapper .active-participant-faction {
+  width: 84px;
+}
+
+.chud-active-conversation-wrapper.minimized
+  .active-participant-wrapper
+  .active-participant-faction
+  .chud-faction-banner {
+  width: 82px;
+  height: 82px;
+}
+
+.chud-active-conversation-wrapper.minimized
+  .active-participant-wrapper
+  .active-participant-faction
+  .chud-faction-banner
+  .chud-faction-logo {
+  max-width: 82px;
+  max-height: 82px;
+}
+
+.chud-active-conversation-wrapper.minimized
+  .active-participant-wrapper
+  .active-participant-faction
+  .chud-faction-banner.chud-banner-enabled
+  .chud-faction-logo {
+  top: 14px;
+
+  max-width: 36px;
+  max-height: 36px;
+}
+
+.chud-active-conversation-wrapper.minimized .active-participant-wrapper .active-participant-faction .faction-name {
+  display: none;
+}
+
+.chud-active-conversation-wrapper.minimized .conversation-hud-content .no-participant-text {
+  font-size: 20px;
+}
+
+/* Participant list */
+.chud-active-conversation-wrapper.minimized .conversation-participant-list {
+  max-height: unset;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.chud-active-conversation-wrapper.minimized .conversation-participant-list > :first-child {
+  margin-top: auto;
+}
+
+.chud-active-conversation-wrapper.minimized .conversation-participant-list > :last-child {
+  margin-bottom: unset;
+}
+
+.chud-active-conversation-wrapper.minimized .conversation-hud-content .no-participant-text.active {
+  font-size: 26px;
+}
+
+/* Dropzone */
+.chud-active-conversation-wrapper.minimized .conversation-hud-content .conversation-hud-dropzone > p {
+  max-width: 120px;
+}
+/* #endregion */

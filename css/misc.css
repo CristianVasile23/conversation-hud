@@ -1,18 +1,28 @@
-#ui-middle {
-  z-index: unset;
-}
-
-#ui-middle > *:not(#ui-conversation-hud) {
-  z-index: var(--z-index-app);
-}
-
-#ui-middle > #ui-conversation-hud {
-  z-index: 20;
-  flex: 1;
-  min-height: 0;
-}
-
 /* CSS fix for file-picker being stretched out by the D&D 5e CSS when inside a sheet */
 .dnd5e .conversation-entry-sheet .form-group .form-fields .file-picker {
   flex: 0;
+}
+
+.chud-flex-1 {
+  flex: 1 1 0;
+}
+
+.chud-flex-0 {
+  flex: 0;
+}
+
+.chud-gap-1 {
+  gap: 1rem;
+}
+
+.chud-h-100 {
+  height: 100%;
+}
+
+.chud-overflow-y-auto {
+  overflow-y: auto;
+}
+
+.chud-mt-16 {
+  margin-top: 16px;
 }

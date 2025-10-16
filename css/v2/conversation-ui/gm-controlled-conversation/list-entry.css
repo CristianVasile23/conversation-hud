@@ -1,0 +1,127 @@
+/* ----- List entry ----- */
+/* #region */
+#gmControlledConversationParticipantsList .chud-list-entry {
+  display: flex;
+  flex-direction: row;
+
+  margin-top: 6px;
+  margin-bottom: 6px;
+}
+/* #endregion */
+
+/* ----- Controls ----- */
+/* #region */
+#gmControlledConversationParticipantsList .chud-list-entry .chud-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  margin-right: 5px;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-controls > .ui-control {
+  width: 23px;
+  min-width: 23px;
+  height: 23px;
+  min-height: 23px;
+  font-size: 12px;
+}
+/* #endregion */
+
+/* Conversation Participant */
+/* #region */
+#gmControlledConversationParticipantsList .chud-list-entry > .ui-control {
+  display: flex;
+  flex-flow: column;
+  position: relative;
+  overflow: hidden;
+
+  width: 102px;
+  height: 102px;
+
+  padding: 0;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .ui-control .chud-portrait {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  object-position: center;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .ui-control .chud-name {
+  position: absolute;
+
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  margin: 0;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  padding-left: 5px;
+  padding-right: 5px;
+
+  overflow: hidden;
+  white-space: nowrap;
+
+  font-size: 12px;
+  text-align: center;
+  color: var(--text-color);
+  text-overflow: ellipsis;
+
+  background: var(--active-participant-bg-color);
+  border-top: 1px solid var(--active-participant-border-color);
+  backdrop-filter: blur(4px);
+}
+
+.conversation-hud-content .ui-control * {
+  pointer-events: none;
+}
+/* #endregion */
+
+/* ----- Faction ----- */
+/* #region */
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner {
+  margin-left: 5px;
+
+  width: 40px;
+  height: 40px;
+  position: relative;
+
+  background: var(--active-participant-bg-color);
+  border: 1px solid var(--active-participant-border-color);
+
+  border-radius: 4px;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner.disabled {
+  visibility: hidden;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner .chud-faction-logo {
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  max-width: 40px;
+  max-height: 40px;
+
+  margin: auto;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner.chud-banner-enabled .chud-faction-logo {
+  top: 6px;
+  bottom: unset;
+  max-width: 16px;
+  max-height: 16px;
+
+  border: 0;
+}
+
+#gmControlledConversationParticipantsList .chud-list-entry .chud-faction-banner .chud-faction-logo[src=""] {
+  display: none;
+}
+/* #endregion */

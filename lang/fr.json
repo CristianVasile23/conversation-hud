@@ -58,6 +58,8 @@
 
     "currentParticipants": "Participants Actuels",
     "noActiveParticipant": "Aucun participant actif",
+    "noParticipants": "Aucun participant",
+    "participantsHidden": "La liste des participants est masquée",
     "noParticipantsInList": "La conversation n'a pas de participants. Essayez d'en ajouter. (Glisser-déposer est pris en charge)",
 
     "conversationEntry": "Entrée de Conversation",
@@ -172,8 +174,10 @@
   },
 
   "CHUD.tabs": {
-    "participantConfig": "Configuration du Participant",
-    "factionConfig": "Configuration de la Faction"
+    "conversationParticipantAddEdit": {
+      "participant": "Configuration du Participant",
+      "faction": "Configuration de la Faction"
+    }
   },
 
   "CHUD.faction": {
@@ -331,10 +335,6 @@
       "regular": "Régulier",
       "large": "Grand",
       "veryLarge": "Très Grand"
-    },
-    "rpgUiFix": {
-      "name": "Activer la correction de l'interface utilisateur personnalisée",
-      "hint": "Si vous utilisez un module qui change l'apparence de l'interface utilisateur et que vous rencontrez un problème qui fait que la barre latérale chevauche l'interface de conversation ou les boutons de contrôle, activer cette fonctionnalité devrait résoudre les problèmes."
     }
   }
 }

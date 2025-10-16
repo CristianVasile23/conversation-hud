@@ -1,0 +1,44 @@
+<div class="standard-form chud-flex-1">
+
+  <div class="flexcol">
+    <p class="hint">
+      {{{localize "CHUD.strings.migration.migrationInfo"}}}
+    </p>
+  </div>
+
+  <div class="notification warning">
+    <p>
+      {{{localize "CHUD.strings.migration.migrationWarning"}}}
+    </p>
+  </div>
+
+  <fieldset class="chud-flex-1">
+    <legend>
+      <span class="chud-label">{{localize 'CHUD.strings.migration.documentsToMigrate'}}</span>
+    </legend>
+
+    <div class="flexcol chud-flex-1">
+      <div id="documents-in-need-of-migration" class="scrollable chud-flex-1">
+        {{#if itemsToMigrate.length}}
+          <ul>
+            {{#each itemsToMigrate}}
+              <li>
+                {{#if (eq this.type "Faction")}}
+                  <i class="fa-solid fa-users"></i>
+                {{else}}
+                  <i class="fa-solid fa-comments"></i>
+                {{/if}}
+                <strong style="margin-left: 4px">{{this.type}}</strong>: {{this.name}}
+              </li>
+            {{/each}}
+          </ul>
+        {{else}}
+          <div class="chud-no-data-message">
+            <i class="fa-solid fa-file-circle-check" aria-hidden="true"></i>
+            <p>{{localize "CHUD.strings.migration.noDocumentsToMigrate"}}</p>
+          </div>
+        {{/if}}
+      </div>
+    </div>
+  </fieldset>
+</div>

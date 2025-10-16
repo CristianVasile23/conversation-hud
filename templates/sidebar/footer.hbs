@@ -1,0 +1,29 @@
+<div class="conversation-footer">
+  {{#if (isGm)}}
+    <nav class="conversation-controls">
+      {{#if isActive}}
+        <button
+          type="button"
+          style="flex: 1"
+          onclick="game.ConversationHud.closeActiveConversation()"
+        >
+          <i class="fas fa-times"></i>
+          <span>
+            {{localize "CHUD.actions.closeConversation"}}
+          </span>
+        </button>
+      {{else}}
+        <button
+          type="button"
+          style="flex: 1"
+          onclick="game.ConversationHud.onToggleConversation(true)"
+        >
+          <i class="fas fa-plus"></i>
+          <span>
+            {{localize "CHUD.actions.createConversation"}}
+          </span>
+        </button>
+      {{/if}}
+    </nav>
+  {{/if}}
+</div>

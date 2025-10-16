@@ -1,9 +1,15 @@
-import { MODULE_NAME } from "./constants.js";
+import { MODULE_NAME } from "./constants/index.js";
 import { ConversationHud } from "./conversation.js";
-import { registerHandlebarHelpers } from "./handlebar-helpers.js";
-import { checkConversationDataAvailability, fixRpgUiIncompatibility, handleOnClickContentLink } from "./helpers.js";
-import { preloadTemplates } from "./preloadTemplates.js";
+import {
+  registerHandlebarsHelpers,
+  preloadHandlebarsTemplates,
+  checkConversationDataAvailability,
+  handleOnClickContentLink,
+} from "./helpers/index.js";
+import { registerHooks } from "./hooks/index.js";
 import { ModuleSettings, registerSettings } from "./settings.js";
+import { registerSheets } from "./sheets/index.js";
+import { ConversationSidebar } from "./sidebar/ConversationSidebar.mjs";
 
 // Warning hook in case libWrapper is not installed
 Hooks.once("ready", () => {
@@ -18,36 +24,61 @@ Hooks.once("socketlib.ready", () => {
   socket = socketlib.registerModule("conversation-hud");
 });
 
+Hooks.once("uiExtender.init", (uiExtender) => {
+  uiExtender.registerDirectory({
+    moduleId: MODULE_NAME,
+    id: "conversation",
+    tooltip: "Conversation",
+    icon: "fa-solid fa-masks-theater",
+    order: 1,
+    applicationClass: ConversationSidebar,
+  });
+});
+
 Hooks.on("init", async () => {
-  // Register the module within libWrapper
+  // Register libWrapper for content link handling
   if (libWrapper) {
-    libWrapper.register(
-      MODULE_NAME,
-      "TextEditor._onClickContentLink",
-      function (wrapped, event) {
-        return handleOnClickContentLink.bind(this)(event, wrapped);
-      },
-      "MIXED"
-    );
+    try {
+      libWrapper.register(
+        MODULE_NAME,
+        `JournalEntry.prototype._onClickDocumentLink`,
+        function (wrapped, event) {
+          if (!event.ctrlKey) {
+            return wrapped(event);
+          }
+
+          // Check if document is a conversation
+          if (this.flags?.core?.sheetClass === "conversation-sheet.ConversationSheet") {
+            return handleOnClickContentLink.call(this, event, wrapped);
+          }
+
+          return wrapped(event);
+        },
+        "MIXED"
+      );
+    } catch (error) {
+      // TODO: Improve error logging
+      console.warn(`ConversationHUD | Could not register libWrapper for JournalEntry:`, error);
+    }
   }
+
+  // Register all other hooks
+  registerHooks();
 
   // Register settings
   registerSettings();
 
-  // Register handlebar helpers
-  registerHandlebarHelpers();
+  // Register the Handlebars helpers
+  registerHandlebarsHelpers();
 
-  // Load templates
-  preloadTemplates();
+  // Load the Handlebars templates
+  preloadHandlebarsTemplates();
+
+  // Register
+  registerSheets();
 
   // Initialize the ConversationHUD object
   game.ConversationHud = new ConversationHud();
-  game.ConversationHud.init();
-
-  // If RPG UI fix setting is enabled, add the fixed CSS class to the sidebar
-  if (game.settings.get(MODULE_NAME, ModuleSettings.rpgUiFix)) {
-    fixRpgUiIncompatibility();
-  }
 });
 
 Hooks.on("ready", async () => {
@@ -70,18 +101,21 @@ Hooks.on("ready", async () => {
     }
 
     if (conversationData) {
-      const visibility = await socket.executeAsUser("getActiveConversationVisibility", conversationData.userId);
-      game.ConversationHud.renderConversation(conversationData.result.activeConversation, visibility);
+      game.ConversationHud.createConversation(
+        conversationData.result.activeConversation,
+        conversationData.result.conversationIsVisible
+      );
     }
   } else {
+    // TODO: Check to see if this whole else can be removed
     try {
-      // Get conversation data from a GM
-      const result = await socket.executeAsGM("getActiveConversation");
+      // Try to get conversation data from a connected GM
+      /** @type {{ conversationIsActive: boolean; conversationIsVisible: boolean; activeConversation: { conversationData: GMControlledConversationData; conversationCurrentState: any; } | undefined; }} */
+      const result = await socket.executeAsGM("getConversation");
 
       // If there is an active conversation, render it
       if (result.conversationIsActive) {
-        const visibility = await socket.executeAsGM("getActiveConversationVisibility");
-        game.ConversationHud.renderConversation(result.activeConversation, visibility);
+        game.ConversationHud.createConversation(result.activeConversation, result.conversationIsVisible);
       }
     } catch (error) {
       if (error.name === "SocketlibNoGMConnectedError") {
@@ -89,11 +123,10 @@ Hooks.on("ready", async () => {
         const users = game.users.filter((item) => item.active && item.id !== game.user.id);
 
         if (users.length > 0) {
-          const { result, userId } = await checkConversationDataAvailability(users);
+          const { result } = await checkConversationDataAvailability(users);
 
           if (result) {
-            const visibility = await socket.executeAsUser("getActiveConversationVisibility", userId);
-            game.ConversationHud.renderConversation(result.activeConversation, visibility);
+            game.ConversationHud.createConversation(result.activeConversation, result.conversationIsVisible);
           }
         }
       } else {

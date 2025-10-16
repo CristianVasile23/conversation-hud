@@ -1,0 +1,79 @@
+.conversation-sidebar {
+  --element-spacing: 8px;
+  --element-spacing-half: 4px;
+}
+
+.conversation-sidebar.active {
+  display: flex;
+  height: 0;
+}
+
+.conversation-sidebar:not(.sidebar-popout),
+.conversation-sidebar.sidebar-popout .window-content {
+  flex-direction: column;
+  gap: var(--element-spacing);
+}
+
+.conversation-sidebar .window-content {
+  padding: 0;
+}
+
+.conversation-sidebar .conversation-participants {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden auto;
+  min-height: 0;
+}
+
+/* Header */
+.conversation-sidebar .conversation-header {
+  flex: none;
+  display: flex;
+  flex-direction: row;
+
+  padding: var(--element-spacing);
+  gap: var(--element-spacing);
+
+  padding-bottom: 0;
+}
+
+.conversation-sidebar .conversation-header .control-buttons {
+  gap: var(--element-spacing-half);
+}
+
+.conversation-sidebar .conversation-header .conversation-title {
+  flex: 1;
+  text-align: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-15);
+
+  align-self: center;
+}
+
+/* Footer */
+.conversation-sidebar .conversation-controls {
+  flex: none;
+  display: flex;
+  padding: var(--element-spacing);
+  gap: var(--element-spacing);
+
+  padding-top: 0;
+  align-items: center;
+}
+
+.conversation-sidebar .chud-no-data-message {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 1rem;
+  color: var(--color-text-subtle);
+  gap: 5px;
+  flex: 1;
+}
+
+.conversation-sidebar .chud-no-data-message i {
+  font-size: 3rem;
+}

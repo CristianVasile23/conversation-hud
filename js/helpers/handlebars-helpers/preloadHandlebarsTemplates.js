@@ -1,0 +1,36 @@
+/**
+ * Function that registers all the custom Handlebars helpers which are used inside the templates
+ */
+export function preloadHandlebarsTemplates() {
+  const templates = [
+    // TODO: Re-order modules to be arranged in the order they are presented by the system file-viewer
+    "modules/conversation-hud/templates/sheets/conversation-sheet/content/gm-controlled-sheet-content.hbs",
+
+    "modules/conversation-hud/templates/forms/content/collective-conversation-creation-form-content.hbs",
+    "modules/conversation-hud/templates/forms/content/gm-controlled-conversation-creation-form-content.hbs",
+
+    "modules/conversation-hud/templates/sidebar/participant.hbs",
+
+    "modules/conversation-hud/templates/fragments/conversation-participant-data.hbs",
+    "modules/conversation-hud/templates/fragments/conversation-participants-list.hbs",
+    "modules/conversation-hud/templates/fragments/faction-data.hbs",
+    "modules/conversation-hud/templates/fragments/active-participant-content.hbs",
+
+    "modules/conversation-hud/templates/fragments/participating-users-list.hbs",
+
+    "modules/conversation-hud/templates/fragments/selectable-participant-entry.hbs",
+    "modules/conversation-hud/templates/fragments/gm-controlled-conversation/active-conversation-participant-list-entry.hbs",
+
+    "modules/conversation-hud/templates/fragments/faction-banner-shape.hbs",
+    "modules/conversation-hud/templates/fragments/faction-banner.hbs",
+
+    "modules/conversation-hud/templates/banner-shapes/shape-1.hbs",
+    "modules/conversation-hud/templates/banner-shapes/shape-2.hbs",
+    "modules/conversation-hud/templates/banner-shapes/shape-3.hbs",
+    "modules/conversation-hud/templates/banner-shapes/shape-4.hbs",
+    "modules/conversation-hud/templates/banner-shapes/shape-5.hbs",
+    "modules/conversation-hud/templates/banner-shapes/shape-6.hbs",
+  ];
+
+  return foundry.applications.handlebars.loadTemplates(templates);
+}

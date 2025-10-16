@@ -1,0 +1,18 @@
+<form class="sheet chud-h-100">
+  {{> "modules/conversation-hud/templates/forms/content/collective-conversation-creation-form-content.hbs"
+    isGM=isGM
+  }}
+    
+  <div class="chud-form-footer">
+    <footer class="sheet-footer flexrow">
+      <button
+        type="submit"
+        name="submit"
+        title="{{localize 'CHUD.actions.editParticipatingUsers'}}"
+      >
+        <i class="fa fa-check"></i>
+        {{localize 'CHUD.actions.editParticipatingUsers'}}
+      </button>
+    </footer>
+  </div>
+</form>

@@ -1,0 +1,56 @@
+.conversation-sidebar .chud-dropzone-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: var(--font-size-14);
+  color: var(--color-text-secondary);
+  pointer-events: none;
+  text-align: center;
+
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* Dashed border with rounded corners using pseudo-element */
+.conversation-sidebar .chud-dropzone-overlay::before {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 2px dashed var(--color-text-secondary);
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.conversation-sidebar .chud-dropzone-overlay .chud-dropzone-message {
+  max-width: 160px;
+}
+
+.conversation-sidebar .chud-dropzone-overlay .chud-dropzone-message > i {
+  font-size: 3rem;
+}
+
+.conversation-sidebar .chud-dropzone-overlay .chud-dropzone-message > p {
+  margin: 0;
+  margin-top: 10px;
+}
+
+.conversation-sidebar .conversation-participants.active-dropzone ~ .chud-dropzone-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.conversation-sidebar .conversation-participants.active-dropzone > * {
+  opacity: 0.2;
+  pointer-events: none;
+}
