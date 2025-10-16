@@ -1,6 +1,7 @@
 .vscode
 packs/macros
-packs/*
-!packs/*/*.ldb
-!packs/*/MANIFEST*
-!packs/*/*.log
+
+# Ignore temporary LevelDB log files in compendium packs
+packs/*/LOG
+packs/*/LOG.old
+packs/*/*.log
