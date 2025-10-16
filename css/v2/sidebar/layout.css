@@ -19,6 +19,8 @@
 }
 
 .conversation-sidebar .conversation-participants {
+  display: flex;
+  flex-direction: column;
   flex: 1;
   overflow: hidden auto;
   min-height: 0;
@@ -65,11 +67,11 @@
   flex-flow: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
   text-align: center;
   padding: 1rem;
   color: var(--color-text-subtle);
   gap: 5px;
+  flex: 1;
 }
 
 .conversation-sidebar .chud-no-data-message i {

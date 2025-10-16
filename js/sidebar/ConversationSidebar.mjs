@@ -81,6 +81,13 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
   _onRender(context, options) {
     super._onRender?.(context, options);
 
+    // Set minimum height for when the sidebar is popped out
+    queueMicrotask(() => {
+      if (this.element) {
+        this.element.style.minHeight = "320px";
+      }
+    });
+
     // Only add drag and drop for GMs on GM-controlled conversations
     if (!game.user.isGM || !context.isActive || context.conversationType !== "gm-controlled") {
       return;
