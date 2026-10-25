@@ -6,15 +6,15 @@ import { ModuleSettings } from "../settings.js";
 **/
 export const registerHook = () => {
   // Hook that injects CHUD fields into the scene configuration sheet
-  Hooks.on("renderSceneConfig", async (app, html, data) => {
+  Hooks.on("renderSceneConfig", async (app, html) => {
     if (game.settings.get(MODULE_NAME, ModuleSettings.enableSceneConversations)) {
       // TODO: Use proper sheet class from constants
       const conversations = game.journal.filter(
         (entry) => foundry.utils.getProperty(entry, "flags.conversation-hud.type") === "conversation-sheet"
       );
 
-      const linkedConversation = data.document["flags"]["conversation-hud"]?.sceneConversation;
-      const sceneConversationVisibilityOff = data.document["flags"]["conversation-hud"]?.sceneConversationVisibilityOff;
+      const linkedConversation = app.document.flags["conversation-hud"]?.sceneConversation;
+      const sceneConversationVisibilityOff = app.document.flags["conversation-hud"]?.sceneConversationVisibilityOff;
 
       const renderedHtml = await foundry.applications.handlebars.renderTemplate(
         "modules/conversation-hud/templates/fragments/scene-conversation-data.hbs",

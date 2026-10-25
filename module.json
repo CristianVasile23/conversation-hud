@@ -5,8 +5,8 @@
   "version": "#{VERSION}#",
   "compatibility": {
     "minimum": "13",
-    "verified": "13",
-    "maximum": "13"
+    "verified": "14",
+    "maximum": "14"
   },
   "authors": [
     {
@@ -37,6 +37,7 @@
       {
         "id": "lib-dfreds-ui-extender",
         "type": "module",
+        "manifest": "https://github.com/DFreds/lib-dfreds-ui-extender/releases/latest/download/module.json",
         "compatibility": {}
       }
     ]

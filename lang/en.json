@@ -190,6 +190,7 @@
     "changeConversationBackground": "Change Conversation Background",
     "pullParticipants": "Pull Participants from Scene",
     "addActors": "Add Actors",
+    "addToConversation": "Add to Conversation",
 
     "startMigration": "Start Migration"
   },
@@ -286,6 +287,8 @@
 
   "CHUD.info": {
     "saveSuccessful": "Current conversation has been saved successfully.",
+    "alreadyInConversation": "Participant is already in the conversation.",
+    "addedToConversation": "Added to the conversation.",
     "migrationComplete": "Migration successful: all entries were updated without errors."
   },
 

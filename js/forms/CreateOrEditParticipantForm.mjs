@@ -297,7 +297,7 @@ export class CreateOrEditParticipantForm extends HandlebarsApplicationMixin(Appl
         if (this.dropzoneVisible) {
           event.preventDefault();
 
-          const data = TextEditor.getDragEventData(event);
+          const data = foundry.applications.ux.TextEditor.implementation.getDragEventData(event);
           if (data.type === "JournalEntry") {
             const entry = await JournalEntry.implementation.fromDropData(data);
             const page = entry.getEmbeddedCollection("JournalEntryPage").contents[0];

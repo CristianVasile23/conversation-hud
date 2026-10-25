@@ -4,6 +4,7 @@ import { getDragAndDropIndex, hideDragAndDropIndicator, showDragAndDropIndicator
 import { activateConversationParticipantsListListeners } from "./forms/index.js";
 import { registerHandlebarsHelpers, preloadHandlebarsTemplates } from "./handlebars-helpers/index.js";
 import { getTokenImage, isWildcardToken } from "./wildcard/index.mjs";
+import { addParticipantsToConversation, actorToParticipant, isTokenInConversation, tokenToParticipant } from "./addToConversation.mjs";
 import { checkConversationDataAvailability } from "./checkConversationDataAvailability.js";
 import { checkIfCameraDockIsOnBottomOrTop } from "./checkIfCameraDockIsOnBottomOrTop.js";
 import { checkIfUserIsGM } from "./checkIfUserIsGM.js";
@@ -43,6 +44,10 @@ export {
   isWildcardToken,
 
   // Rest
+  addParticipantsToConversation,
+  actorToParticipant,
+  isTokenInConversation,
+  tokenToParticipant,
   checkConversationDataAvailability,
   checkIfCameraDockIsOnBottomOrTop,
   checkIfUserIsGM,

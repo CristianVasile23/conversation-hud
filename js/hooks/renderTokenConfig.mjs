@@ -3,14 +3,14 @@
 **/
 export const registerHook = () => {
   // Hook that injects CHUD fields into the token configuration sheet
-  Hooks.on("renderTokenConfig", async (app, html, data) => {
+  Hooks.on("renderTokenConfig", async (app, html) => {
     // TODO: Use proper sheet class from constants
     const conversations = game.journal.filter(
       (entry) => foundry.utils.getProperty(entry, "flags.conversation-hud.type") === "conversation-sheet"
     );
 
-    const excludeFromBeingPulled = data.document["flags"]["conversation-hud"]?.excludeFromBeingPulled || undefined;
-    const linkedConversation = data.document["flags"]["conversation-hud"]?.linkedConversation || undefined;
+    const excludeFromBeingPulled = app.document.flags["conversation-hud"]?.excludeFromBeingPulled || undefined;
+    const linkedConversation = app.document.flags["conversation-hud"]?.linkedConversation || undefined;
 
     const renderedHtml = await foundry.applications.handlebars.renderTemplate(
       "modules/conversation-hud/templates/fragments/actor-linked-conversation-data.hbs",

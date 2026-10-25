@@ -5,9 +5,11 @@ import { registerHook as registerRenderLayoutHook } from "./renderLayout.mjs";
 import { registerHook as registerRenderSceneConfigHook } from "./renderSceneConfig.mjs";
 import { registerHook as registerRenderSettingsConfigHook } from "./renderSettingsConfig.mjs";
 import { registerHook as registerRenderTokenConfigHook } from "./renderTokenConfig.mjs";
+import { registerHook as registerAddToConversationHooks } from "./addToConversation.mjs";
 import { registerHook as registerUpdateSceneHook } from "./updateScene.mjs";
 
 export const registerHooks = () => {
+  registerAddToConversationHooks();
   registerChatMessageHook();
   registerMigrateDataHook();
   registerRenderChatMessageHook();

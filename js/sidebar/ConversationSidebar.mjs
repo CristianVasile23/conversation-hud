@@ -6,6 +6,7 @@ import {
   hideDragAndDropIndicator,
   getDragAndDropIndex,
   getActorDataFromDragEvent,
+  addParticipantsToConversation,
 } from "../helpers/index.js";
 
 const { AbstractSidebarTab } = foundry.applications.sidebar;
@@ -88,12 +89,11 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
       }
     });
 
-    // Only add drag and drop for GMs on GM-controlled conversations
-    if (!game.user.isGM || !context.isActive || context.conversationType !== "gm-controlled") {
-      return;
-    }
+    // Only add drag and drop for GMs. With no active conversation, dropping creates one on the fly
+    if (!game.user.isGM) return;
+    if (context.isActive && context.conversationType !== "gm-controlled") return;
 
-    this.#addDragAndDropListeners();
+    if (context.isActive) this.#addDragAndDropListeners();
     this.#addDropzoneListener();
   }
 
@@ -214,12 +214,8 @@ export class ConversationSidebar extends HandlebarsApplicationMixin(AbstractSide
 
         const data = await getActorDataFromDragEvent(event);
         if (data && data.length > 0) {
-          // Add participants to the active conversation
-          game.ConversationHud.executeFunction({
-            scope: "everyone",
-            type: "add-participants",
-            data: data,
-          });
+          // Add participants to the active conversation (or create one if none is active)
+          addParticipantsToConversation(data);
         }
 
         this.dropzoneVisible = false;

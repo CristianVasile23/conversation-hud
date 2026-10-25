@@ -5,16 +5,15 @@ import { ANCHOR_OPTIONS } from "../constants/index.js";
 import { CreateOrEditParticipantForm } from "./CreateOrEditParticipantForm.mjs";
 import { PullParticipantsFromSceneForm } from "./PullParticipantsFromSceneForm.mjs";
 import {
-  getActorDataFromDragEvent,
   moveInArray,
   processParticipantData,
-  getConfirmationFromUser,
   activateConversationParticipantsListListeners,
 } from "../helpers/index.js";
 import { SelectParticipatingUsersFrom } from "./SelectParticipatingUsersFrom.mjs";
 
-export class CollectiveConversationParticipantsEditForm extends FormApplication {
-  // State variables
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
+export class CollectiveConversationParticipantsEditForm extends HandlebarsApplicationMixin(ApplicationV2) {
   /** @type {(participatingUsers: ParticipatingUserData[]) => void | undefined} } */
   #callbackFunction = undefined;
 
@@ -24,13 +23,9 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
   /** @type {Map<string, boolean>} */
   #minimizedSections = new Map();
 
-  // Drag and drop variables
-  #dropzoneVisible = false;
   #isDraggingAParticipant = false;
 
   /**
-   * TODO: Add JSDoc
-   *
    * @param {(participatingUsers: ParticipatingUserData[]) => void} callbackFunction
    * @param {ParticipatingUserData[]} participatingUsers
    */
@@ -40,104 +35,107 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
     this.#participatingUsers = participatingUsers;
   }
 
-  static get defaultOptions() {
-    return foundry.utils.mergeObject(super.defaultOptions, {
-      classes: ["form"],
-      popOut: true,
-      template: "modules/conversation-hud/templates/forms/edit-collective-conversation-participating-users-form.hbs",
-      id: "collective-conversation-creation-form",
-      title: game.i18n.localize("CHUD.actions.createConversation"),
+  static DEFAULT_OPTIONS = {
+    id: "collective-conversation-participants-edit-form",
+    classes: ["form"],
+    tag: "form",
+    window: {
+      contentClasses: ["standard-form"],
+      title: "CHUD.actions.createConversation",
+    },
+    form: {
+      handler: this.#handleSubmit,
+      closeOnSubmit: true,
+    },
+    position: {
       width: 685,
       height: 800,
-      scrollY: [".chud-form-section.chud-form-content.chud-overflow-y-auto"],
-    });
-  }
+    },
+  };
 
-  getData() {
+  static PARTS = {
+    body: {
+      template: "modules/conversation-hud/templates/forms/edit-collective-conversation-participating-users-form.hbs",
+      scrollable: [".chud-form-content"],
+    },
+    footer: {
+      template: "templates/generic/form-footer.hbs",
+    },
+  };
+
+  async _prepareContext(options) {
+    const context = await super._prepareContext(options);
+    context.buttons = [
+      {
+        type: "submit",
+        icon: "fa-solid fa-check",
+        label: "CHUD.actions.editParticipatingUsers",
+      },
+    ];
+
     for (const participatingUser of this.#participatingUsers) {
       for (const participant of participatingUser.participants) {
         processParticipantData(participant);
       }
-
-      // TODO: Dirty hack, make something better
       participatingUser.sectionIsMinimized = this.#minimizedSections.get(participatingUser.id);
     }
 
     return {
       isGM: game.user.isGM,
       participatingUsers: this.#participatingUsers,
+      ...context,
     };
   }
 
-  activateListeners(html) {
-    super.activateListeners(html);
+  _onRender(context, options) {
+    super._onRender(context, options);
 
-    // Add participating users button
-    html.find("#addParticipatingUsers").click(async (e) => {
+    const html = this.element;
+
+    html.querySelector("#addParticipatingUsers").addEventListener("click", () => {
       new SelectParticipatingUsersFrom((data) => this.#handleAddParticipatingUsers(data), {
         participatingUserIDs: this.#participatingUsers.map((item) => item.id),
       }).render(true);
     });
 
-    // TODO: Add drag-and-drop functionality for participating users
-
-    // Add listeners on all the control buttons present on the conversation participants
-    const participatingUsersHTML = html.find("#conversationParticipatingUsersList")[0];
+    const participatingUsersHTML = html.querySelector("#conversationParticipatingUsersList");
     if (participatingUsersHTML) {
       const participatingUsers = participatingUsersHTML.children;
       for (let index = 0; index < participatingUsers.length; index++) {
         const participatingUser = participatingUsers[index];
 
-        // Collapse/expand button
         const accordionButton = participatingUser.querySelector("#accordionButton");
         const collapsibleWrapper = participatingUser.querySelector(".chud-collapsible-content-wrapper");
-        accordionButton.onclick = () => {
+        accordionButton.addEventListener("click", () => {
           accordionButton.classList.toggle("chud-collapsed");
           collapsibleWrapper.classList.toggle("chud-collapsed");
 
           const userID = this.#participatingUsers[index].id;
           const minimizationState = this.#minimizedSections.get(userID);
           this.#minimizedSections.set(userID, !minimizationState);
-        };
+        });
 
-        // Pull scene actors button
-        participatingUser.querySelector("#pullSceneActorsButton").onclick = async () => {
-          const pullParticipantsFromSceneForm = new PullParticipantsFromSceneForm((data) => {
+        participatingUser.querySelector("#pullSceneActorsButton").addEventListener("click", () => {
+          new PullParticipantsFromSceneForm((data) => {
             for (const participant of data) {
               this.#handleAddParticipantToParticipatingUser(index, participant);
             }
-          });
-          return pullParticipantsFromSceneForm.render(true);
-        };
+          }).render(true);
+        });
 
-        // TODO: Add owned actors button
-
-        // Add participant button
-        participatingUser.querySelector("#addParticipantButton").onclick = () => {
-          const participantCreationForm = new CreateOrEditParticipantForm(false, (data) =>
+        participatingUser.querySelector("#addParticipantButton").addEventListener("click", () => {
+          new CreateOrEditParticipantForm(false, (data) =>
             this.#handleAddParticipantToParticipatingUser(index, data)
-          );
-          return participantCreationForm.render(true);
-        };
+          ).render(true);
+        });
 
-        // Remove participant button
-        // TODO: Remove
-        // participatingUser.querySelector("#removeParticipatingUserButton").onclick = () => {
-        //   getConfirmationFromUser("CHUD.dialogue.onRemoveParticipatingUser", () =>
-        //     this.#handleRemoveParticipatingUsers(index)
-        //   );
-        // };
-
-        // Add listeners on all the control buttons present on the conversation participants
         const conversationParticipantsListHTML = participatingUser.querySelector("#conversationParticipantsList");
         if (conversationParticipantsListHTML) {
           activateConversationParticipantsListListeners({
             conversationParticipantsListHTML,
             handleDrop: (oldIndex, newIndex) => {
-              // Reorder the array
               moveInArray(this.#participatingUsers[index].participants, oldIndex, newIndex);
 
-              // Update active participant index
               const defaultActiveParticipantIndex = this.#participatingUsers[index].defaultActiveParticipant;
               if (defaultActiveParticipantIndex === oldIndex) {
                 this.#participatingUsers[index].defaultActiveParticipant = newIndex;
@@ -150,7 +148,6 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
                 }
               }
 
-              // Update sheet
               this.render(false);
             },
             setIsDraggingAParticipant: (value) => (this.#isDraggingAParticipant = value),
@@ -183,12 +180,7 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
     }
   }
 
-  /**
-   *
-   * @param {*} event
-   * @param {*} formData
-   */
-  async _updateObject(event, formData) {
+  static async #handleSubmit(event, form, formData) {
     this.#callbackFunction(this.#participatingUsers);
   }
 
@@ -216,7 +208,6 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
       (userA, userB) => userA.id - userB.id
     );
 
-    // Set minimization state only for new users (or previously removed ones)
     for (const userID of addedUsers) {
       this.#minimizedSections.set(userID, false);
     }
@@ -224,49 +215,26 @@ export class CollectiveConversationParticipantsEditForm extends FormApplication 
     this.render(false);
   }
 
-  // TODO: Remove
-  // #handleRemoveParticipatingUsers(index) {
-  //   this.#participatingUsers.splice(index, 1);
-
-  //   this.render(false);
-  // }
-
   #handleAddParticipantToParticipatingUser(index, data) {
     processParticipantData(data);
     this.#participatingUsers[index].participants.push(data);
-
     this.render(false);
   }
 
   #handleEditParticipant(participatingUserIndex, participantIndex, data) {
     processParticipantData(data);
     this.#participatingUsers[participatingUserIndex].participants[participantIndex] = data;
-
     this.render(false);
   }
 
-  // TODO: Uncomment when drag-and-drop functionality for participating users is enabled
-  // #handleReplaceAllParticipants(data) {
-  //   const processedData = data.map((participant) => {
-  //     processParticipantData(participant);
-  //     return participant;
-  //   });
-
-  //   this.defaultActiveParticipant = undefined;
-  //   this.participants = processedData;
-  //   this.render(false);
-  // }
-
   #handleRemoveParticipant(participatingUserIndex, participantIndex) {
     this.#participatingUsers[participatingUserIndex].participants.splice(participantIndex, 1);
-
     this.render(false);
   }
 
   #handleCloneParticipant(participatingUserIndex, participantIndex) {
     const clonedParticipant = this.#participatingUsers[participatingUserIndex].participants[participantIndex];
     this.#participatingUsers[participatingUserIndex].participants.push(clonedParticipant);
-
     this.render(false);
   }
 

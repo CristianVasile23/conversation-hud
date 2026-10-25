@@ -170,7 +170,8 @@
 
     "changeConversationBackground": "Change Conversation Background",
     "pullParticipants": "Extraire les Participants de la Scène",
-    "addActors": "Ajouter des Acteurs"
+    "addActors": "Ajouter des Acteurs",
+    "addToConversation": "Ajouter à la conversation"
   },
 
   "CHUD.tabs": {
@@ -252,7 +253,9 @@
   },
 
   "CHUD.info": {
-    "saveSuccessful": "La conversation en cours a été enregistrée avec succès."
+    "saveSuccessful": "La conversation en cours a été enregistrée avec succès.",
+    "alreadyInConversation": "Ce participant est déjà dans la conversation.",
+    "addedToConversation": "Ajouté à la conversation."
   },
 
   "CHUD.settings": {
